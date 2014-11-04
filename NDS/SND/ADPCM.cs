@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LibEveryFileExplorer.IO;
 
 namespace NDS.SND
 {
-	//Tempoarly from mkdscm
-	//I need to rewrite this all
 	public class ADPCM
 	{
-		private static int[] indexTable = 
+		private static int[] IndexTable = 
 		{ -1, -1, -1, -1, 2, 4, 6, 8,
           -1, -1, -1, -1, 2, 4, 6, 8 };
 
-		private static int[] stepsizeTable = 
+		private static int[] StepTable = 
 		{ 7, 8, 9, 10, 11, 12, 13, 14,
 		  16, 17, 19, 21, 23, 25, 28,
 		  31, 34, 37, 41, 45, 50, 55,
@@ -27,56 +26,50 @@ namespace NDS.SND
 	      9493, 10442, 11487, 12635, 13899, 15289, 16818,
 	      18500, 20350, 22385, 24623, 27086, 29794, 32767 };
 
-		public unsafe static void ConvertImaAdpcm(byte* buf, int length, byte* outbuffer)
-		{
-			int a = ((short*)buf)[0];
-			int b = ((short*)buf)[1] & 0x7F;
-			((short*)outbuffer)[0] = (short)a;
-			ConvertImaAdpcm(buf + 4, length - 4, outbuffer + 2, ref a, ref b);
-		}
+		private bool IsInit = false;
+		private int Last;
+		private int Index;
 
-		public unsafe static void ConvertImaAdpcm(byte* buf, int length, byte* outbuffer, ref int decompSample, ref int stepIndex)
-		{
-			uint destOff = 0;
-			uint curOffset = 0;
+		public ADPCM() { }
 
-			byte compByte;
-			while (curOffset < length)
+		public Int16[] GetWaveData(byte[] Data, int Offset, int Length)
+		{
+			List<Int16> DataOut = new List<short>();
+			if (!IsInit)
 			{
-				compByte = buf[curOffset++];
-				process_nibble(compByte, ref stepIndex, ref decompSample);
-				((short*)outbuffer)[destOff++] = (short)decompSample;
-				process_nibble((byte)((compByte & 0xF0) >> 4), ref stepIndex, ref decompSample);
-				((short*)outbuffer)[destOff++] = (short)decompSample;
+				Last = IOUtil.ReadS16LE(Data, Offset);
+				Index = IOUtil.ReadS16LE(Data, Offset + 2) & 0x7F;
+				DataOut.Add((short)Last);
+				IsInit = true;
 			}
+			int end = Offset + Length;
+			while (Offset < end)
+			{
+				byte sampd = Data[Offset++];
+				for (int i = 0; i < 2; i++)
+				{
+					int val = (sampd >> (i * 4)) & 0xF;
+
+					int diff =
+						StepTable[Index] / 8 +
+						StepTable[Index] / 4 * ((val >> 0) & 1) +
+						StepTable[Index] / 2 * ((val >> 1) & 1) +
+						StepTable[Index] * ((val >> 2) & 1);
+
+					int samp = Last + diff * ((((val >> 3) & 1) == 1) ? -1 : 1);
+					Last = Clamp(samp, short.MinValue, short.MaxValue);
+					Index = Clamp(Index + IndexTable[val & 7], 0, 88);
+					DataOut.Add((short)Last);
+				}
+			}
+			return DataOut.ToArray();
 		}
 
-		private static int IMAMax(int samp) { return (samp > 0x7FFF) ? ((short)0x7FFF) : samp; }
-		private static int IMAMin(int samp) { return (samp < -0x7FFF) ? ((short)-0x7FFF) : samp; }
-		private static int IMAIndexMinMax(int index, int min, int max) { return (index > max) ? max : ((index < min) ? min : index); }
-
-		private static void process_nibble(byte data4bit, ref int Index, ref int Pcm16bit)
+		private static short Clamp(int value, int min, int max)
 		{
-			int Diff = stepsizeTable[Index] / 8;
-			if ((data4bit & 1) != 0) Diff = Diff + stepsizeTable[Index] / 4;
-			if ((data4bit & 2) != 0) Diff = Diff + stepsizeTable[Index] / 2;
-			if ((data4bit & 4) != 0) Diff = Diff + stepsizeTable[Index] / 1;
-
-			if ((data4bit & 8) == 0) Pcm16bit = IMAMax(Pcm16bit + Diff);
-			if ((data4bit & 8) == 8) Pcm16bit = IMAMin(Pcm16bit - Diff);
-			Index = IMAIndexMinMax(Index + indexTable[data4bit & 7], 0, 88);
-		}
-
-		private static void clamp_step_index(ref int stepIndex)
-		{
-			if (stepIndex < 0) stepIndex = 0;
-			if (stepIndex > 88) stepIndex = 88;
-		}
-
-		private static void clamp_sample(ref int decompSample)
-		{
-			if (decompSample < -32768) decompSample = -32768;
-			if (decompSample > 32767) decompSample = 32767;
+			if (value < min) value = min;
+			if (value > max) value = max;
+			return (short)value;
 		}
 	}
 }

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using NDS.SND;
+using LibEveryFileExplorer.IO;
 
 namespace LegoPirates.UI
 {
@@ -39,6 +41,7 @@ namespace LegoPirates.UI
 			//TODO: Calculate timing based on fps
 			if ((Video.Header.Flags & 4) == 4)
 			{
+				AudioConverter = new ADPCM();
 				AudioBuffer = new NAudio.Wave.BufferedWaveProvider(new NAudio.Wave.WaveFormat((int)Video.Header.AudioRate, 16, 1));
 				AudioBuffer.DiscardOnBufferOverflow = true;
 				AudioBuffer.BufferLength = 8192 * 16;
@@ -68,6 +71,8 @@ namespace LegoPirates.UI
 				})).Start();
 			backgroundWorker1.RunWorkerAsync();
 		}
+
+		ADPCM AudioConverter = null;
 
 		int aa = 0;
 		int bb = 0;
@@ -103,27 +108,10 @@ namespace LegoPirates.UI
 					Bitmap b = Video.GetNextFrame(out audio);
 					if (audio != null)
 					{
-						byte[] Return;
-						if (first) Return = new byte[(int)(audio.Length - 4) * 4];
-						else Return = new byte[audio.Length * 4];
-						unsafe
-						{
-							byte* buf = (byte*)Marshal.UnsafeAddrOfPinnedArrayElement(audio, 0);
-							byte* outbuffer = (byte*)Marshal.UnsafeAddrOfPinnedArrayElement(Return, 0);
-							int length = audio.Length;
-							if (first)
-							{
-								aa = ((short*)buf)[0];
-								bb = ((short*)buf)[1] & 0x7F;
-								((short*)outbuffer)[0] = (short)aa;
-								first = false;
-								buf += 4;
-								length -= 4;
-								outbuffer += 2;
-							}
-							NDS.SND.ADPCM.ConvertImaAdpcm(buf, length, outbuffer, ref aa, ref bb);
-						}
-						AudioBuffer.AddSamples(Return, 0, Return.Length);
+						short[] data = AudioConverter.GetWaveData(audio, 0, audio.Length);
+						byte[] result = new byte[data.Length * 2];
+						IOUtil.WriteS16sLE(result, 0, data);
+						AudioBuffer.AddSamples(result, 0, result.Length);
 						goto retry;
 					}
 					if (b == null)

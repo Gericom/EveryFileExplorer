@@ -12,6 +12,20 @@ namespace LibEveryFileExplorer.IO
 			return (short)(Data[Offset] | (Data[Offset + 1] << 8));
 		}
 
+		public static void WriteS16LE(byte[] Data, int Offset, short Value)
+		{
+			Data[Offset] = (byte)(Value & 0xFF);
+			Data[Offset + 1] = (byte)((Value >> 8) & 0xFF);
+		}
+
+		public static void WriteS16sLE(byte[] Data, int Offset, short[] Values)
+		{
+			for (int i = 0; i < Values.Length; i++)
+			{
+				WriteS16LE(Data, Offset + i * 2, Values[i]);
+			}
+		}
+
 		public static ushort ReadU16LE(byte[] Data, int Offset)
 		{
 			return (ushort)(Data[Offset] | (Data[Offset + 1] << 8));
