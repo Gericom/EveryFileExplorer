@@ -48,6 +48,7 @@
 			// menuItem1
 			// 
 			this.menuItem1.Index = 0;
+			this.menuItem1.MergeOrder = 2;
 			this.menuItem1.Text = "NSBTX";
 			// 
 			// splitContainer1
