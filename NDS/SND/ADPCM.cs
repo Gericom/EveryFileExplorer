@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.Math;
 
 namespace NDS.SND
 {
@@ -57,19 +58,12 @@ namespace NDS.SND
 						StepTable[Index] * ((val >> 2) & 1);
 
 					int samp = Last + diff * ((((val >> 3) & 1) == 1) ? -1 : 1);
-					Last = Clamp(samp, short.MinValue, short.MaxValue);
-					Index = Clamp(Index + IndexTable[val & 7], 0, 88);
+					Last = (short)MathUtil.Clamp(samp, short.MinValue, short.MaxValue);
+					Index = (short)MathUtil.Clamp(Index + IndexTable[val & 7], 0, 88);
 					DataOut.Add((short)Last);
 				}
 			}
 			return DataOut.ToArray();
-		}
-
-		private static short Clamp(int value, int min, int max)
-		{
-			if (value < min) value = min;
-			if (value > max) value = max;
-			return (short)value;
 		}
 	}
 }

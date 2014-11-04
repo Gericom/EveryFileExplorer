@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LibEveryFileExplorer.Math;
 
 namespace _3DS.DSP
 {
@@ -39,25 +40,18 @@ namespace _3DS.DSP
 					if (high >= 8) high -= 16;
 					if (low >= 8) low -= 16;
 					double val = (((high * Scale) << 11) + 1024.0 + (Coef1 * Last1 + Coef2 * Last2)) / 2048.0; //>> 11;
-					short samp = Clamp((int)val, short.MinValue, short.MaxValue);
+					short samp = (short)MathUtil.Clamp((int)val, short.MinValue, short.MaxValue);
 					DataOut.Add(samp);
 					Last2 = Last1;
 					Last1 = val;
 					val = (((low * Scale) << 11) + 1024.0 + (Coef1 * Last1 + Coef2 * Last2)) / 2048.0;//>> 11;
-					samp = Clamp((int)val, short.MinValue, short.MaxValue);
+					samp = (short)MathUtil.Clamp((int)val, short.MinValue, short.MaxValue);
 					DataOut.Add(samp);
 					Last2 = Last1;
 					Last1 = val;
 				}
 			}
 			return DataOut.ToArray();
-		}
-
-		private static short Clamp(int value, int min, int max)
-		{
-			if (value < min) value = min;
-			if (value > max) value = max;
-			return (short)value;
 		}
 	}
 }

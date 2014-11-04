@@ -24,7 +24,7 @@ namespace LibEveryFileExplorer._3D
 			get
 			{
 				Vector3 a = (PointB - PointA).Cross(PointC - PointA);
-				return a / (float)Math.Sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z);
+				return a / (float)System.Math.Sqrt(a.X * a.X + a.Y * a.Y + a.Z * a.Z);
 			}
 		}
 	}

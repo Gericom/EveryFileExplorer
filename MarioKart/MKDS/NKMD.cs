@@ -11,6 +11,7 @@ using LibEveryFileExplorer.Collections;
 using Tao.OpenGl;
 using MarioKart.UI;
 using LibEveryFileExplorer.GFX;
+using LibEveryFileExplorer.Math;
 
 namespace MarioKart.MKDS
 {
@@ -433,7 +434,7 @@ namespace MarioKart.MKDS
 					if (Version <= 34)
 					{
 						float yangle = (float)Math.Atan2(Rotation.X, Rotation.Z);
-						Rotation = new Vector3(0, /*MathHelper.RadiansToDegrees(yangle)*/ yangle * (180f / (float)Math.PI), 0);
+						Rotation = new Vector3(0, MathUtil.RadToDeg(yangle), 0);
 					}
 					EnemyPositionID = er.ReadInt16();
 					ItemPositionID = er.ReadInt16();

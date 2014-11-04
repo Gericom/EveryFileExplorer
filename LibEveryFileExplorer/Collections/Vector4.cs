@@ -62,7 +62,7 @@ namespace LibEveryFileExplorer.Collections
 
 		public float Length
 		{
-			get { return (float)Math.Sqrt(X * X + Y * Y + Z * Z + W * W); }
+			get { return (float)System.Math.Sqrt(X * X + Y * Y + Z * Z + W * W); }
 		}
 
 		public void Normalize()
