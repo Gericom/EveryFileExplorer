@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8BCF0C6C-FD8F-4446-BEA1-B8C1BE5C3389}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NDS</RootNamespace>
+    <AssemblyName>NDS</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Tao.OpenGl, Version=2.1.0.12, Culture=neutral, PublicKeyToken=1ca010269a4501ef, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\MKDS Course Modifier\MKDS Course Modifier\bin\x86\Debug_new\Tao.OpenGl.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Platform.Windows, Version=1.0.0.5, Culture=neutral, PublicKeyToken=701104b2da67a104, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3DS\bin\Debug\Tao.Platform.Windows.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GPU\CommandContext.cs" />
+    <Compile Include="GPU\Textures.cs" />
+    <Compile Include="NitroSystem\Foundation\NARC.cs" />
+    <Compile Include="NitroFS.cs" />
+    <Compile Include="NitroSystem\G3D\Dictionary.cs" />
+    <Compile Include="NitroSystem\G3D\MDL0.cs" />
+    <Compile Include="NitroSystem\G3D\NSBCA.cs" />
+    <Compile Include="NitroSystem\G3D\NSBMD.cs" />
+    <Compile Include="NitroSystem\G3D\NSBTX.cs" />
+    <Compile Include="NitroSystem\G3D\SBC.cs" />
+    <Compile Include="NitroSystem\G3D\TEX0.cs" />
+    <Compile Include="NitroSystem\G3D\Util.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MDL0MaterialEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\MDL0MaterialEditor.Designer.cs">
+      <DependentUpon>MDL0MaterialEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MDL0Viewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\MDL0Viewer.Designer.cs">
+      <DependentUpon>MDL0Viewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\NSBMDViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\NSBMDViewer.designer.cs">
+      <DependentUpon>NSBMDViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\NARCViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\NARCViewer.Designer.cs">
+      <DependentUpon>NARCViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\NSBTXViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\NSBTXViewer.Designer.cs">
+      <DependentUpon>NSBTXViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\TEX0Viewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\TEX0Viewer.Designer.cs">
+      <DependentUpon>TEX0Viewer.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LibEveryFileExplorer\LibEveryFileExplorer.csproj">
+      <Project>{39DBD12F-F7E3-4E9A-97A2-0722A4BA2A26}</Project>
+      <Name>LibEveryFileExplorer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MDL0MaterialEditor.resx">
+      <DependentUpon>MDL0MaterialEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MDL0Viewer.resx">
+      <DependentUpon>MDL0Viewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\NSBMDViewer.resx">
+      <DependentUpon>NSBMDViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\NARCViewer.resx">
+      <DependentUpon>NARCViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\NSBTXViewer.resx">
+      <DependentUpon>NSBTXViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\TEX0Viewer.resx">
+      <DependentUpon>TEX0Viewer.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NitroSystem\G2D\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\leaf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lollypopanim.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\image-sunset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\images-stack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\jar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\image-sunset16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\color-swatch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\molecule.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fruit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\point.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fruit-grape.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\node.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\color-swatches.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)\EveryFileExplorer\bin\Debug\Plugins\$(TargetFileName)"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

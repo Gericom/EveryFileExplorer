@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8117CF39-0FD6-453D-AA7F-4B4AD85EBB3A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MarioKart</RootNamespace>
+    <AssemblyName>MarioKart</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\MKDS Course Modifier\MKDS Course Modifier\bin\x86\Debug_new\Microsoft.VisualBasic.PowerPacks.Vs.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Tao.OpenGl, Version=2.1.0.12, Culture=neutral, PublicKeyToken=1ca010269a4501ef, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\MKDS Course Modifier\MKDS Course Modifier\bin\x86\Debug_new\Tao.OpenGl.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Platform.Windows, Version=1.0.0.5, Culture=neutral, PublicKeyToken=701104b2da67a104, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3DS\bin\Debug\Tao.Platform.Windows.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="KCLHeader.cs" />
+    <Compile Include="KCLOctree.cs" />
+    <Compile Include="MK7\CDAB.cs" />
+    <Compile Include="MK7\CDMD.cs" />
+    <Compile Include="MK7\KCL.cs" />
+    <Compile Include="MK7\MK7.cs" />
+    <Compile Include="MK7\ObjFlow.cs" />
+    <Compile Include="MKDS\KCL.cs" />
+    <Compile Include="MKDS\NKMD.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\CDMDViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CDMDViewer.Designer.cs">
+      <DependentUpon>CDMDViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\KCLCollisionTypeSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\KCLCollisionTypeSelector.designer.cs">
+      <DependentUpon>KCLCollisionTypeSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\NKMDViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\NKMDViewer.Designer.cs">
+      <DependentUpon>NKMDViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\OBJI.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonFiles\CommonFiles.csproj">
+      <Project>{4D0F5EC8-4730-4D62-AFA5-80AD4AD14625}</Project>
+      <Name>CommonFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LibEveryFileExplorer\LibEveryFileExplorer.csproj">
+      <Project>{39DBD12F-F7E3-4E9A-97A2-0722A4BA2A26}</Project>
+      <Name>LibEveryFileExplorer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MKWii\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CDMDViewer.resx">
+      <DependentUpon>CDMDViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\KCLCollisionTypeSelector.resx">
+      <DependentUpon>KCLCollisionTypeSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\NKMDViewer.resx">
+      <DependentUpon>NKMDViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\OBJI.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\leaf-brown-pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\start.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_2D01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_2E01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_3501.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_3801.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_3A01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_3E01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_3F01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_4901.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_5901.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_6500.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_6700.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_6800.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_6B00.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_6E00.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_9101.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_9601.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_9801.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_9901.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_9B01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_A401.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_A501.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_A601.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_A701.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_A801.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_A901.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_AC01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_AF01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_B001.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_C900.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_CB00.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_CD00.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_CE00.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OBJ_CF00.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)\EveryFileExplorer\bin\Debug\Plugins\$(TargetFileName)"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
