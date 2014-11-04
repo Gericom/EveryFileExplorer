@@ -96,6 +96,10 @@
     <Content Include="Propeller_Box_Artwork_-_Super_Mario_3D_World.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>md "$(TargetDir)\Plugins"
+copy "$(SolutionDir)\Libraries\*" "$(TargetDir)\Plugins"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

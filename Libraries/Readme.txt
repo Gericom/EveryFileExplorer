@@ -1,1 +1,0 @@
-Put these 2 dll files in the plugins directory of efe!

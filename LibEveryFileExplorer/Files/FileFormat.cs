@@ -30,6 +30,7 @@ namespace LibEveryFileExplorer.Files
 		protected const String Category_Shaders = "Shaders";
 		protected const String Category_Strings = "Strings";
 		protected const String Category_Textures = "Textures";
+		protected const String Category_Videos = "Videos";
 
 		public abstract String GetCategory();
 		public abstract String GetFileDescription();

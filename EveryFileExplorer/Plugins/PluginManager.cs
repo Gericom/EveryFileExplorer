@@ -25,7 +25,15 @@ namespace EveryFileExplorer.Plugins
 				{
 					continue;//This is not a .net assembly
 				}
-				Assembly ass = Assembly.LoadFile(s);
+				Assembly ass = null;
+				try
+				{
+					ass = Assembly.LoadFile(s);
+				}
+				catch(NotSupportedException e)
+				{
+					MessageBox.Show("Unblock " + AssemblyName.GetAssemblyName(s) + " from external sources!");
+				}
 				if (Plugin.IsPlugin(ass)) p.Add(new Plugin(ass));
 			}
 			Plugins = p.ToArray();
