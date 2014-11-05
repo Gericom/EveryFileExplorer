@@ -62,10 +62,13 @@
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
-			this.label10 = new System.Windows.Forms.Label();
-			this.comboBox4 = new System.Windows.Forms.ComboBox();
-			this.label11 = new System.Windows.Forms.Label();
 			this.comboBox5 = new System.Windows.Forms.ComboBox();
+			this.label11 = new System.Windows.Forms.Label();
+			this.comboBox4 = new System.Windows.Forms.ComboBox();
+			this.label10 = new System.Windows.Forms.Label();
+			this.label12 = new System.Windows.Forms.Label();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
 			this.groupBox2.SuspendLayout();
@@ -169,10 +172,14 @@
 			// 
 			// panel1
 			// 
+			this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.panel1.Controls.Add(this.textBox1);
+			this.panel1.Controls.Add(this.label12);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(432, 35);
+			this.panel1.Padding = new System.Windows.Forms.Padding(3);
+			this.panel1.Size = new System.Drawing.Size(432, 26);
 			this.panel1.TabIndex = 2;
 			// 
 			// label9
@@ -381,10 +388,10 @@
 			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Controls.Add(this.tabPage3);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tabControl1.Location = new System.Drawing.Point(0, 35);
+			this.tabControl1.Location = new System.Drawing.Point(0, 26);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(432, 350);
+			this.tabControl1.Size = new System.Drawing.Size(432, 359);
 			this.tabControl1.TabIndex = 4;
 			// 
 			// tabPage1
@@ -408,7 +415,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(424, 324);
+			this.tabPage1.Size = new System.Drawing.Size(424, 333);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Polygon Attributes";
 			// 
@@ -446,14 +453,27 @@
 			this.tabPage3.Text = "Texture Mapping";
 			this.tabPage3.UseVisualStyleBackColor = true;
 			// 
-			// label10
+			// comboBox5
 			// 
-			this.label10.AutoSize = true;
-			this.label10.Location = new System.Drawing.Point(6, 9);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(49, 13);
-			this.label10.TabIndex = 0;
-			this.label10.Text = "Wrap S: ";
+			this.comboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox5.FormattingEnabled = true;
+			this.comboBox5.Items.AddRange(new object[] {
+            "Clamp",
+            "Repeat",
+            "Mirror"});
+			this.comboBox5.Location = new System.Drawing.Point(61, 33);
+			this.comboBox5.Name = "comboBox5";
+			this.comboBox5.Size = new System.Drawing.Size(121, 21);
+			this.comboBox5.TabIndex = 3;
+			// 
+			// label11
+			// 
+			this.label11.AutoSize = true;
+			this.label11.Location = new System.Drawing.Point(6, 36);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(49, 13);
+			this.label11.TabIndex = 2;
+			this.label11.Text = "Wrap T: ";
 			// 
 			// comboBox4
 			// 
@@ -468,27 +488,35 @@
 			this.comboBox4.Size = new System.Drawing.Size(121, 21);
 			this.comboBox4.TabIndex = 1;
 			// 
-			// label11
+			// label10
 			// 
-			this.label11.AutoSize = true;
-			this.label11.Location = new System.Drawing.Point(6, 36);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(49, 13);
-			this.label11.TabIndex = 2;
-			this.label11.Text = "Wrap T: ";
+			this.label10.AutoSize = true;
+			this.label10.Location = new System.Drawing.Point(6, 9);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(49, 13);
+			this.label10.TabIndex = 0;
+			this.label10.Text = "Wrap S: ";
 			// 
-			// comboBox5
+			// label12
 			// 
-			this.comboBox5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox5.FormattingEnabled = true;
-			this.comboBox5.Items.AddRange(new object[] {
-            "Clamp",
-            "Repeat",
-            "Mirror"});
-			this.comboBox5.Location = new System.Drawing.Point(61, 33);
-			this.comboBox5.Name = "comboBox5";
-			this.comboBox5.Size = new System.Drawing.Size(121, 21);
-			this.comboBox5.TabIndex = 3;
+			this.label12.AutoSize = true;
+			this.label12.Dock = System.Windows.Forms.DockStyle.Left;
+			this.label12.Location = new System.Drawing.Point(3, 3);
+			this.label12.MaximumSize = new System.Drawing.Size(0, 20);
+			this.label12.MinimumSize = new System.Drawing.Size(0, 20);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(41, 20);
+			this.label12.TabIndex = 0;
+			this.label12.Text = "Name: ";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textBox1
+			// 
+			this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBox1.Location = new System.Drawing.Point(44, 3);
+			this.textBox1.Name = "textBox1";
+			this.textBox1.Size = new System.Drawing.Size(385, 20);
+			this.textBox1.TabIndex = 1;
 			// 
 			// MDL0MaterialEditor
 			// 
@@ -501,6 +529,8 @@
 			this.Name = "MDL0MaterialEditor";
 			this.Size = new System.Drawing.Size(432, 385);
 			this.Load += new System.EventHandler(this.MDL0MaterialEditor_Load);
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
 			this.groupBox2.ResumeLayout(false);
@@ -556,5 +586,7 @@
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.ComboBox comboBox4;
 		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.Label label12;
 	}
 }

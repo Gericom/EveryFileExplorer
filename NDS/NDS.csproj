@@ -54,7 +54,7 @@
   <ItemGroup>
     <Compile Include="GPU\CommandContext.cs" />
     <Compile Include="GPU\Textures.cs" />
-    <Compile Include="NitroSystem\Foundation\NARC.cs" />
+    <Compile Include="NitroSystem\FND\NARC.cs" />
     <Compile Include="NitroFS.cs" />
     <Compile Include="NitroSystem\G3D\Dictionary.cs" />
     <Compile Include="NitroSystem\G3D\MDL0.cs" />
@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NitroSystem\G2D\" />
+    <Folder Include="NitroSystem\SND\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\leaf.png" />

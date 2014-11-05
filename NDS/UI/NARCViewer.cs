@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using LibEveryFileExplorer;
 using LibEveryFileExplorer.Files;
-using NDS.NitroSystem.Foundation;
+using NDS.NitroSystem.FND;
 
 namespace NDS.UI
 {

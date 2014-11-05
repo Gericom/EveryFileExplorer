@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 
-namespace NDS.NitroSystem.Foundation
+namespace NDS.NitroSystem.FND
 {
 	public class NARC : FileFormat<NARC.NARCIdentifier>, IEmptyCreatable, IViewable, IWriteable
 	{
