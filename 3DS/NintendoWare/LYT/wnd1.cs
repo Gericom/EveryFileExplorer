@@ -161,6 +161,7 @@ namespace _3DS.NintendoWare.LYT
 								else
 								{
 									var t = Textures[m.TexMaps[0].TexIndex];
+									if (t == null) break;
 									Gl.glPushMatrix();
 									{
 										Gl.glTranslatef(t.Image.Width, -t.Image.Height, 0);
@@ -264,6 +265,7 @@ namespace _3DS.NintendoWare.LYT
 								var t2 = Textures[Layout.Materials.Materials[WindowFrames[1].MaterialId].TexMaps[0].TexIndex];
 								var t3 = Textures[Layout.Materials.Materials[WindowFrames[2].MaterialId].TexMaps[0].TexIndex];
 								var t4 = Textures[Layout.Materials.Materials[WindowFrames[3].MaterialId].TexMaps[0].TexIndex];
+								if (t1 == null || t2 == null || t3 == null || t4 == null) break;
 								Gl.glPushMatrix();
 								{
 									Gl.glTranslatef(t4.Image.Width, -t1.Image.Height, 0);
