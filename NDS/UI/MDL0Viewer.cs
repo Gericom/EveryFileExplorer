@@ -22,8 +22,8 @@ namespace NDS.UI
 		}
 		void simpleOpenGlControl1_MouseWheel(object sender, MouseEventArgs e)
 		{
-			if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) { dist += ((float)e.Delta / 10); }// *file.modelSet.models[SelMdl].info.posScale; }
-			else { dist += ((float)e.Delta / 100); }// *file.modelSet.models[SelMdl].info.posScale; }
+			if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) { dist += ((float)e.Delta / 10) * Model.info.posScale / 8f; }
+			else { dist += ((float)e.Delta / 100) * Model.info.posScale / 8f; }
 			Render();
 		}
 
@@ -159,6 +159,18 @@ namespace NDS.UI
 					return true;
 				case Keys.L:
 					licht = !licht;
+					Render();
+					return true;
+				case Keys.OemMinus:
+				case Keys.OemMinus | Keys.Shift:
+					if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) dist += 12f * Model.info.posScale / 8f;
+					else dist += 1.2f * Model.info.posScale / 8f;
+					Render();
+					return true;
+				case Keys.Oemplus:
+				case Keys.Oemplus | Keys.Shift:
+					if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) dist -= 12f * Model.info.posScale / 8f;
+					else dist -= 1.2f * Model.info.posScale / 8f;
 					Render();
 					return true;
 				default:

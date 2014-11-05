@@ -26,8 +26,8 @@ namespace _3DS.UI
 		}
 		void simpleOpenGlControl1_MouseWheel(object sender, MouseEventArgs e)
 		{
-			if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) { dist += ((float)e.Delta / 10); }// *file.modelSet.models[SelMdl].info.posScale; }
-			else { dist += ((float)e.Delta / 100); }// *file.modelSet.models[SelMdl].info.posScale; }
+			if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) { dist += ((float)e.Delta / 10); }
+			else { dist += ((float)e.Delta / 100); }
 			Render();
 		}
 
@@ -132,7 +132,7 @@ namespace _3DS.UI
 			if (!(TextureMapper.TextureObject is ReferenceTexture))
 				return;
 			var tex = cgfx.Data.Textures[cgfx.Data.Dictionaries[1].IndexOf(((ReferenceTexture)TextureMapper.TextureObject).LinkedTextureName)] as ImageTextureCtr;
-			if (tex == null) 
+			if (tex == null)
 				return;
 			Gl.glBindTexture(Gl.GL_TEXTURE_2D, Id);
 			Gl.glColor3f(1, 1, 1);
@@ -339,7 +339,8 @@ namespace _3DS.UI
 					if (mat.Tex2 != null) tex.Add((int)mm.MaterialIndex * 4 + 2 + 1);
 					else tex.Add(0);
 					//if (mat.Tex3 != null) tex.Add((int)mm.MaterialIndex * 4 + 3 + 1);
-					/*else */tex.Add(0);
+					/*else */
+					tex.Add(0);
 
 					Shaders[mm.MaterialIndex] = new CGFXShader(mat, tex.ToArray());
 					Shaders[mm.MaterialIndex].Compile();
@@ -411,19 +412,19 @@ namespace _3DS.UI
 					Render();
 					return true;
 				case Keys.Z:
-					X -= 5f;// * file.modelSet.models[SelMdl].info.posScale;
+					X -= 5f;
 					Render();
 					return true;
 				case Keys.X:
-					X += 5f;// * file.modelSet.models[SelMdl].info.posScale;
+					X += 5f;
 					Render();
 					return true;
 				case Keys.A:
-					Y -= 5f;// * file.modelSet.models[SelMdl].info.posScale;
+					Y -= 5f;
 					Render();
 					return true;
 				case Keys.S:
-					Y += 5f;// * file.modelSet.models[SelMdl].info.posScale;
+					Y += 5f;
 					Render();
 					return true;
 				case Keys.W:
@@ -446,6 +447,18 @@ namespace _3DS.UI
 					return true;
 				case Keys.L:
 					licht = !licht;
+					Render();
+					return true;
+				case Keys.OemMinus:
+				case Keys.OemMinus | Keys.Shift:
+					if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) dist += 12f;
+					else dist += 1.2f;
+					Render();
+					return true;
+				case Keys.Oemplus:
+				case Keys.Oemplus | Keys.Shift:
+					if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) dist -= 12f;
+					else dist -= 1.2f;
 					Render();
 					return true;
 				default:

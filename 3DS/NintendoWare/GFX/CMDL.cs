@@ -2985,11 +2985,12 @@ namespace _3DS.NintendoWare.GFX
 									{
 										if (bones.Length != 0)
 										{
-											Vector3 dst = new Vector3(0, 0, 0);
+											//this doesn't work correct!
+											/*Vector3 dst = new Vector3(0, 0, 0);
 											for (int j = 0; j < v.NrComponents; j++)
 											{
 												dst += p.Vertex[i] * Model.Skeleton.GetMatrix((int)PrimitiveSet.RelatedBones[bones[j]]);// SkeletonCtr.TransformByMtx(p.Vertex[i], Model.Skeleton.GetMatrix((int)PrimitiveSet.RelatedBones[bones[j]])) * Vars[j];//Add4(dst, Mult4(Model.Skeleton.GetMatrix((int)PrimitiveSet.RelatedBones[bones[j]]), ((float)weights[j] * v.Scale)));
-											}
+											}*/
 											//no transformations when no animation is used!
 											//p.Vertex[i] = dst;
 										}
@@ -3061,7 +3062,8 @@ namespace _3DS.NintendoWare.GFX
 							Destination.Colors = new Color[count];
 							for (int i = 0; i < count; i++)
 							{
-								Destination.Colors[i] = Color.FromArgb((int)(Attributes[3] * 255), (int)(Attributes[0] * 255), (int)(Attributes[1] * 255), (int)(Attributes[2] * 255));
+								if (NrAttributes > 3) Destination.Colors[i] = Color.FromArgb((int)(Attributes[3] * 255), (int)(Attributes[0] * 255), (int)(Attributes[1] * 255), (int)(Attributes[2] * 255));
+								else Destination.Colors[i] = Color.FromArgb(255, (int)(Attributes[0] * 255), (int)(Attributes[1] * 255), (int)(Attributes[2] * 255));
 							}
 							break;
 						case VertexAttributeUsage.TextureCoordinate0:
@@ -3071,8 +3073,20 @@ namespace _3DS.NintendoWare.GFX
 								Destination.TexCoords[i] = new Vector2(Attributes[0], Attributes[1]);
 							}
 							break;
-						//case VertexAttributeUsage.TextureCoordinate1: p.TexCoords2 = new Vector2[Vertices]; break;
-						//case VertexAttributeUsage.TextureCoordinate2: p.TexCoords3 = new Vector2[Vertices]; break;
+						case VertexAttributeUsage.TextureCoordinate1:
+							Destination.TexCoords2 = new Vector2[count];
+							for (int i = 0; i < count; i++)
+							{
+								Destination.TexCoords2[i] = new Vector2(Attributes[0], Attributes[1]);
+							}
+							break;
+						case VertexAttributeUsage.TextureCoordinate2:
+							Destination.TexCoords3 = new Vector2[count];
+							for (int i = 0; i < count; i++)
+							{
+								Destination.TexCoords3[i] = new Vector2(Attributes[0], Attributes[1]);
+							}
+							break;
 						case VertexAttributeUsage.BoneIndex:
 							Matrix34 mtx = Model.Skeleton.GetMatrix((int)Attributes[0]);
 							for (int i = 0; i < count; i++)
