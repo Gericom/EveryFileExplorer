@@ -16,14 +16,11 @@ namespace LibEveryFileExplorer.UI
 		ImageList images;
 		ImageList images2;
 
-		[DllImport("uxtheme.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
-		private static extern int SetWindowTheme(IntPtr hWnd, string appName, string partList);
-
 		public FileBrowser()
 		{
 			InitializeComponent();
-			SetWindowTheme(treeView1.Handle, "explorer", null);
-			SetWindowTheme(listView1.Handle, "explorer", null);
+			Win32Util.SetWindowTheme(treeView1.Handle, "explorer", null);
+			Win32Util.SetWindowTheme(listView1.Handle, "explorer", null);
 		}
 
 		private void FileBrowser_Load(object sender, EventArgs e)

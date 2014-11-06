@@ -108,6 +108,7 @@
     <Compile Include="UI\GameDataSectionViewerBase.Designer.cs">
       <DependentUpon>GameDataSectionViewerBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win32Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tools\" />

@@ -50,15 +50,12 @@ namespace LibEveryFileExplorer
 			return s;
 		}
 
-		[DllImport("Shlwapi.dll", CharSet = CharSet.Auto)]
-		private static extern long StrFormatByteSize(long fileSize, [MarshalAs(UnmanagedType.LPTStr)] StringBuilder buffer, int bufferSize);
-
 		public static ListViewItem GetFileItem(EFEFile File)
 		{
 			Type[] formats = Program.FileManager.GetPossibleFormats(File);
 			ListViewItem i = new ListViewItem(File.Name);
 			StringBuilder b = new StringBuilder(50);
-			StrFormatByteSize(File.Data.Length, b, 50);
+			Win32Util.StrFormatByteSize(File.Data.Length, b, 50);
 			i.SubItems.Add(b.ToString());
 			if (formats.Length == 1)
 			{

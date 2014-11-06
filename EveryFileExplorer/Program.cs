@@ -8,6 +8,7 @@ using System.Reflection;
 using System.IO;
 using System.Threading;
 using System.Runtime.InteropServices;
+using LibEveryFileExplorer;
 
 namespace EveryFileExplorer
 {
@@ -37,7 +38,7 @@ namespace EveryFileExplorer
 			{
 				String arg0 = "";
 				if (Arguments.Length > 0) arg0 = Arguments[0];
-				Win32MessageHelper.SendString((IntPtr)Win32MessageHelper.HWND_BROADCAST, arg0);
+				Win32Util.SendString((IntPtr)Win32Util.HWND_BROADCAST, arg0);
 			}
 		}
 

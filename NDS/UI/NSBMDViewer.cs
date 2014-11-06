@@ -25,14 +25,11 @@ namespace NDS.UI
 		NSBMD mod;
 		NSBTX tex = null;
 
-		[DllImport("uxtheme.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
-		private static extern int SetWindowTheme(IntPtr hWnd, string appName, string partList);
-
 		public NSBMDViewer(NSBMD mod)
 		{
 			this.mod = mod;
 			InitializeComponent();
-			SetWindowTheme(treeView1.Handle, "explorer", null);
+			Win32Util.SetWindowTheme(treeView1.Handle, "explorer", null);
 			ImageL = new ImageList();
 			ImageL.ColorDepth = ColorDepth.Depth32Bit;
 			ImageL.ImageSize = new Size(16, 16);

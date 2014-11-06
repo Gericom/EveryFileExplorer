@@ -18,33 +18,6 @@ namespace EveryFileExplorer
 {
 	public partial class Form1 : Form
 	{
-		private const int GWL_STYLE = -16;
-		private const int GWL_EXSTYLE = -20;
-
-		private const int WS_BORDER = 0x00800000;
-		private const int WS_EX_CLIENTEDGE = 0x00000200;
-
-		private const uint SWP_NOSIZE = 0x0001;
-		private const uint SWP_NOMOVE = 0x0002;
-		private const uint SWP_NOZORDER = 0x0004;
-		private const uint SWP_NOREDRAW = 0x0008;
-		private const uint SWP_NOACTIVATE = 0x0010;
-		private const uint SWP_FRAMECHANGED = 0x0020;
-		private const uint SWP_SHOWWINDOW = 0x0040;
-		private const uint SWP_HIDEWINDOW = 0x0080;
-		private const uint SWP_NOCOPYBITS = 0x0100;
-		private const uint SWP_NOOWNERZORDER = 0x0200;
-		private const uint SWP_NOSENDCHANGING = 0x0400;
-
-		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		private static extern int SetWindowLong(IntPtr hWnd, int Index, int Value);
-
-		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		private static extern int GetWindowLong(IntPtr hWnd, int Index);
-
-		[DllImport("user32.dll", ExactSpelling = true)]
-		private static extern int SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-
 		public Form1()
 		{
 			InitializeComponent();
@@ -66,7 +39,7 @@ namespace EveryFileExplorer
 				MdiClient mdiClient = this.Controls[i] as MdiClient;
 				if (mdiClient != null)
 				{
-					SetMDIBorderStyle(mdiClient, BorderStyle.None);
+					Win32Util.SetMDIBorderStyle(mdiClient, BorderStyle.None);
 				}
 			}
 			menuNew.MenuItems.Clear();
@@ -127,40 +100,7 @@ namespace EveryFileExplorer
 			PendingPath = null;
 		}
 
-		private void SetMDIBorderStyle(MdiClient mdiClient, BorderStyle value)
-		{
-			// Get styles using Win32 calls
-			int style = GetWindowLong(mdiClient.Handle, GWL_STYLE);
-			int exStyle = GetWindowLong(mdiClient.Handle, GWL_EXSTYLE);
-
-			// Add or remove style flags as necessary.
-			switch (value)
-			{
-				case BorderStyle.Fixed3D:
-					exStyle |= WS_EX_CLIENTEDGE;
-					style &= ~WS_BORDER;
-					break;
-
-				case BorderStyle.FixedSingle:
-					exStyle &= ~WS_EX_CLIENTEDGE;
-					style |= WS_BORDER;
-					break;
-
-				case BorderStyle.None:
-					style &= ~WS_BORDER;
-					exStyle &= ~WS_EX_CLIENTEDGE;
-					break;
-			}
-
-			// Set the styles using Win32 calls
-			SetWindowLong(mdiClient.Handle, GWL_STYLE, style);
-			SetWindowLong(mdiClient.Handle, GWL_EXSTYLE, exStyle);
-
-			// Update the non-client area.
-			SetWindowPos(mdiClient.Handle, IntPtr.Zero, 0, 0, 0, 0,
-				SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
-				SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
-		}
+		
 
 		public void BringMDIWindowToFront(Form Dialog)
 		{
@@ -380,19 +320,14 @@ namespace EveryFileExplorer
 			panel2.Controls.Clear();
 		}
 
-		[DllImport("user32.dll")]
-		private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
-
-		private const int SW_RESTORE = 0x09;
-
 		protected override void WndProc(ref Message m)
 		{
-			if (m.Msg == Win32MessageHelper.WM_COPYDATA)
+			if (m.Msg == Win32Util.WM_COPYDATA)
 			{
-				if (WindowState == FormWindowState.Minimized) ShowWindowAsync(Handle, SW_RESTORE);
+				if (WindowState == FormWindowState.Minimized) Win32Util.ShowWindowAsync(Handle, Win32Util.SW_RESTORE);
 				TopMost = true;
 				TopMost = false;
-				String path = Win32MessageHelper.GetStringFromMessage(m);
+				String path = Win32Util.GetStringFromMessage(m);
 				if (path.Length < 1 || !System.IO.File.Exists(path)) return;
 				Program.FileManager.OpenFile(new EFEDiskFile(path));
 				return;

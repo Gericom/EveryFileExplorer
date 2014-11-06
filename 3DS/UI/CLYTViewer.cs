@@ -12,6 +12,7 @@ using LibEveryFileExplorer.Files;
 using System.Drawing.Imaging;
 using NintendoWare.LYT;
 using System.Runtime.InteropServices;
+using LibEveryFileExplorer;
 
 namespace _3DS.UI
 {
@@ -23,15 +24,12 @@ namespace _3DS.UI
 		BasicShader BShader = new BasicShader();
 		ImageList ImageL;
 
-		[DllImport("uxtheme.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
-		private static extern int SetWindowTheme(IntPtr hWnd, string appName, string partList);
-
 		public CLYTViewer(CLYT Layout)
 		{
 			this.NWLayout = Layout;
 			InitializeComponent();
-			SetWindowTheme(treeView1.Handle, "explorer", null);
-			SetWindowTheme(treeView2.Handle, "explorer", null);
+			Win32Util.SetWindowTheme(treeView1.Handle, "explorer", null);
+			Win32Util.SetWindowTheme(treeView2.Handle, "explorer", null);
 		}
 
 		private void CLYTViewer_Load(object sender, EventArgs e)
