@@ -57,6 +57,11 @@
 			this.buttonOpen = new System.Windows.Forms.ToolStripButton();
 			this.buttonSave = new System.Windows.Forms.ToolStripButton();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+			this.panel2 = new System.Windows.Forms.Panel();
+			this.splitter1 = new System.Windows.Forms.Splitter();
+			this.menuProject = new System.Windows.Forms.MenuItem();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
+			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			this.panel1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -66,6 +71,7 @@
 			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuFile,
             this.menuEdit,
+            this.menuProject,
             this.menuTools,
             this.menuWindow,
             this.menuHelp});
@@ -147,12 +153,12 @@
 			// 
 			// menuTools
 			// 
-			this.menuTools.Index = 2;
+			this.menuTools.Index = 3;
 			this.menuTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuCompression,
             this.menuItem2,
             this.menuItemOptions});
-			this.menuTools.MergeOrder = 2;
+			this.menuTools.MergeOrder = 3;
 			this.menuTools.MergeType = System.Windows.Forms.MenuMerge.MergeItems;
 			this.menuTools.Text = "Tools";
 			// 
@@ -173,12 +179,12 @@
 			// 
 			// menuWindow
 			// 
-			this.menuWindow.Index = 3;
+			this.menuWindow.Index = 4;
 			this.menuWindow.MdiList = true;
 			this.menuWindow.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuTile,
             this.menuCascade});
-			this.menuWindow.MergeOrder = 3;
+			this.menuWindow.MergeOrder = 4;
 			this.menuWindow.Text = "Window";
 			// 
 			// menuTile
@@ -195,10 +201,10 @@
 			// 
 			// menuHelp
 			// 
-			this.menuHelp.Index = 4;
+			this.menuHelp.Index = 5;
 			this.menuHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem4});
-			this.menuHelp.MergeOrder = 4;
+			this.menuHelp.MergeOrder = 5;
 			this.menuHelp.Text = "Help";
 			// 
 			// menuItem4
@@ -252,12 +258,55 @@
 			this.buttonSave.Text = "Save";
 			this.buttonSave.Click += new System.EventHandler(this.SaveFile);
 			// 
+			// panel2
+			// 
+			this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
+			this.panel2.Location = new System.Drawing.Point(0, 25);
+			this.panel2.Name = "panel2";
+			this.panel2.Size = new System.Drawing.Size(200, 418);
+			this.panel2.TabIndex = 5;
+			this.panel2.Visible = false;
+			// 
+			// splitter1
+			// 
+			this.splitter1.Location = new System.Drawing.Point(200, 25);
+			this.splitter1.Name = "splitter1";
+			this.splitter1.Size = new System.Drawing.Size(3, 418);
+			this.splitter1.TabIndex = 7;
+			this.splitter1.TabStop = false;
+			this.splitter1.Visible = false;
+			// 
+			// menuProject
+			// 
+			this.menuProject.Index = 2;
+			this.menuProject.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem3,
+            this.menuItem6});
+			this.menuProject.MergeOrder = 2;
+			this.menuProject.MergeType = System.Windows.Forms.MenuMerge.MergeItems;
+			this.menuProject.Text = "Project";
+			this.menuProject.Visible = false;
+			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 0;
+			this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.F6;
+			this.menuItem3.Text = "Build";
+			// 
+			// menuItem6
+			// 
+			this.menuItem6.Index = 1;
+			this.menuItem6.Shortcut = System.Windows.Forms.Shortcut.F5;
+			this.menuItem6.Text = "Build and Run";
+			// 
 			// Form1
 			// 
 			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(804, 443);
+			this.Controls.Add(this.splitter1);
+			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.panel1);
 			this.DoubleBuffered = true;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -307,6 +356,11 @@
 		private System.Windows.Forms.MenuItem menuFileNew;
 		private System.Windows.Forms.MenuItem menuCompression;
 		private System.Windows.Forms.MenuItem menuItem2;
+		private System.Windows.Forms.Panel panel2;
+		private System.Windows.Forms.Splitter splitter1;
+		private System.Windows.Forms.MenuItem menuProject;
+		private System.Windows.Forms.MenuItem menuItem3;
+		private System.Windows.Forms.MenuItem menuItem6;
 	}
 }
 

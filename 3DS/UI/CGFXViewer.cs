@@ -68,46 +68,6 @@ namespace _3DS.UI
 
 			if (cgfx.Data.Textures != null && cgfx.Data.Models != null)
 			{
-				//int i = 1;
-				/*foreach (_3DS.CGFX.DATA.TXOB t in cgfx.Data.Textures)
-				{
-					//int S = (int)((t.Unknown7 >> 8) & 0x3);
-					//int T = (int)((t.Unknown7 >> 12) & 0x3);
-					//if (S == 0) S = Gl.GL_REPEAT;
-					//else S = Gl.GL_MIRRORED_REPEAT;
-					//if (T == 0) T = Gl.GL_REPEAT;
-					//else T = Gl.GL_MIRRORED_REPEAT;
-					int S = Gl.GL_REPEAT;
-					int T = Gl.GL_REPEAT;
-					/*if ((t.Unknown4 & 0x7) == 0x3)
-					{
-						S = Gl.GL_MIRRORED_REPEAT;
-						T = Gl.GL_MIRRORED_REPEAT;
-					}*/
-
-				//if ((t.Unknown4 & 0x1) == 1) S = Gl.GL_MIRRORED_REPEAT;
-				//if (((t.Unknown4 >> 1) & 0x1) == 1) T = Gl.GL_MIRRORED_REPEAT;
-				/*uint _s = (t.Unknown8 >> 16) & 0xFF;
-				uint _t = (t.Unknown8 >> 24) & 0xFF;
-				if (_s == 2) S = Gl.GL_REPEAT;
-				else if (_s == 3) S = Gl.GL_MIRRORED_REPEAT;
-				else S = Gl.GL_CLAMP_TO_EDGE;
-				if (_t == 2) T = Gl.GL_REPEAT;
-				else if (_t == 3) T = Gl.GL_MIRRORED_REPEAT;
-				else T = Gl.GL_CLAMP_TO_EDGE;/
-				//GlNitro.glNitroTexImage2D(t.GetBitmap(), i, S, T, Gl.GL_LINEAR, Gl.GL_LINEAR);
-				Gl.glBindTexture(Gl.GL_TEXTURE_2D, i);
-				Gl.glColor3f(1, 1, 1);
-				Bitmap b = t.GetBitmap();
-				BitmapData d = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-				Gl.glTexImage2D(Gl.GL_TEXTURE_2D, 0, Gl.GL_RGBA8, b.Width, b.Height, 0, Gl.GL_BGRA, Gl.GL_UNSIGNED_BYTE, d.Scan0);
-				b.UnlockBits(d);
-				Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MIN_FILTER, Gl.GL_LINEAR);
-				Gl.glTexParameteri(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_MAG_FILTER, Gl.GL_LINEAR);
-				Gl.glTexParameterf(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_WRAP_S, S);
-				Gl.glTexParameterf(Gl.GL_TEXTURE_2D, Gl.GL_TEXTURE_WRAP_T, T);
-				i++;
-			}*/
 				int i = 0;
 				foreach (var v in cgfx.Data.Models[0].Materials)
 				{
@@ -482,6 +442,10 @@ namespace _3DS.UI
 			Render();
 		}
 
+		private void CGFXViewer_Activated(object sender, EventArgs e)
+		{
+			for (int i = 0; i < 8; i++) Render();
+		}
 
 	}
 }

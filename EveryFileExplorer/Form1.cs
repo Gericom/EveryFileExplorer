@@ -50,6 +50,15 @@ namespace EveryFileExplorer
 			InitializeComponent();
 		}
 
+		private String PendingPath = null;
+
+		public Form1(String Path)
+		{
+			InitializeComponent();
+			if (Path.Length < 1 || !System.IO.File.Exists(Path)) return;
+			PendingPath = Path;
+		}
+
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			for (int i = 0; i < this.Controls.Count; i++)
@@ -114,6 +123,8 @@ namespace EveryFileExplorer
 					}
 				}
 			}
+			if (PendingPath != null) Program.FileManager.OpenFile(new EFEDiskFile(PendingPath));
+			PendingPath = null;
 		}
 
 		private void SetMDIBorderStyle(MdiClient mdiClient, BorderStyle value)
@@ -354,6 +365,39 @@ namespace EveryFileExplorer
 		void CreateFileNew_Click(object sender, EventArgs e)
 		{
 			Program.FileManager.CreateFileFromFileWithType((Type)(((MenuItem)sender).Tag));
+		}
+
+		private void EnableProjectMode()
+		{
+			menuProject.Visible = splitter1.Visible = panel2.Visible = true;
+			menuNew.Enabled = menuFileNew.Enabled = menuOpen.Enabled = buttonOpen.Enabled = false;
+		}
+
+		private void DisableProjectMode()
+		{
+			menuProject.Visible = splitter1.Visible = panel2.Visible = false;
+			menuNew.Enabled = menuFileNew.Enabled = menuOpen.Enabled = buttonOpen.Enabled = true;
+			panel2.Controls.Clear();
+		}
+
+		[DllImport("user32.dll")]
+		private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+
+		private const int SW_RESTORE = 0x09;
+
+		protected override void WndProc(ref Message m)
+		{
+			if (m.Msg == Win32MessageHelper.WM_COPYDATA)
+			{
+				if (WindowState == FormWindowState.Minimized) ShowWindowAsync(Handle, SW_RESTORE);
+				TopMost = true;
+				TopMost = false;
+				String path = Win32MessageHelper.GetStringFromMessage(m);
+				if (path.Length < 1 || !System.IO.File.Exists(path)) return;
+				Program.FileManager.OpenFile(new EFEDiskFile(path));
+				return;
+			}
+			base.WndProc(ref m);
 		}
 	}
 }

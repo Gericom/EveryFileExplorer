@@ -50,6 +50,7 @@
     <Compile Include="Collections\Matrix34.cs" />
     <Compile Include="Collections\Matrix44.cs" />
     <Compile Include="Collections\Vector2.cs" />
+    <Compile Include="Files\EFEDiskFile.cs" />
     <Compile Include="Files\IChildReactive.cs" />
     <Compile Include="GFX\ETC1.cs" />
     <Compile Include="GFX\ETC1_new.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="IO\EndianBinaryWriter.cs" />
     <Compile Include="IO\IOUtil.cs" />
     <Compile Include="Math\MathUtil.cs" />
+    <Compile Include="Projects\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>

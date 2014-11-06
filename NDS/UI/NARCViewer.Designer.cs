@@ -155,7 +155,7 @@
 			this.menuItem5.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem6,
             this.menuItem7});
-			this.menuItem5.MergeOrder = 2;
+			this.menuItem5.MergeOrder = 3;
 			this.menuItem5.MergeType = System.Windows.Forms.MenuMerge.MergeItems;
 			this.menuItem5.Text = "Tools";
 			// 

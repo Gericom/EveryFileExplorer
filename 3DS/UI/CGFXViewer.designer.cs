@@ -123,6 +123,7 @@
 			this.Controls.Add(this.tabControl1);
 			this.Name = "CGFXViewer";
 			this.Text = "CGFX";
+			this.Activated += new System.EventHandler(this.CGFXViewer_Activated);
 			this.Load += new System.EventHandler(this.CGFX_Load);
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.CGFX_Layout);
 			this.Resize += new System.EventHandler(this.CGFX_Resize);

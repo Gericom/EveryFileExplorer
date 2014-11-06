@@ -8,7 +8,7 @@ using System.IO;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using _3DS.UI;
 
-namespace _3DS
+namespace _3DS.NintendoWare.LYT
 {
 	public class DARC : FileFormat<DARC.darcIdentifier>, IViewable
 	{
@@ -55,7 +55,7 @@ namespace _3DS
 				if (Signature != "darc") throw new SignatureNotCorrectException(Signature, "darc", er.BaseStream.Position - 4);
 				Endianness = er.ReadUInt16();
 				HeaderSize = er.ReadUInt16();
-				Unknown = er.ReadUInt32();
+				Version = er.ReadUInt32();
 				FileSize = er.ReadUInt32();
 				FileTableOffset = er.ReadUInt32();
 				FileTableLength = er.ReadUInt32();
@@ -64,7 +64,7 @@ namespace _3DS
 			public String Signature;
 			public UInt16 Endianness;
 			public UInt16 HeaderSize;
-			public UInt32 Unknown;
+			public UInt32 Version;
 			public UInt32 FileSize;
 			public UInt32 FileTableOffset;
 			public UInt32 FileTableLength;

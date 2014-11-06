@@ -221,6 +221,7 @@ namespace NDS.UI
 
 		public void FileOpened(ViewableFile File)
 		{
+			if (!(File.FileFormat is NSBTX)) return;
 			ViewableFile[] v = EveryFileExplorerUtil.GetOpenFilesOfType(typeof(NSBTX));
 			menuItem1.MenuItems.Clear();
 			bool curavab = false;
@@ -273,6 +274,8 @@ namespace NDS.UI
 			//otherwise the nsbtx menu is not refreshed!
 			mainMenu1.MenuItems.Clear();
 			mainMenu1.MenuItems.Add(menuItem1);
+			//render it multiple times to avoid glitches!
+			for (int i = 0; i < 8; i++) ModViewer.Render();
 		}
 
 		private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)

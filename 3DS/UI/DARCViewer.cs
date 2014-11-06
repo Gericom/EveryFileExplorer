@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer;
+using _3DS.NintendoWare.LYT;
 
 namespace _3DS.UI
 {

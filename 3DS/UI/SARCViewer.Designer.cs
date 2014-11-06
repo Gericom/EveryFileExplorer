@@ -90,7 +90,7 @@
 			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem3,
             this.menuExportDir});
-			this.menuItem2.MergeOrder = 2;
+			this.menuItem2.MergeOrder = 3;
 			this.menuItem2.MergeType = System.Windows.Forms.MenuMerge.MergeItems;
 			this.menuItem2.Text = "Tools";
 			// 
