@@ -6,8 +6,23 @@ using System.Windows.Forms;
 
 namespace LibEveryFileExplorer.Projects
 {
-	public abstract class Project
+	public interface ProjectBase
 	{
+		String ProjectDirectory { get; }
+		bool CanRun { get; }
+
+		Control GetProjectControl();
+
+		void Build();
+		void Run();
+		void SaveProjectFile();
+	}
+
+	public abstract class Project<T> : ProjectBase where T : ProjectIdentifier, new()
+	{
+		private static T _identifier = new T();
+		public static T Identifier { get { return _identifier; } }
+
 		public Project(String ProjectDir)
 		{
 			ProjectDirectory = ProjectDir;
@@ -20,5 +35,12 @@ namespace LibEveryFileExplorer.Projects
 
 		public abstract void Build();
 		public abstract void Run();
+		public abstract void SaveProjectFile();
+	}
+
+	public abstract class ProjectIdentifier
+	{
+		public abstract String GetProjectDescription();
+		public abstract bool IsProject(byte[] Data);
 	}
 }

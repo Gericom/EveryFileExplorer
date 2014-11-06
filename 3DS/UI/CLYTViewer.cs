@@ -231,5 +231,10 @@ namespace _3DS.UI
 			Render();
 			Render();
 		}
+
+		private void CLYTViewer_Activated(object sender, EventArgs e)
+		{
+			for (int i = 0; i < 8; i++) Render();
+		}
 	}
 }

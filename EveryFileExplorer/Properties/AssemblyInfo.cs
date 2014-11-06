@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Every File Explorer")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyDescription("Takes hacking to a higher level!")]
+[assembly: AssemblyConfiguration("Devbuild")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Every File Explorer")]
 [assembly: AssemblyCopyright("Copyright © Florian Nouwt 2014")]

@@ -171,7 +171,10 @@ namespace EveryFileExplorer
 			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
 				&& openFileDialog1.FileName.Length > 0)
 			{
-				Program.FileManager.OpenFile(new EFEDiskFile(openFileDialog1.FileName));
+				foreach (String s in openFileDialog1.FileNames)
+				{
+					Program.FileManager.OpenFile(new EFEDiskFile(s));
+				}
 			}
 			opening = false;
 		}

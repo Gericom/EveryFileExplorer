@@ -10,5 +10,6 @@ Just open the project in Visual Studio, and build it. You may need to specify th
 * 3DS
 * Common Compressors
 * Common Files
+* Lego Pirates of the Carribean
 * Mario Kart
 * NDS

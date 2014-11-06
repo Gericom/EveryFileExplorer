@@ -15,6 +15,7 @@ namespace EveryFileExplorer.Plugins
 		public String Version;
 		public Type[] CompressionTypes;
 		public Type[] FileFormatTypes;
+		public Type[] ProjectTypes;
 
 		public Plugin(Assembly Assembly)
 		{
@@ -31,15 +32,18 @@ namespace EveryFileExplorer.Plugins
 			Type[] tt = Assembly.GetExportedTypes();
 			List<Type> fe = new List<Type>();
 			List<Type> ce = new List<Type>();
+			List<Type> pe = new List<Type>();
 			foreach (var t in tt)
 			{
 				if (!t.IsClass) continue;
 				var v = t.GetInterfaces();
 				if (v.Length != 0 && t.GetInterfaces()[0].Name == "FileFormatBase") fe.Add(t);
 				else if (v.Length != 0 && t.GetInterfaces()[0].Name == "CompressionFormatBase") ce.Add(t);
+				else if (v.Length != 0 && t.GetInterfaces()[0].Name == "ProjectBase") pe.Add(t);
 			}
 			FileFormatTypes = fe.ToArray();
 			CompressionTypes = ce.ToArray();
+			ProjectTypes = pe.ToArray();
 		}
 
 		public static bool IsPlugin(Assembly Assembly)
@@ -49,7 +53,7 @@ namespace EveryFileExplorer.Plugins
 			{
 				if (!t.IsClass) continue;
 				var v = t.GetInterfaces();
-				if (v.Length != 0 && (t.GetInterfaces()[0].Name == "FileFormatBase" || t.GetInterfaces()[0].Name == "CompressionFormatBase")) return true;
+				if (v.Length != 0 && (t.GetInterfaces()[0].Name == "FileFormatBase" || t.GetInterfaces()[0].Name == "CompressionFormatBase" || t.GetInterfaces()[0].Name == "ProjectBase")) return true;
 			}
 			return false;
 		}

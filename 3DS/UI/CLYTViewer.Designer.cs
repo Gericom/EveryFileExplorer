@@ -35,6 +35,7 @@
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.treeView2 = new System.Windows.Forms.TreeView();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.tabPage5 = new System.Windows.Forms.TabPage();
@@ -42,7 +43,6 @@
 			this.simpleOpenGlControl1 = new Tao.Platform.Windows.SimpleOpenGlControl();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.mainMenu1 = new LibEveryFileExplorer.UI.MainMenu(this.components);
-			this.treeView2 = new System.Windows.Forms.TreeView();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -138,6 +138,16 @@
 			this.tabPage2.Text = "Groups";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
+			// treeView2
+			// 
+			this.treeView2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeView2.HideSelection = false;
+			this.treeView2.HotTracking = true;
+			this.treeView2.Location = new System.Drawing.Point(0, 0);
+			this.treeView2.Name = "treeView2";
+			this.treeView2.Size = new System.Drawing.Size(186, 156);
+			this.treeView2.TabIndex = 0;
+			// 
 			// tabPage3
 			// 
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
@@ -200,16 +210,6 @@
 			this.toolStrip1.TabIndex = 0;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
-			// treeView2
-			// 
-			this.treeView2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.treeView2.HideSelection = false;
-			this.treeView2.HotTracking = true;
-			this.treeView2.Location = new System.Drawing.Point(0, 0);
-			this.treeView2.Name = "treeView2";
-			this.treeView2.Size = new System.Drawing.Size(186, 156);
-			this.treeView2.TabIndex = 0;
-			// 
 			// CLYTViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -219,6 +219,7 @@
 			this.Menu = this.mainMenu1;
 			this.Name = "CLYTViewer";
 			this.Text = "CLYTViewer";
+			this.Activated += new System.EventHandler(this.CLYTViewer_Activated);
 			this.Load += new System.EventHandler(this.CLYTViewer_Load);
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.CLYTViewer_Layout);
 			this.Resize += new System.EventHandler(this.CLYTViewer_Resize);

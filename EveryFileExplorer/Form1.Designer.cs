@@ -34,14 +34,22 @@
 			this.menuFile = new System.Windows.Forms.MenuItem();
 			this.menuNew = new System.Windows.Forms.MenuItem();
 			this.menuFileNew = new System.Windows.Forms.MenuItem();
+			this.menuItem10 = new System.Windows.Forms.MenuItem();
+			this.menuItem11 = new System.Windows.Forms.MenuItem();
 			this.menuOpen = new System.Windows.Forms.MenuItem();
+			this.menuItem1 = new System.Windows.Forms.MenuItem();
+			this.menuItem8 = new System.Windows.Forms.MenuItem();
 			this.menuClose = new System.Windows.Forms.MenuItem();
+			this.menuItem9 = new System.Windows.Forms.MenuItem();
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
 			this.menuSave = new System.Windows.Forms.MenuItem();
 			this.menuSaveAs = new System.Windows.Forms.MenuItem();
 			this.menuItem7 = new System.Windows.Forms.MenuItem();
 			this.menuExit = new System.Windows.Forms.MenuItem();
 			this.menuEdit = new System.Windows.Forms.MenuItem();
+			this.menuProject = new System.Windows.Forms.MenuItem();
+			this.menuItem3 = new System.Windows.Forms.MenuItem();
+			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			this.menuTools = new System.Windows.Forms.MenuItem();
 			this.menuCompression = new System.Windows.Forms.MenuItem();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
@@ -59,9 +67,6 @@
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.splitter1 = new System.Windows.Forms.Splitter();
-			this.menuProject = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
-			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			this.panel1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -82,8 +87,13 @@
 			this.menuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuNew,
             this.menuFileNew,
+            this.menuItem10,
+            this.menuItem11,
             this.menuOpen,
+            this.menuItem1,
+            this.menuItem8,
             this.menuClose,
+            this.menuItem9,
             this.menuItem5,
             this.menuSave,
             this.menuSaveAs,
@@ -101,46 +111,72 @@
 			this.menuFileNew.Index = 1;
 			this.menuFileNew.Text = "New from File";
 			// 
+			// menuItem10
+			// 
+			this.menuItem10.Index = 2;
+			this.menuItem10.Text = "New Project";
+			// 
+			// menuItem11
+			// 
+			this.menuItem11.Index = 3;
+			this.menuItem11.Text = "-";
+			// 
 			// menuOpen
 			// 
-			this.menuOpen.Index = 2;
+			this.menuOpen.Index = 4;
 			this.menuOpen.Text = "Open...";
 			this.menuOpen.Click += new System.EventHandler(this.OpenFile);
+			// 
+			// menuItem1
+			// 
+			this.menuItem1.Index = 5;
+			this.menuItem1.Text = "Open Project...";
+			// 
+			// menuItem8
+			// 
+			this.menuItem8.Index = 6;
+			this.menuItem8.Text = "-";
 			// 
 			// menuClose
 			// 
 			this.menuClose.Enabled = false;
-			this.menuClose.Index = 3;
+			this.menuClose.Index = 7;
 			this.menuClose.Text = "Close";
 			this.menuClose.Click += new System.EventHandler(this.menuClose_Click);
 			// 
+			// menuItem9
+			// 
+			this.menuItem9.Enabled = false;
+			this.menuItem9.Index = 8;
+			this.menuItem9.Text = "Close Project";
+			// 
 			// menuItem5
 			// 
-			this.menuItem5.Index = 4;
+			this.menuItem5.Index = 9;
 			this.menuItem5.Text = "-";
 			// 
 			// menuSave
 			// 
 			this.menuSave.Enabled = false;
-			this.menuSave.Index = 5;
+			this.menuSave.Index = 10;
 			this.menuSave.Text = "Save";
 			this.menuSave.Click += new System.EventHandler(this.SaveFile);
 			// 
 			// menuSaveAs
 			// 
 			this.menuSaveAs.Enabled = false;
-			this.menuSaveAs.Index = 6;
+			this.menuSaveAs.Index = 11;
 			this.menuSaveAs.Text = "Save As...";
 			this.menuSaveAs.Click += new System.EventHandler(this.menuSaveAs_Click);
 			// 
 			// menuItem7
 			// 
-			this.menuItem7.Index = 7;
+			this.menuItem7.Index = 12;
 			this.menuItem7.Text = "-";
 			// 
 			// menuExit
 			// 
-			this.menuExit.Index = 8;
+			this.menuExit.Index = 13;
 			this.menuExit.Text = "Exit";
 			this.menuExit.Click += new System.EventHandler(this.menuExit_Click);
 			// 
@@ -150,6 +186,29 @@
 			this.menuEdit.MergeOrder = 1;
 			this.menuEdit.MergeType = System.Windows.Forms.MenuMerge.MergeItems;
 			this.menuEdit.Text = "Edit";
+			// 
+			// menuProject
+			// 
+			this.menuProject.Index = 2;
+			this.menuProject.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem3,
+            this.menuItem6});
+			this.menuProject.MergeOrder = 2;
+			this.menuProject.MergeType = System.Windows.Forms.MenuMerge.MergeItems;
+			this.menuProject.Text = "Project";
+			this.menuProject.Visible = false;
+			// 
+			// menuItem3
+			// 
+			this.menuItem3.Index = 0;
+			this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.F6;
+			this.menuItem3.Text = "Build";
+			// 
+			// menuItem6
+			// 
+			this.menuItem6.Index = 1;
+			this.menuItem6.Shortcut = System.Windows.Forms.Shortcut.F5;
+			this.menuItem6.Text = "Build and Run";
 			// 
 			// menuTools
 			// 
@@ -215,6 +274,7 @@
 			// openFileDialog1
 			// 
 			this.openFileDialog1.FileName = "openFileDialog1";
+			this.openFileDialog1.Multiselect = true;
 			// 
 			// panel1
 			// 
@@ -275,29 +335,6 @@
 			this.splitter1.TabIndex = 7;
 			this.splitter1.TabStop = false;
 			this.splitter1.Visible = false;
-			// 
-			// menuProject
-			// 
-			this.menuProject.Index = 2;
-			this.menuProject.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem3,
-            this.menuItem6});
-			this.menuProject.MergeOrder = 2;
-			this.menuProject.MergeType = System.Windows.Forms.MenuMerge.MergeItems;
-			this.menuProject.Text = "Project";
-			this.menuProject.Visible = false;
-			// 
-			// menuItem3
-			// 
-			this.menuItem3.Index = 0;
-			this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.F6;
-			this.menuItem3.Text = "Build";
-			// 
-			// menuItem6
-			// 
-			this.menuItem6.Index = 1;
-			this.menuItem6.Shortcut = System.Windows.Forms.Shortcut.F5;
-			this.menuItem6.Text = "Build and Run";
 			// 
 			// Form1
 			// 
@@ -361,6 +398,11 @@
 		private System.Windows.Forms.MenuItem menuProject;
 		private System.Windows.Forms.MenuItem menuItem3;
 		private System.Windows.Forms.MenuItem menuItem6;
+		private System.Windows.Forms.MenuItem menuItem1;
+		private System.Windows.Forms.MenuItem menuItem8;
+		private System.Windows.Forms.MenuItem menuItem9;
+		private System.Windows.Forms.MenuItem menuItem10;
+		private System.Windows.Forms.MenuItem menuItem11;
 	}
 }
 
