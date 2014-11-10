@@ -35,6 +35,25 @@ namespace NDS.NitroSystem.G3D
 			return new NSBTXViewer(this);
 		}
 
+		public byte[] Write()
+		{
+			MemoryStream m = new MemoryStream();
+			EndianBinaryWriter er = new EndianBinaryWriter(m, Endianness.LittleEndian);
+			Header.Write(er);
+
+			long curpos = er.BaseStream.Position;
+			er.BaseStream.Position = 16;
+			er.Write((UInt32)curpos);
+			er.BaseStream.Position = curpos;
+
+			TexPlttSet.Write(er);
+			er.BaseStream.Position = 8;
+			er.Write((UInt32)er.BaseStream.Length);
+			byte[] b = m.ToArray();
+			er.Close();
+			return b;
+		}
+
 		public NSBTXHeader Header;
 		public class NSBTXHeader
 		{
@@ -57,6 +76,16 @@ namespace NDS.NitroSystem.G3D
 				HeaderSize = er.ReadUInt16();
 				NrBlocks = er.ReadUInt16();
 				BlockOffsets = er.ReadUInt32s(NrBlocks);
+			}
+			public void Write(EndianBinaryWriter er)
+			{
+				er.Write(Signature, Encoding.ASCII, false);
+				er.Write(Endianness);
+				er.Write(Version);
+				er.Write((uint)0);
+				er.Write(HeaderSize);
+				er.Write(NrBlocks);
+				er.Write(new uint[NrBlocks], 0, NrBlocks);
 			}
 			public String Signature;
 			public UInt16 Endianness;

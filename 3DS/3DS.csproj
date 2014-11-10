@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BYML.cs" />
     <Compile Include="NintendoWare\GFX\BoundingVolume.cs" />
     <Compile Include="NintendoWare\GFX\CANM.cs" />
     <Compile Include="NintendoWare\GFX\CGFX.cs" />
@@ -111,6 +112,12 @@
     <Compile Include="UI\CLYTViewer.Designer.cs">
       <DependentUpon>CLYTViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\CSTMViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CSTMViewer.Designer.cs">
+      <DependentUpon>CSTMViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\DARCViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,6 +160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CLYTViewer.resx">
       <DependentUpon>CLYTViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CSTMViewer.resx">
+      <DependentUpon>CSTMViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\DARCViewer.resx">
       <DependentUpon>DARCViewer.cs</DependentUpon>

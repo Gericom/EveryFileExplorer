@@ -9,6 +9,7 @@ using _3DS.DSP;
 using LibEveryFileExplorer.SND;
 using CommonFiles;
 using LibEveryFileExplorer.IO;
+using _3DS.UI;
 
 namespace _3DS.NintendoWare.SND
 {
@@ -106,7 +107,7 @@ namespace _3DS.NintendoWare.SND
 
 		public System.Windows.Forms.Form GetDialog()
 		{
-			return new CommonFiles.UI.WAVEPlayer(ToWave());
+			return new CSTMViewer(this);
 		}
 
 		public string GetConversionFileFilters()

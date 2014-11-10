@@ -41,7 +41,7 @@ namespace _3DS
 			public SMDHHeader(EndianBinaryReader er)
 			{
 				Signature = er.ReadString(Encoding.ASCII, 4);
-				if (Signature != "SMDH") throw new SignatureNotCorrectException(Signature, "SMDH", er.BaseStream.Position);
+				if (Signature != "SMDH") throw new SignatureNotCorrectException(Signature, "SMDH", er.BaseStream.Position - 4);
 				Version = er.ReadUInt16();
 				Reserved = er.ReadUInt16();
 			}

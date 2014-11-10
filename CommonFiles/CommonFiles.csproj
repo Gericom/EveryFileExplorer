@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NAudio">
+      <HintPath>..\Libraries\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -46,11 +49,16 @@
     <Compile Include="MTL.cs" />
     <Compile Include="OBJ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\WAVEPlayer.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
-    <Compile Include="UI\WAVEPlayer.Designer.cs">
-      <DependentUpon>WAVEPlayer.cs</DependentUpon>
+    <Compile Include="UI\WavePlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\WavePlayer.Designer.cs">
+      <DependentUpon>WavePlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="WAV.cs" />
   </ItemGroup>
@@ -59,6 +67,21 @@
       <Project>{39DBD12F-F7E3-4E9A-97A2-0722A4BA2A26}</Project>
       <Name>LibEveryFileExplorer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\WavePlayer.resx">
+      <DependentUpon>WavePlayer.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\control.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\control-pause.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
