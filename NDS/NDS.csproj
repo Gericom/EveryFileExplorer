@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="GPU\CommandContext.cs" />
     <Compile Include="GPU\Textures.cs" />
+    <Compile Include="NDS.cs" />
     <Compile Include="NitroSystem\FND\NARC.cs" />
     <Compile Include="NitroFS.cs" />
     <Compile Include="NitroSystem\G3D\Dictionary.cs" />
@@ -71,6 +72,12 @@
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
     <Compile Include="SND\ADPCM.cs" />
+    <Compile Include="UI\NDSViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\NDSViewer.Designer.cs">
+      <DependentUpon>NDSViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\MDL0MaterialEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -118,6 +125,9 @@
     <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\NDSViewer.resx">
+      <DependentUpon>NDSViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MDL0MaterialEditor.resx">
       <DependentUpon>MDL0MaterialEditor.cs</DependentUpon>

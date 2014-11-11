@@ -296,7 +296,7 @@ namespace _3DS
 
 			public override FormatMatch IsFormat(EFEFile File)
 			{
-				if (File.Data.Length > 20 && File.Data[0] == 'S' && File.Data[1] == 'A' && File.Data[2] == 'R' && File.Data[3] == 'C') return FormatMatch.Content;
+				if (File.Data.Length > 20 && File.Data[0] == 'S' && File.Data[1] == 'A' && File.Data[2] == 'R' && File.Data[3] == 'C' && File.Data[0x14] == 'S' && File.Data[0x15] == 'F' && File.Data[0x16] == 'A' && File.Data[0x17] == 'T') return FormatMatch.Content;
 				return FormatMatch.No;
 			}
 

@@ -26,6 +26,7 @@ namespace LibEveryFileExplorer.Files
 		protected const String Category_Models = "Models";
 		protected const String Category_Palettes = "Palettes";
 		protected const String Category_Particles = "Particles";
+		protected const String Category_Roms = "Roms";
 		protected const String Category_Screens = "Screens";
 		protected const String Category_Shaders = "Shaders";
 		protected const String Category_Strings = "Strings";

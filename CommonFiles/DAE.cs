@@ -1754,7 +1754,12 @@ namespace CommonFiles
 
 			public override FormatMatch IsFormat(EFEFile File)
 			{
-				String s = Encoding.ASCII.GetString(File.Data);
+				String s;
+				try
+				{
+					s = Encoding.ASCII.GetString(File.Data);
+				}
+				catch { return FormatMatch.No; }
 				if(s.StartsWith("<?xml") && s.Contains("<COLLADA xmlns=\"http://www.collada.org/2005/11/COLLADASchema\" version=\"")) return FormatMatch.Content;
 				return FormatMatch.No;
 			}
