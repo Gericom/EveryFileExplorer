@@ -10,6 +10,7 @@ using LibEveryFileExplorer.Files.SimpleFileSystem;
 using LibEveryFileExplorer;
 using LibEveryFileExplorer.Files;
 using NDS.NitroSystem.FND;
+using System.IO;
 
 namespace NDS.UI
 {
@@ -231,6 +232,30 @@ namespace NDS.UI
 			/*Archive.FromFileSystem(Root);
 			fileBrowser1.UpdateDirectories(Root.GetTreeNodes(), true);
 			*/
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			saveFileDialog1.FileName = "arm9.bin";
+			saveFileDialog1.Filter = "Binary Data (*.bin)|*.bin";
+			if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
+				&& saveFileDialog1.FileName.Length > 0)
+			{
+				File.Create(saveFileDialog1.FileName).Close();
+				File.WriteAllBytes(saveFileDialog1.FileName, Archive.GetDecompressedARM9());
+			}
+		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+			saveFileDialog1.FileName = "arm9.bin";
+			saveFileDialog1.Filter = "Binary Data (*.bin)|*.bin";
+			if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
+				&& saveFileDialog1.FileName.Length > 0)
+			{
+				File.Create(saveFileDialog1.FileName).Close();
+				File.WriteAllBytes(saveFileDialog1.FileName, Archive.MainRom);
+			}
 		}
 	}
 }

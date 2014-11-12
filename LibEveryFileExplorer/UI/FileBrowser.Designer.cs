@@ -31,10 +31,6 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileBrowser));
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.treeView1 = new System.Windows.Forms.TreeView();
-			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-			this.listView1 = new LibEveryFileExplorer.UI.ListViewNF();
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.buttonDirAdd = new System.Windows.Forms.ToolStripButton();
 			this.buttonFileAdd = new System.Windows.Forms.ToolStripButton();
@@ -42,15 +38,13 @@
 			this.buttonDelete = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.buttonRename = new System.Windows.Forms.ToolStripButton();
-			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+			this.listView1 = new LibEveryFileExplorer.UI.ListViewNF();
+			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-			this.splitContainer2.Panel1.SuspendLayout();
-			this.splitContainer2.Panel2.SuspendLayout();
-			this.splitContainer2.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -67,7 +61,8 @@
 			// 
 			// splitContainer1.Panel2
 			// 
-			this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
+			this.splitContainer1.Panel2.Controls.Add(this.listView1);
+			this.splitContainer1.Panel2.Controls.Add(this.toolStrip1);
 			this.splitContainer1.Size = new System.Drawing.Size(700, 391);
 			this.splitContainer1.SplitterDistance = 175;
 			this.splitContainer1.TabIndex = 0;
@@ -86,51 +81,6 @@
 			this.treeView1.TabIndex = 0;
 			this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
 			// 
-			// splitContainer2
-			// 
-			this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-			this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-			this.splitContainer2.Name = "splitContainer2";
-			// 
-			// splitContainer2.Panel1
-			// 
-			this.splitContainer2.Panel1.Controls.Add(this.listView1);
-			this.splitContainer2.Panel1.Controls.Add(this.toolStrip1);
-			// 
-			// splitContainer2.Panel2
-			// 
-			this.splitContainer2.Panel2.Controls.Add(this.propertyGrid1);
-			this.splitContainer2.Size = new System.Drawing.Size(521, 391);
-			this.splitContainer2.SplitterDistance = 346;
-			this.splitContainer2.TabIndex = 0;
-			// 
-			// listView1
-			// 
-			this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2});
-			this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listView1.Location = new System.Drawing.Point(0, 25);
-			this.listView1.MultiSelect = false;
-			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(346, 366);
-			this.listView1.TabIndex = 0;
-			this.listView1.TileSize = new System.Drawing.Size(168, 36);
-			this.listView1.UseCompatibleStateImageBehavior = false;
-			this.listView1.View = System.Windows.Forms.View.Tile;
-			this.listView1.ItemActivate += new System.EventHandler(this.listView1_ItemActivate);
-			this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
-			this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
-			// 
-			// columnHeader1
-			// 
-			this.columnHeader1.Text = "Name";
-			// 
-			// columnHeader2
-			// 
-			this.columnHeader2.Text = "Size";
-			// 
 			// toolStrip1
 			// 
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -142,7 +92,7 @@
             this.buttonRename});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(346, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(521, 25);
 			this.toolStrip1.TabIndex = 1;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -196,13 +146,31 @@
 			this.buttonRename.Text = "Rename";
 			this.buttonRename.Click += new System.EventHandler(this.buttonRename_Click);
 			// 
-			// propertyGrid1
+			// listView1
 			// 
-			this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
-			this.propertyGrid1.Name = "propertyGrid1";
-			this.propertyGrid1.Size = new System.Drawing.Size(171, 391);
-			this.propertyGrid1.TabIndex = 0;
+			this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+			this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.listView1.Location = new System.Drawing.Point(0, 25);
+			this.listView1.MultiSelect = false;
+			this.listView1.Name = "listView1";
+			this.listView1.Size = new System.Drawing.Size(521, 366);
+			this.listView1.TabIndex = 0;
+			this.listView1.TileSize = new System.Drawing.Size(168, 36);
+			this.listView1.UseCompatibleStateImageBehavior = false;
+			this.listView1.View = System.Windows.Forms.View.Tile;
+			this.listView1.ItemActivate += new System.EventHandler(this.listView1_ItemActivate);
+			this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+			this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
+			// 
+			// columnHeader1
+			// 
+			this.columnHeader1.Text = "Name";
+			// 
+			// columnHeader2
+			// 
+			this.columnHeader2.Text = "Size";
 			// 
 			// FileBrowser
 			// 
@@ -214,13 +182,9 @@
 			this.Load += new System.EventHandler(this.FileBrowser_Load);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
+			this.splitContainer1.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
 			this.splitContainer1.ResumeLayout(false);
-			this.splitContainer2.Panel1.ResumeLayout(false);
-			this.splitContainer2.Panel1.PerformLayout();
-			this.splitContainer2.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-			this.splitContainer2.ResumeLayout(false);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -231,17 +195,15 @@
 
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private System.Windows.Forms.TreeView treeView1;
-		private System.Windows.Forms.SplitContainer splitContainer2;
 		private ListViewNF listView1;
-		private System.Windows.Forms.PropertyGrid propertyGrid1;
+		private System.Windows.Forms.ColumnHeader columnHeader1;
+		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ToolStrip toolStrip1;
 		private System.Windows.Forms.ToolStripButton buttonDirAdd;
 		private System.Windows.Forms.ToolStripButton buttonFileAdd;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripButton buttonDelete;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripButton buttonRename;
-		private System.Windows.Forms.ToolStripButton buttonDelete;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ColumnHeader columnHeader1;
-		private System.Windows.Forms.ColumnHeader columnHeader2;
 	}
 }
