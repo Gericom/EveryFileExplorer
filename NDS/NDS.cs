@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using NDS.UI;
-using NDS.CPU;
+using NDS.Nitro;
 
 namespace NDS
 {
@@ -21,6 +21,11 @@ namespace NDS
 
 			er.BaseStream.Position = Header.MainRomOffset;
 			MainRom = er.ReadBytes((int)Header.MainSize);
+			if (er.ReadUInt32() == 0xDEC00621)//Nitro Footer!
+			{
+				er.BaseStream.Position -= 4;
+				StaticFooter = new NitroFooter(er);
+			}
 
 			er.BaseStream.Position = Header.SubRomOffset;
 			SubRom = er.ReadBytes((int)Header.SubSize);
@@ -159,6 +164,21 @@ namespace NDS
 			public UInt16 HeaderCRC;
 		}
 		public Byte[] MainRom;
+		public NitroFooter StaticFooter;
+		public class NitroFooter
+		{
+			public NitroFooter(EndianBinaryReader er)
+			{
+				NitroCode = er.ReadUInt32();
+				_start_ModuleParamsOffset = er.ReadUInt32();
+				Unknown = er.ReadUInt32();
+			}
+			public UInt32 NitroCode;
+			public UInt32 _start_ModuleParamsOffset;
+			public UInt32 Unknown;
+		}
+
+
 		public Byte[] SubRom;
 		public RomFNT Fnt;
 		public class RomFNT
@@ -352,7 +372,8 @@ namespace NDS
 
 		public byte[] GetDecompressedARM9()
 		{
-			return ARM9.Decompress(MainRom, Header.MainRamAddress, Header.MainEntryAddress, Header.MainAutoloadDone);
+			if (StaticFooter != null) return ARM9.Decompress(MainRom, StaticFooter._start_ModuleParamsOffset);
+			else return ARM9.Decompress(MainRom);
 		}
 
 		public class NDSIdentifier : FileFormatIdentifier

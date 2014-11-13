@@ -341,7 +341,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Menu = this.mainMenu1;
 			this.Name = "NDSViewer";
-			this.Text = "NARC Viewer";
+			this.Text = "NDS Viewer";
 			this.Load += new System.EventHandler(this.NARCViewer_Load);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
