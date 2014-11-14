@@ -136,7 +136,10 @@ namespace _3DS
 
             public override FormatMatch IsFormat(EFEFile File)
             {
-                return FormatMatch.Content;
+                if (File.Name.Equals("body_LZ.bin"))
+                    return FormatMatch.Content;
+                else
+                    return FormatMatch.No;
             }
 
         }
