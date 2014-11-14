@@ -14,8 +14,8 @@ namespace _3DS
         public ThemeIconFile(byte[] Data)
         {
             icon = Data;
-            width = 32;
-            height = 32;
+            width = 48;
+            height = 48;
         }
 
         int width;
