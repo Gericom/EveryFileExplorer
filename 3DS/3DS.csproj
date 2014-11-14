@@ -95,6 +95,7 @@
     <Compile Include="SARCEFESFSFile.cs" />
     <Compile Include="SMDH.cs" />
     <Compile Include="ThemeFile.cs" />
+    <Compile Include="ThemeIconFile.cs" />
     <Compile Include="UI\CGFXViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,6 +137,12 @@
     </Compile>
     <Compile Include="UI\SMDHViewer.Designer.cs">
       <DependentUpon>SMDHViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ThemeIconViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ThemeIconViewer.Designer.cs">
+      <DependentUpon>ThemeIconViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\ThemeViewer.cs">
       <SubType>Form</SubType>
@@ -179,6 +186,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\SMDHViewer.resx">
       <DependentUpon>SMDHViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ThemeIconViewer.resx">
+      <DependentUpon>ThemeIconViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ThemeViewer.resx">
       <DependentUpon>ThemeViewer.cs</DependentUpon>
