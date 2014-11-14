@@ -42,7 +42,7 @@ namespace _3DS
 
             public override string GetFileDescription()
             {
-                return "*.icn";
+                return "System Theme Icon *.icn";
             }
 
             public override string GetFileFilter()

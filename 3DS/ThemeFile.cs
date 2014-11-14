@@ -121,7 +121,7 @@ namespace _3DS
 
             public override string GetFileDescription()
             {
-                return "body_LZ.bin";
+                return "System Theme body_LZ.bin";
             }
 
             public override string GetFileFilter()
