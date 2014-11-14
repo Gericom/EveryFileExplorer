@@ -62,6 +62,95 @@ namespace NDS
 			return new NDSViewer(this);
 		}
 
+		public byte[] Write()
+		{
+			MemoryStream m = new MemoryStream();
+			EndianBinaryWriter er = new EndianBinaryWriter(m, Endianness.LittleEndian);
+			//Header
+			//skip the header, and write it afterwards
+			er.BaseStream.Position = 16384;
+			Header.HeaderSize = (uint)er.BaseStream.Position;
+			//MainRom
+			Header.MainRomOffset = (uint)er.BaseStream.Position;
+			Header.MainSize = (uint)MainRom.Length;
+			er.Write(MainRom, 0, MainRom.Length);
+			//Static Footer
+			if (StaticFooter != null) StaticFooter.Write(er);
+			while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0);
+			if (MainOvt != null)
+			{
+				//Main Ovt
+				Header.MainOvtOffset = (uint)er.BaseStream.Position;
+				Header.MainOvtSize = (uint)MainOvt.Length * 0x20;
+				foreach (var v in MainOvt) v.Write(er);
+				foreach (var v in MainOvt)
+				{
+					while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0);
+					Fat[v.FileId].fileTop = (uint)er.BaseStream.Position;
+					Fat[v.FileId].fileBottom = (uint)er.BaseStream.Position + (uint)FileData[v.FileId].Length;
+					er.Write(FileData[v.FileId], 0, FileData[v.FileId].Length);
+				}
+				while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0);
+			}
+			else
+			{
+				Header.MainOvtOffset = 0;
+				Header.MainOvtSize = 0;
+			}
+			//SubRom
+			Header.SubRomOffset = (uint)er.BaseStream.Position;
+			Header.SubSize = (uint)SubRom.Length;
+			er.Write(SubRom, 0, SubRom.Length);
+			while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0);
+			//I assume this works the same as the main ovt?
+			if (SubOvt != null)
+			{
+				//Sub Ovt
+				Header.SubOvtOffset = (uint)er.BaseStream.Position;
+				Header.SubOvtSize = (uint)SubOvt.Length * 0x20;
+				foreach (var v in SubOvt) v.Write(er);
+				foreach (var v in SubOvt)
+				{
+					while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0);
+					Fat[v.FileId].fileTop = (uint)er.BaseStream.Position;
+					Fat[v.FileId].fileBottom = (uint)er.BaseStream.Position + (uint)FileData[v.FileId].Length;
+					er.Write(FileData[v.FileId], 0, FileData[v.FileId].Length);
+				}
+				while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0);
+			}
+			else
+			{
+				Header.SubOvtOffset = 0;
+				Header.SubOvtSize = 0;
+			}
+			//FNT
+			Header.FntOffset = (uint)er.BaseStream.Position;
+			Fnt.Write(er);
+			Header.FntSize = (uint)er.BaseStream.Position - Header.FntOffset;
+			while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0);
+			//FAT
+			Header.FatOffset = (uint)er.BaseStream.Position;
+			Header.FatSize = (uint)Fat.Length * 8;
+			//Skip the fat, and write it after writing the data itself
+			er.BaseStream.Position += Header.FatSize;
+			while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0);
+			//Banner
+			Banner.Write(er);
+			//Files
+			for (int i = (int)(Header.MainOvtSize / 32 + Header.SubOvtSize / 32); i < FileData.Length; i++)
+			{
+				while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0);
+				Fat[i].fileTop = (uint)er.BaseStream.Position;
+				Fat[i].fileBottom = (uint)er.BaseStream.Position + (uint)FileData[i].Length;
+				er.Write(FileData[i], 0, FileData[i].Length);
+			}
+			while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0);
+			long curpos = er.BaseStream.Position;
+			byte[] result = m.ToArray();
+			er.Close();
+			return result;
+		}
+
 		public RomHeader Header;
 		public class RomHeader
 		{
@@ -173,6 +262,12 @@ namespace NDS
 				_start_ModuleParamsOffset = er.ReadUInt32();
 				Unknown = er.ReadUInt32();
 			}
+			public void Write(EndianBinaryWriter er)
+			{
+				er.Write(NitroCode);
+				er.Write(_start_ModuleParamsOffset);
+				er.Write(Unknown);
+			}
 			public UInt32 NitroCode;
 			public UInt32 _start_ModuleParamsOffset;
 			public UInt32 Unknown;
@@ -206,6 +301,11 @@ namespace NDS
 					else EntryNameTable.Add(new EntryNameTableDirectoryEntry(er));
 				}
 			}
+			public void Write(EndianBinaryWriter er)
+			{
+				foreach (DirectoryTableEntry e in DirectoryTable) e.Write(er);
+				foreach (EntryNameTableEntry e in EntryNameTable) e.Write(er);
+			}
 			public List<DirectoryTableEntry> DirectoryTable;
 			public List<EntryNameTableEntry> EntryNameTable;
 		}
@@ -232,6 +332,17 @@ namespace NDS
 				Compressed = tmp & 0xFFFFFF;
 				Flag = (OVTFlag)(tmp >> 24);
 			}
+			public void Write(EndianBinaryWriter er)
+			{
+				er.Write(Id);
+				er.Write(RamAddress);
+				er.Write(RamSize);
+				er.Write(BssSize);
+				er.Write(SinitInit);
+				er.Write(SinitInitEnd);
+				er.Write(FileId);
+				er.Write((uint)((((uint)Flag) & 0xFF) << 8 | (Compressed & 0xFFFFFF)));
+			}
 			public UInt32 Id;
 			public UInt32 RamAddress;
 			public UInt32 RamSize;
@@ -252,7 +363,13 @@ namespace NDS
 				Header = new BannerHeader(er);
 				Banner = new BannerV1(er);
 			}
-			BannerHeader Header;
+			public void Write(EndianBinaryWriter er)
+			{
+				Header.CRC16_v1 = Banner.GetCRC();
+				Header.Write(er);
+				Banner.Write(er);
+			}
+			public BannerHeader Header;
 			public class BannerHeader
 			{
 				public BannerHeader(EndianBinaryReader er)
@@ -262,12 +379,19 @@ namespace NDS
 					CRC16_v1 = er.ReadUInt16();
 					ReservedB = er.ReadBytes(28);
 				}
+				public void Write(EndianBinaryWriter er)
+				{
+					er.Write(Version);
+					er.Write(ReservedA);
+					er.Write(CRC16_v1);
+					er.Write(ReservedB, 0, 28);
+				}
 				public Byte Version;
 				public Byte ReservedA;
 				public UInt16 CRC16_v1;
 				public Byte[] ReservedB;//28
 			}
-			BannerV1 Banner;
+			public BannerV1 Banner;
 			public class BannerV1
 			{
 				public BannerV1(EndianBinaryReader er)
@@ -282,9 +406,29 @@ namespace NDS
 					GameName[4] = er.ReadString(Encoding.Unicode, 128).Replace("\0", "");
 					GameName[5] = er.ReadString(Encoding.Unicode, 128).Replace("\0", "");
 				}
+				public void Write(EndianBinaryWriter er)
+				{
+					er.Write(Image, 0, 32 * 32 / 2);
+					er.Write(Pltt, 0, 16 * 2);
+					foreach (string s in GameName) er.Write(GameName[0].PadRight(128, '\0'), Encoding.Unicode, false);
+				}
 				public Byte[] Image;//32*32/2
 				public Byte[] Pltt;//16*2
 				public String[] GameName;//6, 128 chars (UTF16-LE)
+
+				public ushort GetCRC()
+				{
+					byte[] Data = new byte[2080];
+					Array.Copy(Image, Data, 512);
+					Array.Copy(Pltt, 0, Data, 512, 32);
+					Array.Copy(Encoding.Unicode.GetBytes(GameName[0].PadRight(128, '\0')), 0, Data, 544, 256);
+					Array.Copy(Encoding.Unicode.GetBytes(GameName[1].PadRight(128, '\0')), 0, Data, 544 + 256, 256);
+					Array.Copy(Encoding.Unicode.GetBytes(GameName[2].PadRight(128, '\0')), 0, Data, 544 + 256 * 2, 256);
+					Array.Copy(Encoding.Unicode.GetBytes(GameName[3].PadRight(128, '\0')), 0, Data, 544 + 256 * 3, 256);
+					Array.Copy(Encoding.Unicode.GetBytes(GameName[4].PadRight(128, '\0')), 0, Data, 544 + 256 * 4, 256);
+					Array.Copy(Encoding.Unicode.GetBytes(GameName[5].PadRight(128, '\0')), 0, Data, 544 + 256 * 5, 256);
+					return CRC16.GetCRC16(Data);
+				}
 			}
 		}
 		public Byte[][] FileData;

@@ -67,6 +67,7 @@
     <Compile Include="NitroSystem\G3D\SBC.cs" />
     <Compile Include="NitroSystem\G3D\TEX0.cs" />
     <Compile Include="NitroSystem\G3D\Util.cs" />
+    <Compile Include="Nitro\CRC16.cs" />
     <Compile Include="Nitro\CRT0.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
