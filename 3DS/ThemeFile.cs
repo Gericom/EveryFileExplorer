@@ -116,7 +116,7 @@ namespace _3DS
         {
             public override string GetCategory()
             {
-                return "3DS";
+                return "3DS Themes";
             }
 
             public override string GetFileDescription()
@@ -126,7 +126,7 @@ namespace _3DS
 
             public override string GetFileFilter()
             {
-                return "System Menu Theme decompressed body_LZ.bin (body_LZ.bin, body_LZ.bin)|body_LZ.bin;body_LZ.bin";
+                return "System Menu Theme decompressed (body_LZ.bin)|body_LZ.bin";
             }
 
             public override Bitmap GetIcon()
