@@ -16,6 +16,8 @@ namespace _3DS.UI
         {
             theme = themeFile;
             InitializeComponent();
+            widthBox.Text = theme.bottomWidth + "";
+            heightBox.Text = theme.bottomHeight + "";
         }
 
         private void ThemeViewer_Load(object sender, EventArgs e)
@@ -24,14 +26,36 @@ namespace _3DS.UI
             bottomTextureImage.Image = theme.GetBottomTexture();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+
+        private void button1_Click(object sender, EventArgs e)
         {
 
+            theme.bottomWidth = int.Parse(widthBox.Text);
+            bottomTextureImage.Image = theme.GetBottomTexture();
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void adjustHeightbutton(object sender, EventArgs e)
         {
 
+            theme.bottomHeight = int.Parse(heightBox.Text);
+            bottomTextureImage.Image = theme.GetBottomTexture();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            theme.bottomWidth += 40;
+            widthBox.Text = theme.bottomWidth + "";
+            bottomTextureImage.Image = theme.GetBottomTexture();
+        }
+
+        private void plus40heighbutton_Click(object sender, EventArgs e)
+        {
+
+            theme.bottomHeight += 40;
+            heightBox.Text = theme.bottomHeight + "";
+            bottomTextureImage.Image = theme.GetBottomTexture();
+        }
+
+
     }
 }

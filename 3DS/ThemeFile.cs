@@ -20,9 +20,10 @@ namespace _3DS
 
                 header.bottomScreenFrameCount = (2 - header.bottomScreenFrameCount % 2) + header.bottomScreenFrameCount;
                 header.topScreenFrameCount = (2 - header.topScreenFrameCount % 2) + header.topScreenFrameCount;
+                System.Console.WriteLine("topScreenFrameCounttopScreenFrameCount " + header.topScreenFrameCount);
 
-                bottomWidth = 320 * (int)header.bottomScreenFrameCount;
-                topWidth = 320 * (int)header.topScreenFrameCount;
+                bottomWidth = 256 * (int)header.bottomScreenFrameCount;
+                topWidth = 512 * (int)header.topScreenFrameCount;
                 bottomHeight = 240;
                 topHeight = 240;
 
