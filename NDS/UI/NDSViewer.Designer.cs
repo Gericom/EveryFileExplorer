@@ -76,10 +76,10 @@
 			this.fileBrowser1.Location = new System.Drawing.Point(0, 0);
 			this.fileBrowser1.Name = "fileBrowser1";
 			this.fileBrowser1.RenameEnabled = false;
-			this.fileBrowser1.ShowAddDirectoryButton = false;
-			this.fileBrowser1.ShowAddFileButton = false;
-			this.fileBrowser1.ShowDeleteButton = false;
-			this.fileBrowser1.ShowRenameButton = false;
+			this.fileBrowser1.ShowAddDirectoryButton = true;
+			this.fileBrowser1.ShowAddFileButton = true;
+			this.fileBrowser1.ShowDeleteButton = true;
+			this.fileBrowser1.ShowRenameButton = true;
 			this.fileBrowser1.Size = new System.Drawing.Size(475, 338);
 			this.fileBrowser1.TabIndex = 0;
 			this.fileBrowser1.OnDirectoryChanged += new LibEveryFileExplorer.UI.FileBrowser.OnDirectoryChangedEventHandler(this.fileBrowser1_OnDirectoryChanged);
@@ -151,7 +151,6 @@
 			this.menuReplace.Enabled = false;
 			this.menuReplace.Index = 5;
 			this.menuReplace.Text = "Replace...";
-			this.menuReplace.Visible = false;
 			this.menuReplace.Click += new System.EventHandler(this.menuReplace_Click);
 			// 
 			// menuRename
@@ -159,7 +158,6 @@
 			this.menuRename.Enabled = false;
 			this.menuRename.Index = 6;
 			this.menuRename.Text = "Rename...";
-			this.menuRename.Visible = false;
 			this.menuRename.Click += new System.EventHandler(this.fileBrowser1_OnRename);
 			// 
 			// menuDelete
@@ -167,7 +165,6 @@
 			this.menuDelete.Enabled = false;
 			this.menuDelete.Index = 7;
 			this.menuDelete.Text = "Delete";
-			this.menuDelete.Visible = false;
 			this.menuDelete.Click += new System.EventHandler(this.fileBrowser1_OnRemove);
 			// 
 			// menuItem5
@@ -226,21 +223,18 @@
 			// 
 			this.menuItem14.Index = 2;
 			this.menuItem14.Text = "Replace...";
-			this.menuItem14.Visible = false;
 			this.menuItem14.Click += new System.EventHandler(this.menuReplace_Click);
 			// 
 			// menuItem10
 			// 
 			this.menuItem10.Index = 3;
 			this.menuItem10.Text = "Rename...";
-			this.menuItem10.Visible = false;
 			this.menuItem10.Click += new System.EventHandler(this.fileBrowser1_OnRename);
 			// 
 			// menuItem11
 			// 
 			this.menuItem11.Index = 4;
 			this.menuItem11.Text = "Delete";
-			this.menuItem11.Visible = false;
 			this.menuItem11.Click += new System.EventHandler(this.fileBrowser1_OnRemove);
 			// 
 			// saveFileDialog1

@@ -44,7 +44,7 @@ namespace NDS.UI
 
 		private void fileBrowser1_OnAddDirectory(object sender, EventArgs e)
 		{
-			/*var dir = Root.GetDirectoryByPath(fileBrowser1.SelectedFolderPath);
+			var dir = Root.GetDirectoryByPath(fileBrowser1.SelectedFolderPath);
 			if (dir == null) return;
 			String name = null;
 		retry:
@@ -62,12 +62,12 @@ namespace NDS.UI
 			{
 				MessageBox.Show("The name contains either one or more invalid chars, or is already in use!", "Invalid Name");
 				goto retry;
-			}*/
+			}
 		}
 
 		private void fileBrowser1_OnAddFile(object sender, EventArgs e)
 		{
-			/*if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
+			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
 				&& openFileDialog1.FileName.Length > 0)
 			{
 				var dir = Root.GetDirectoryByPath(fileBrowser1.SelectedFolderPath);
@@ -101,12 +101,12 @@ namespace NDS.UI
 				}
 				Archive.FromFileSystem(Root);
 				fileBrowser1.UpdateDirectories(Root.GetTreeNodes(), true);
-			}*/
+			}
 		}
 
 		private void fileBrowser1_OnRemove(object sender, EventArgs e)
 		{
-			/*if (fileBrowser1.SelectedFolderPath == fileBrowser1.SelectedPath) return;
+			if (fileBrowser1.SelectedFolderPath == fileBrowser1.SelectedPath) return;
 			var dir = Root.GetDirectoryByPath(fileBrowser1.SelectedPath);
 			if (dir != null)
 			{
@@ -122,12 +122,12 @@ namespace NDS.UI
 				file.Parent.Files.Remove(file);
 				Archive.FromFileSystem(Root);
 				fileBrowser1.UpdateDirectories(Root.GetTreeNodes(), true);
-			}*/
+			}
 		}
 
 		private void fileBrowser1_OnRename(object sender, EventArgs e)
 		{
-			/*if (fileBrowser1.SelectedFolderPath == fileBrowser1.SelectedPath) return;
+			if (fileBrowser1.SelectedFolderPath == fileBrowser1.SelectedPath) return;
 			var dir = Root.GetDirectoryByPath(fileBrowser1.SelectedPath);
 			if (dir != null)
 			{
@@ -167,7 +167,7 @@ namespace NDS.UI
 					MessageBox.Show("The name contains either one or more invalid chars, or is already in use!", "Invalid Name");
 					goto retryf;
 				}
-			}*/
+			}
 		}
 
 		private void fileBrowser1_OnSelectionChanged(object sender, EventArgs e)
@@ -217,21 +217,20 @@ namespace NDS.UI
 
 		private void menuReplace_Click(object sender, EventArgs e)
 		{
-			/*if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
+			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
 				   && openFileDialog1.FileName.Length > 0)
 			{
 				var file = Root.GetFileByPath(fileBrowser1.SelectedPath);
 				file.Data = System.IO.File.ReadAllBytes(openFileDialog1.FileName);
 				Archive.FromFileSystem(Root);
 				fileBrowser1.UpdateDirectories(Root.GetTreeNodes(), true);
-			}*/
+			}
 		}
 
 		public void OnChildSave(ViewableFile File)
 		{
-			/*Archive.FromFileSystem(Root);
+			Archive.FromFileSystem(Root);
 			fileBrowser1.UpdateDirectories(Root.GetTreeNodes(), true);
-			*/
 		}
 
 		private void button1_Click(object sender, EventArgs e)

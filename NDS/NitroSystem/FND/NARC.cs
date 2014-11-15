@@ -242,11 +242,11 @@ namespace NDS.NitroSystem.FND
 			}
 			FIMG.fileImage = Data.ToArray();
 			FNTB.directoryTable.Clear();
-			GenerateDirectoryTable(FNTB.directoryTable, Root);
+			NitroFSUtil.GenerateDirectoryTable(FNTB.directoryTable, Root);
 			uint offset2 = FNTB.directoryTable[0].dirEntryStart;
 			ushort fileId = 0;
 			FNTB.entryNameTable.Clear();
-			GenerateEntryNameTable(FNTB.directoryTable, FNTB.entryNameTable, Root, ref offset2, ref fileId);
+			NitroFSUtil.GenerateEntryNameTable(FNTB.directoryTable, FNTB.entryNameTable, Root, ref offset2, ref fileId);
 		}
 
 		public SFSDirectory ToFileSystem()
@@ -328,49 +328,6 @@ namespace NDS.NitroSystem.FND
 				dirs[0].GetFileByID((ushort)i).Data = data;
 			}
 			return dirs[0];
-		}
-
-		private static void GenerateDirectoryTable(List<DirectoryTableEntry> directoryTable, SFSDirectory dir)
-		{
-			DirectoryTableEntry cur = new DirectoryTableEntry();
-			if (dir.IsRoot)
-			{
-				cur.dirParentID = (ushort)(dir.TotalNrSubDirectories + 1);
-				cur.dirEntryStart = cur.dirParentID * 8u;
-			}
-			else cur.dirParentID = dir.Parent.DirectoryID;
-			dir.DirectoryID = (ushort)(0xF000 + directoryTable.Count);
-			directoryTable.Add(cur);
-			foreach (SFSDirectory d in dir.SubDirectories)
-			{
-				GenerateDirectoryTable(directoryTable, d);
-			}
-		}
-
-		private static void GenerateEntryNameTable(List<DirectoryTableEntry> directoryTable, List<EntryNameTableEntry> entryNameTable, SFSDirectory dir, ref uint Offset, ref ushort FileId)
-		{
-			directoryTable[dir.DirectoryID - 0xF000].dirEntryStart = Offset;
-			directoryTable[dir.DirectoryID - 0xF000].dirEntryFileID = FileId;
-
-			foreach (SFSDirectory d in dir.SubDirectories)
-			{
-				entryNameTable.Add(new EntryNameTableDirectoryEntry(d.DirectoryName, d.DirectoryID));
-				Offset += (uint)d.DirectoryName.Length + 3u;
-			}
-			foreach (SFSFile f in dir.Files)
-			{
-				f.FileID = FileId;
-				entryNameTable.Add(new EntryNameTableFileEntry(f.FileName));
-				Offset += (uint)f.FileName.Length + 1u;
-				FileId++;
-			}
-			entryNameTable.Add(new EntryNameTableEndOfDirectoryEntry());
-			Offset++;
-
-			foreach (SFSDirectory d in dir.SubDirectories)
-			{
-				GenerateEntryNameTable(directoryTable, entryNameTable, d, ref Offset, ref FileId);
-			}
 		}
 
 		public class NARCIdentifier : FileFormatIdentifier
