@@ -20,11 +20,13 @@ namespace _3DS.UI
 
         private void ThemeViewer_Load(object sender, EventArgs e)
         {
-            topTextureImage.Image = theme.GetTopTexture();
-            bottomTextureImage.Image = theme.GetBottomTexture();
+            topBackgroundImage.Image = theme.GetTopTexture();
+            bottomBackgroundImage.Image = theme.GetBottomTexture();
+            folderOpenImage.Image = theme.GetOpenFolderTexture();
+            folderClosedImage.Image = theme.GetClosedFolderTexture();
+            iconBorder48pxImage.Image = theme.GetIconBorder48px();
+            iconBorder24pxImage.Image = theme.GetIconBorder24px();
         }
-
-
 
     }
 }
