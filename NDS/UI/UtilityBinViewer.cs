@@ -10,15 +10,14 @@ using LibEveryFileExplorer.Files.SimpleFileSystem;
 using LibEveryFileExplorer;
 using LibEveryFileExplorer.Files;
 using NDS.NitroSystem.FND;
-using System.IO;
 
 namespace NDS.UI
 {
-	public partial class NDSViewer : Form, IChildReactive
+	public partial class UtilityBinViewer : Form, IChildReactive
 	{
-		Nitro.NDS Archive;
+		UtilityBin Archive;
 		SFSDirectory Root;
-		public NDSViewer(Nitro.NDS Archive)
+		public UtilityBinViewer(UtilityBin Archive)
 		{
 			this.Archive = Archive;
 			Root = Archive.ToFileSystem();
@@ -28,10 +27,6 @@ namespace NDS.UI
 		private void NARCViewer_Load(object sender, EventArgs e)
 		{
 			fileBrowser1.UpdateDirectories(Root.GetTreeNodes());
-			if (Archive.Banner != null)
-			{
-				pictureBox1.Image = Archive.Banner.Banner.GetIcon();
-			}
 		}
 
 		private void fileBrowser1_OnDirectoryChanged(string Path)
@@ -235,30 +230,6 @@ namespace NDS.UI
 		{
 			Archive.FromFileSystem(Root);
 			fileBrowser1.UpdateDirectories(Root.GetTreeNodes(), true);
-		}
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-			saveFileDialog1.FileName = "arm9.bin";
-			saveFileDialog1.Filter = "Binary Data (*.bin)|*.bin";
-			if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
-				&& saveFileDialog1.FileName.Length > 0)
-			{
-				File.Create(saveFileDialog1.FileName).Close();
-				File.WriteAllBytes(saveFileDialog1.FileName, Archive.GetDecompressedARM9());
-			}
-		}
-
-		private void button2_Click(object sender, EventArgs e)
-		{
-			saveFileDialog1.FileName = "arm9.bin";
-			saveFileDialog1.Filter = "Binary Data (*.bin)|*.bin";
-			if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
-				&& saveFileDialog1.FileName.Length > 0)
-			{
-				File.Create(saveFileDialog1.FileName).Close();
-				File.WriteAllBytes(saveFileDialog1.FileName, Archive.MainRom);
-			}
 		}
 	}
 }

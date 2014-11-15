@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 
-namespace NDS
+namespace NDS.Nitro
 {
 	public class FileAllocationEntry
 	{

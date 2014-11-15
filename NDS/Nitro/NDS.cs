@@ -8,9 +8,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using NDS.UI;
-using NDS.Nitro;
 
-namespace NDS
+namespace NDS.Nitro
 {
 	public class NDS : FileFormat<NDS.NDSIdentifier>, IViewable, IWriteable
 	{
@@ -45,8 +44,11 @@ namespace NDS
 			Fat = new FileAllocationEntry[Header.FatSize / 8];
 			for (int i = 0; i < Header.FatSize / 8; i++) Fat[i] = new FileAllocationEntry(er);
 
-			er.BaseStream.Position = Header.BannerOffset;
-			Banner = new RomBanner(er);
+			if (Header.BannerOffset != 0)
+			{
+				er.BaseStream.Position = Header.BannerOffset;
+				Banner = new RomBanner(er);
+			}
 
 			FileData = new byte[Header.FatSize / 8][];
 			for (int i = 0; i < Header.FatSize / 8; i++)
@@ -154,10 +156,14 @@ namespace NDS
 			Header.FatSize = (uint)Fat.Length * 8;
 			//Skip the fat, and write it after writing the data itself
 			er.BaseStream.Position += Header.FatSize;
-			while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0xFF);
 			//Banner
-			Header.BannerOffset = (uint)er.BaseStream.Position;
-			Banner.Write(er);
+			if (Banner != null)
+			{
+				while ((er.BaseStream.Position % 0x200) != 0) er.Write((byte)0xFF);
+				Header.BannerOffset = (uint)er.BaseStream.Position;
+				Banner.Write(er);
+			}
+			else Header.BannerOffset = 0;
 			//Files
 			for (int i = (int)(Header.MainOvtSize / 32 + Header.SubOvtSize / 32); i < FileData.Length; i++)
 			{
@@ -531,6 +537,11 @@ namespace NDS
 					Array.Copy(Encoding.Unicode.GetBytes(GameName[5].PadRight(128, '\0')), 0, Data, 544 + 256 * 5, 256);
 					return CRC16.GetCRC16(Data);
 				}
+
+				public Bitmap GetIcon()
+				{
+					return GPU.Textures.ToBitmap(Image, Pltt, 0, 32, 32, GPU.Textures.ImageFormat.PLTT16, GPU.Textures.CharFormat.CHAR, true);
+				}
 			}
 		}
 		public Byte[][] FileData;
@@ -544,16 +555,17 @@ namespace NDS
 			Root.UpdateIDs(ref did, ref fid);
 			//FATB.numFiles = (ushort)Root.TotalNrSubFiles;
 			//List<byte> Data = new List<byte>();
+			uint nrfiles = Root.TotalNrSubFiles;
 			FileAllocationEntry[] overlays = new FileAllocationEntry[MainOvt.Length + SubOvt.Length];
 			Array.Copy(Fat, overlays, MainOvt.Length + SubOvt.Length);
-			Fat = new FileAllocationEntry[(MainOvt.Length + SubOvt.Length) + Root.TotalNrSubFiles];
+			Fat = new FileAllocationEntry[(MainOvt.Length + SubOvt.Length) + nrfiles];
 			Array.Copy(overlays, Fat, MainOvt.Length + SubOvt.Length);
 			byte[][] overlaydata = new byte[MainOvt.Length + SubOvt.Length][];
 			Array.Copy(FileData, overlaydata, MainOvt.Length + SubOvt.Length);
-			FileData = new byte[(MainOvt.Length + SubOvt.Length) + Root.TotalNrSubFiles][];
+			FileData = new byte[(MainOvt.Length + SubOvt.Length) + nrfiles][];
 			Array.Copy(overlaydata, FileData, MainOvt.Length + SubOvt.Length);
 			//FATB.allocationTable.Clear();
-			for (ushort i = (ushort)(MainOvt.Length + SubOvt.Length); i < Root.TotalNrSubFiles + MainOvt.Length + SubOvt.Length; i++)
+			for (ushort i = (ushort)(MainOvt.Length + SubOvt.Length); i < nrfiles + MainOvt.Length + SubOvt.Length; i++)
 			{
 				var f = Root.GetFileByID(i);
 				Fat[i] = new FileAllocationEntry(0, 0);
