@@ -181,8 +181,8 @@ namespace _3DS.NintendoWare.LYT
 			frag_ss.AppendLine("void main()");
 			frag_ss.AppendLine("{");
 			{
-				if (Material.TexMaps.Length == 0) frag_ss.AppendLine("gl_FragColor = gl_Color;");
-				else if (Material.TexMaps.Length == 1) frag_ss.AppendLine("gl_FragColor = texture2D(textures0, gl_TexCoord[0].st) * gl_Color;");
+				if (Material.TexMaps.Length == 0 && Material.TevStages.Length == 0) frag_ss.AppendLine("gl_FragColor = gl_Color;");
+				else if (Material.TexMaps.Length == 1 && Material.TevStages.Length == 0) frag_ss.AppendLine("gl_FragColor = texture2D(textures0, gl_TexCoord[0].st) * gl_Color;");
 				else
 				{
 					frag_ss.AppendLine("vec4 j1;");
