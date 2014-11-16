@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BYML.cs" />
+    <Compile Include="CFNT.cs" />
     <Compile Include="NintendoWare\GFX\BoundingVolume.cs" />
     <Compile Include="NintendoWare\GFX\CANM.cs" />
     <Compile Include="NintendoWare\GFX\CGFX.cs" />
