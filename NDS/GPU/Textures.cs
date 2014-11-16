@@ -69,25 +69,29 @@ namespace NDS.GPU
 						}
 						if (CharacterType == CharFormat.CHAR)
 						{
-							b = new Bitmap((int)(Data.Length / 16) * 8, 8, PixelFormat.Format32bppArgb);
-							BitmapData d = b.LockBits(new Rectangle(0, 0, (int)(Data.Length / 32) * 8, 8), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-							for (int i = 0; i < Data.Length / 16; i++)
+							b = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);//b = new Bitmap((int)(Data.Length / 16) * 8, 8, PixelFormat.Format32bppArgb);
+							BitmapData d = b.LockBits(new Rectangle(0, 0, /*(int)(Data.Length / 32) * 8, 8*/Width, Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+							for (int y = 0; y < Height; y += 8)
 							{
-								for (int TileY = 0; TileY < 8; TileY++)
+								for (int x = 0; x < Width; x += 8)
 								{
-									for (int TileX = 0; TileX < 2; TileX++)
+									for (int TileY = 0; TileY < 8; TileY++)
 									{
-										byte by = Data[offset];
-										int y2 = TileY;
-										int x2 = (i * 8 + TileX * 4) + 3;
-										Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by & 3) + 4 * PaletteNr].ToArgb());
-										x2 = (i * 8 + TileX * 4) + 2;
-										Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by >> 2 & 3) + 4 * PaletteNr].ToArgb());
-										x2 = (i * 8 + TileX * 4) + 1;
-										Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by >> 4 & 3) + 4 * PaletteNr].ToArgb());
-										x2 = i * 8 + TileX * 4;
-										Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by >> 6 & 3) + 4 * PaletteNr].ToArgb());
-										offset++;
+										for (int TileX = 0; TileX < 2; TileX++)
+										{
+											byte by = Data[offset];
+											int y2 = TileY + y;
+											int x2 = TileX * 4 + x + 3;//(i * 8 + TileX * 4) + 3;
+											Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by & 3) + 4 * PaletteNr].ToArgb());
+											x2 = TileX * 4 + x + 2;//(i * 8 + TileX * 4) + 2;
+											Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by >> 2 & 3) + 4 * PaletteNr].ToArgb());
+											x2 = TileX * 4 + x + 1;//(i * 8 + TileX * 4) + 1;
+											Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by >> 4 & 3) + 4 * PaletteNr].ToArgb());
+											x2 = TileX * 4 + x + 0;//i * 8 + TileX * 4;
+											Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by >> 6 & 3) + 4 * PaletteNr].ToArgb());
+											offset++;
+
+										}
 									}
 								}
 							}
@@ -124,21 +128,24 @@ namespace NDS.GPU
 						}
 						if (CharacterType == CharFormat.CHAR)
 						{
-							b = new Bitmap((int)(Data.Length / 32) * 8, 8, PixelFormat.Format32bppArgb);
-							BitmapData d = b.LockBits(new Rectangle(0, 0, (int)(Data.Length / 32) * 8, 8), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-							for (int i = 0; i < Data.Length / 32; i++)
+							b = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+							BitmapData d = b.LockBits(new Rectangle(0, 0, Width, Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+							for (int y = 0; y < Height; y += 8)
 							{
-								for (int TileY = 0; TileY < 8; TileY++)
+								for (int x = 0; x < Width; x += 8)
 								{
-									for (int TileX = 0; TileX < 4; TileX++)
+									for (int TileY = 0; TileY < 8; TileY++)
 									{
-										byte by = Data[offset];
-										int y2 = TileY;
-										int x2 = (i * 8 + TileX * 2) + 1;
-										Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by / 16) + 16 * PaletteNr].ToArgb());
-										x2 = i * 8 + TileX * 2;
-										Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by % 16) + 16 * PaletteNr].ToArgb());
-										offset++;
+										for (int TileX = 0; TileX < 4; TileX++)
+										{
+											byte by = Data[offset];
+											int y2 = TileY + y;
+											int x2 = TileX * 2 + x + 1; //(i * 8 + TileX * 2) + 1;
+											Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by / 16) + 16 * PaletteNr].ToArgb());
+											x2 = TileX * 2 + x;//i * 8 + TileX * 2;
+											Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[(by % 16) + 16 * PaletteNr].ToArgb());
+											offset++;
+										}
 									}
 								}
 							}
@@ -173,19 +180,22 @@ namespace NDS.GPU
 						}
 						if (CharacterType == CharFormat.CHAR)
 						{
-							b = new Bitmap((int)(Data.Length / 64) * 8, 8, PixelFormat.Format32bppArgb);
-							BitmapData d = b.LockBits(new Rectangle(0, 0, (int)(Data.Length / 64) * 8, 8), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-							for (int i = 0; i < Data.Length / 64; i++)
+							b = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);//new Bitmap((int)(Data.Length / 64) * 8, 8, PixelFormat.Format32bppArgb);
+							BitmapData d = b.LockBits(new Rectangle(0, 0, /*(int)(Data.Length / 64) * 8, 8*/Width, Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+							for (int y = 0; y < Height; y += 8)
 							{
-								for (int TileY = 0; TileY < 8; TileY++)
+								for (int x = 0; x < Width; x += 8)
 								{
-									for (int TileX = 0; TileX < 8; TileX++)
+									for (int TileY = 0; TileY < 8; TileY++)
 									{
-										byte by = Data[offset];
-										int y2 = TileY;
-										int x2 = i * 8 + TileX;
-										Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[by + 256 * PaletteNr].ToArgb());
-										offset++;
+										for (int TileX = 0; TileX < 8; TileX++)
+										{
+											byte by = Data[offset];
+											int y2 = TileY + y;
+											int x2 = TileX + x;//i * 8 + TileX;
+											Marshal.WriteInt32(d.Scan0, y2 * d.Stride + x2 * 4, pal[by + 256 * PaletteNr].ToArgb());
+											offset++;
+										}
 									}
 								}
 							}

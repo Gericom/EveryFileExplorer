@@ -2,345 +2,346 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 
 namespace LibEveryFileExplorer.GFX
 {
-	//Based on: https://raw.githubusercontent.com/gp-b2g/frameworks_base/master/opengl/libs/ETC1/etc1.cpp
 	public class ETC1
-	{	
-		private static readonly int[] kModifierTable = {
-		/* 0 */2, 8, -2, -8,
-		/* 1 */5, 17, -5, -17,
-		/* 2 */9, 29, -9, -29,
-		/* 3 */13, 42, -13, -42,
-		/* 4 */18, 60, -18, -60,
-		/* 5 */24, 80, -24, -80,
-		/* 6 */33, 106, -33, -106,
-		/* 7 */47, 183, -47, -183 };
+	{
+		private static readonly int[,] ETC1Modifiers = 
+		{	
+			{ 2, 8 },
+			{ 5, 17 },
+			{ 9, 29 },
+			{ 13, 42 },
+			{ 18, 60 },
+			{ 24, 80 },
+			{ 33, 106 },
+			{ 47, 183 }
+		};
 
-		private static readonly int[] kLookup = { 0, 1, 2, 3, -4, -3, -2, -1 };
-
-		private static byte clamp(int x)
+		private static int GenModifier(out Color BaseColor, Color[] Pixels)
 		{
-			return (byte)(x >= 0 ? (x < 255 ? x : 255) : 0);
-		}
-
-		private static int convert4To8(int b)
-		{
-			int c = b & 0xf;
-			return (c << 4) | c;
-		}
-
-		private static int convert5To8(int b)
-		{
-			int c = b & 0x1f;
-			return (c << 3) | (c >> 2);
-		}
-
-		private static int convert6To8(int b)
-		{
-			int c = b & 0x3f;
-			return (c << 2) | (c >> 4);
-		}
-
-		private static int divideBy255(int d)
-		{
-			return (d + 128 + (d >> 8)) >> 8;
-		}
-
-		private static int convert8To4(int b)
-		{
-			int c = b & 0xff;
-			return divideBy255(b * 15);
-		}
-
-		private static int convert8To5(int b)
-		{
-			int c = b & 0xff;
-			return divideBy255(b * 31);
-		}
-
-		private static int convertDiff(int b, int diff)
-		{
-			return convert5To8((0x1f & b) + kLookup[0x7 & diff]);
-		}
-
-		private struct etc_compressed
-		{
-			public uint high;
-			public uint low;
-			public uint score; // Lower is more accurate
-		}
-
-		private static void take_best(ref etc_compressed a, etc_compressed b)
-		{
-			if (a.score > b.score) a = b;
-		}
-
-		private static void etc_average_colors_subblock(byte[] pIn, uint inMask, byte[] pColors, int pColorsOffset, bool flipped, bool second)
-		{
-			int r = 0;
-			int g = 0;
-			int b = 0;
-
-			if (flipped)
+			Color Max = Color.White;
+			Color Min = Color.Black;
+			int MinY = int.MaxValue;
+			int MaxY = int.MinValue;
+			for (int i = 0; i < 8; i++)
 			{
-				int by = 0;
-				if (second)
+				int Y = (Pixels[i].R + Pixels[i].G + Pixels[i].B) / 3;
+				if (Y > MaxY)
 				{
-					by = 2;
+					MaxY = Y;
+					Max = Pixels[i];
 				}
-				for (int y = 0; y < 2; y++)
+				if (Y < MinY)
 				{
-					int yy = by + y;
-					for (int x = 0; x < 4; x++)
-					{
-						int i = x + 4 * yy;
-						if ((inMask & (1 << i)) != 0)
-						{
-							r += pIn[i * 3];
-							g += pIn[i * 3 + 1];
-							b += pIn[i * 3 + 2];
-						}
-					}
+					MinY = Y;
+					Min = Pixels[i];
 				}
+			}
+			int DiffMean = ((Max.R - Min.R) + (Max.G - Min.G) + (Max.B - Min.B)) / 3;
+
+			int ModDiff = int.MaxValue;
+			int Modifier = -1;
+			int Mode = -1;
+
+			for (int i = 0; i < 8; i++)
+			{
+				int SS = ETC1Modifiers[i, 0] * 2;
+				int SB = ETC1Modifiers[i, 0] + ETC1Modifiers[i, 1];
+				int BB = ETC1Modifiers[i, 1] * 2;
+				if (System.Math.Abs(DiffMean - SS) < ModDiff)
+				{
+					ModDiff = System.Math.Abs(DiffMean - SS);
+					Modifier = i;
+					Mode = 0;
+				}
+				if (System.Math.Abs(DiffMean - SB) < ModDiff)
+				{
+					ModDiff = System.Math.Abs(DiffMean - SB);
+					Modifier = i;
+					Mode = 1;
+				}
+				if (System.Math.Abs(DiffMean - BB) < ModDiff)
+				{
+					ModDiff = System.Math.Abs(DiffMean - BB);
+					Modifier = i;
+					Mode = 2;
+				}
+			}
+
+			if (Mode == 1)
+			{
+				float div1 = (float)ETC1Modifiers[Modifier, 0] / (float)ETC1Modifiers[Modifier, 1];
+				float div2 = 1f - div1;
+				BaseColor = Color.FromArgb((int)(Min.R * div1 + Max.R * div2), (int)(Min.G * div1 + Max.G * div2), (int)(Min.B * div1 + Max.B * div2));
 			}
 			else
 			{
-				int bx = 0;
-				if (second)
+				BaseColor = Color.FromArgb((Min.R + Max.R) / 2, (Min.G + Max.G) / 2, (Min.B + Max.B) / 2);
+			}
+			return Modifier;
+		}
+
+		private static ulong GenHorizontal(Color[] Colors)
+		{
+			ulong data = 0;
+			SetFlipMode(ref data, false);
+			//Left
+			Color[] Left = GetLeftColors(Colors);
+			Color basec1;
+			int mod = GenModifier(out basec1, Left);
+			SetTable1(ref data, mod);
+			GenPixDiff(ref data, Left, basec1, mod, 0, 2, 0, 4);
+			//Right
+			Color[] Right = GetRightColors(Colors);
+			Color basec2;
+			mod = GenModifier(out basec2, Right);
+			SetTable2(ref data, mod);
+			GenPixDiff(ref data, Right, basec2, mod, 2, 4, 0, 4);
+			SetBaseColors(ref data, basec1, basec2);
+			return data;
+		}
+
+		private static ulong GenVertical(Color[] Colors)
+		{
+			ulong data = 0;
+			SetFlipMode(ref data, true);
+			//Top
+			Color[] Top = GetTopColors(Colors);
+			Color basec1;
+			int mod = GenModifier(out basec1, Top);
+			SetTable1(ref data, mod);
+			GenPixDiff(ref data, Top, basec1, mod, 0, 4, 0, 2);
+			//Bottom
+			Color[] Bottom = GetBottomColors(Colors);
+			Color basec2;
+			mod = GenModifier(out basec2, Bottom);
+			SetTable2(ref data, mod);
+			GenPixDiff(ref data, Bottom, basec2, mod, 0, 4, 2, 4);
+			SetBaseColors(ref data, basec1, basec2);
+			return data;
+		}
+
+		private static int GetScore(Color[] Original, Color[] Encode)
+		{
+			int Diff = 0;
+			for (int i = 0; i < 4 * 4; i++)
+			{
+				Diff += System.Math.Abs(Encode[i].R - Original[i].R);
+				Diff += System.Math.Abs(Encode[i].G - Original[i].G);
+				Diff += System.Math.Abs(Encode[i].B - Original[i].B);
+			}
+			return Diff;
+		}
+
+		public static ulong GenETC1(Color[] Colors)
+		{
+			ulong Horizontal = GenHorizontal(Colors);
+			ulong Vertical = GenVertical(Colors);
+			int HorizontalScore = GetScore(Colors, DecodeETC1(Horizontal));
+			int VerticalScore = GetScore(Colors, DecodeETC1(Vertical));
+			return (HorizontalScore < VerticalScore) ? Horizontal : Vertical;
+		}
+
+		private static void GenPixDiff(ref ulong Data, Color[] Pixels, Color BaseColor, int Modifier, int XOffs, int XEnd, int YOffs, int YEnd)
+		{
+			int BaseMean = (BaseColor.R + BaseColor.G + BaseColor.B) / 3;
+			int i = 0;
+			for (int yy = YOffs; yy < YEnd; yy++)
+			{
+				for (int xx = XOffs; xx < XEnd; xx++)
 				{
-					bx = 2;
-				}
-				for (int y = 0; y < 4; y++)
-				{
-					for (int x = 0; x < 2; x++)
-					{
-						int xx = bx + x;
-						int i = xx + 4 * y;
-						if ((inMask & (1 << i)) != 0)
-						{
-							r += pIn[i * 3];
-							g += pIn[i * 3 + 1];
-							b += pIn[i * 3 + 2];
-						}
-					}
+					int Diff = ((Pixels[i].R + Pixels[i].G + Pixels[i].B) / 3) - BaseMean;
+
+					if (Diff < 0) Data |= 1ul << (xx * 4 + yy + 16);
+					int tbldiff1 = System.Math.Abs(Diff) - ETC1Modifiers[Modifier, 0];
+					int tbldiff2 = System.Math.Abs(Diff) - ETC1Modifiers[Modifier, 1];
+
+					if (System.Math.Abs(tbldiff2) < System.Math.Abs(tbldiff1)) Data |= 1ul << (xx * 4 + yy);
+					i++;
 				}
 			}
-			pColors[0 + pColorsOffset] = (byte)((r + 4) >> 3);
-			pColors[1 + pColorsOffset] = (byte)((g + 4) >> 3);
-			pColors[2 + pColorsOffset] = (byte)((b + 4) >> 3);
 		}
 
-		private static int square(int x)
+		private static Color[] GetLeftColors(Color[] Pixels)
 		{
-			return x * x;
-		}
-
-		private static uint chooseModifier(byte[] pBaseColors, int pBaseColorsOffset, byte[] pIn, int pInOffset, ref uint pLow, int bitIndex, int[] pModifierTable, int pModifierTableOffset)
-		{
-			uint bestScore = ~0u;
-			int bestIndex = 0;
-			int pixelR = pIn[0 + pInOffset];
-			int pixelG = pIn[1 + pInOffset];
-			int pixelB = pIn[2 + pInOffset];
-			int r = pBaseColors[0 + pBaseColorsOffset];
-			int g = pBaseColors[1 + pBaseColorsOffset];
-			int b = pBaseColors[2 + pBaseColorsOffset];
-			for (int i = 0; i < 4; i++)
+			Color[] Left = new Color[4 * 2];
+			for (int y = 0; y < 4; y++)
 			{
-				int modifier = pModifierTable[i + pModifierTableOffset];
-				int decodedG = clamp(g + modifier);
-				uint score = (uint)(6 * square(decodedG - pixelG));
-				if (score >= bestScore)
+				for (int x = 0; x < 2; x++)
 				{
-					continue;
-				}
-				int decodedR = clamp(r + modifier);
-				score += (uint)(3 * square(decodedR - pixelR));
-				if (score >= bestScore)
-				{
-					continue;
-				}
-				int decodedB = clamp(b + modifier);
-				score += (uint)square(decodedB - pixelB);
-				if (score < bestScore)
-				{
-					bestScore = score;
-					bestIndex = i;
+					Left[y * 2 + x] = Pixels[y * 4 + x];
 				}
 			}
-			uint lowMask = (uint)((((bestIndex >> 1) << 16) | (bestIndex & 1)) << bitIndex);
-			pLow |= lowMask;
-			return bestScore;
+			return Left;
 		}
 
-		private static void etc_encode_subblock_helper(byte[] pIn, uint inMask, ref etc_compressed pCompressed, bool flipped, bool second, byte[] pBaseColors, int pBaseColorsOffset, int[] pModifierTable, int pModifierTableOffset)
+		private static Color[] GetRightColors(Color[] Pixels)
 		{
-			int score = (int)pCompressed.score;
-			if (flipped)
+			Color[] Right = new Color[4 * 2];
+			for (int y = 0; y < 4; y++)
 			{
-				int by = 0;
-				if (second)
+				for (int x = 2; x < 4; x++)
 				{
-					by = 2;
+					Right[y * 2 + x - 2] = Pixels[y * 4 + x];
 				}
-				for (int y = 0; y < 2; y++)
+			}
+			return Right;
+		}
+
+		private static Color[] GetTopColors(Color[] Pixels)
+		{
+			Color[] Top = new Color[4 * 2];
+			for (int y = 0; y < 2; y++)
+			{
+				for (int x = 0; x < 4; x++)
 				{
-					int yy = by + y;
-					for (int x = 0; x < 4; x++)
-					{
-						int i = x + 4 * yy;
-						if ((inMask & (1 << i)) != 0)
-						{
-							score += (int)chooseModifier(pBaseColors, pBaseColorsOffset, pIn, i * 3, ref pCompressed.low, yy + x * 4, pModifierTable, pModifierTableOffset);
-						}
-					}
+					Top[y * 4 + x] = Pixels[y * 4 + x];
 				}
+			}
+			return Top;
+		}
+
+		private static Color[] GetBottomColors(Color[] Pixels)
+		{
+			Color[] Bottom = new Color[4 * 2];
+			for (int y = 2; y < 4; y++)
+			{
+				for (int x = 0; x < 4; x++)
+				{
+					Bottom[(y - 2) * 4 + x] = Pixels[y * 4 + x];
+				}
+			}
+			return Bottom;
+		}
+
+		private static void SetFlipMode(ref ulong Data, bool Mode)
+		{
+			Data &= ~(1ul << 32);
+			Data |= (Mode ? 1ul : 0ul) << 32;
+		}
+
+		private static void SetDiffMode(ref ulong Data, bool Mode)
+		{
+			Data &= ~(1ul << 33);
+			Data |= (Mode ? 1ul : 0ul) << 33;
+		}
+
+		private static void SetTable1(ref ulong Data, int Table)
+		{
+			Data &= ~(7ul << 37);
+			Data |= (ulong)(Table & 0x7) << 37;
+		}
+
+		private static void SetTable2(ref ulong Data, int Table)
+		{
+			Data &= ~(7ul << 34);
+			Data |= (ulong)(Table & 0x7) << 34;
+		}
+
+		private static void SetBaseColors(ref ulong Data, Color Color1, Color Color2)
+		{
+			int R1 = Color1.R;
+			int G1 = Color1.G;
+			int B1 = Color1.B;
+			int R2 = Color2.R;
+			int G2 = Color2.G;
+			int B2 = Color2.B;
+			//First look if differencial is possible.
+			int RDiff = (R2 - R1) / 8;
+			int GDiff = (G2 - G1) / 8;
+			int BDiff = (B2 - B1) / 8;
+			if (RDiff > -4 && RDiff < 3 && GDiff > -4 && GDiff < 3 && BDiff > -4 && BDiff < 3)
+			{
+				SetDiffMode(ref Data, true);
+				R1 /= 8;
+				G1 /= 8;
+				B1 /= 8;
+				Data |= (ulong)R1 << 59;
+				Data |= (ulong)G1 << 51;
+				Data |= (ulong)B1 << 43;
+				Data |= (ulong)(RDiff & 0x7) << 56;
+				Data |= (ulong)(GDiff & 0x7) << 48;
+				Data |= (ulong)(BDiff & 0x7) << 40;
 			}
 			else
 			{
-				int bx = 0;
-				if (second)
+				Data |= (ulong)(R1 / 0x11) << 60;
+				Data |= (ulong)(G1 / 0x11) << 52;
+				Data |= (ulong)(B1 / 0x11) << 44;
+
+				Data |= (ulong)(R2 / 0x11) << 56;
+				Data |= (ulong)(G2 / 0x11) << 48;
+				Data |= (ulong)(B2 / 0x11) << 40;
+			}
+		}
+
+		public static Color[] DecodeETC1(ulong Data, ulong Alpha = ~0ul)
+		{
+			Color[] Result = new Color[4 * 4];
+			bool diffbit = ((Data >> 33) & 1) == 1;
+			bool flipbit = ((Data >> 32) & 1) == 1; //0: |||, 1: |-|
+			int r1, r2, g1, g2, b1, b2;
+			if (diffbit) //'differential' mode
+			{
+				int r = (int)((Data >> 59) & 0x1F);
+				int g = (int)((Data >> 51) & 0x1F);
+				int b = (int)((Data >> 43) & 0x1F);
+				r1 = (r << 3) | ((r & 0x1C) >> 2);
+				g1 = (g << 3) | ((g & 0x1C) >> 2);
+				b1 = (b << 3) | ((b & 0x1C) >> 2);
+				r += (int)((Data >> 56) & 0x7) << 29 >> 29;
+				g += (int)((Data >> 48) & 0x7) << 29 >> 29;
+				b += (int)((Data >> 40) & 0x7) << 29 >> 29;
+				r2 = (r << 3) | ((r & 0x1C) >> 2);
+				g2 = (g << 3) | ((g & 0x1C) >> 2);
+				b2 = (b << 3) | ((b & 0x1C) >> 2);
+			}
+			else //'individual' mode
+			{
+				r1 = (int)((Data >> 60) & 0xF) * 0x11;
+				g1 = (int)((Data >> 52) & 0xF) * 0x11;
+				b1 = (int)((Data >> 44) & 0xF) * 0x11;
+				r2 = (int)((Data >> 56) & 0xF) * 0x11;
+				g2 = (int)((Data >> 48) & 0xF) * 0x11;
+				b2 = (int)((Data >> 40) & 0xF) * 0x11;
+			}
+			int Table1 = (int)((Data >> 37) & 0x7);
+			int Table2 = (int)((Data >> 34) & 0x7);
+			for (int y3 = 0; y3 < 4; y3++)
+			{
+				for (int x3 = 0; x3 < 4; x3++)
 				{
-					bx = 2;
-				}
-				for (int y = 0; y < 4; y++)
-				{
-					for (int x = 0; x < 2; x++)
+					//if (x + j + x3 >= physicalwidth) continue;
+					//if (y + i + y3 >= physicalheight) continue;
+
+					int val = (int)((Data >> (x3 * 4 + y3)) & 0x1);
+					bool neg = ((Data >> (x3 * 4 + y3 + 16)) & 0x1) == 1;
+					uint c;
+					if ((flipbit && y3 < 2) || (!flipbit && x3 < 2))
 					{
-						int xx = bx + x;
-						int i = xx + 4 * y;
-						if ((inMask & (1 << i)) != 0)
-						{
-							score += (int)chooseModifier(pBaseColors, pBaseColorsOffset, pIn, i * 3, ref pCompressed.low, y + xx * 4, pModifierTable, pModifierTableOffset);
-						}
+						int add = ETC1Modifiers[Table1, val] * (neg ? -1 : 1);
+						c = GFXUtil.ToArgb((byte)(((Alpha >> ((x3 * 4 + y3) * 4)) & 0xF) * 0x11), (byte)ColorClamp(r1 + add), (byte)ColorClamp(g1 + add), (byte)ColorClamp(b1 + add));
 					}
+					else
+					{
+						int add = ETC1Modifiers[Table2, val] * (neg ? -1 : 1);
+						c = GFXUtil.ToArgb((byte)(((Alpha >> ((x3 * 4 + y3) * 4)) & 0xF) * 0x11), (byte)ColorClamp(r2 + add), (byte)ColorClamp(g2 + add), (byte)ColorClamp(b2 + add));
+					}
+					Result[y3 * 4 + x3] = Color.FromArgb((int)c);
+					//res[(i + y3) * stride + x + j + x3] = c;
 				}
 			}
-			pCompressed.score = (uint)score;
+			return Result;
 		}
 
-		private static bool inRange4bitSigned(int color)
+		private static int ColorClamp(int Color)
 		{
-			return color >= -4 && color <= 3;
-		}
-
-		private static void etc_encodeBaseColors(byte[] pBaseColors, byte[] pColors, ref etc_compressed pCompressed)
-		{
-			int r1 = 0, g1 = 0, b1 = 0, r2 = 0, g2 = 0, b2 = 0; // 8 bit base colors for sub-blocks
-			bool differential;
-			{
-				int r51 = convert8To5(pColors[0]);
-				int g51 = convert8To5(pColors[1]);
-				int b51 = convert8To5(pColors[2]);
-				int r52 = convert8To5(pColors[3]);
-				int g52 = convert8To5(pColors[4]);
-				int b52 = convert8To5(pColors[5]);
-
-				r1 = convert5To8(r51);
-				g1 = convert5To8(g51);
-				b1 = convert5To8(b51);
-
-				int dr = r52 - r51;
-				int dg = g52 - g51;
-				int db = b52 - b51;
-
-				differential = inRange4bitSigned(dr) && inRange4bitSigned(dg) && inRange4bitSigned(db);
-				if (differential)
-				{
-					r2 = convert5To8(r51 + dr);
-					g2 = convert5To8(g51 + dg);
-					b2 = convert5To8(b51 + db);
-					pCompressed.high |= (uint)((r51 << 27) | ((7 & dr) << 24) | (g51 << 19) | ((7 & dg) << 16) | (b51 << 11) | ((7 & db) << 8) | 2);
-				}
-			}
-
-			if (!differential)
-			{
-				int r41 = convert8To4(pColors[0]);
-				int g41 = convert8To4(pColors[1]);
-				int b41 = convert8To4(pColors[2]);
-				int r42 = convert8To4(pColors[3]);
-				int g42 = convert8To4(pColors[4]);
-				int b42 = convert8To4(pColors[5]);
-				r1 = convert4To8(r41);
-				g1 = convert4To8(g41);
-				b1 = convert4To8(b41);
-				r2 = convert4To8(r42);
-				g2 = convert4To8(g42);
-				b2 = convert4To8(b42);
-				pCompressed.high |= (uint)((r41 << 28) | (r42 << 24) | (g41 << 20) | (g42 << 16) | (b41 << 12) | (b42 << 8));
-			}
-			pBaseColors[0] = (byte)r1;
-			pBaseColors[1] = (byte)g1;
-			pBaseColors[2] = (byte)b1;
-			pBaseColors[3] = (byte)r2;
-			pBaseColors[4] = (byte)g2;
-			pBaseColors[5] = (byte)b2;
-		}
-
-		private static void etc_encode_block_helper(byte[] pIn, uint inMask, byte[] pColors, ref etc_compressed pCompressed, bool flipped)
-		{
-			pCompressed.score = ~0u;
-			pCompressed.high = (flipped ? 1u : 0u);
-			pCompressed.low = 0;
-
-			byte[] pBaseColors = new byte[6];
-
-			etc_encodeBaseColors(pBaseColors, pColors, ref pCompressed);
-
-			uint originalHigh = pCompressed.high;
-
-			int[] pModifierTable = kModifierTable;
-			for (int i = 0; i < 8; i++)
-			{
-				etc_compressed temp;
-				temp.score = 0;
-				temp.high = originalHigh | (uint)(i << 5);
-				temp.low = 0;
-				etc_encode_subblock_helper(pIn, inMask, ref temp, flipped, false, pBaseColors, 0, pModifierTable, i * 4);
-				take_best(ref pCompressed, temp);
-			}
-			pModifierTable = kModifierTable;
-			etc_compressed firstHalf = pCompressed;
-			for (int i = 0; i < 8; i++)
-			{
-				etc_compressed temp;
-				temp.score = firstHalf.score;
-				temp.high = firstHalf.high | (uint)(i << 2);
-				temp.low = firstHalf.low;
-				etc_encode_subblock_helper(pIn, inMask, ref temp, flipped, true, pBaseColors, 3, pModifierTable, i * 4);
-				if (i == 0)
-				{
-					pCompressed = temp;
-				}
-				else
-				{
-					take_best(ref pCompressed, temp);
-				}
-			}
-		}
-
-		// Input is a 4 x 4 square of 3-byte pixels in form R, G, B
-		// inmask is a 16-bit mask where bit (1 << (x + y * 4)) tells whether the corresponding (x,y)
-		// pixel is valid or not. Invalid pixel color values are ignored when compressing.
-		// Output is an ETC1 compressed version of the data.
-
-		public static ulong etc1_encode_block(byte[] pIn, uint inMask = 0xFFFF)//, byte[] pOut)
-		{
-			byte[] colors = new byte[6];
-			byte[] flippedColors = new byte[6];
-			etc_average_colors_subblock(pIn, inMask, colors, 0, false, false);
-			etc_average_colors_subblock(pIn, inMask, colors, 3, false, true);
-			etc_average_colors_subblock(pIn, inMask, flippedColors, 0, true, false);
-			etc_average_colors_subblock(pIn, inMask, flippedColors, 3, true, true);
-
-			etc_compressed a = new etc_compressed(), b = new etc_compressed();
-			etc_encode_block_helper(pIn, inMask, colors, ref a, false);
-			etc_encode_block_helper(pIn, inMask, flippedColors, ref b, true);
-			take_best(ref a, b);
-			return ((ulong)a.high << 32) | (ulong)a.low;
+			if (Color > 255) Color = 255;
+			if (Color < 0) Color = 0;
+			return Color;
 		}
 	}
 }

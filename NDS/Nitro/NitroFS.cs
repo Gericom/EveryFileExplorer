@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using LibEveryFileExplorer.Files.SimpleFileSystem;
 
-namespace NDS
+namespace NDS.Nitro
 {
 	public class FileAllocationEntry
 	{
@@ -114,5 +115,51 @@ namespace NDS
 		}
 		public String entryName;
 		public UInt16 directoryID;
+	}
+
+	public class NitroFSUtil
+	{
+		public static void GenerateDirectoryTable(List<DirectoryTableEntry> directoryTable, SFSDirectory dir)
+		{
+			DirectoryTableEntry cur = new DirectoryTableEntry();
+			if (dir.IsRoot)
+			{
+				cur.dirParentID = (ushort)(dir.TotalNrSubDirectories + 1);
+				cur.dirEntryStart = cur.dirParentID * 8u;
+			}
+			else cur.dirParentID = dir.Parent.DirectoryID;
+			dir.DirectoryID = (ushort)(0xF000 + directoryTable.Count);
+			directoryTable.Add(cur);
+			foreach (SFSDirectory d in dir.SubDirectories)
+			{
+				GenerateDirectoryTable(directoryTable, d);
+			}
+		}
+
+		public static void GenerateEntryNameTable(List<DirectoryTableEntry> directoryTable, List<EntryNameTableEntry> entryNameTable, SFSDirectory dir, ref uint Offset, ref ushort FileId)
+		{
+			directoryTable[dir.DirectoryID - 0xF000].dirEntryStart = Offset;
+			directoryTable[dir.DirectoryID - 0xF000].dirEntryFileID = FileId;
+
+			foreach (SFSDirectory d in dir.SubDirectories)
+			{
+				entryNameTable.Add(new EntryNameTableDirectoryEntry(d.DirectoryName, d.DirectoryID));
+				Offset += (uint)d.DirectoryName.Length + 3u;
+			}
+			foreach (SFSFile f in dir.Files)
+			{
+				f.FileID = FileId;
+				entryNameTable.Add(new EntryNameTableFileEntry(f.FileName));
+				Offset += (uint)f.FileName.Length + 1u;
+				FileId++;
+			}
+			entryNameTable.Add(new EntryNameTableEndOfDirectoryEntry());
+			Offset++;
+
+			foreach (SFSDirectory d in dir.SubDirectories)
+			{
+				GenerateEntryNameTable(directoryTable, entryNameTable, d, ref Offset, ref FileId);
+			}
+		}
 	}
 }

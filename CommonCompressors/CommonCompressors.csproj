@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LZ11.cs" />
     <Compile Include="LZ77.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YAZ0.cs" />

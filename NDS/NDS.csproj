@@ -56,9 +56,9 @@
     <Compile Include="Nitro\ASMHack.cs" />
     <Compile Include="GPU\CommandContext.cs" />
     <Compile Include="GPU\Textures.cs" />
-    <Compile Include="NDS.cs" />
+    <Compile Include="Nitro\NDS.cs" />
     <Compile Include="NitroSystem\FND\NARC.cs" />
-    <Compile Include="NitroFS.cs" />
+    <Compile Include="Nitro\NitroFS.cs" />
     <Compile Include="NitroSystem\G3D\Dictionary.cs" />
     <Compile Include="NitroSystem\G3D\MDL0.cs" />
     <Compile Include="NitroSystem\G3D\NSBCA.cs" />
@@ -67,6 +67,7 @@
     <Compile Include="NitroSystem\G3D\SBC.cs" />
     <Compile Include="NitroSystem\G3D\TEX0.cs" />
     <Compile Include="NitroSystem\G3D\Util.cs" />
+    <Compile Include="Nitro\CRC16.cs" />
     <Compile Include="Nitro\CRT0.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
@@ -75,6 +76,12 @@
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
     <Compile Include="SND\ADPCM.cs" />
+    <Compile Include="UI\UtilityBinViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\UtilityBinViewer.Designer.cs">
+      <DependentUpon>UtilityBinViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\NDSViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +124,7 @@
     <Compile Include="UI\TEX0Viewer.Designer.cs">
       <DependentUpon>TEX0Viewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="UtilityBin.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LibEveryFileExplorer\LibEveryFileExplorer.csproj">
@@ -128,6 +136,9 @@
     <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\UtilityBinViewer.resx">
+      <DependentUpon>UtilityBinViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\NDSViewer.resx">
       <DependentUpon>NDSViewer.cs</DependentUpon>
