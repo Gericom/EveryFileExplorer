@@ -62,11 +62,11 @@
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.buttonOpen = new System.Windows.Forms.ToolStripButton();
+			this.buttonSave = new System.Windows.Forms.ToolStripButton();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.splitter1 = new System.Windows.Forms.Splitter();
-			this.buttonOpen = new System.Windows.Forms.ToolStripButton();
-			this.buttonSave = new System.Windows.Forms.ToolStripButton();
 			this.panel1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -297,24 +297,6 @@
 			this.toolStrip1.TabIndex = 2;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
-			// panel2
-			// 
-			this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
-			this.panel2.Location = new System.Drawing.Point(0, 25);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(200, 376);
-			this.panel2.TabIndex = 5;
-			this.panel2.Visible = false;
-			// 
-			// splitter1
-			// 
-			this.splitter1.Location = new System.Drawing.Point(200, 25);
-			this.splitter1.Name = "splitter1";
-			this.splitter1.Size = new System.Drawing.Size(3, 376);
-			this.splitter1.TabIndex = 7;
-			this.splitter1.TabStop = false;
-			this.splitter1.Visible = false;
-			// 
 			// buttonOpen
 			// 
 			this.buttonOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -335,6 +317,24 @@
 			this.buttonSave.Size = new System.Drawing.Size(23, 22);
 			this.buttonSave.Text = "Save";
 			this.buttonSave.Click += new System.EventHandler(this.SaveFile);
+			// 
+			// panel2
+			// 
+			this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
+			this.panel2.Location = new System.Drawing.Point(0, 25);
+			this.panel2.Name = "panel2";
+			this.panel2.Size = new System.Drawing.Size(200, 376);
+			this.panel2.TabIndex = 5;
+			this.panel2.Visible = false;
+			// 
+			// splitter1
+			// 
+			this.splitter1.Location = new System.Drawing.Point(200, 25);
+			this.splitter1.Name = "splitter1";
+			this.splitter1.Size = new System.Drawing.Size(3, 376);
+			this.splitter1.TabIndex = 7;
+			this.splitter1.TabStop = false;
+			this.splitter1.Visible = false;
 			// 
 			// Form1
 			// 

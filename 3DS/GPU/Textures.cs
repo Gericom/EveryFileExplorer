@@ -446,6 +446,27 @@ namespace _3DS.GPU
 			int offs = 0;
 			switch (Format)
 			{
+				case ImageFormat.RGB8:
+					for (int y = 0; y < ConvHeight; y += 8)
+					{
+						for (int x = 0; x < ConvWidth; x += 8)
+						{
+							for (int i = 0; i < 64; i++)
+							{
+								int x2 = i % 8;
+								if (x + x2 >= physicalwidth) continue;
+								int y2 = i / 8;
+								if (y + y2 >= physicalheight) continue;
+								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
+								Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
+								result[offs + pos * 3 + 0] = c.B;
+								result[offs + pos * 3 + 1] = c.G;
+								result[offs + pos * 3 + 2] = c.R;
+							}
+							offs += 64 * 3;
+						}
+					}
+					break;
 				case ImageFormat.RGB565:
 					for (int y = 0; y < ConvHeight; y += 8)
 					{
@@ -492,214 +513,15 @@ namespace _3DS.GPU
 										IOUtil.WriteU64LE(result, offs, alpha);
 										offs += 8;
 									}
-									/*
-									ulong data = 0;
-									//TODO: Choose the best configuration
-									bool diffbit = false;//((data >> 33) & 1) == 1;
-									bool flipbit = false;// ((data >> 32) & 1) == 1;
-									data |= (flipbit ? 1ul : 0ul) << 32;
-									data |= (diffbit ? 1ul : 0ul) << 33;
-									//Get the colors for the left side:
-									uint[] Left = new uint[8];
-									uint avrgRL = 0;
-									uint avrgGL = 0;
-									uint avrgBL = 0;
-									int iii = 0;
-									for (int yy = 0; yy < 4; yy++)
-									{
-										for (int xx = 0; xx < 2; xx++)
-										{
-											uint color = res[((y + i + yy) * (d.Stride / 4)) + x + j + xx];
-											avrgRL += (color >> 16) & 0xFF;
-											avrgGL += (color >> 8) & 0xFF;
-											avrgBL += (color >> 0) & 0xFF;
-											Left[iii++] = color;
-										}
-									}
-									avrgRL /= 8;
-									avrgGL /= 8;
-									avrgBL /= 8;
-
-									ulong r1 = avrgRL / 0x11;
-									ulong g1 = avrgGL / 0x11;
-									ulong b1 = avrgBL / 0x11;
-
-									float[] LeftDeltas = new float[8];
-									//float LeftMax = int.MinValue;
-									//float LeftMin = int.MaxValue;
-									float deltamean = 0;
-									iii = 0;
-									foreach (uint c in Left)
-									{
-										uint r = (c >> 16) & 0xFF;
-										uint g = (c >> 8) & 0xFF;
-										uint b = (c >> 0) & 0xF;
-
-										LeftDeltas[iii] = ((int)(r - (r1 * 0x11)) + (int)(g - (g1 * 0x11)) + (int)(b - (b1 * 0x11))) / 3f;
-										deltamean += LeftDeltas[iii];
-										//if (Math.Abs(LeftDeltas[iii]) > LeftMax) LeftMax = Math.Abs(LeftDeltas[iii]);
-										//if (Math.Abs(LeftDeltas[iii]) < LeftMin) LeftMin = Math.Abs(LeftDeltas[iii]);
-										iii++;
-									}
-									deltamean /= 8;
-									/*avrgRL = (uint)((int)avrgRL + deltamean);
-									if ((int)avrgRL > 255) avrgRL = 255;
-									if ((int)avrgRL < 0) avrgRL = 0;
-									avrgGL = (uint)((int)avrgGL + deltamean);
-									if ((int)avrgGL > 255) avrgGL = 255;
-									if ((int)avrgGL < 0) avrgGL = 0;
-									avrgBL = (uint)((int)avrgBL + deltamean);
-									if ((int)avrgBL > 255) avrgBL = 255;
-									if ((int)avrgBL < 0) avrgBL = 0;*/
-
-									/*while (avrgRL > 183 && avrgGL > 183 && avrgBL > 183)
-									{
-										avrgRL--;
-										avrgGL--;
-										avrgBL--;
-									}/
-									r1 = avrgRL / 0x11;
-									g1 = avrgGL / 0x11;
-									b1 = avrgBL / 0x11;
-									data |= r1 << 60;
-									data |= g1 << 52;
-									data |= b1 << 44;
-									//Get the colors for the right side:
-									uint[] Right = new uint[8];
-									uint avrgRR = 0;
-									uint avrgGR = 0;
-									uint avrgBR = 0;
-									iii = 0;
-									for (int yy = 0; yy < 4; yy++)
-									{
-										for (int xx = 2; xx < 4; xx++)
-										{
-											uint color = res[((y + i + yy) * (d.Stride / 4)) + x + j + xx];
-											avrgRR += (color >> 16) & 0xFF;
-											avrgGR += (color >> 8) & 0xFF;
-											avrgBR += (color >> 0) & 0xFF;
-											Right[iii++] = color;
-										}
-									}
-									avrgRR /= 8;
-									avrgGR /= 8;
-									avrgBR /= 8;
-
-									ulong r2 = avrgRR / 0x11;
-									ulong g2 = avrgGR / 0x11;
-									ulong b2 = avrgBR / 0x11;
-
-
-									float[] RightDeltas = new float[8];
-									deltamean = 0;
-									iii = 0;
-									foreach (uint c in Right)
-									{
-										uint r = (c >> 16) & 0xFF;
-										uint g = (c >> 8) & 0xFF;
-										uint b = (c >> 0) & 0xF;
-										RightDeltas[iii] = ((int)(r - (r2 * 0x11)) + (int)(g - (g2 * 0x11)) + (int)(b - (b2 * 0x11))) / 3f;
-										deltamean += RightDeltas[iii];
-										iii++;
-									}
-									deltamean /= 8;
-								/*	avrgRR = (uint)((int)avrgRR + deltamean);
-									if ((int)avrgRR > 255) avrgRR = 255;
-									if ((int)avrgRR < 0) avrgRR = 0;
-									avrgGR = (uint)((int)avrgGR + deltamean);
-									if ((int)avrgGR > 255) avrgGR = 255;
-									if ((int)avrgGR < 0) avrgGR = 0;
-									avrgBR = (uint)((int)avrgBR + deltamean);
-									if ((int)avrgBR > 255) avrgBR = 255;
-									if ((int)avrgBR < 0) avrgBR = 0;/
-
-									r2 = avrgRR / 0x11;
-									g2 = avrgGR / 0x11;
-									b2 = avrgBR / 0x11;
-									data |= r2 << 56;
-									data |= g2 << 48;
-									data |= b2 << 40;
-									//Calulate Deltas
-									LeftDeltas = new float[8];
-									float LeftMax = float.MinValue;
-									float LeftMin = float.MaxValue;
-									iii = 0;
-									foreach (uint c in Left)
-									{
-										uint r = (c >> 16) & 0xFF;
-										uint g = (c >> 8) & 0xFF;
-										uint b = (c >> 0) & 0xF;
-
-										LeftDeltas[iii] = ((int)(r - (r1 * 0x11)) + (int)(g - (g1 * 0x11)) + (int)(b - (b1 * 0x11))) / 3f;
-										if (Math.Abs(LeftDeltas[iii]) > LeftMax) LeftMax = Math.Abs(LeftDeltas[iii]);
-										if (Math.Abs(LeftDeltas[iii]) < LeftMin) LeftMin = Math.Abs(LeftDeltas[iii]);
-										iii++;
-									}
-									int tblidxmax = ClosestTable((int)LeftMax);
-									int tblidxmin = ClosestTable((int)LeftMin);
-									uint Table1 = (uint)tblidxmin;//(uint)((tblidxmax + tblidxmin) / 2);
-									RightDeltas = new float[8];
-									float RightMax = int.MinValue;
-									float RightMin = int.MaxValue;
-									iii = 0;
-									foreach (uint c in Right)
-									{
-										uint r = (c >> 16) & 0xFF;
-										uint g = (c >> 8) & 0xFF;
-										uint b = (c >> 0) & 0xF;
-										RightDeltas[iii] = ((int)(r - (r2 * 0x11)) + (int)(g - (g2 * 0x11)) + (int)(b - (b2 * 0x11))) / 3f;
-										if (Math.Abs(RightDeltas[iii]) > RightMax) RightMax = Math.Abs(RightDeltas[iii]);
-										if (Math.Abs(RightDeltas[iii]) < RightMin) RightMin = Math.Abs(RightDeltas[iii]);
-										iii++;
-									}
-									tblidxmax = ClosestTable((int)RightMax);
-									tblidxmin = ClosestTable((int)RightMin);
-									uint Table2 = (uint)tblidxmin;//(uint)((tblidxmax + tblidxmin) / 2);
-									//Set the tables
-									//uint Table1 = 0;
-									//uint Table2 = 0;
-									data |= (Table1 & 0x7) << 37;
-									data |= (Table2 & 0x7) << 34;
-									iii = 0;
-									for (int yy = 0; yy < 4; yy++)
-									{
-										for (int xx = 0; xx < 2; xx++)
-										{
-											if (LeftDeltas[iii] < 0) data |= 1ul << (xx * 4 + yy + 16);
-											float tbldiff1 = Math.Abs(LeftDeltas[iii]) - ETC1Modifiers[Table1, 0];
-											float tbldiff2 = Math.Abs(LeftDeltas[iii]) - ETC1Modifiers[Table1, 1];
-											if (Math.Abs(tbldiff2) < Math.Abs(tbldiff1)) data |= 1ul << (xx * 4 + yy);
-											iii++;
-										}
-									}
-									iii = 0;
-									for (int yy = 0; yy < 4; yy++)
-									{
-										for (int xx = 2; xx < 4; xx++)
-										{
-											if (RightDeltas[iii] < 0) data |= 1ul << (xx * 4 + yy + 16);
-											float tbldiff1 = Math.Abs(RightDeltas[iii]) - ETC1Modifiers[Table2, 0];
-											float tbldiff2 = Math.Abs(RightDeltas[iii]) - ETC1Modifiers[Table2, 1];
-											if (Math.Abs(tbldiff2) < Math.Abs(tbldiff1)) data |= 1ul << (xx * 4 + yy);
-											iii++;
-										}
-									}
-
-									//Write the data
-									IOUtil.WriteU64LE(result, offs, data);
-									offs += 8;*/
-									byte[] Data = new byte[4 * 4 * 3];
+									Color[] pixels = new Color[4 * 4];
 									for (int yy = 0; yy < 4; yy++)
 									{
 										for (int xx = 0; xx < 4; xx++)
 										{
-											uint color = res[((y + i + yy) * (d.Stride / 4)) + x + j + xx];
-											Data[(yy * 4 + xx) * 3] = (byte)((color >> 16) & 0xFF);
-											Data[(yy * 4 + xx) * 3 + 1] = (byte)((color >> 8) & 0xFF);
-											Data[(yy * 4 + xx) * 3 + 2] = (byte)((color >> 0) & 0xFF);
+											pixels[yy * 4 + xx] = Color.FromArgb((int)res[((y + i + yy) * (d.Stride / 4)) + x + j + xx]);
 										}
 									}
-									IOUtil.WriteU64LE(result, offs, ETC1.etc1_encode_block(Data));
+									IOUtil.WriteU64LE(result, offs, ETC1.GenETC1(pixels));
 									offs += 8;
 								}
 							}
@@ -712,33 +534,12 @@ namespace _3DS.GPU
 			return result;
 		}
 
-		private static int ClosestTable(int Value)
-		{
-			int delta = int.MaxValue;
-			int curtable = -1;
-			for (int i = 0; i < 8; i++)
-			{
-				if (Math.Abs(Value - ETC1Modifiers[i, 0]) < delta)
-				{
-					delta = Math.Abs(Value - ETC1Modifiers[i, 0]);
-					curtable = i;
-				}
-				if (Math.Abs(Value - ETC1Modifiers[i, 1]) < delta)
-				{
-					delta = Math.Abs(Value - ETC1Modifiers[i, 1]);
-					curtable = i;
-				}
-			}
-			return curtable;
-		}
-
 		private static int ColorClamp(int Color)
 		{
 			if (Color > 255) Color = 255;
 			if (Color < 0) Color = 0;
 			return Color;
 		}
-
 
 	}
 }
