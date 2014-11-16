@@ -30,37 +30,45 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.topBackgroundImage = new System.Windows.Forms.PictureBox();
             this.bottomBackgroundImage = new System.Windows.Forms.PictureBox();
-            this.folderOpenImage = new System.Windows.Forms.PictureBox();
-            this.folderClosedImage = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.topBackgroundImage = new System.Windows.Forms.PictureBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.iconBorder24pxImage = new System.Windows.Forms.PictureBox();
             this.iconBorder48pxImage = new System.Windows.Forms.PictureBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.folderClosedImage = new System.Windows.Forms.PictureBox();
+            this.folderOpenImage = new System.Windows.Forms.PictureBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.backgroundMusicCheckbox = new System.Windows.Forms.CheckBox();
+            this.clampTextureSizeCheckBox = new System.Windows.Forms.CheckBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.topBackgroundImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bottomBackgroundImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.folderOpenImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.folderClosedImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.topBackgroundImage)).BeginInit();
+            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iconBorder24pxImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.iconBorder48pxImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.folderClosedImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.folderOpenImage)).BeginInit();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1397, 518);
+            this.tabControl1.Size = new System.Drawing.Size(1074, 615);
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -70,10 +78,28 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1389, 492);
+            this.tabPage1.Size = new System.Drawing.Size(1066, 589);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Background";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // bottomBackgroundImage
+            // 
+            this.bottomBackgroundImage.Location = new System.Drawing.Point(4, 269);
+            this.bottomBackgroundImage.Name = "bottomBackgroundImage";
+            this.bottomBackgroundImage.Size = new System.Drawing.Size(1024, 256);
+            this.bottomBackgroundImage.TabIndex = 1;
+            this.bottomBackgroundImage.TabStop = false;
+            this.bottomBackgroundImage.Click += new System.EventHandler(this.bottomBackgroundImage_Click);
+            // 
+            // topBackgroundImage
+            // 
+            this.topBackgroundImage.Location = new System.Drawing.Point(4, 7);
+            this.topBackgroundImage.Name = "topBackgroundImage";
+            this.topBackgroundImage.Size = new System.Drawing.Size(1024, 256);
+            this.topBackgroundImage.TabIndex = 0;
+            this.topBackgroundImage.TabStop = false;
+            this.topBackgroundImage.Click += new System.EventHandler(this.topBackgroundImage_Click);
             // 
             // tabPage2
             // 
@@ -88,65 +114,15 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1389, 492);
+            this.tabPage2.Size = new System.Drawing.Size(1066, 589);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Icons";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // topBackgroundImage
-            // 
-            this.topBackgroundImage.Location = new System.Drawing.Point(4, 7);
-            this.topBackgroundImage.Name = "topBackgroundImage";
-            this.topBackgroundImage.Size = new System.Drawing.Size(1366, 212);
-            this.topBackgroundImage.TabIndex = 0;
-            this.topBackgroundImage.TabStop = false;
-            // 
-            // bottomBackgroundImage
-            // 
-            this.bottomBackgroundImage.Location = new System.Drawing.Point(4, 225);
-            this.bottomBackgroundImage.Name = "bottomBackgroundImage";
-            this.bottomBackgroundImage.Size = new System.Drawing.Size(1366, 212);
-            this.bottomBackgroundImage.TabIndex = 1;
-            this.bottomBackgroundImage.TabStop = false;
-            // 
-            // folderOpenImage
-            // 
-            this.folderOpenImage.Location = new System.Drawing.Point(8, 24);
-            this.folderOpenImage.Name = "folderOpenImage";
-            this.folderOpenImage.Size = new System.Drawing.Size(78, 61);
-            this.folderOpenImage.TabIndex = 0;
-            this.folderOpenImage.TabStop = false;
-            // 
-            // folderClosedImage
-            // 
-            this.folderClosedImage.Location = new System.Drawing.Point(92, 24);
-            this.folderClosedImage.Name = "folderClosedImage";
-            this.folderClosedImage.Size = new System.Drawing.Size(78, 61);
-            this.folderClosedImage.TabIndex = 1;
-            this.folderClosedImage.TabStop = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 8);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(60, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "open folder";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(89, 8);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "closed folder";
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(257, 8);
+            this.label3.Location = new System.Drawing.Point(410, 8);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(69, 13);
             this.label3.TabIndex = 7;
@@ -155,7 +131,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(171, 8);
+            this.label4.Location = new System.Drawing.Point(276, 8);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(69, 13);
             this.label4.TabIndex = 6;
@@ -163,39 +139,127 @@
             // 
             // iconBorder24pxImage
             // 
-            this.iconBorder24pxImage.Location = new System.Drawing.Point(260, 24);
+            this.iconBorder24pxImage.Location = new System.Drawing.Point(413, 24);
             this.iconBorder24pxImage.Name = "iconBorder24pxImage";
-            this.iconBorder24pxImage.Size = new System.Drawing.Size(78, 61);
+            this.iconBorder24pxImage.Size = new System.Drawing.Size(128, 128);
             this.iconBorder24pxImage.TabIndex = 5;
             this.iconBorder24pxImage.TabStop = false;
+            this.iconBorder24pxImage.Click += new System.EventHandler(this.iconBorder24pxImage_Click);
             // 
             // iconBorder48pxImage
             // 
-            this.iconBorder48pxImage.Location = new System.Drawing.Point(176, 24);
+            this.iconBorder48pxImage.Location = new System.Drawing.Point(279, 24);
             this.iconBorder48pxImage.Name = "iconBorder48pxImage";
-            this.iconBorder48pxImage.Size = new System.Drawing.Size(78, 61);
+            this.iconBorder48pxImage.Size = new System.Drawing.Size(128, 128);
             this.iconBorder48pxImage.TabIndex = 4;
             this.iconBorder48pxImage.TabStop = false;
+            this.iconBorder48pxImage.Click += new System.EventHandler(this.iconBorder48pxImage_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(145, 8);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "closed folder";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(60, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "open folder";
+            // 
+            // folderClosedImage
+            // 
+            this.folderClosedImage.Location = new System.Drawing.Point(145, 24);
+            this.folderClosedImage.Name = "folderClosedImage";
+            this.folderClosedImage.Size = new System.Drawing.Size(128, 128);
+            this.folderClosedImage.TabIndex = 1;
+            this.folderClosedImage.TabStop = false;
+            this.folderClosedImage.Click += new System.EventHandler(this.folderClosedImage_Click);
+            // 
+            // folderOpenImage
+            // 
+            this.folderOpenImage.Location = new System.Drawing.Point(11, 24);
+            this.folderOpenImage.Name = "folderOpenImage";
+            this.folderOpenImage.Size = new System.Drawing.Size(128, 128);
+            this.folderOpenImage.TabIndex = 0;
+            this.folderOpenImage.TabStop = false;
+            this.folderOpenImage.DoubleClick += new System.EventHandler(this.folderOpenImage_Click);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.backgroundMusicCheckbox);
+            this.tabPage3.Controls.Add(this.clampTextureSizeCheckBox);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(1066, 589);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Options";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // backgroundMusicCheckbox
+            // 
+            this.backgroundMusicCheckbox.AutoSize = true;
+            this.backgroundMusicCheckbox.Checked = true;
+            this.backgroundMusicCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.backgroundMusicCheckbox.Location = new System.Drawing.Point(6, 29);
+            this.backgroundMusicCheckbox.Name = "backgroundMusicCheckbox";
+            this.backgroundMusicCheckbox.Size = new System.Drawing.Size(209, 17);
+            this.backgroundMusicCheckbox.TabIndex = 2;
+            this.backgroundMusicCheckbox.Text = "Enable background music (bgm.bcstm)";
+            this.backgroundMusicCheckbox.UseVisualStyleBackColor = true;
+            this.backgroundMusicCheckbox.CheckedChanged += new System.EventHandler(this.backgroundMusicCheckbox_CheckedChanged);
+            // 
+            // clampTextureSizeCheckBox
+            // 
+            this.clampTextureSizeCheckBox.AutoSize = true;
+            this.clampTextureSizeCheckBox.Checked = true;
+            this.clampTextureSizeCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.clampTextureSizeCheckBox.Location = new System.Drawing.Point(6, 6);
+            this.clampTextureSizeCheckBox.Name = "clampTextureSizeCheckBox";
+            this.clampTextureSizeCheckBox.Size = new System.Drawing.Size(161, 17);
+            this.clampTextureSizeCheckBox.TabIndex = 1;
+            this.clampTextureSizeCheckBox.Text = "Clamp texture sizes in viewer";
+            this.clampTextureSizeCheckBox.UseVisualStyleBackColor = true;
+            this.clampTextureSizeCheckBox.CheckedChanged += new System.EventHandler(this.clampTextureSizeCheckBox_CheckedChanged);
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(1066, 589);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Color only themes";
+            this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // ThemeViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1397, 575);
+            this.ClientSize = new System.Drawing.Size(1074, 627);
             this.Controls.Add(this.tabControl1);
             this.Name = "ThemeViewer";
             this.Text = "ThemeViewer";
             this.Load += new System.EventHandler(this.ThemeViewer_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.bottomBackgroundImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.topBackgroundImage)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.topBackgroundImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bottomBackgroundImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.folderOpenImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.folderClosedImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.iconBorder24pxImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.iconBorder48pxImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.folderClosedImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.folderOpenImage)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -215,6 +279,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox iconBorder24pxImage;
         private System.Windows.Forms.PictureBox iconBorder48pxImage;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.CheckBox clampTextureSizeCheckBox;
+        private System.Windows.Forms.CheckBox backgroundMusicCheckbox;
+        private System.Windows.Forms.TabPage tabPage4;
 
     }
 }
