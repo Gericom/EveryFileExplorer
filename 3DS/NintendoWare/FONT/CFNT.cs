@@ -16,9 +16,9 @@ namespace _3DS.NintendoWare.FONT
 			EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
 			try
 			{
-				header = new CFNTHeader(er);
-				fontInfo = new FontInfo(er);
-				tglplHeader = new TGLPLHeader(er);
+				Header = new CFNTHeader(er);
+				FontInfo = new FINF(er);
+				//TextureGlyph = new TGLP(er);
 			}
 			finally
 			{
@@ -31,112 +31,93 @@ namespace _3DS.NintendoWare.FONT
 			return new Form();
 		}
 
-		CFNTHeader header;
+		public CFNTHeader Header;
 		public class CFNTHeader
 		{
 			public CFNTHeader(EndianBinaryReader er)
 			{
-				signature = er.ReadString(Encoding.ASCII, 4);
-				if (signature != "CFNT") throw new SignatureNotCorrectException(signature, "CFNT", er.BaseStream.Position - 4);
-
-				littleEndian = er.ReadUInt16() == 65279;
-				version = er.ReadUInt32();//20 on internal sysmenu
-				er.ReadBytes(2);
-				fileSize = er.ReadUInt32();
-				sectionCount = er.ReadUInt32();
-
-				Console.WriteLine("little Endian? " + littleEndian);
-				Console.WriteLine("version " + version);
-				Console.WriteLine("fileSize " + fileSize);
-				Console.WriteLine("sectionCount " + sectionCount);
-
-
+				Signature = er.ReadString(Encoding.ASCII, 4);
+				if (Signature != "CFNT") throw new SignatureNotCorrectException(Signature, "CFNT", er.BaseStream.Position - 4);
+				Endianness = er.ReadUInt16();
+				HeaderSize = er.ReadUInt16();
+				Version = er.ReadUInt32();
+				FileSize = er.ReadUInt32();
+				NrBlocks = er.ReadUInt32();
 			}
-
-			public String signature;
-			public bool littleEndian;
-			public UInt32 version;
-			public UInt32 fileSize;// at 0xC
-			public UInt32 sectionCount;
+			public String Signature;
+			public UInt16 Endianness;
+			public UInt16 HeaderSize;
+			public UInt32 Version;
+			public UInt32 FileSize;
+			public UInt32 NrBlocks;
 		}
 
-		FontInfo fontInfo;
-		public class FontInfo
+		public FINF FontInfo;
+		public class FINF
 		{
-			public FontInfo(EndianBinaryReader er)//same as wii font's
+			public FINF(EndianBinaryReader er)//same as wii font's
 			{
-				signature = er.ReadString(Encoding.ASCII, 4);
-				if (signature != "FINF") throw new SignatureNotCorrectException(signature, "FINF", er.BaseStream.Position - 4);
-
-				sectionSize = er.ReadUInt32();
-				fontType = er.ReadByte();
-				leading = er.ReadByte();
-				er.ReadUInt16();
-				leftMargin = er.ReadByte();
-				er.ReadByte();
-				er.ReadByte();
-				er.ReadByte();
-				tglplDataOffset = er.ReadUInt32();
-				cwdhDataOffset = er.ReadUInt32();//above + tlgp size
-				cmapDataOffset = er.ReadUInt32();//above + cwdh size
-				height = er.ReadByte();
-				width = er.ReadByte();
-				ascender = er.ReadByte();
-				descender = er.ReadByte();
-
-				Console.WriteLine("tglplDataOffset " + tglplDataOffset);
-				Console.WriteLine("cwdhDataOffset " + cwdhDataOffset);
-				Console.WriteLine("cmapDataOffset " + cmapDataOffset);
-
+				Signature = er.ReadString(System.Text.Encoding.ASCII, 4);
+				if (Signature != "FINF") throw new SignatureNotCorrectException(Signature, "FINF", er.BaseStream.Position - 4);
+				SectionSize = er.ReadUInt32();
+				FontType = er.ReadByte();
+				LineFeed = er.ReadByte();
+				AlterCharIndex = er.ReadUInt16();
+				DefaultWidth = new CharWidths(er);
+				Encoding = er.ReadByte();
+				TGLPOffset = er.ReadUInt32();
+				CWDHOffset = er.ReadUInt32();
+				CMAPOffset = er.ReadUInt32();
+				Height = er.ReadByte();
+				Width = er.ReadByte();
+				Ascent = er.ReadByte();
+				Padding = er.ReadByte();
 			}
-
-			public String signature;
-			public UInt32 sectionSize;
-			public Byte fontType;
-			public Byte leading;//space between lines (unsure)
-			public Byte leftMargin;
-			public UInt32 tglplDataOffset;
-			public UInt32 cwdhDataOffset;
-			public UInt32 cmapDataOffset;
-			public Byte height;
-			public Byte width;
-			public Byte ascender;
-			public Byte descender;
-
+			public String Signature;
+			public UInt32 SectionSize;
+			public Byte FontType;
+			public Byte LineFeed;
+			public UInt16 AlterCharIndex;
+			public CharWidths DefaultWidth;
+			public Byte Encoding;
+			public UInt32 TGLPOffset;
+			public UInt32 CWDHOffset;
+			public UInt32 CMAPOffset;
+			public Byte Height;
+			public Byte Width;
+			public Byte Ascent;
+			public Byte Padding;//?
 		}
 
-		TGLPLHeader tglplHeader;
-		public class TGLPLHeader
+		public class CharWidths
 		{
-			public TGLPLHeader(EndianBinaryReader er)
+			public CharWidths(EndianBinaryReader er)
 			{
-				signature = er.ReadString(Encoding.ASCII, 5);
-				if (signature != "TGLPL") throw new SignatureNotCorrectException(signature, "TGLPL", er.BaseStream.Position - 5);
-				/*
-				sectionLength = er.ReadUInt32();
-
-				fontWidthMinus1 = er.ReadByte();
-				fontHeightMinus1 = er.ReadByte();
-
-				charWidthMinus1 = er.ReadByte();
-				charHeightMinus1 = er.ReadByte();
-
-				imageLength = er.ReadUInt32();
-
-				imageAmount = er.ReadUInt16();
-
-				*/
-
+				Left = er.ReadByte();
+				GlyphWidth = er.ReadByte();
+				CharWidth = er.ReadByte();
 			}
-			public String signature;
-
+			public Byte Left;
+			public Byte GlyphWidth;
+			public Byte CharWidth;
 		}
+
+		/*public TGLP TextureGlyph;
+		public class TGLP
+		{
+			public TGLP(EndianBinaryReader er)
+			{
+				Signature = er.ReadString(Encoding.ASCII, 4);
+				if (Signature != "TGLP") throw new SignatureNotCorrectException(Signature, "TGLP", er.BaseStream.Position - 4);
+			}
+			public String Signature;
+		}*/
 
 		public class CFNTIdentifier : FileFormatIdentifier
 		{
 			public override string GetCategory()
 			{
-				return "CFNT Files";
+				return Category_Fonts;
 			}
 
 			public override string GetFileDescription()
