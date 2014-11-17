@@ -9,7 +9,7 @@ using _3DS.UI;
 using _3DS.GPU;
 using LibEveryFileExplorer.IO;
 
-namespace _3DS.NintendoWare.LYT
+namespace _3DS.NintendoWare.LYT1
 {
 	public class CLIM : FileFormat<CLIM.CLIMIdentifier>, IConvertable, IFileCreatable, IViewable, IWriteable
 	{

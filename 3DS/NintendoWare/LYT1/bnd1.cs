@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace _3DS.NintendoWare.LYT
+namespace _3DS.NintendoWare.LYT1
 {
 	public class bnd1 : pan1
 	{

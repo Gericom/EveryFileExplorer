@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Tao.OpenGl;
 
-namespace NintendoWare.LYT
+namespace _3DS.NintendoWare.LYT1
 {
 	public class BasicShader
 	{

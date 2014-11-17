@@ -9,7 +9,7 @@ using System.IO;
 using System.Windows.Forms;
 using _3DS.UI;
 
-namespace _3DS.NintendoWare.LYT
+namespace _3DS.NintendoWare.LYT1
 {
 	public class CLYT : FileFormat<CLYT.CLYTIdentifier>, IViewable
 	{

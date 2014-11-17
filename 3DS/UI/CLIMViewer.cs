@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using _3DS.NintendoWare.LYT;
+using _3DS.NintendoWare.LYT1;
 
 namespace _3DS.UI
 {

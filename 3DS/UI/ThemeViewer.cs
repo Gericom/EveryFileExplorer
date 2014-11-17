@@ -31,11 +31,11 @@ namespace _3DS.UI
 
         private void ThemeViewer_Load(object sender, EventArgs e)
         {
-            loadImages();
+			LoadImages();
             backgroundMusicCheckbox.Checked = theme.header.backgroundMusicEnabled;
         }
 
-        private void loadImages()
+        private void LoadImages()
         {
             topBackgroundImage.Image = theme.GetTopTexture(clampTextureSizeCheckBox.Checked);
             bottomBackgroundImage.Image = theme.GetBottomTexture(clampTextureSizeCheckBox.Checked);
@@ -51,7 +51,7 @@ namespace _3DS.UI
                 bottomBackgroundImage.BackColor = theme.bottomSolidColor;
         }
 
-        private void bitmapFromPngSelect(ref byte[] texturedata, Textures.ImageFormat imageFormat, int fullWidth, int fullHeight, int displayWidth, int displayHeight)
+        private void BitmapFromPngSelect(ref byte[] texturedata, Textures.ImageFormat imageFormat, int fullWidth, int fullHeight, int displayWidth, int displayHeight)
         {
             MessageBox.Show("Please choose a " + fullWidth + "x" + fullHeight + " size image, only " + displayWidth + "x" + displayHeight + " will be displayed on the 3ds!");
             OpenFileDialog dialog = new OpenFileDialog();
@@ -64,41 +64,41 @@ namespace _3DS.UI
             {
                 Bitmap bitmap = new Bitmap(new MemoryStream(File.ReadAllBytes(dialog.FileName)));
                 texturedata = Textures.FromBitmap(bitmap, imageFormat, true);
-                loadImages();
+				LoadImages();
             }
         }
 
         private void folderOpenImage_Click(object sender, EventArgs e)
         {
-            bitmapFromPngSelect(ref theme.openFolderTexture, Textures.ImageFormat.RGB8, theme.folderWidth, theme.folderHeight, 82, 64);			
+			BitmapFromPngSelect(ref theme.openFolderTexture, Textures.ImageFormat.RGB8, theme.folderWidth, theme.folderHeight, 82, 64);			
         }
         private void folderClosedImage_Click(object sender, EventArgs e)
         {
-            bitmapFromPngSelect(ref theme.closedFolderTexture, Textures.ImageFormat.RGB8, theme.folderWidth, theme.folderHeight, 74, 64);		
+			BitmapFromPngSelect(ref theme.closedFolderTexture, Textures.ImageFormat.RGB8, theme.folderWidth, theme.folderHeight, 74, 64);		
         }
         private void topBackgroundImage_Click(object sender, EventArgs e)
         {
-            bitmapFromPngSelect(ref theme.topScreenTexture, Textures.ImageFormat.RGB565, theme.topWidth, theme.topHeight, theme.topClampWidth, theme.topClampHeight);
+			BitmapFromPngSelect(ref theme.topScreenTexture, Textures.ImageFormat.RGB565, theme.topWidth, theme.topHeight, theme.topClampWidth, theme.topClampHeight);
         }
 
         private void bottomBackgroundImage_Click(object sender, EventArgs e)
         {
-            bitmapFromPngSelect(ref theme.bottomScreenTexture, Textures.ImageFormat.RGB565, theme.bottomWidth, theme.bottomHeight, theme.bottomClampWidth, theme.bottomClampHeight);
+			BitmapFromPngSelect(ref theme.bottomScreenTexture, Textures.ImageFormat.RGB565, theme.bottomWidth, theme.bottomHeight, theme.bottomClampWidth, theme.bottomClampHeight);
         }
 
         private void iconBorder48pxImage_Click(object sender, EventArgs e)
         {
-            bitmapFromPngSelect(ref theme.iconBorder48pxTexture, Textures.ImageFormat.RGB8, theme.iconBorder48pxWidth, theme.iconBorder48pxHeight, 36, 72);
+			BitmapFromPngSelect(ref theme.iconBorder48pxTexture, Textures.ImageFormat.RGB8, theme.iconBorder48pxWidth, theme.iconBorder48pxHeight, 36, 72);
         }
 
         private void iconBorder24pxImage_Click(object sender, EventArgs e)
         {
-            bitmapFromPngSelect(ref theme.iconBorder24pxTexture, Textures.ImageFormat.RGB8, theme.iconBorder24pxWidth, theme.iconBorder24pxHeight, 25, 50);
+			BitmapFromPngSelect(ref theme.iconBorder24pxTexture, Textures.ImageFormat.RGB8, theme.iconBorder24pxWidth, theme.iconBorder24pxHeight, 25, 50);
         }
     
         private void clampTextureSizeCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            loadImages();
+			LoadImages();
         }
 
         private void backgroundMusicCheckbox_CheckedChanged(object sender, EventArgs e)

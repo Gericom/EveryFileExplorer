@@ -8,7 +8,7 @@ using System.IO;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using _3DS.UI;
 
-namespace _3DS.NintendoWare.LYT
+namespace _3DS.NintendoWare.LYT1
 {
 	public class DARC : FileFormat<DARC.darcIdentifier>, IViewable
 	{

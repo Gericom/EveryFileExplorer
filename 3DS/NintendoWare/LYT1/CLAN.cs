@@ -5,7 +5,7 @@ using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
 
-namespace _3DS.NintendoWare.LYT
+namespace _3DS.NintendoWare.LYT1
 {
 	public class CLAN : FileFormat<CLAN.CLANIdentifier>
 	{
