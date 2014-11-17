@@ -89,8 +89,8 @@ namespace _3DS.NintendoWare.LYT
 				Bitmap b = new Bitmap(new MemoryStream(File.ReadAllBytes(f.FileName)));
 				Image.Width = (ushort)b.Width;
 				Image.Height = (ushort)b.Height;
-				Image.Format = 10;//5;
-				Data = Textures.FromBitmap(b, Textures.ImageFormat.ETC1);//.RGB565);
+				Image.Format = 11;//10;//5;
+				Data = Textures.FromBitmap(b, Textures.ImageFormat.ETC1A4);//.RGB565);
 				Image.DataLength = (uint)Data.Length;
 				return true;
 			}
