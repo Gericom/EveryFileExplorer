@@ -68,6 +68,13 @@ namespace _3DS
                         Byte a1 = er.ReadByte();//alpha makes the colours appear lighter because the 3ds does blending
                         topSolidColor = Color.FromArgb(a1, r, g, b);
                         break;
+
+					case 2://wierd 64x64 overlay mode
+						topWidth = 64;
+						topHeight = 64;
+						topClampWidth = 64;
+						topClampHeight = 64;
+						break;
                     case 3://texture
                         switch (header.topScreenFrameType)
                         {
@@ -114,14 +121,12 @@ namespace _3DS
                                 bottomClampHeight = 240;
                                 break;
 
+							case 4://tex3 //both animated.?
                             case 2://tex3
                                 bottomWidth = 1024;
                                 bottomClampWidth = 960;
                                 bottomClampHeight = 240;
                                 break;
-
-
-
 
                         }
                         break;
@@ -130,7 +135,11 @@ namespace _3DS
 
 
                 er.BaseStream.Position = header.topScreenTextureOffset;
-                topScreenTexture = er.ReadBytes((topHeight * topWidth) * 2);
+				if (header.topScreenDrawType == 2)// in draw type 2 theyre are 2 alpha images, one at topscreentextureoffset and the other at the colour offset, they need to be drawn onto the gradient background
+					topScreenTexture = er.ReadBytes((topHeight * topWidth) * 2);
+				else
+					topScreenTexture = er.ReadBytes((topHeight * topWidth) * 2);
+
                 er.BaseStream.Position = header.bottomScreenSolidOrTextureOffset;
                 bottomScreenTexture = er.ReadBytes((bottomHeight * bottomWidth) * 2);
 
@@ -144,6 +153,10 @@ namespace _3DS
                 er.BaseStream.Position = header.iconBorder24pxOffset;
                 iconBorder24pxTexture = er.ReadBytes((iconBorder24pxWidth * iconBorder24pxHeight) * 4);
 
+				er.BaseStream.Position = header.audioSectionOffset;
+				audioSection = new AudioSection(er);
+
+
 
 
             }
@@ -154,6 +167,7 @@ namespace _3DS
 
         }
 
+		public Image testImage;
 
         public int iconBorder48pxWidth = 64;
         public int iconBorder48pxHeight = 128;
@@ -213,6 +227,8 @@ namespace _3DS
         public int topClampHeight;
         public Bitmap GetTopTexture(bool clamp)
         {
+			if (header.topScreenDrawType == 2)
+				return GPU.Textures.ToBitmap(topScreenTexture, topWidth, topHeight, GPU.Textures.ImageFormat.A8, true);
             if (clamp)
                 return GPU.Textures.ToBitmap(topScreenTexture, topClampWidth, topClampHeight, GPU.Textures.ImageFormat.RGB565, false);
             return GPU.Textures.ToBitmap(topScreenTexture, topWidth, topHeight, GPU.Textures.ImageFormat.RGB565, true);
@@ -228,8 +244,28 @@ namespace _3DS
         {
             public AudioSection(EndianBinaryReader er)
             {
+				Console.WriteLine("audio section at " + er.BaseStream.Position);
+				version = er.ReadUInt32();
+				flag = er.ReadUInt32();
+
+				//start of cwav
+				
+				cwavSize = er.ReadUInt32();
+				er.ReadUInt32();//2nd flag?
+
+				Console.WriteLine("cwavSize " + cwavSize);
+				
+				//cwav
+				Console.WriteLine("cwav at " + er.BaseStream.Position);
+
 
             }
+
+			UInt32 version;
+			UInt32 flag;
+			byte[] cwav6ExtraData;
+			UInt32 cwavSize;
+			byte[] cwav4ExtraData;
         }
 
         public ThemeHeader header;
