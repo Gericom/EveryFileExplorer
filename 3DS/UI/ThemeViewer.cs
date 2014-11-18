@@ -24,9 +24,6 @@ namespace _3DS.UI
         {
             theme = themeFile;
             InitializeComponent();
-
-//            tabControl1.TabPages[3].Enabled = false;
-//            tabControl1.TabPages[3].Visible = false;
             tabControl1.TabPages.Remove(tabPage4);
         }
 
@@ -86,10 +83,10 @@ namespace _3DS.UI
 		Bitmap bottomFrame2;
 		int frameptr = 0;
 		private void onTimedEvent(object source, ElapsedEventArgs e)
-		{
+		{//normally only animates on right/left movement
 			if (theme.header.bottomScreenFrameType == 2)
 			{
-				if (frameptr == 4)
+				if (frameptr == 3)
 					frameptr = 0;
 
 				if (frameptr == 0)
@@ -99,9 +96,6 @@ namespace _3DS.UI
 					simBottomBackgroundImage.Image = bottomFrame1;
 
 				if (frameptr == 2)
-					simBottomBackgroundImage.Image = bottomFrame0;
-
-				if (frameptr == 3)
 					simBottomBackgroundImage.Image = bottomFrame2;
 			}
 			else if (theme.header.bottomScreenFrameType == 4)
