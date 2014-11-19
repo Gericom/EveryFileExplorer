@@ -8,7 +8,7 @@ using LibEveryFileExplorer.Files;
 using Tao.OpenGl;
 using System.Windows.Forms;
 
-namespace _3DS.NintendoWare.LYT
+namespace _3DS.NintendoWare.LYT1
 {
 	public class pan1
 	{

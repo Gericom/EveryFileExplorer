@@ -23,6 +23,8 @@ namespace LibEveryFileExplorer.GFX
 		private static int GenModifier(out Color BaseColor, Color[] Pixels)
 		{
 			Color Max = Color.White;
+			Color LessMax;
+			Color MoreMin;
 			Color Min = Color.Black;
 			int MinY = int.MaxValue;
 			int MaxY = int.MinValue;
@@ -40,17 +42,42 @@ namespace LibEveryFileExplorer.GFX
 					Min = Pixels[i];
 				}
 			}
+			LessMax = Max;
+			MoreMin = Min;
+			int MoreMinY = int.MaxValue;
+			int LessMaxY = int.MinValue;
+			for (int i = 0; i < 8; i++)
+			{
+				int Y = (Pixels[i].R + Pixels[i].G + Pixels[i].B) / 3;
+				if (Y > MinY && Y < MaxY && Y > LessMaxY)
+				{
+					LessMaxY = Y;
+					LessMax = Pixels[i];
+				}
+				if (Y > MinY && Y < MaxY && Y < MoreMinY)
+				{
+					MoreMinY = Y;
+					MoreMin = Pixels[i];
+				}
+			}
 			int DiffMean = ((Max.R - Min.R) + (Max.G - Min.G) + (Max.B - Min.B)) / 3;
+			int DiffMeanSmall = ((LessMax.R - MoreMin.R) + (LessMax.G - MoreMin.G) + (LessMax.B - MoreMin.B)) / 3;
 
 			int ModDiff = int.MaxValue;
 			int Modifier = -1;
 			int Mode = -1;
+
+			int ModDiffSmall = int.MaxValue;
+			int ModifierSmall = -1;
 
 			for (int i = 0; i < 8; i++)
 			{
 				int SS = ETC1Modifiers[i, 0] * 2;
 				int SB = ETC1Modifiers[i, 0] + ETC1Modifiers[i, 1];
 				int BB = ETC1Modifiers[i, 1] * 2;
+				if (SS > 255) SS = 255;
+				if (SB > 255) SB = 255;
+				if (BB > 255) BB = 255;
 				if (System.Math.Abs(DiffMean - SS) < ModDiff)
 				{
 					ModDiff = System.Math.Abs(DiffMean - SS);
@@ -69,7 +96,25 @@ namespace LibEveryFileExplorer.GFX
 					Modifier = i;
 					Mode = 2;
 				}
+
+				if (System.Math.Abs(DiffMeanSmall - SS) < ModDiffSmall)
+				{
+					ModDiffSmall = System.Math.Abs(DiffMeanSmall - SS);
+					ModifierSmall = i;
+				}
+				if (System.Math.Abs(DiffMeanSmall - SB) < ModDiffSmall)
+				{
+					ModDiffSmall = System.Math.Abs(DiffMeanSmall - SB);
+					ModifierSmall = i;
+				}
+				if (System.Math.Abs(DiffMeanSmall - BB) < ModDiffSmall)
+				{
+					ModDiffSmall = System.Math.Abs(DiffMeanSmall - BB);
+					ModifierSmall = i;
+				}
 			}
+
+			//Modifier = (Modifier + ModifierSmall) / 2;
 
 			if (Mode == 1)
 			{

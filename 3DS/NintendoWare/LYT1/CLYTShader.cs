@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 using Tao.OpenGl;
 
-namespace _3DS.NintendoWare.LYT
+namespace _3DS.NintendoWare.LYT1
 {
 	public class CLYTShader
 	{

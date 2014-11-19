@@ -21,6 +21,7 @@ namespace LibEveryFileExplorer.Files
 		protected const String Category_Archives = "Archives";
 		protected const String Category_Audio = "Audio";
 		protected const String Category_Cells = "Cells";
+		protected const String Category_Fonts = "Fonts";
 		protected const String Category_Graphics = "Graphics";
 		protected const String Category_Layouts = "Layouts";
 		protected const String Category_Models = "Models";

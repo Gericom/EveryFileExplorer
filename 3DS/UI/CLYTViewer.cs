@@ -6,13 +6,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using _3DS.NintendoWare.LYT;
 using Tao.OpenGl;
 using LibEveryFileExplorer.Files;
 using System.Drawing.Imaging;
-using NintendoWare.LYT;
 using System.Runtime.InteropServices;
 using LibEveryFileExplorer;
+using _3DS.NintendoWare.LYT1;
 
 namespace _3DS.UI
 {

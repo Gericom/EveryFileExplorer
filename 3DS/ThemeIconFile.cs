@@ -42,12 +42,12 @@ namespace _3DS
 
             public override string GetFileDescription()
             {
-                return "System Theme Icon *.icn";
+                return "3DS System Menu Theme Icon";
             }
 
             public override string GetFileFilter()
             {
-                return "System Menu Icon (*.icn)|*.icn";
+                return "3DS System Menu Icon (*.icn)|*.icn";
             }
 
             public override Bitmap GetIcon()

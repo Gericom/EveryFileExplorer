@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BYML.cs" />
-    <Compile Include="CFNT.cs" />
+    <Compile Include="NintendoWare\FONT\CFNT.cs" />
     <Compile Include="NintendoWare\GFX\BoundingVolume.cs" />
     <Compile Include="NintendoWare\GFX\CANM.cs" />
     <Compile Include="NintendoWare\GFX\CGFX.cs" />
@@ -69,19 +69,19 @@
     <Compile Include="NintendoWare\GFX\DICT.cs" />
     <Compile Include="NintendoWare\GFX\PatriciaTreeGenerator.cs" />
     <Compile Include="NintendoWare\GFX\TXOB.cs" />
-    <Compile Include="NintendoWare\LYT\BasicShader.cs" />
-    <Compile Include="NintendoWare\LYT\bnd1.cs" />
-    <Compile Include="NintendoWare\LYT\CLIM.cs" />
-    <Compile Include="NintendoWare\LYT\CLYT.cs" />
-    <Compile Include="NintendoWare\LYT\CLAN.cs" />
-    <Compile Include="NintendoWare\LYT\CLYTShader.cs" />
-    <Compile Include="NintendoWare\LYT\mat1.cs" />
-    <Compile Include="NintendoWare\LYT\pan1.cs" />
-    <Compile Include="NintendoWare\LYT\pic1.cs" />
-    <Compile Include="NintendoWare\LYT\txt1.cs" />
-    <Compile Include="NintendoWare\LYT\wnd1.cs" />
+    <Compile Include="NintendoWare\LYT1\BasicShader.cs" />
+    <Compile Include="NintendoWare\LYT1\bnd1.cs" />
+    <Compile Include="NintendoWare\LYT1\CLIM.cs" />
+    <Compile Include="NintendoWare\LYT1\CLYT.cs" />
+    <Compile Include="NintendoWare\LYT1\CLAN.cs" />
+    <Compile Include="NintendoWare\LYT1\CLYTShader.cs" />
+    <Compile Include="NintendoWare\LYT1\mat1.cs" />
+    <Compile Include="NintendoWare\LYT1\pan1.cs" />
+    <Compile Include="NintendoWare\LYT1\pic1.cs" />
+    <Compile Include="NintendoWare\LYT1\txt1.cs" />
+    <Compile Include="NintendoWare\LYT1\wnd1.cs" />
     <Compile Include="NintendoWare\SND\CSTM.cs" />
-    <Compile Include="NintendoWare\LYT\DARC.cs" />
+    <Compile Include="NintendoWare\LYT1\DARC.cs" />
     <Compile Include="DSP\ADPCM.cs" />
     <Compile Include="DVLB.cs" />
     <Compile Include="Extensions.cs" />

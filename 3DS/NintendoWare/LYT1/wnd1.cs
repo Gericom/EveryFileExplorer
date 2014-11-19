@@ -7,7 +7,7 @@ using System.Drawing;
 using LibEveryFileExplorer.Collections;
 using Tao.OpenGl;
 
-namespace _3DS.NintendoWare.LYT
+namespace _3DS.NintendoWare.LYT1
 {
 	public class wnd1 : pan1
 	{
