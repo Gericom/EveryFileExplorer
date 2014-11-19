@@ -57,8 +57,9 @@ namespace LibEveryFileExplorer.GFX
 				Height += (int)(LineHeight * Settings.YScale) + Settings.LineSpacing;
 			}
 			while (linestart != -1);
-			Height -= Settings.LineSpacing;
 			if (Width == 0 || Height == 0) return null;
+			Height -= Settings.LineSpacing;
+			Width += 2;
 			Bitmap b = new Bitmap(Width, Height);
 			using (Graphics g = Graphics.FromImage(b))
 			{
