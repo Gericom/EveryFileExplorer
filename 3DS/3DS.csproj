@@ -97,6 +97,12 @@
     <Compile Include="SMDH.cs" />
     <Compile Include="ThemeFile.cs" />
     <Compile Include="ThemeIconFile.cs" />
+    <Compile Include="UI\CFNTViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CFNTViewer.Designer.cs">
+      <DependentUpon>CFNTViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\CGFXViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,6 +172,9 @@
     <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CFNTViewer.resx">
+      <DependentUpon>CFNTViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CGFXViewer.resx">
       <DependentUpon>CGFXViewer.cs</DependentUpon>

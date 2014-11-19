@@ -27,8 +27,8 @@ namespace _3DS.NintendoWare.LYT1
 			TopColor = er.ReadColor8();
 			BottomColor = er.ReadColor8();
 			FontSize = er.ReadVector2();
-			CharSize = er.ReadSingle();
-			LineSize = er.ReadSingle();
+			CharSpace = er.ReadSingle();
+			LineSpace = er.ReadSingle();
 			er.BaseStream.Position = baseoffset + StringOffset;
 			Text = er.ReadStringNT(Encoding.Unicode);
 			er.BaseStream.Position = baseoffset + SectionSize;
@@ -45,8 +45,8 @@ namespace _3DS.NintendoWare.LYT1
 		public Color TopColor;
 		public Color BottomColor;
 		public Vector2 FontSize;
-		public Single CharSize;
-		public Single LineSize;
+		public Single CharSpace;
+		public Single LineSpace;
 
 		public String Text;
 

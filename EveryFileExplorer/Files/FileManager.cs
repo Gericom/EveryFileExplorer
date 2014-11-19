@@ -40,7 +40,17 @@ namespace EveryFileExplorer.Files
 				return false;
 			}
 
-			ViewableFile vv = new ViewableFile(File, tt);
+			ViewableFile vv;
+			try
+			{
+				vv = new ViewableFile(File, tt);
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show("An error occured while opening the file:\n" + e);
+				return false;
+			}
+
 			ViewedFiles.Add(vv);
 			vv.DialogClosing += new ViewableFile.DialogClosingEventHandler(v_DialogClosing);
 			vv.ShowDialog(Application.OpenForms[0]);

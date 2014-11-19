@@ -32,7 +32,7 @@ namespace _3DS.UI
         private void ThemeViewer_Load(object sender, EventArgs e)
         {
 			LoadImages();
-            backgroundMusicCheckbox.Checked = theme.header.backgroundMusicEnabled;
+            backgroundMusicCheckbox.Checked = theme.header.UseBGMusic;
         }
 
         private void LoadImages()
@@ -103,7 +103,7 @@ namespace _3DS.UI
 
         private void backgroundMusicCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            theme.header.backgroundMusicEnabled = backgroundMusicCheckbox.Checked;
+			theme.header.UseBGMusic = backgroundMusicCheckbox.Checked;
         }
 
     }

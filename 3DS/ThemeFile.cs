@@ -93,9 +93,9 @@ namespace _3DS
 				er.BaseStream.Position = header.bottomScreenSolidOrTextureOffset;
 				bottomScreenTexture = er.ReadBytes((bottomHeight * bottomWidth) * 2);
 
-				er.BaseStream.Position = header.openedFolderTextureOffset;
+				er.BaseStream.Position = header.FolderOpenedTexOffset;
 				openFolderTexture = er.ReadBytes((folderWidth * folderHeight) * 4);
-				er.BaseStream.Position = header.closedFolderTextureOffset;
+				er.BaseStream.Position = header.FolderClosedTexOffset;
 				closedFolderTexture = er.ReadBytes((folderWidth * folderHeight) * 4);
 
 				er.BaseStream.Position = header.iconBorder48pxOffset;
@@ -127,10 +127,10 @@ namespace _3DS
 			header.bottomScreenSolidOrTextureOffset = (uint)er.BaseStream.Position;
 			er.Write(bottomScreenTexture, 0, bottomScreenTexture.Length);
 
-			header.openedFolderTextureOffset = (uint)er.BaseStream.Position;
+			header.FolderOpenedTexOffset = (uint)er.BaseStream.Position;
 			er.Write(openFolderTexture, 0, openFolderTexture.Length);
 
-			header.closedFolderTextureOffset = (uint)er.BaseStream.Position;
+			header.FolderClosedTexOffset = (uint)er.BaseStream.Position;
 			er.Write(closedFolderTexture, 0, closedFolderTexture.Length);
 
 			header.iconBorder48pxOffset = (uint)er.BaseStream.Position;
@@ -227,14 +227,11 @@ namespace _3DS
 			public ThemeHeader(EndianBinaryReader er)
 			{
 				//offset 0x0
-				version = er.ReadUInt32();
+				Version = er.ReadUInt32();
 
-				unknownByte1 = er.ReadByte();
-				backgroundMusicEnabled = er.ReadByte() == 1;
-				unknownByte2 = er.ReadByte();
-				unknownByte3 = er.ReadByte();
-
-				unknownInt2 = er.ReadUInt32();
+				Unknown1 = er.ReadByte();
+				UseBGMusic = er.ReadByte() == 1;
+				Padding = er.ReadBytes(6);
 
 				//offset 0xC
 				topScreenDrawType = er.ReadUInt32();// 0 = none, 1 = solid colour, 2 = extension of val1, 3 = texture
@@ -243,32 +240,23 @@ namespace _3DS
 				topScreenTextureOffset = er.ReadUInt32();
 				topScreenAdditionalTextureOffset = er.ReadUInt32();//used with draw type val2, optional when using draw type val2
 
-				System.Console.WriteLine("topScreenDrawType " + topScreenDrawType);
-				System.Console.WriteLine("topScreenFrameType " + topScreenFrameType);
-				System.Console.WriteLine("topScreenAdditionalTextureOffset " + topScreenAdditionalTextureOffset);
-
-
 				//offset 0x20
 				bottomScreenDrawType = er.ReadUInt32();
 				bottomScreenFrameType = er.ReadUInt32();
 				bottomScreenSolidOrTextureOffset = er.ReadUInt32();
 
-				System.Console.WriteLine("bottomScreenDrawType " + bottomScreenDrawType);
-				System.Console.WriteLine("bottomScreenFrameType " + bottomScreenFrameType);
-				System.Console.WriteLine("bottomScreenSolidOrTextureOffset " + bottomScreenSolidOrTextureOffset);
-
 				//offset 0x2C
-				useUnknownBlock0 = er.ReadUInt32() == 1;
-				unknownBlock0Offset = er.ReadUInt32();//0xC length
+				UseSelectorColor = er.ReadUInt32() == 1;
+				SelectorColorBlockOffset = er.ReadUInt32();//0xC length
 
 				//offset 0x34
-				useUnknownBlock1 = er.ReadUInt32() == 1;
-				unknownBlock1Offset = er.ReadUInt32();//0xC length
+				UseFolderColor = er.ReadUInt32() == 1;
+				FolderColorBlockOffset = er.ReadUInt32();//0xC length
 
 				//offset 0x3C
-				useFolderTextures = er.ReadUInt32() == 1;
-				closedFolderTextureOffset = er.ReadUInt32();//texture 6
-				openedFolderTextureOffset = er.ReadUInt32();//texture 7
+				UseFolderTex = er.ReadUInt32() == 1;
+				FolderClosedTexOffset = er.ReadUInt32();//texture 6
+				FolderOpenedTexOffset = er.ReadUInt32();//texture 7
 
 				//offset 0x48
 				useUnknownBlock2 = er.ReadUInt32() == 1;
@@ -317,27 +305,17 @@ namespace _3DS
 				useAudioSection = er.ReadUInt32() == 1;
 				audioSectionSize = er.ReadUInt32();
 				audioSectionOffset = er.ReadUInt32();
-
-				System.Console.WriteLine("useFolderTextures " + useFolderTextures);
-				System.Console.WriteLine("useIconBorders " + useIconBorders);
-				System.Console.WriteLine("useAudioSection " + useAudioSection);
-				System.Console.WriteLine("audioSectionSize " + audioSectionSize);
-				System.Console.WriteLine("audioSectionOffset " + audioSectionOffset);
-
 			}
 
 			public void Write(EndianBinaryWriter er)
 			{
 				er.BaseStream.Position = 0;
 				//write header data
-				er.Write(version);
+				er.Write(Version);
 
-				er.Write(unknownByte1);
-				er.Write((byte)(backgroundMusicEnabled ? 1 : 0));
-				er.Write(unknownByte2);
-				er.Write(unknownByte3);
-
-				er.Write(unknownInt2);
+				er.Write(Unknown1);
+				er.Write((byte)(UseBGMusic ? 1 : 0));
+				er.Write(Padding, 0, 6);
 
 				er.Write(topScreenDrawType);
 				er.Write(topScreenFrameType);
@@ -356,9 +334,9 @@ namespace _3DS
 				er.Write((UInt32)0);
 				er.Write((UInt32)0);
 
-				er.Write(useFolderTextures ? 1u : 0u);//TODO write 0 instead or somethign when this is disabled?
-				er.Write(closedFolderTextureOffset);
-				er.Write(openedFolderTextureOffset);
+				er.Write(UseFolderTex ? 1u : 0u);//TODO write 0 instead or somethign when this is disabled?
+				er.Write(FolderClosedTexOffset);
+				er.Write(FolderOpenedTexOffset);
 
 				er.Write((UInt32)0);
 				er.Write((UInt32)0);
@@ -406,14 +384,10 @@ namespace _3DS
 				er.Write((UInt32)0);
 			}
 
-			public UInt32 version;
-			public Byte unknownByte1;
-			public bool backgroundMusicEnabled;
-			public Byte unknownByte2;
-			public Byte unknownByte3;
-
-			public UInt32 unknownInt2;
-
+			public UInt32 Version;
+			public Byte Unknown1;
+			public bool UseBGMusic;
+			public Byte[] Padding;//6
 
 			public UInt32 topScreenDrawType;
 			public UInt32 topScreenFrameType;
@@ -425,15 +399,15 @@ namespace _3DS
 			public UInt32 bottomScreenFrameType;
 			public UInt32 bottomScreenSolidOrTextureOffset;
 
-			public bool useUnknownBlock0;
-			public UInt32 unknownBlock0Offset;
+			public bool UseSelectorColor;
+			public UInt32 SelectorColorBlockOffset;
 
-			public bool useUnknownBlock1;
-			public UInt32 unknownBlock1Offset;
+			public bool UseFolderColor;
+			public UInt32 FolderColorBlockOffset;
 
-			public bool useFolderTextures;//6 and 7
-			public UInt32 closedFolderTextureOffset;
-			public UInt32 openedFolderTextureOffset;
+			public bool UseFolderTex;//6 and 7
+			public UInt32 FolderClosedTexOffset;
+			public UInt32 FolderOpenedTexOffset;
 
 			public bool useUnknownBlock2;
 			public UInt32 unknownBlock2Offset;
