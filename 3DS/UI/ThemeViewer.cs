@@ -38,7 +38,7 @@ namespace _3DS.UI
 			if (theme.header.topScreenDrawType == 2)
 			{
 				topBackgroundImage.BackColor = Color.Aqua;
-				topBackgroundImage.Image = theme.GetTopAlphaTexture1();
+				topBackgroundImage.Image = theme.GetTopAlphaTexture();
 			}
 			else
 			{ 
@@ -101,9 +101,9 @@ namespace _3DS.UI
 				if (testptr == 2)
 					testptr = 0;
 				if (testptr == 0)
-					topBackgroundImage.Image = theme.GetTopAlphaTexture1();
+					topBackgroundImage.Image = theme.GetTopAlphaTexture();
 				if (testptr == 1)
-					topBackgroundImage.Image = theme.GetTopAlphaTexture2();
+					topBackgroundImage.Image = theme.GetOverlayAlphaTexture();
 				testptr++;
 
 			}
