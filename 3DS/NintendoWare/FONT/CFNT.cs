@@ -7,6 +7,10 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using _3DS.GPU;
+using LibEveryFileExplorer.GFX;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using _3DS.UI;
 
 namespace _3DS.NintendoWare.FONT
 {
@@ -54,7 +58,7 @@ namespace _3DS.NintendoWare.FONT
 
 		public Form GetDialog()
 		{
-			return new Form();
+			return new CFNTViewer(this);
 		}
 
 		public CFNTHeader Header;
@@ -130,8 +134,8 @@ namespace _3DS.NintendoWare.FONT
 				SheetSize = er.ReadUInt32();
 				NrSheets = er.ReadUInt16();
 				SheetFormat = (Textures.ImageFormat)er.ReadUInt16();
-				SheetRow = er.ReadUInt16();
-				SheetLine = er.ReadUInt16();
+				SheetNrRows = er.ReadUInt16();
+				SheetNrLines = er.ReadUInt16();
 				SheetWidth = er.ReadUInt16();
 				SheetHeight = er.ReadUInt16();
 				SheetDataOffset = er.ReadUInt32();
@@ -149,8 +153,8 @@ namespace _3DS.NintendoWare.FONT
 			public UInt32 SheetSize;
 			public UInt16 NrSheets;
 			public Textures.ImageFormat SheetFormat;
-			public UInt16 SheetRow;
-			public UInt16 SheetLine;
+			public UInt16 SheetNrRows;
+			public UInt16 SheetNrLines;
 			public UInt16 SheetWidth;
 			public UInt16 SheetHeight;
 			public UInt32 SheetDataOffset;
@@ -176,8 +180,8 @@ namespace _3DS.NintendoWare.FONT
 				EndIndex = er.ReadUInt16();
 				NextCWDHOffset = er.ReadUInt32();
 
-				CharWidths = new CharWidthInfo[EndIndex - StartIndex];
-				for (int i = 0; i < EndIndex - StartIndex; i++) CharWidths[i] = new CharWidthInfo(er);
+				CharWidths = new CharWidthInfo[EndIndex - StartIndex + 1];
+				for (int i = 0; i < EndIndex - StartIndex + 1; i++) CharWidths[i] = new CharWidthInfo(er);
 			}
 			public String Signature;
 			public UInt32 SectionSize;
@@ -191,6 +195,13 @@ namespace _3DS.NintendoWare.FONT
 		public CMAP[] CharMaps;
 		public class CMAP
 		{
+			public enum CMAPMappingMethod : ushort
+			{
+				Direct = 0,
+				Table = 1,
+				Scan = 2
+			}
+
 			public CMAP(EndianBinaryReader er)
 			{
 				Signature = er.ReadString(Encoding.ASCII, 4);
@@ -198,28 +209,136 @@ namespace _3DS.NintendoWare.FONT
 				SectionSize = er.ReadUInt32();
 				CodeBegin = er.ReadUInt16();
 				CodeEnd = er.ReadUInt16();
-				MappingMethod = er.ReadUInt16();
+				MappingMethod = (CMAPMappingMethod)er.ReadUInt16();
 				Reserved = er.ReadUInt16();
 				NextCMAPOffset = er.ReadUInt32();
+
+				switch (MappingMethod)
+				{
+					case CMAPMappingMethod.Direct:
+						IndexOffset = er.ReadUInt16();
+						break;
+					case CMAPMappingMethod.Table:
+						IndexTable = er.ReadUInt16s(CodeEnd - CodeBegin + 1);
+						break;
+					case CMAPMappingMethod.Scan:
+						ScanEntries = new Dictionary<ushort, ushort>();
+						NrScanEntries = er.ReadUInt16();
+						for (int i = 0; i < NrScanEntries; i++) ScanEntries.Add(er.ReadUInt16(), er.ReadUInt16());
+						break;
+				}
 			}
 			public String Signature;
 			public UInt32 SectionSize;
 			public UInt16 CodeBegin;
 			public UInt16 CodeEnd;
-			public UInt16 MappingMethod;
+			public CMAPMappingMethod MappingMethod;
 			public UInt16 Reserved;
 			public UInt32 NextCMAPOffset;
+
+			//Direct
+			public UInt16 IndexOffset;
+
+			//Table
+			public UInt16[] IndexTable;
+
+			//Scan
+			public UInt16 NrScanEntries;
+			public Dictionary<UInt16, UInt16> ScanEntries;
+
+			public UInt16 GetIndexFromCode(UInt16 Code)
+			{
+				if (Code < CodeBegin || Code > CodeEnd) return 0xFFFF;
+				switch (MappingMethod)
+				{
+					case CMAPMappingMethod.Direct:
+						return (UInt16)(Code - CodeBegin + IndexOffset);
+					case CMAPMappingMethod.Table:
+						return IndexTable[Code - CodeBegin];
+					case CMAPMappingMethod.Scan:
+						if (!ScanEntries.ContainsKey(Code)) return 0xFFFF;
+						return ScanEntries[Code];
+				}
+				return 0xFFFF;
+			}
+		}
+
+		private CharWidthInfo GetCharWidthInfoByIndex(UInt16 Index)
+		{
+			foreach (var v in CharWidths)
+			{
+				if (Index < v.StartIndex || Index > v.EndIndex) continue;
+				return v.CharWidths[Index - v.StartIndex];
+			}
+			return null;
+		}
+
+		private UInt16 GetIndexFromCode(UInt16 Code)
+		{
+			foreach (var v in CharMaps)
+			{
+				UInt16 result = v.GetIndexFromCode(Code);
+				if (result != 0xFFFF) return result;
+			}
+			return 0xFFFF;
+		}
+
+		public BitmapFont GetBitmapFont()
+		{
+			BitmapFont f = new BitmapFont();
+			f.LineHeight = FontInfo.LineFeed;
+			Bitmap[] Chars = new Bitmap[TextureGlyph.SheetNrLines * TextureGlyph.SheetNrRows * TextureGlyph.NrSheets];
+
+			float realcellwidth = TextureGlyph.CellWidth + 1;
+			float realcellheight = TextureGlyph.CellHeight + 1;
+
+			int j = 0;
+			for (int sheet = 0; sheet < TextureGlyph.NrSheets; sheet++)
+			{
+				Bitmap SheetBM = TextureGlyph.GetSheet(sheet);
+				BitmapData bd = SheetBM.LockBits(new Rectangle(0, 0, SheetBM.Width, SheetBM.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+				for (int y = 0; y < TextureGlyph.SheetNrLines; y++)
+				{
+					for (int x = 0; x < TextureGlyph.SheetNrRows; x++)
+					{
+						Bitmap b = new Bitmap(TextureGlyph.CellWidth, TextureGlyph.CellHeight);
+						BitmapData bd2 = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+						for (int y2 = 0; y2 < TextureGlyph.CellHeight; y2++)
+						{
+							for (int x2 = 0; x2 < TextureGlyph.CellWidth; x2++)
+							{
+								Marshal.WriteInt32(bd2.Scan0, y2 * bd2.Stride + x2 * 4, Marshal.ReadInt32(bd.Scan0, (int)(y * realcellheight + y2 + 1) * bd.Stride + (int)(x * realcellwidth + x2 + 1) * 4));
+							}
+						}
+						b.UnlockBits(bd2);
+						Chars[j++] = b;
+					}
+				}
+				SheetBM.UnlockBits(bd);
+			}
+
+			foreach (var v in CharMaps)
+			{
+				for (int i = v.CodeBegin; i < v.CodeEnd + 1; i++)
+				{
+					ushort idx = v.GetIndexFromCode((ushort)i);
+					if (idx == 0xFFFF) continue;
+					var info = GetCharWidthInfoByIndex(idx);
+					f.Characters.Add((char)i, new BitmapFont.Character(Chars[idx], info.Left, info.GlyphWidth, info.CharWidth));
+				}
+			}
+			return f;
 		}
 
 		public class CharWidthInfo
 		{
 			public CharWidthInfo(EndianBinaryReader er)
 			{
-				Left = er.ReadByte();
+				Left = er.ReadSByte();
 				GlyphWidth = er.ReadByte();
 				CharWidth = er.ReadByte();
 			}
-			public Byte Left;
+			public SByte Left;
 			public Byte GlyphWidth;
 			public Byte CharWidth;
 		}

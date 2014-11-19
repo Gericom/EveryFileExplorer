@@ -52,6 +52,7 @@
     <Compile Include="Collections\Vector2.cs" />
     <Compile Include="Files\EFEDiskFile.cs" />
     <Compile Include="Files\IChildReactive.cs" />
+    <Compile Include="GFX\BitmapFont.cs" />
     <Compile Include="GFX\ETC1.cs" />
     <Compile Include="GFX\PaletteUtil.cs" />
     <Compile Include="Collections\Vector3.cs" />
