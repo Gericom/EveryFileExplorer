@@ -136,7 +136,27 @@ namespace _3DS
 
                 er.BaseStream.Position = header.topScreenTextureOffset;
 				if (header.topScreenDrawType == 2)// in draw type 2 theyre are 2 alpha images, one at topscreentextureoffset and the other at the colour offset, they need to be drawn onto the gradient background
-					topScreenTexture = er.ReadBytes((topHeight * topWidth) * 2);
+				{
+					topScreenAlphaTexture1 = er.ReadBytes(alphaOverlayWidth * alphaOverlayHeight);
+					er.BaseStream.Position = header.topScreenAdditionalTextureOffset;
+					topScreenAlphaTexture2 = er.ReadBytes(alphaOverlayWidth * alphaOverlayHeight);
+
+					//TODO figure out colour data for gradients etc
+					er.BaseStream.Position = header.topScreenSolidColorDataOffset;
+					Byte type = er.ReadByte();
+					Byte r1 = er.ReadByte();
+					Byte g1 = er.ReadByte();
+					Byte b1 = er.ReadByte();
+
+					Byte r2 = er.ReadByte();
+					Byte g2 = er.ReadByte();
+					Byte b2 = er.ReadByte();
+
+					Console.WriteLine("type? " + type);
+					Console.WriteLine("color " + r1 + " " + g1 + " " + b1);
+					Console.WriteLine("color " + r2 + " " + g2 + " " + b2);
+
+				}
 				else
 					topScreenTexture = er.ReadBytes((topHeight * topWidth) * 2);
 
@@ -227,12 +247,24 @@ namespace _3DS
         public int topClampHeight;
         public Bitmap GetTopTexture(bool clamp)
         {
-			if (header.topScreenDrawType == 2)
-				return GPU.Textures.ToBitmap(topScreenTexture, topWidth, topHeight, GPU.Textures.ImageFormat.A8, true);
             if (clamp)
                 return GPU.Textures.ToBitmap(topScreenTexture, topClampWidth, topClampHeight, GPU.Textures.ImageFormat.RGB565, false);
             return GPU.Textures.ToBitmap(topScreenTexture, topWidth, topHeight, GPU.Textures.ImageFormat.RGB565, true);
         }
+
+		public byte[] topScreenAlphaTexture1;
+		public byte[] topScreenAlphaTexture2;
+		public int alphaOverlayWidth = 64;
+		public int alphaOverlayHeight = 64;
+		public Bitmap GetTopAlphaTexture1()
+		{
+			return GPU.Textures.ToBitmap(topScreenAlphaTexture1, alphaOverlayWidth, alphaOverlayHeight, GPU.Textures.ImageFormat.A8, true);
+		}
+		public Bitmap GetTopAlphaTexture2()
+		{
+			return GPU.Textures.ToBitmap(topScreenAlphaTexture2, alphaOverlayWidth, alphaOverlayHeight, GPU.Textures.ImageFormat.A8, true);
+		}
+
 
         public System.Windows.Forms.Form GetDialog()
         {
@@ -293,8 +325,9 @@ namespace _3DS
                 topScreenAdditionalTextureOffset = er.ReadUInt32();//used with draw type val2, optional when using draw type val2
 
                 System.Console.WriteLine("topScreenDrawType " + topScreenDrawType);
-                System.Console.WriteLine("topScreenFrameType " + topScreenFrameType);
-                System.Console.WriteLine("topScreenAdditionalTextureOffset " + topScreenAdditionalTextureOffset);
+				System.Console.WriteLine("topScreenFrameType " + topScreenFrameType);
+				System.Console.WriteLine("topScreenAdditionalTextureOffset " + topScreenAdditionalTextureOffset);
+				System.Console.WriteLine("topScreenSolidColorDataOffset " + topScreenSolidColorDataOffset);
 
 
                 //offset 0x20

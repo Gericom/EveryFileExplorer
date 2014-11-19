@@ -35,11 +35,18 @@ namespace _3DS.UI
 
         private void loadImages()
         {
-			topBackgroundImage.BackColor = Color.Aqua;
-            topBackgroundImage.Image = theme.GetTopTexture(clampTextureSizeCheckBox.Checked);
-			simTopBackgroundImage.Image = topBackgroundImage.Image;
+			if (theme.header.topScreenDrawType == 2)
+			{
+				topBackgroundImage.BackColor = Color.Aqua;
+				topBackgroundImage.Image = theme.GetTopAlphaTexture1();
+			}
+			else
+			{ 
+			    topBackgroundImage.Image = theme.GetTopTexture(clampTextureSizeCheckBox.Checked);
+				simTopBackgroundImage.Image = topBackgroundImage.Image;
+			}
 
-            bottomBackgroundImage.Image = theme.GetBottomTexture(clampTextureSizeCheckBox.Checked);
+			bottomBackgroundImage.Image = theme.GetBottomTexture(clampTextureSizeCheckBox.Checked);
 			simBottomBackgroundImage.Image = bottomBackgroundImage.Image;
 
 			if (theme.header.useFolderTextures)
@@ -70,11 +77,13 @@ namespace _3DS.UI
 					bottomFrame0 = map.Clone(frame0rect, map.PixelFormat);
 					bottomFrame1 = map.Clone(frame1rect, map.PixelFormat);
 					bottomFrame2 = map.Clone(frame2rect, map.PixelFormat);
-				System.Timers.Timer timer = new System.Timers.Timer();
-				timer.Elapsed += new System.Timers.ElapsedEventHandler(onTimedEvent);
-				timer.Interval = 500;
-				timer.Enabled = true;
+
 			}
+
+			System.Timers.Timer timer = new System.Timers.Timer();
+			timer.Elapsed += new System.Timers.ElapsedEventHandler(onTimedEvent);
+			timer.Interval = 500;
+			timer.Enabled = true;
         }
 
 
@@ -82,8 +91,23 @@ namespace _3DS.UI
 		Bitmap bottomFrame1;
 		Bitmap bottomFrame2;
 		int frameptr = 0;
+		int testptr = 0;
 		private void onTimedEvent(object source, ElapsedEventArgs e)
 		{//normally only animates on right/left movement
+
+			//TESTING
+			if (theme.header.topScreenDrawType == 2)
+			{
+				if (testptr == 2)
+					testptr = 0;
+				if (testptr == 0)
+					topBackgroundImage.Image = theme.GetTopAlphaTexture1();
+				if (testptr == 1)
+					topBackgroundImage.Image = theme.GetTopAlphaTexture2();
+				testptr++;
+
+			}
+
 			if (theme.header.bottomScreenFrameType == 2)
 			{
 				if (frameptr == 3)
