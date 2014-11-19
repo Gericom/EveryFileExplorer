@@ -137,9 +137,9 @@ namespace _3DS
                 er.BaseStream.Position = header.topScreenTextureOffset;
 				if (header.topScreenDrawType == 2)// in draw type 2 theyre are 2 alpha images, one at topscreentextureoffset and the other at the colour offset, they need to be drawn onto the gradient background
 				{
-					topScreenAlphaTexture = er.ReadBytes(alphaTextureWidth * alphaTextureHeight);
+					topOverlayAlphaTexture = er.ReadBytes(alphaTextureWidth * alphaTextureHeight);
 					er.BaseStream.Position = header.topScreenAdditionalTextureOffset;
-					topScreenOverlayAlphaTexture = er.ReadBytes(alphaTextureWidth * alphaTextureHeight);
+					topBackgroundAlphaTexture = er.ReadBytes(alphaTextureWidth * alphaTextureHeight);
 
 					//TODO figure out colour data for gradients etc
 					er.BaseStream.Position = header.topScreenSolidColorDataOffset;
@@ -252,17 +252,17 @@ namespace _3DS
             return GPU.Textures.ToBitmap(topScreenTexture, topWidth, topHeight, GPU.Textures.ImageFormat.RGB565, true);
         }
 
-		public byte[] topScreenAlphaTexture;
-		public byte[] topScreenOverlayAlphaTexture;
+		public byte[] topOverlayAlphaTexture;
+		public byte[] topBackgroundAlphaTexture;
 		public int alphaTextureWidth = 64;
 		public int alphaTextureHeight = 64;
-		public Bitmap GetTopAlphaTexture()//Static texture background of top screen, does not move.
+		public Bitmap GetOverlayAlphaTexture()///Overlayed in a moving pattern ontop of the TopAlphaTexture 
 		{
-			return GPU.Textures.ToBitmap(topScreenAlphaTexture, alphaTextureWidth, alphaTextureHeight, GPU.Textures.ImageFormat.A8, true);
+			return GPU.Textures.ToBitmap(topOverlayAlphaTexture, alphaTextureWidth, alphaTextureHeight, GPU.Textures.ImageFormat.A8, true);
 		}
-		public Bitmap GetOverlayAlphaTexture()//Overlayed in a moving pattern ontop of the TopAlphaTexture
+		public Bitmap GetBackgroundAlphaTexture()//Static texture background of top screen, does not move.
 		{
-			return GPU.Textures.ToBitmap(topScreenOverlayAlphaTexture, alphaTextureWidth, alphaTextureHeight, GPU.Textures.ImageFormat.A8, true);
+			return GPU.Textures.ToBitmap(topBackgroundAlphaTexture, alphaTextureWidth, alphaTextureHeight, GPU.Textures.ImageFormat.A8, true);
 		}
 
 

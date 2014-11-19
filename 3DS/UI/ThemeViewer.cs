@@ -36,9 +36,10 @@ namespace _3DS.UI
         private void loadImages()
         {
 			if (theme.header.topScreenDrawType == 2)
-			{
-				topBackgroundImage.BackColor = Color.Aqua;
-				topBackgroundImage.Image = theme.GetTopAlphaTexture();
+			{//when using alpha textures the image appears to be warped?
+				topBackgroundImage.BackColor = Color.Aqua;//TODO use actual gradient data
+				topBackgroundImage.BackgroundImage = theme.GetBackgroundAlphaTexture();
+				topBackgroundImage.Image = theme.GetOverlayAlphaTexture();
 			}
 			else
 			{ 
@@ -101,9 +102,9 @@ namespace _3DS.UI
 				if (testptr == 2)
 					testptr = 0;
 				if (testptr == 0)
-					topBackgroundImage.Image = theme.GetTopAlphaTexture();
-				if (testptr == 1)
 					topBackgroundImage.Image = theme.GetOverlayAlphaTexture();
+				if (testptr == 1)
+					topBackgroundImage.Image = theme.GetBackgroundAlphaTexture();
 				testptr++;
 
 			}
