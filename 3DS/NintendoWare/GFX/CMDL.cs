@@ -2967,17 +2967,13 @@ namespace _3DS.NintendoWare.GFX
 											byte boneidx = VertexData[Offset + v.Offset];
 											p.Vertex[i] = p.Vertex[i] * Model.Skeleton.GetMatrix((int)PrimitiveSet.RelatedBones[boneidx]); //SkeletonCtr.TransformByMtx(p.Vertex[i], Model.Skeleton.GetMatrix((int)PrimitiveSet.RelatedBones[boneidx]));//Vector3.Transform(p.Vertex[i], Model.Skeleton.GetMatrix((int)PrimitiveSets[0].RelatedBones[boneidx]));
 										}
-										else if (v.NrComponents == 2)
+										else
 										{
 											bones = new byte[v.NrComponents];
 											for (int q = 0; q < v.NrComponents; q++)
 											{
 												bones[q] = VertexData[Offset + v.Offset + q];
 											}
-										}
-										else
-										{
-
 										}
 									}
 									break;
@@ -2986,11 +2982,11 @@ namespace _3DS.NintendoWare.GFX
 										if (bones.Length != 0)
 										{
 											//this doesn't work correct!
-											/*Vector3 dst = new Vector3(0, 0, 0);
-											for (int j = 0; j < v.NrComponents; j++)
-											{
-												dst += p.Vertex[i] * Model.Skeleton.GetMatrix((int)PrimitiveSet.RelatedBones[bones[j]]);// SkeletonCtr.TransformByMtx(p.Vertex[i], Model.Skeleton.GetMatrix((int)PrimitiveSet.RelatedBones[bones[j]])) * Vars[j];//Add4(dst, Mult4(Model.Skeleton.GetMatrix((int)PrimitiveSet.RelatedBones[bones[j]]), ((float)weights[j] * v.Scale)));
-											}*/
+											//Vector3 dst = new Vector3(0, 0, 0);
+											//for (int j = 0; j < v.NrComponents; j++)
+											//{
+											//	dst += p.Vertex[i] * Model.Skeleton.GetMatrix((int)PrimitiveSet.RelatedBones[bones[j]]) * Vars[j];// SkeletonCtr.TransformByMtx(p.Vertex[i], Model.Skeleton.GetMatrix((int)PrimitiveSet.RelatedBones[bones[j]])) * Vars[j];//Add4(dst, Mult4(Model.Skeleton.GetMatrix((int)PrimitiveSet.RelatedBones[bones[j]]), ((float)weights[j] * v.Scale)));
+											//}
 											//no transformations when no animation is used!
 											//p.Vertex[i] = dst;
 										}

@@ -288,6 +288,8 @@ namespace _3DS.UI
 					Gl.glLoadIdentity();
 				}*/
 				Gl.glMatrixMode(Gl.GL_MODELVIEW);
+				Gl.glPushMatrix();
+				Gl.glTranslatef(vv.PositionOffset.X, vv.PositionOffset.Y, vv.PositionOffset.Z);
 
 				if (glversion.StartsWith("2.") && Shaders[mm.MaterialIndex] == null)
 				{
@@ -346,6 +348,7 @@ namespace _3DS.UI
 					}
 					Gl.glEnd();
 				}
+				Gl.glPopMatrix();
 			}
 		}
 
