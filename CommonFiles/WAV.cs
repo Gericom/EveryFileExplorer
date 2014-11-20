@@ -52,7 +52,7 @@ namespace CommonFiles
 			er.Close();
 			return b;
 		}
-		
+
 		public RIFFHeader Header;
 		public class RIFFHeader
 		{
@@ -95,6 +95,10 @@ namespace CommonFiles
 				Signature = er.ReadString(ASCIIEncoding.ASCII, 4);
 				if (Signature != "WAVE") throw new SignatureNotCorrectException(Signature, "WAVE", er.BaseStream.Position - 4);
 				FMT = new FMTBlock(er);
+				String sig = er.ReadString(Encoding.ASCII, 4);
+				uint length = er.ReadUInt32();
+				er.BaseStream.Position -= 8;
+				if (sig == "LIST") er.BaseStream.Position += length + 8;
 				DATA = new DATABlock(er);
 			}
 
@@ -104,7 +108,7 @@ namespace CommonFiles
 				FMT.Write(er);
 				DATA.Write(er);
 			}
-			
+
 			public String Signature;
 			public FMTBlock FMT;
 			public class FMTBlock
@@ -177,7 +181,7 @@ namespace CommonFiles
 					SectionSize = er.ReadUInt32();
 					Data = er.ReadBytes((int)SectionSize);
 				}
-				
+
 				public void Write(EndianBinaryWriter er)
 				{
 					er.Write(Signature, Encoding.ASCII, false);

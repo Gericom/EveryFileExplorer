@@ -64,6 +64,7 @@
 			this.Name = "CSTMViewer";
 			this.Text = "CSTMViewer";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CSTMViewer_FormClosed);
+			this.Load += new System.EventHandler(this.CSTMViewer_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
