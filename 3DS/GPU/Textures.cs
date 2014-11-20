@@ -503,7 +503,10 @@ namespace _3DS.GPU
 										{
 											for (int yy = 0; yy < 4; yy++)
 											{
-												uint color = res[((y + i + yy) * (d.Stride / 4)) + x + j + xx];
+												uint color;
+												if (x + j + xx >= physicalwidth) color = 0x00FFFFFF;
+												else if (y + i + yy >= physicalheight) color = 0x00FFFFFF;
+												else color = res[((y + i + yy) * (d.Stride / 4)) + x + j + xx];
 												uint a = color >> 24;
 												a >>= 4;
 												alpha |= (ulong)a << (iiii * 4);
@@ -518,7 +521,9 @@ namespace _3DS.GPU
 									{
 										for (int xx = 0; xx < 4; xx++)
 										{
-											pixels[yy * 4 + xx] = Color.FromArgb((int)res[((y + i + yy) * (d.Stride / 4)) + x + j + xx]);
+											if (x + j + xx >= physicalwidth) pixels[yy * 4 + xx] = Color.Transparent;
+											else if (y + i + yy >= physicalheight) pixels[yy * 4 + xx] = Color.Transparent;
+											else pixels[yy * 4 + xx] = Color.FromArgb((int)res[((y + i + yy) * (d.Stride / 4)) + x + j + xx]);
 										}
 									}
 									IOUtil.WriteU64LE(result, offs, ETC1.GenETC1(pixels));

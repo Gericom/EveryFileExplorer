@@ -23,13 +23,14 @@ namespace LibEveryFileExplorer.GFX
 		private static int GenModifier(out Color BaseColor, Color[] Pixels)
 		{
 			Color Max = Color.White;
-			Color LessMax;
-			Color MoreMin;
+			//Color LessMax;
+			//Color MoreMin;
 			Color Min = Color.Black;
 			int MinY = int.MaxValue;
 			int MaxY = int.MinValue;
 			for (int i = 0; i < 8; i++)
 			{
+				if (Pixels[i].A == 0) continue;
 				int Y = (Pixels[i].R + Pixels[i].G + Pixels[i].B) / 3;
 				if (Y > MaxY)
 				{
@@ -42,12 +43,13 @@ namespace LibEveryFileExplorer.GFX
 					Min = Pixels[i];
 				}
 			}
-			LessMax = Max;
+			/*LessMax = Max;
 			MoreMin = Min;
 			int MoreMinY = int.MaxValue;
 			int LessMaxY = int.MinValue;
 			for (int i = 0; i < 8; i++)
 			{
+				if (Pixels[i].A == 0) continue;
 				int Y = (Pixels[i].R + Pixels[i].G + Pixels[i].B) / 3;
 				if (Y > MinY && Y < MaxY && Y > LessMaxY)
 				{
@@ -59,16 +61,17 @@ namespace LibEveryFileExplorer.GFX
 					MoreMinY = Y;
 					MoreMin = Pixels[i];
 				}
-			}
+			}*/
+
 			int DiffMean = ((Max.R - Min.R) + (Max.G - Min.G) + (Max.B - Min.B)) / 3;
-			int DiffMeanSmall = ((LessMax.R - MoreMin.R) + (LessMax.G - MoreMin.G) + (LessMax.B - MoreMin.B)) / 3;
+			//int DiffMeanSmall = ((LessMax.R - MoreMin.R) + (LessMax.G - MoreMin.G) + (LessMax.B - MoreMin.B)) / 3;
 
 			int ModDiff = int.MaxValue;
 			int Modifier = -1;
 			int Mode = -1;
 
-			int ModDiffSmall = int.MaxValue;
-			int ModifierSmall = -1;
+			//int ModDiffSmall = int.MaxValue;
+			//int ModifierSmall = -1;
 
 			for (int i = 0; i < 8; i++)
 			{
@@ -97,7 +100,7 @@ namespace LibEveryFileExplorer.GFX
 					Mode = 2;
 				}
 
-				if (System.Math.Abs(DiffMeanSmall - SS) < ModDiffSmall)
+				/*if (System.Math.Abs(DiffMeanSmall - SS) < ModDiffSmall)
 				{
 					ModDiffSmall = System.Math.Abs(DiffMeanSmall - SS);
 					ModifierSmall = i;
@@ -111,10 +114,11 @@ namespace LibEveryFileExplorer.GFX
 				{
 					ModDiffSmall = System.Math.Abs(DiffMeanSmall - BB);
 					ModifierSmall = i;
-				}
+				}*/
 			}
 
 			//Modifier = (Modifier + ModifierSmall) / 2;
+			//if (Mode == 0 && Modifier != 0) Modifier--;
 
 			if (Mode == 1)
 			{
@@ -124,6 +128,20 @@ namespace LibEveryFileExplorer.GFX
 			}
 			else
 			{
+				/*int R = 0;
+				int G = 0;
+				int B = 0;
+				int total = 0;
+				for (int i = 0; i < 8; i++)
+				{
+					if (Pixels[i].A == 0) continue;
+					total++;
+					R += Pixels[i].R;
+					G += Pixels[i].G;
+					B += Pixels[i].B;
+				}
+				if (total == 0) BaseColor = Color.White;
+				else BaseColor = Color.FromArgb(R / total, G / total, B / total); //*/
 				BaseColor = Color.FromArgb((Min.R + Max.R) / 2, (Min.G + Max.G) / 2, (Min.B + Max.B) / 2);
 			}
 			return Modifier;

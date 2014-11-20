@@ -11,7 +11,7 @@ namespace LibEveryFileExplorer.Projects
 		String ProjectDirectory { get; }
 		bool CanRun { get; }
 
-		Control GetProjectControl();
+		TabPage[] GetProjectTabPages();
 
 		void Build();
 		void Run();
@@ -31,7 +31,7 @@ namespace LibEveryFileExplorer.Projects
 		public String ProjectDirectory { get; private set; }
 		public abstract bool CanRun { get; }
 
-		public abstract Control GetProjectControl();
+		public abstract TabPage[] GetProjectTabPages();
 
 		public abstract void Build();
 		public abstract void Run();
