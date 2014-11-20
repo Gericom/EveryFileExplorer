@@ -142,7 +142,7 @@ namespace NDS.Nitro
 		{
 			if (IOUtil.ReadU32LE(Data, (int)_start_ModuleParamsOffset + 0x14) == 0) return Data;//Not Compressed!
 			byte[] Result = CRT0.MIi_UncompressBackward(Data);
-			IOUtil.WriteU32LE(Data, (int)_start_ModuleParamsOffset + 0x14, 0);
+			IOUtil.WriteU32LE(Result, (int)_start_ModuleParamsOffset + 0x14, 0);
 			return Result;
 		}
 

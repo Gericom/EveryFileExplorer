@@ -260,5 +260,14 @@ namespace NDS.UI
 				File.WriteAllBytes(saveFileDialog1.FileName, Archive.MainRom);
 			}
 		}
+
+		private void button4_Click(object sender, EventArgs e)
+		{
+			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
+				&& openFileDialog1.FileName.Length > 0)
+			{
+				Archive.MainRom = File.ReadAllBytes(openFileDialog1.FileName);
+			}
+		}
 	}
 }
