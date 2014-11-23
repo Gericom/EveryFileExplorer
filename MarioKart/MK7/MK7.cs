@@ -929,5 +929,48 @@ namespace MarioKart.MK7
 			"CmnVR11",
 			"CmnVR12"
 		};
+
+		/*public static readonly String[] CourseNames = new String[]
+		{
+			"Gctr_MarioCircuit",
+			"Gctr_RallyCourse",
+			"Gctr_MarineRoad",
+			"Gctr_GlideLake",
+			"Gctr_ToadCircuit",
+			"Gctr_SandTown",
+			"Gctr_AdvancedCircuit",
+			"Gctr_DKJungle",
+			"Gctr_WuhuIsland1",
+			"Gctr_WuhuIsland2",
+			"Gctr_IceSlider",
+			"Gctr_BowserCastle",
+			"Gctr_UnderGround",
+			"Gctr_RainbowRoad",
+			"Gctr_WarioShip",
+			"Gctr_MusicPark",
+			"Gwii_CoconutMall",
+			"Gwii_KoopaCape",
+			"Gwii_MapleTreeway",
+			"Gwii_MushroomGorge",
+			"Gds_LuigisMansion",
+			"Gds_AirshipFortress",
+			"Gds_DKPass",
+			"Gds_WaluigiPinball",
+			"Ggc_DinoDinoJungle",
+			"Ggc_DaisyCruiser",
+			"Gn64_LuigiCircuit",
+			"Gn64_KalimariDesert",
+			"Gn64_KoopaTroopaBeach",
+			"Gagb_BowserCastle1",
+			"Gsfc_MarioCircuit2",
+			"Gsfc_RainbowRoad",
+			"Bctr_WuhuIsland3",
+			"Bctr_HoneyStage",
+			"Bctr_IceRink",
+			"Bds_PalmShore",
+			"Bn64_BigDonut",
+			"Bagb_BattleCourse1",
+			"Gctr_WinningRun"
+		};*/
 	}
 }

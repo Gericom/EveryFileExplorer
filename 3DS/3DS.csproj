@@ -33,6 +33,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -94,6 +95,7 @@
     </Compile>
     <Compile Include="SARC.cs" />
     <Compile Include="SARCEFESFSFile.cs" />
+    <Compile Include="SARCHashTable.cs" />
     <Compile Include="SMDH.cs" />
     <Compile Include="ThemeFile.cs" />
     <Compile Include="ThemeIconFile.cs" />
@@ -132,6 +134,12 @@
     </Compile>
     <Compile Include="UI\DARCViewer.Designer.cs">
       <DependentUpon>DARCViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SAHTViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\SAHTViewer.Designer.cs">
+      <DependentUpon>SAHTViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\SARCViewer.cs">
       <SubType>Form</SubType>
@@ -190,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\DARCViewer.resx">
       <DependentUpon>DARCViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\SAHTViewer.resx">
+      <DependentUpon>SAHTViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\SARCViewer.resx">
       <DependentUpon>SARCViewer.cs</DependentUpon>

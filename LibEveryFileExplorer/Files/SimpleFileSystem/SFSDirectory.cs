@@ -145,6 +145,10 @@ namespace LibEveryFileExplorer.Files.SimpleFileSystem
 			if (!Path.StartsWith(DirectoryName)) return null;
 			Path = Path.Substring(DirectoryName.Length);
 			if (Path.Length == 0 || !Path.StartsWith("/")) return null;
+			//Sarc files may use slashes in their names (since they are just hashes, and do not have a real directory structure)
+			var vvv = this[Path.Substring(1)];
+			if (vvv != null) return vvv;
+
 			string[] parts = Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 			if (parts.Length > 1)
 			{

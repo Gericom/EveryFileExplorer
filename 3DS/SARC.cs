@@ -237,6 +237,11 @@ namespace _3DS
 			foreach (var v in SFat.Entries)
 			{
 				var q = new SFSFile((int)v.FileNameHash, string.Format("0x{0:X8}", v.FileNameHash), Root);
+				if (SARCHashTable.DefaultHashTable != null)
+				{
+					var vv = SARCHashTable.DefaultHashTable.GetEntryByHash(v.FileNameHash);
+					if (vv != null) q.FileName = vv.Name;
+				}
 				q.Data = GetFileDataByHash(v.FileNameHash);
 				Root.Files.Add(q);
 			}
