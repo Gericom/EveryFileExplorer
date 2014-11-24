@@ -81,6 +81,7 @@
     <Compile Include="NintendoWare\LYT1\pic1.cs" />
     <Compile Include="NintendoWare\LYT1\txt1.cs" />
     <Compile Include="NintendoWare\LYT1\wnd1.cs" />
+    <Compile Include="NintendoWare\SND\CSAR.cs" />
     <Compile Include="NintendoWare\SND\CSTM.cs" />
     <Compile Include="NintendoWare\LYT1\DARC.cs" />
     <Compile Include="DSP\ADPCM.cs" />
