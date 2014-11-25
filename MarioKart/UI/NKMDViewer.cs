@@ -11,6 +11,9 @@ using Tao.OpenGl;
 using System.Drawing.Imaging;
 using LibEveryFileExplorer._3D;
 using LibEveryFileExplorer;
+using LibEveryFileExplorer.UI;
+using LibEveryFileExplorer.GameData;
+using MarioKart.MKDS;
 
 namespace MarioKart.UI
 {
@@ -68,54 +71,16 @@ namespace MarioKart.UI
 				KCL = v[0].FileFormat;
 			}
 
-			if (NKMD.ObjectInformation != null)
-			{
-				TabPage p = new TabPage("OBJI");
-				p.Controls.Add(new LibEveryFileExplorer.UI.GameDataSectionViewer<MKDS.NKMD.OBJI.OBJIEntry>(NKMD.ObjectInformation) { Dock = DockStyle.Fill });
-				tabControl1.TabPages.Add(p);
-			}
-			if (NKMD.Path != null)
-			{
-				TabPage p = new TabPage("PATH");
-				p.Controls.Add(new LibEveryFileExplorer.UI.GameDataSectionViewer<MKDS.NKMD.PATH.PATHEntry>(NKMD.Path) { Dock = DockStyle.Fill });
-				tabControl1.TabPages.Add(p);
-			}
-			if (NKMD.Point != null)
-			{
-				TabPage p = new TabPage("POIT");
-				p.Controls.Add(new LibEveryFileExplorer.UI.GameDataSectionViewer<MKDS.NKMD.POIT.POITEntry>(NKMD.Point) { Dock = DockStyle.Fill });
-				tabControl1.TabPages.Add(p);
-			}
-			if (NKMD.KartPointStart != null)
-			{
-				TabPage p = new TabPage("KTPS");
-				p.Controls.Add(new LibEveryFileExplorer.UI.GameDataSectionViewer<MKDS.NKMD.KTPS.KTPSEntry>(NKMD.KartPointStart) { Dock = DockStyle.Fill });
-				tabControl1.TabPages.Add(p);
-			}
-			if (NKMD.KartPointJugem != null)
-			{
-				TabPage p = new TabPage("KTPJ");
-				p.Controls.Add(new LibEveryFileExplorer.UI.GameDataSectionViewer<MKDS.NKMD.KTPJ.KTPJEntry>(NKMD.KartPointJugem) { Dock = DockStyle.Fill });
-				tabControl1.TabPages.Add(p);
-			}
-			if (NKMD.KartPointSecond != null)
-			{
-				TabPage p = new TabPage("KTP2");
-				p.Controls.Add(new LibEveryFileExplorer.UI.GameDataSectionViewer<MKDS.NKMD.KTP2.KTP2Entry>(NKMD.KartPointSecond) { Dock = DockStyle.Fill });
-				tabControl1.TabPages.Add(p);
-			}
-			if (NKMD.KartPointCannon != null)
-			{
-				TabPage p = new TabPage("KTPC");
-				p.Controls.Add(new LibEveryFileExplorer.UI.GameDataSectionViewer<MKDS.NKMD.KTPC.KTPCEntry>(NKMD.KartPointCannon) { Dock = DockStyle.Fill });
-				tabControl1.TabPages.Add(p);
-			}
-			if (NKMD.KartPointMission != null)
-			{
-				TabPage p = new TabPage("KTPM");
-				p.Controls.Add(new LibEveryFileExplorer.UI.GameDataSectionViewer<MKDS.NKMD.KTPM.KTPMEntry>(NKMD.KartPointMission) { Dock = DockStyle.Fill });
-				tabControl1.TabPages.Add(p);
-			}
+			if (NKMD.ObjectInformation != null) AddTab<NKMD.OBJI.OBJIEntry>("OBJI", NKMD.ObjectInformation);
+			if (NKMD.Path != null) AddTab<NKMD.PATH.PATHEntry>("PATH", NKMD.Path);
+			if (NKMD.Point != null) AddTab<NKMD.POIT.POITEntry>("POIT", NKMD.Point);
+			if (NKMD.KartPointStart != null) AddTab<NKMD.KTPS.KTPSEntry>("KTPS", NKMD.KartPointStart);
+			if (NKMD.KartPointJugem != null) AddTab<NKMD.KTPJ.KTPJEntry>("KTPJ", NKMD.KartPointJugem);
+			if (NKMD.KartPointSecond != null) AddTab<NKMD.KTP2.KTP2Entry>("KTP2", NKMD.KartPointSecond);
+			if (NKMD.KartPointCannon != null) AddTab<NKMD.KTPC.KTPCEntry>("KTPC", NKMD.KartPointCannon);
+			if (NKMD.KartPointMission != null) AddTab<NKMD.KTPM.KTPMEntry>("KTPM", NKMD.KartPointMission);
+			if (NKMD.CheckPoint != null) AddTab<NKMD.CPOI.CPOIEntry>("CPOI", NKMD.CheckPoint);
+			if (NKMD.CheckPointPath != null) AddTab<NKMD.CPAT.CPATEntry>("CPAT", NKMD.CheckPointPath);
 
 			Bitmap b3 = OBJI.OBJ_2D01;
 			System.Resources.ResourceSet s = OBJI.ResourceManager.GetResourceSet(System.Globalization.CultureInfo.CurrentCulture, false, false);
@@ -142,6 +107,13 @@ namespace MarioKart.UI
 			init = true;
 			Render();
 			Render();
+		}
+
+		private void AddTab<T>(String Name, GameDataSection<T> Section) where T : GameDataSectionEntry, new()
+		{
+			TabPage p = new TabPage(Name);
+			p.Controls.Add(new GameDataSectionViewer<T>(Section) { Dock = DockStyle.Fill });
+			tabControl1.TabPages.Add(p);
 		}
 
 		float min = -8192f;
@@ -548,70 +520,53 @@ namespace MarioKart.UI
 
 			Gl.glEnd();
 
-			/*if (cPOIToolStripMenuItem.Checked)
+			//if (cPOIToolStripMenuItem.Checked)
 			{
 				if (!picking)
 				{
 					Gl.glBegin(Gl.GL_LINES);
-					foreach (MKDS_Course_Modifier.MKDS.NKM.CPOIEntry o in File.CPOI)
+					foreach (var o in NKMD.CheckPoint.Entries)
 					{
 						Gl.glColor3f(0, 170f / 255f, 0);
 						//Gl.glColor3f(0.5f, 0.5f, 0.5f);
-						Gl.glVertex2f(o.Position1.X, o.Position1.Y);
+						Gl.glVertex2f(o.Point1.X, o.Point1.Y);
 						Gl.glColor3f(170f / 255f, 0, 0);//181f / 255f, 230f / 255f, 29f / 255f);
 						//Gl.glColor3f(1, 1, 1);
-						Gl.glVertex2f(o.Position2.X, o.Position2.Y);
+						Gl.glVertex2f(o.Point2.X, o.Point2.Y);
 					}
-					for (int j = 0; j < File.CPAT.NrEntries; j++)
+					for (int j = 0; j < NKMD.CheckPointPath.Entries.Count; j++)
 					{
-						if (File.CPOI.NrEntries < File.CPAT[j].StartIdx + File.CPAT[j].Length) break;
-						for (int i = File.CPAT[j].StartIdx; i < File.CPAT[j].StartIdx + File.CPAT[j].Length - 1; i++)
+						if (NKMD.CheckPoint.Entries.Count < NKMD.CheckPointPath[j].StartIndex + NKMD.CheckPointPath[j].Length) break;
+						for (int i = NKMD.CheckPointPath[j].StartIndex; i < NKMD.CheckPointPath.Entries[j].StartIndex + NKMD.CheckPointPath[j].Length - 1; i++)
 						{
 							Gl.glColor3f(0, 170f / 255f, 0);
-							Gl.glVertex2f(File.CPOI[i].Position1.X, File.CPOI[i].Position1.Y);
-							Gl.glVertex2f(File.CPOI[i + 1].Position1.X, File.CPOI[i + 1].Position1.Y);
+							Gl.glVertex2f(NKMD.CheckPoint[i].Point1.X, NKMD.CheckPoint[i].Point1.Y);
+							Gl.glVertex2f(NKMD.CheckPoint[i + 1].Point1.X, NKMD.CheckPoint[i + 1].Point1.Y);
 							Gl.glColor3f(170f / 255f, 0, 0);
-							Gl.glVertex2f(File.CPOI[i].Position2.X, File.CPOI[i].Position2.Y);
-							Gl.glVertex2f(File.CPOI[i + 1].Position2.X, File.CPOI[i + 1].Position2.Y);
+							Gl.glVertex2f(NKMD.CheckPoint[i].Point2.X, NKMD.CheckPoint[i].Point2.Y);
+							Gl.glVertex2f(NKMD.CheckPoint[i + 1].Point2.X, NKMD.CheckPoint[i + 1].Point2.Y);
 						}
 
-						if (File.CPAT[j].GoesTo1 != -1)
+						for (int i = 0; i < 3; i++)
 						{
+							if (NKMD.CheckPointPath[j].GoesTo[i] == -1 || NKMD.CheckPointPath[j].GoesTo[i] >= NKMD.CheckPointPath.Entries.Count) continue;
 							Gl.glColor3f(0, 170f / 255f, 0);
-							Gl.glVertex2f(File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position1.X, File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position1.Y);
-							Gl.glVertex2f(File.CPOI[File.CPAT[File.CPAT[j].GoesTo1].StartIdx].Position1.X, File.CPOI[File.CPAT[File.CPAT[j].GoesTo1].StartIdx].Position1.Y);
+							Gl.glVertex2f(NKMD.CheckPoint[NKMD.CheckPointPath[j].StartIndex + NKMD.CheckPointPath[j].Length - 1].Point1.X, NKMD.CheckPoint[NKMD.CheckPointPath[j].StartIndex + NKMD.CheckPointPath[j].Length - 1].Point1.Y);
+							Gl.glVertex2f(NKMD.CheckPoint[NKMD.CheckPointPath[NKMD.CheckPointPath[j].GoesTo[i]].StartIndex].Point1.X, NKMD.CheckPoint[NKMD.CheckPointPath[NKMD.CheckPointPath[j].GoesTo[i]].StartIndex].Point1.Y);
 							Gl.glColor3f(170f / 255f, 0, 0);
-							Gl.glVertex2f(File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position2.X, File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position2.Y);
-							Gl.glVertex2f(File.CPOI[File.CPAT[File.CPAT[j].GoesTo1].StartIdx].Position2.X, File.CPOI[File.CPAT[File.CPAT[j].GoesTo1].StartIdx].Position2.Y);
-						}
-						if (File.CPAT[j].GoesTo2 != -1)
-						{
-							Gl.glColor3f(0, 170f / 255f, 0);
-							Gl.glVertex2f(File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position1.X, File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position1.Y);
-							Gl.glVertex2f(File.CPOI[File.CPAT[File.CPAT[j].GoesTo2].StartIdx].Position1.X, File.CPOI[File.CPAT[File.CPAT[j].GoesTo2].StartIdx].Position1.Y);
-							Gl.glColor3f(170f / 255f, 0, 0);
-							Gl.glVertex2f(File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position2.X, File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position2.Y);
-							Gl.glVertex2f(File.CPOI[File.CPAT[File.CPAT[j].GoesTo2].StartIdx].Position2.X, File.CPOI[File.CPAT[File.CPAT[j].GoesTo2].StartIdx].Position2.Y);
-						}
-						if (File.CPAT[j].GoesTo3 != -1)
-						{
-							Gl.glColor3f(0, 170f / 255f, 0);
-							Gl.glVertex2f(File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position1.X, File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position1.Y);
-							Gl.glVertex2f(File.CPOI[File.CPAT[File.CPAT[j].GoesTo3].StartIdx].Position1.X, File.CPOI[File.CPAT[File.CPAT[j].GoesTo3].StartIdx].Position1.Y);
-							Gl.glColor3f(170f / 255f, 0, 0);
-							Gl.glVertex2f(File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position2.X, File.CPOI[File.CPAT[j].StartIdx + File.CPAT[j].Length - 1].Position2.Y);
-							Gl.glVertex2f(File.CPOI[File.CPAT[File.CPAT[j].GoesTo3].StartIdx].Position2.X, File.CPOI[File.CPAT[File.CPAT[j].GoesTo3].StartIdx].Position2.Y);
+							Gl.glVertex2f(NKMD.CheckPoint[NKMD.CheckPointPath[j].StartIndex + NKMD.CheckPointPath[j].Length - 1].Point2.X, NKMD.CheckPoint[NKMD.CheckPointPath[j].StartIndex + NKMD.CheckPointPath[j].Length - 1].Point2.Y);
+							Gl.glVertex2f(NKMD.CheckPoint[NKMD.CheckPointPath[NKMD.CheckPointPath[j].GoesTo[i]].StartIndex].Point2.X, NKMD.CheckPoint[NKMD.CheckPointPath[NKMD.CheckPointPath[j].GoesTo[i]].StartIndex].Point2.Y);
 						}
 					}
 					Gl.glEnd();
 				}
-			}*/
+			}
 
 			Gl.glBegin(Gl.GL_POINTS);
 			objidx = 1;
-			/*if (cPOIToolStripMenuItem.Checked)
+			//if (cPOIToolStripMenuItem.Checked)
 			{
-				foreach (MKDS_Course_Modifier.MKDS.NKM.CPOIEntry o in File.CPOI)
+				foreach (var o in NKMD.CheckPoint.Entries)
 				{
 					if (!picking)
 					{
@@ -621,7 +576,7 @@ namespace MarioKart.UI
 					{
 						Gl.glColor4f(Color.FromArgb(objidx | (21 << 18)).R / 255f, Color.FromArgb(objidx | (21 << 18)).G / 255f, Color.FromArgb(objidx | (21 << 18)).B / 255f, 1);
 					}
-					Gl.glVertex2f(o.Position1.X, o.Position1.Y);
+					Gl.glVertex2f(o.Point1.X, o.Point1.Y);
 					if (!picking)
 					{
 						Gl.glColor3f(170f / 255f, 0, 0);//181f / 255f, 230f / 255f, 29f / 255f);
@@ -631,9 +586,9 @@ namespace MarioKart.UI
 						Gl.glColor4f(Color.FromArgb(objidx | (22 << 18)).R / 255f, Color.FromArgb(objidx | (22 << 18)).G / 255f, Color.FromArgb(objidx | (22 << 18)).B / 255f, 1);
 						objidx++;
 					}
-					Gl.glVertex2f(o.Position2.X, o.Position2.Y);
+					Gl.glVertex2f(o.Point2.X, o.Point2.Y);
 				}
-			}*/
+			}
 			Gl.glEnd();
 			//Gl.glEnable(Gl.GL_LINE_SMOOTH);
 		}

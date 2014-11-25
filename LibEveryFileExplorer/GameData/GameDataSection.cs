@@ -40,6 +40,14 @@ namespace LibEveryFileExplorer.GameData
 
 		public abstract ListViewItem GetListViewItem();
 
+		protected static String GetHexReverse(sbyte Value)
+		{
+			return (Value & 0xFF).ToString("X2");
+		}
+		protected static String GetHexReverse(byte Value)
+		{
+			return Value.ToString("X2");
+		}
 		protected static String GetHexReverse(short Value)
 		{
 			return BitConverter.ToString(BitConverter.GetBytes(Value)).Replace("-", "");

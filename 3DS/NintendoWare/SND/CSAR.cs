@@ -5,10 +5,11 @@ using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
 
 namespace _3DS.NintendoWare.SND
 {
-	public class CSAR : FileFormat<CSAR.CSARIdentifier>
+	public class CSAR : FileFormat<CSAR.CSARIdentifier>, IViewable
 	{
 		public CSAR(byte[] Data)
 		{
@@ -16,12 +17,25 @@ namespace _3DS.NintendoWare.SND
 			try
 			{
 				Header = new CSARHeader(er);
-				//TODO!
+				foreach (var v in Header.Sections)
+				{
+					er.BaseStream.Position = v.Offset;
+					switch (v.Id)
+					{
+						case 0x2000: Strings = new STRG(er); break;
+						case 0x2001: Infos = new INFO(er); break;
+					}
+				}
 			}
 			finally
 			{
 				er.Close();
 			}
+		}
+
+		public Form GetDialog()
+		{
+			return new Form();
 		}
 
 		public CSARHeader Header;
@@ -75,6 +89,7 @@ namespace _3DS.NintendoWare.SND
 			{
 				Signature = er.ReadString(Encoding.ASCII, 4);
 				if (Signature != "STRG") throw new SignatureNotCorrectException(Signature, "STRG", er.BaseStream.Position - 4);
+				SectionSize = er.ReadUInt32();
 				long basepos = er.BaseStream.Position;
 				StringTableSignature = er.ReadUInt32();
 				StringTableOffset = er.ReadUInt32();
@@ -85,7 +100,7 @@ namespace _3DS.NintendoWare.SND
 				StringTable = new STRGStringTable(er);
 
 				er.BaseStream.Position = basepos + PatriciaTreeOffset;
-				//TODO!
+				PatriciaTree = new STRGPatriciaTree(er);
 			}
 			public String Signature;
 			public UInt32 SectionSize;
@@ -120,6 +135,7 @@ namespace _3DS.NintendoWare.SND
 					{
 						NTStringSignature = er.ReadUInt32();
 						StringOffset = er.ReadUInt32();
+						StringLength = er.ReadUInt32();
 					}
 					public UInt32 NTStringSignature;//0x1F01
 					public UInt32 StringOffset;//Relative to start of this block
@@ -127,7 +143,149 @@ namespace _3DS.NintendoWare.SND
 				}
 				public String[] Strings;
 			}
+			public STRGPatriciaTree PatriciaTree;
+			public class STRGPatriciaTree
+			{
+				public STRGPatriciaTree(EndianBinaryReader er)
+				{
+					RootNodeIndex = er.ReadUInt32();
+					NrNodes = er.ReadUInt32();
+					Nodes = new PatriciaTreeNode[NrNodes];
+					for (int i = 0; i < NrNodes; i++) Nodes[i] = new PatriciaTreeNode(er);
+				}
+				public UInt32 RootNodeIndex;
+				public UInt32 NrNodes;
+				public PatriciaTreeNode[] Nodes;
+				public class PatriciaTreeNode
+				{
+					public PatriciaTreeNode(EndianBinaryReader er)
+					{
+						IsLeaf = er.ReadUInt16() == 1;
+						Bit = er.ReadUInt16();
+						Left = er.ReadUInt32();
+						Right = er.ReadUInt32();
+						StringID = er.ReadUInt32();
+						NodeID = er.ReadUInt32();
+					}
+					public Boolean IsLeaf;//2
+					public UInt16 Bit;
+					public UInt32 Left;
+					public UInt32 Right;
+					public UInt32 StringID;
+					public UInt32 NodeID;
+				}
+			}
+		}
+		public INFO Infos;
+		public class INFO
+		{
+			public INFO(EndianBinaryReader er)
+			{
+				Signature = er.ReadString(Encoding.ASCII, 4);
+				if (Signature != "INFO") throw new SignatureNotCorrectException(Signature, "INFO", er.BaseStream.Position - 4);
+				SectionSize = er.ReadUInt32();
+				long basepos = er.BaseStream.Position;
+				SoundInfoSignature = er.ReadUInt32();
+				SoundInfoOffset = er.ReadUInt32();
+				SoundGroupInfoSignature = er.ReadUInt32();
+				SoundGroupInfoOffset = er.ReadUInt32();
+				BankInfoSignature = er.ReadUInt32();
+				BankInfoOffset = er.ReadUInt32();
+				WaveArchiveInfoSignature = er.ReadUInt32();
+				WaveArchiveInfoOffset = er.ReadUInt32();
+				GroupInfoSignature = er.ReadUInt32();
+				GroupInfoOffset = er.ReadUInt32();
+				PlayerInfoSignature = er.ReadUInt32();
+				PlayerInfoOffset = er.ReadUInt32();
+				FileInfoSignature = er.ReadUInt32();
+				FileInfoOffset = er.ReadUInt32();
+				SoundArchivePlayerInfoSignature = er.ReadUInt32();
+				SoundArchivePlayerInfoOffset = er.ReadUInt32();
 
+				er.BaseStream.Position = basepos + SoundInfoOffset;
+				SoundInfo = new INFOInfoBlock<INFOSoundInfoEntry>(er);
+			}
+			public String Signature;
+			public UInt32 SectionSize;
+			public UInt32 SoundInfoSignature;
+			public UInt32 SoundInfoOffset;
+			public UInt32 SoundGroupInfoSignature;
+			public UInt32 SoundGroupInfoOffset;
+			public UInt32 BankInfoSignature;
+			public UInt32 BankInfoOffset;
+			public UInt32 WaveArchiveInfoSignature;
+			public UInt32 WaveArchiveInfoOffset;
+			public UInt32 GroupInfoSignature;
+			public UInt32 GroupInfoOffset;
+			public UInt32 PlayerInfoSignature;
+			public UInt32 PlayerInfoOffset;
+			public UInt32 FileInfoSignature;
+			public UInt32 FileInfoOffset;
+			public UInt32 SoundArchivePlayerInfoSignature;
+			public UInt32 SoundArchivePlayerInfoOffset;
+
+			public class INFOInfoBlock<T> where T : INFOInfoBlockEntry, new()
+			{
+				public INFOInfoBlock(EndianBinaryReader er)
+				{
+					long basepos = er.BaseStream.Position;
+					NrEntries = er.ReadUInt32();
+					ReferenceTableEntries = new ReferenceTableEntry[NrEntries];
+					for (int i = 0; i < NrEntries; i++) ReferenceTableEntries[i] = new ReferenceTableEntry(er);
+					Entries = new T[NrEntries];
+					for (int i = 0; i < NrEntries; i++)
+					{
+						Entries[i] = new T();
+						Entries[i].Read(er);
+					}
+				}
+				public UInt32 NrEntries;
+				public ReferenceTableEntry[] ReferenceTableEntries;
+				public class ReferenceTableEntry
+				{
+					public ReferenceTableEntry(EndianBinaryReader er)
+					{
+						Signature = er.ReadUInt32();
+						Offset = er.ReadUInt32();
+					}
+					public UInt32 Signature;
+					public UInt32 Offset;
+				}
+				public T[] Entries;
+			}
+
+			public abstract class INFOInfoBlockEntry
+			{
+				public abstract void Read(EndianBinaryReader er);
+			}
+
+			public INFOInfoBlock<INFOSoundInfoEntry> SoundInfo;
+			public class INFOSoundInfoEntry : INFOInfoBlockEntry
+			{
+				public override void Read(EndianBinaryReader er)
+				{
+					FileID = er.ReadUInt32();
+					PlayerID = er.ReadUInt32();
+					Volume = er.ReadByte();
+					Padding = er.ReadBytes(3);
+
+					SpecificInfoSignature = er.ReadUInt32();
+					SpecificInfoOffset = er.ReadUInt32();
+				}
+				public UInt32 FileID;
+				public UInt32 PlayerID;
+				public Byte Volume;
+				public Byte[] Padding;//3
+
+				public UInt32 SpecificInfoSignature;
+				public UInt32 SpecificInfoOffset;
+
+				public INFOSoundInfoParameterArray Parameters;
+				public class INFOSoundInfoParameterArray
+				{
+					public UInt32 Flags;
+				}
+			}
 		}
 
 		public class CSARIdentifier : FileFormatIdentifier

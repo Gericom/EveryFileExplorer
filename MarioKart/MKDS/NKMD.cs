@@ -39,6 +39,8 @@ namespace MarioKart.MKDS
 						case "KTP2": KartPointSecond = new KTP2(er); break;
 						case "KTPC": KartPointCannon = new KTPC(er); break;
 						case "KTPM": KartPointMission = new KTPM(er); break;
+						case "CPOI": CheckPoint = new CPOI(er); break;
+						case "CPAT": CheckPointPath = new CPAT(er); break;
 						default:
 							//throw new Exception("Unknown Section: " + sig);
 							continue;
@@ -652,6 +654,177 @@ namespace MarioKart.MKDS
 				public Vector3 Rotation { get; set; }
 				public UInt16 Unknown { get; set; }
 				public Int16 Index { get; set; }
+			}
+		}
+
+		public CPOI CheckPoint;
+		public class CPOI : GameDataSection<CPOI.CPOIEntry>
+		{
+			public CPOI() { Signature = "CPOI"; }
+			public CPOI(EndianBinaryReader er)
+			{
+				Signature = er.ReadString(Encoding.ASCII, 4);
+				if (Signature != "CPOI") throw new SignatureNotCorrectException(Signature, "CPOI", er.BaseStream.Position - 4);
+				NrEntries = er.ReadUInt32();
+				for (int i = 0; i < NrEntries; i++) Entries.Add(new CPOIEntry(er));
+			}
+
+			public override String[] GetColumnNames()
+			{
+				return new String[] {
+					"ID",
+					"X1", "Z1", "X2", "Z2",
+					"Sine", "Cosine",
+					"Distance",
+					"Next Section", "Current Section",
+					"Key Point",
+					"Respawn",
+					"?"
+				};
+			}
+
+			public class CPOIEntry : GameDataSectionEntry
+			{
+				public CPOIEntry()
+				{
+					UpdateSinCos();
+					NextSection = -1;
+					CurrentSection = -1;
+					KeyPointID = -1;
+				}
+				public CPOIEntry(EndianBinaryReader er)
+				{
+					Point1 = new Vector2(er.ReadFx32(), er.ReadFx32());
+					Point2 = new Vector2(er.ReadFx32(), er.ReadFx32());
+					Sine = er.ReadFx32();
+					Cosine = er.ReadFx32();
+					Distance = er.ReadFx32();
+					NextSection = er.ReadInt16();
+					CurrentSection = er.ReadInt16();
+					KeyPointID = er.ReadInt16();
+					RespawnID = er.ReadByte();
+					Unknown = er.ReadByte();
+				}
+
+				public override ListViewItem GetListViewItem()
+				{
+					ListViewItem m = new ListViewItem("");
+					m.SubItems.Add(Point1.X.ToString("#####0.############"));
+					m.SubItems.Add(Point1.Y.ToString("#####0.############"));
+
+					m.SubItems.Add(Point2.X.ToString("#####0.############"));
+					m.SubItems.Add(Point2.Y.ToString("#####0.############"));
+
+					m.SubItems.Add(Sine.ToString("#####0.############"));
+					m.SubItems.Add(Cosine.ToString("#####0.############"));
+					m.SubItems.Add(Distance.ToString("#####0.############"));
+
+					m.SubItems.Add(NextSection.ToString());
+					m.SubItems.Add(CurrentSection.ToString());
+					m.SubItems.Add(KeyPointID.ToString());
+					m.SubItems.Add(RespawnID.ToString());
+					m.SubItems.Add(GetHexReverse(Unknown));
+					return m;
+				}
+
+				public Vector2 Point1 { get; set; }
+				public Vector2 Point2 { get; set; }
+				public Single Sine { get; private set; }
+				public Single Cosine { get; private set; }
+				public Single Distance { get; set; }
+				public Int16 NextSection { get; set; }
+				public Int16 CurrentSection { get; set; }
+				public Int16 KeyPointID { get; set; }
+				public Byte RespawnID { get; set; }
+				public Byte Unknown { get; set; }
+
+				public void UpdateSinCos()
+				{
+					double a = Math.Atan((Point1.Y - Point2.Y) / (Point1.X - Point2.X));
+					Sine = (float)Math.Sin(Math.Abs(a));
+					Cosine = (float)Math.Cos(Math.Abs(a));
+					if ((Point1.Y - Point2.Y) > 0) Sine = 0 - Sine;
+					if ((Point1.Y - Point2.X) < 0) Cosine = 0 - Cosine;
+				}
+
+				public void UpdateDistance(CPOIEntry Next)
+				{
+					UpdateSinCos();
+					Next.UpdateSinCos();
+					Distance =
+						Next.Cosine * Next.Point2.Y + Next.Sine * Next.Point2.X + 0.5f -
+						Cosine * Point1.Y - Sine * Point1.X + 0.5f;
+				}
+			}
+		}
+
+		public CPAT CheckPointPath;
+		public class CPAT : GameDataSection<CPAT.CPATEntry>
+		{
+			public CPAT() { Signature = "CPAT"; }
+			public CPAT(EndianBinaryReader er)
+			{
+				Signature = er.ReadString(Encoding.ASCII, 4);
+				if (Signature != "CPAT") throw new SignatureNotCorrectException(Signature, "CPAT", er.BaseStream.Position - 4);
+				NrEntries = er.ReadUInt32();
+				for (int i = 0; i < NrEntries; i++) Entries.Add(new CPATEntry(er));
+			}
+
+			public override String[] GetColumnNames()
+			{
+				return new String[] {
+					"ID",
+					"Start",
+					"Length",
+					"Next",
+					"Next",
+					"Next",
+					"Previous",
+					"Previous",
+					"Previous",
+					"Order"
+				};
+			}
+
+			public class CPATEntry : GameDataSectionEntry
+			{
+				public CPATEntry()
+				{
+					GoesTo = new sbyte[] { -1, -1, -1 };
+					ComesFrom = new sbyte[] { -1, -1, -1 };
+				}
+				public CPATEntry(EndianBinaryReader er)
+				{
+					StartIndex = er.ReadInt16();
+					Length = er.ReadInt16();
+					GoesTo = er.ReadSBytes(3);
+					ComesFrom = er.ReadSBytes(3);
+					SectionOrder = er.ReadInt16();
+				}
+
+				public override ListViewItem GetListViewItem()
+				{
+					ListViewItem m = new ListViewItem("");
+					m.SubItems.Add(StartIndex.ToString());
+					m.SubItems.Add(Length.ToString());
+
+					m.SubItems.Add(GoesTo[0].ToString());
+					m.SubItems.Add(GoesTo[1].ToString());
+					m.SubItems.Add(GoesTo[2].ToString());
+
+					m.SubItems.Add(ComesFrom[0].ToString());
+					m.SubItems.Add(ComesFrom[1].ToString());
+					m.SubItems.Add(ComesFrom[2].ToString());
+
+					m.SubItems.Add(SectionOrder.ToString());
+					return m;
+				}
+
+				public Int16 StartIndex { get; set; }
+				public Int16 Length { get; set; }
+				public SByte[] GoesTo { get; set; }//3
+				public SByte[] ComesFrom { get; set; }//3
+				public Int16 SectionOrder { get; set; }
 			}
 		}
 
