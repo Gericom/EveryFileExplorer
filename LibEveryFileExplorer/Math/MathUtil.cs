@@ -23,5 +23,15 @@ namespace LibEveryFileExplorer.Math
 		{
 			return Radians * (180.0 / System.Math.PI);
 		}
+
+		public static float DegToRad(float Degrees)
+		{
+			return Degrees * ((float)System.Math.PI / 180f);
+		}
+
+		public static double DegToRad(double Degrees)
+		{
+			return Degrees * (System.Math.PI / 180.0);
+		}
 	}
 }

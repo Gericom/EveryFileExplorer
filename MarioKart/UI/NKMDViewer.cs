@@ -81,6 +81,7 @@ namespace MarioKart.UI
 			if (NKMD.KartPointMission != null) AddTab<NKMD.KTPM.KTPMEntry>("KTPM", NKMD.KartPointMission);
 			if (NKMD.CheckPoint != null) AddTab<NKMD.CPOI.CPOIEntry>("CPOI", NKMD.CheckPoint);
 			if (NKMD.CheckPointPath != null) AddTab<NKMD.CPAT.CPATEntry>("CPAT", NKMD.CheckPointPath);
+			if (NKMD.Camera != null) AddTab<NKMD.CAME.CAMEEntry>("CAME", NKMD.Camera);
 
 			Bitmap b3 = OBJI.OBJ_2D01;
 			System.Resources.ResourceSet s = OBJI.ResourceManager.GetResourceSet(System.Globalization.CultureInfo.CurrentCulture, false, false);
@@ -493,28 +494,31 @@ namespace MarioKart.UI
 				Gl.glColor3f(Color.BurlyWood.R / 255f, Color.BurlyWood.G / 255f, Color.BurlyWood.B / 255f);
 			}
 			objidx = 1;
-			/*if (cAMEToolStripMenuItem.Checked)
+			//if (cAMEToolStripMenuItem.Checked)
 			{
-				foreach (MKDS_Course_Modifier.MKDS.NKM.CAMEEntry o in File.CAME)
+				foreach (var o in NKMD.Camera.Entries)
 				{
 					if (picking)
 					{
 						Gl.glColor4f(Color.FromArgb(objidx | (18 << 18)).R / 255f, Color.FromArgb(objidx | (18 << 18)).G / 255f, Color.FromArgb(objidx | (18 << 18)).B / 255f, 1);
 					}
-					Gl.glVertex2f(o.Position1.X, o.Position1.Z);
-					if (picking)
+					Gl.glVertex2f(o.Position.X, o.Position.Z);
+					if (o.CameraType == 3 || o.CameraType == 4)
 					{
-						Gl.glColor4f(Color.FromArgb(objidx | (19 << 18)).R / 255f, Color.FromArgb(objidx | (19 << 18)).G / 255f, Color.FromArgb(objidx | (19 << 18)).B / 255f, 1);
+						if (picking)
+						{
+							Gl.glColor4f(Color.FromArgb(objidx | (19 << 18)).R / 255f, Color.FromArgb(objidx | (19 << 18)).G / 255f, Color.FromArgb(objidx | (19 << 18)).B / 255f, 1);
+						}
+						Gl.glVertex2f(o.Viewpoint1.X, o.Viewpoint1.Z);
+						if (picking)
+						{
+							Gl.glColor4f(Color.FromArgb(objidx | (20 << 18)).R / 255f, Color.FromArgb(objidx | (20 << 18)).G / 255f, Color.FromArgb(objidx | (20 << 18)).B / 255f, 1);
+							objidx++;
+						}
+						Gl.glVertex2f(o.Viewpoint2.X, o.Viewpoint2.Z);
 					}
-					Gl.glVertex2f(o.Position2.X, o.Position2.Z);
-					if (picking)
-					{
-						Gl.glColor4f(Color.FromArgb(objidx | (20 << 18)).R / 255f, Color.FromArgb(objidx | (20 << 18)).G / 255f, Color.FromArgb(objidx | (20 << 18)).B / 255f, 1);
-						objidx++;
-					}
-					Gl.glVertex2f(o.Position3.X, o.Position3.Z);
 				}
-			}*/
+			}
 
 
 
