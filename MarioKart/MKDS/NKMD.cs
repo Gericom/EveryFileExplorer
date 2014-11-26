@@ -12,6 +12,7 @@ using Tao.OpenGl;
 using MarioKart.UI;
 using LibEveryFileExplorer.GFX;
 using LibEveryFileExplorer.Math;
+using System.ComponentModel;
 
 namespace MarioKart.MKDS
 {
@@ -166,13 +167,15 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(TTVisible.ToString());
 					return m;
 				}
-
+				[Category("Transformation")]
 				public Vector3 Position { get; set; }
+				[Category("Transformation")]
 				public Vector3 Rotation { get; set; }
+				[Category("Transformation")]
 				public Vector3 Scale { get; set; }
 				public UInt16 ObjectID { get; set; }
 				public Int16 RouteID { get; set; }
-				public UInt16[] Settings { get; set; }//8
+				public UInt16[] Settings { get; private set; }//8
 				public Boolean TTVisible { get; set; }
 			}
 		}
@@ -281,7 +284,7 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(GetHexReverse(Unknown));
 					return m;
 				}
-
+				[Category("Transformation")]
 				public Vector3 Position { get; set; }
 				public Int16 Index { get; set; }
 				public Int16 Duration { get; set; }
@@ -386,8 +389,9 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(Index.ToString());
 					return m;
 				}
-
+				[Category("Transformation")]
 				public Vector3 Position { get; set; }
+				[Category("Transformation")]
 				public Vector3 Rotation { get; set; }
 				public UInt16 Unknown { get; set; }
 				public Int16 Index { get; set; }
@@ -460,8 +464,9 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(Index.ToString());
 					return m;
 				}
-
+				[Category("Transformation")]
 				public Vector3 Position { get; set; }
+				[Category("Transformation")]
 				public Vector3 Rotation { get; set; }
 				public Int16 EnemyPositionID { get; set; }
 				public Int16 ItemPositionID { get; set; }
@@ -524,8 +529,9 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(Index.ToString());
 					return m;
 				}
-
+				[Category("Transformation")]
 				public Vector3 Position { get; set; }
+				[Category("Transformation")]
 				public Vector3 Rotation { get; set; }
 				public UInt16 Unknown { get; set; }
 				public Int16 Index { get; set; }
@@ -587,8 +593,9 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(Index.ToString());
 					return m;
 				}
-
+				[Category("Transformation")]
 				public Vector3 Position { get; set; }
+				[Category("Transformation")]
 				public Vector3 Rotation { get; set; }
 				public Int16 NextMEPO { get; set; }
 				public Int16 Index { get; set; }
@@ -650,8 +657,9 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(Index.ToString());
 					return m;
 				}
-
+				[Category("Transformation")]
 				public Vector3 Position { get; set; }
+				[Category("Transformation")]
 				public Vector3 Rotation { get; set; }
 				public UInt16 Unknown { get; set; }
 				public Int16 Index { get; set; }
@@ -823,8 +831,8 @@ namespace MarioKart.MKDS
 
 				public Int16 StartIndex { get; set; }
 				public Int16 Length { get; set; }
-				public SByte[] GoesTo { get; set; }//3
-				public SByte[] ComesFrom { get; set; }//3
+				public SByte[] GoesTo { get; private set; }//3
+				public SByte[] ComesFrom { get; private set; }//3
 				public Int16 SectionOrder { get; set; }
 			}
 		}
@@ -950,18 +958,27 @@ namespace MarioKart.MKDS
 					return m;
 				}
 
-
-
+				[Category("Transformation")]
 				public Vector3 Position { get; set; }
+				[Category("Transformation")]
 				public Vector3 Angle { get; set; }
+				[Category("Viewpoints")]
 				public Vector3 Viewpoint1 { get; set; }
+				[Category("Viewpoints")]
 				public Vector3 Viewpoint2 { get; set; }
+				[Category("Field of View")]
 				public UInt16 FieldOfViewBegin { get; set; }
+				[Category("Field of View")]
 				public Single FieldOfViewBeginSine { get; private set; }//2
+				[Category("Field of View")]
 				public Single FieldOfViewBeginCosine { get; private set; }//2
+				[Category("Field of View")]
 				public UInt16 FieldOfViewEnd { get; set; }
+				[Category("Field of View")]
 				public Single FieldOfViewEndSine { get; private set; }
+				[Category("Field of View")]
 				public Single FieldOfViewEndCosine { get; private set; }
+				[Category("Field of View")]
 				public Int16 FovSpeed { get; set; }
 				public Int16 CameraType { get; set; }
 				public Int16 LinkedRoute { get; set; }

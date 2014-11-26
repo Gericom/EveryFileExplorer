@@ -19,6 +19,8 @@ namespace MarioKart.UI
 {
 	public partial class NKMDViewer : Form, IUseOtherFiles
 	{
+		List<IGameDataSectionViewer> SectionViewers = new List<IGameDataSectionViewer>();
+
 		MKDS.NKMD NKMD;
 		MKDS.KCL KCL = null;
 		public NKMDViewer(MKDS.NKMD NKMD)
@@ -113,8 +115,20 @@ namespace MarioKart.UI
 		private void AddTab<T>(String Name, GameDataSection<T> Section) where T : GameDataSectionEntry, new()
 		{
 			TabPage p = new TabPage(Name);
-			p.Controls.Add(new GameDataSectionViewer<T>(Section) { Dock = DockStyle.Fill });
+			var v = new GameDataSectionViewer<T>(Section) { Dock = DockStyle.Fill };
+			v.OnSelected += new SelectedEventHandler(GameDataSectionViewer_OnSelected);
+			SectionViewers.Add(v);
+			p.Controls.Add(v);
 			tabControl1.TabPages.Add(p);
+		}
+
+		void GameDataSectionViewer_OnSelected(IGameDataSectionViewer Viewer, object Entry)
+		{
+			propertyGrid1.SelectedObject = Entry;
+			foreach (var v in SectionViewers)
+			{
+				if (v != Viewer) v.RemoveSelection();
+			}
 		}
 
 		float min = -8192f;
@@ -684,6 +698,11 @@ namespace MarioKart.UI
 		{
 			Render();
 			Render();
+		}
+
+		private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+		{
+			foreach (var v in SectionViewers) v.UpdateListViewEntry(propertyGrid1.SelectedObject);
 		}
 	}
 }

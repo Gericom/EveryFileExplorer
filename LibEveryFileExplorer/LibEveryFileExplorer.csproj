@@ -50,6 +50,8 @@
     <Compile Include="Collections\Matrix34.cs" />
     <Compile Include="Collections\Matrix44.cs" />
     <Compile Include="Collections\Vector2.cs" />
+    <Compile Include="ComponentModel\UInt16HexTypeConverter.cs" />
+    <Compile Include="ComponentModel\UInt32HexTypeConverter.cs" />
     <Compile Include="Files\EFEDiskFile.cs" />
     <Compile Include="Files\IChildReactive.cs" />
     <Compile Include="GFX\BitmapFont.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="UI\GameDataSectionViewerBase.Designer.cs">
       <DependentUpon>GameDataSectionViewerBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="ComponentModel\ValueTypeTypeConverter.cs" />
     <Compile Include="Win32Util.cs" />
   </ItemGroup>
   <ItemGroup>

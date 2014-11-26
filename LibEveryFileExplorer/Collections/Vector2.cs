@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel;
+using LibEveryFileExplorer.ComponentModel;
 
 namespace LibEveryFileExplorer.Collections
 {
+	[TypeConverter(typeof(ValueTypeTypeConverter))]
 	public struct Vector2
 	{
 		public Vector2(float Value)
@@ -43,6 +46,7 @@ namespace LibEveryFileExplorer.Collections
 			}
 		}
 
+		[Browsable(false)]
 		public float Length
 		{
 			get { return (float)System.Math.Sqrt(X * X + Y * Y); }
@@ -123,6 +127,11 @@ namespace LibEveryFileExplorer.Collections
 		public override int GetHashCode()
 		{
 			return base.GetHashCode();
+		}
+
+		public override string ToString()
+		{
+			return "(" + X + "; " + Y + ")";
 		}
 	}
 }
