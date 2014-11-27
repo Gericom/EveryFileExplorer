@@ -125,6 +125,7 @@ namespace MarioKart.UI
 		void GameDataSectionViewer_OnSelected(IGameDataSectionViewer Viewer, object Entry)
 		{
 			propertyGrid1.SelectedObject = Entry;
+			propertyGrid1.ExpandAllGridItems();
 			foreach (var v in SectionViewers)
 			{
 				if (v != Viewer) v.RemoveSelection();

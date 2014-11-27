@@ -50,8 +50,9 @@
     <Compile Include="Collections\Matrix34.cs" />
     <Compile Include="Collections\Matrix44.cs" />
     <Compile Include="Collections\Vector2.cs" />
-    <Compile Include="ComponentModel\UInt16HexTypeConverter.cs" />
-    <Compile Include="ComponentModel\UInt32HexTypeConverter.cs" />
+    <Compile Include="ComponentModel\HexReversedAttribute.cs" />
+    <Compile Include="ComponentModel\HexTypeConverter.cs" />
+    <Compile Include="ComponentModel\PrettyArrayConverter.cs" />
     <Compile Include="Files\EFEDiskFile.cs" />
     <Compile Include="Files\IChildReactive.cs" />
     <Compile Include="GFX\BitmapFont.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Files\ViewableFile.cs" />
     <Compile Include="GameData\GameDataSection.cs" />
     <Compile Include="GFX\GFXUtil.cs" />
+    <Compile Include="HexUtil.cs" />
     <Compile Include="IO\EndianBinaryReader.cs" />
     <Compile Include="IO\EndianBinaryWriter.cs" />
     <Compile Include="IO\IOUtil.cs" />

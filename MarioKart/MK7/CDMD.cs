@@ -9,6 +9,7 @@ using System.IO;
 using LibEveryFileExplorer.Collections;
 using System.Windows.Forms;
 using MarioKart.UI;
+using LibEveryFileExplorer;
 
 namespace MarioKart.MK7
 {
@@ -214,7 +215,7 @@ namespace MarioKart.MK7
 					m.SubItems.Add(Next[4].ToString());
 					m.SubItems.Add(Next[5].ToString());
 
-					m.SubItems.Add(GetHexReverse(Unknown));
+					m.SubItems.Add(HexUtil.GetHexReverse(Unknown));
 					return m;
 				}
 				public Byte Start { get; set; }
@@ -289,7 +290,7 @@ namespace MarioKart.MK7
 					//if (ob != null) i.SubItems.Add(ob.ToString());
 					/*else */
 					m.SubItems.Add(ToString());//String.Format("{0:X4}", ObjectID));
-					m.SubItems.Add(GetHexReverse(Unknown1));
+					m.SubItems.Add(HexUtil.GetHexReverse(Unknown1));
 					m.SubItems.Add(Position.X.ToString("#####0.############"));
 					m.SubItems.Add(Position.Y.ToString("#####0.############"));
 					m.SubItems.Add(Position.Z.ToString("#####0.############"));
@@ -304,19 +305,19 @@ namespace MarioKart.MK7
 
 					m.SubItems.Add(RouteID.ToString());
 
-					m.SubItems.Add(GetHexReverse(Settings[0]));
-					m.SubItems.Add(GetHexReverse(Settings[1]));
-					m.SubItems.Add(GetHexReverse(Settings[2]));
-					m.SubItems.Add(GetHexReverse(Settings[3]));
-					m.SubItems.Add(GetHexReverse(Settings[4]));
-					m.SubItems.Add(GetHexReverse(Settings[5]));
-					m.SubItems.Add(GetHexReverse(Settings[6]));
-					m.SubItems.Add(GetHexReverse(Settings[7]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[0]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[1]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[2]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[3]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[4]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[5]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[6]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[7]));
 
-					m.SubItems.Add(GetHexReverse(Visibility));
+					m.SubItems.Add(HexUtil.GetHexReverse(Visibility));
 
-					m.SubItems.Add(GetHexReverse(Unknown2));
-					m.SubItems.Add(GetHexReverse(Unknown3));
+					m.SubItems.Add(HexUtil.GetHexReverse(Unknown2));
+					m.SubItems.Add(HexUtil.GetHexReverse(Unknown3));
 					return m;
 				}
 

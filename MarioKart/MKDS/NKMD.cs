@@ -13,6 +13,8 @@ using MarioKart.UI;
 using LibEveryFileExplorer.GFX;
 using LibEveryFileExplorer.Math;
 using System.ComponentModel;
+using LibEveryFileExplorer.ComponentModel;
+using LibEveryFileExplorer;
 
 namespace MarioKart.MKDS
 {
@@ -152,17 +154,17 @@ namespace MarioKart.MKDS
 					//ObjectDb.Object ob = MKDS_Const.ObjectDatabase.GetObject(o.ObjectID);
 					//if (ob != null) i.SubItems.Add(ob.ToString());
 					/*else */
-					m.SubItems.Add(GetHexReverse(ObjectID));
+					m.SubItems.Add(HexUtil.GetHexReverse(ObjectID));
 					m.SubItems.Add(RouteID.ToString());
 
-					m.SubItems.Add(GetHexReverse(Settings[0]));
-					m.SubItems.Add(GetHexReverse(Settings[1]));
-					m.SubItems.Add(GetHexReverse(Settings[2]));
-					m.SubItems.Add(GetHexReverse(Settings[3]));
-					m.SubItems.Add(GetHexReverse(Settings[4]));
-					m.SubItems.Add(GetHexReverse(Settings[5]));
-					m.SubItems.Add(GetHexReverse(Settings[6]));
-					m.SubItems.Add(GetHexReverse(Settings[7]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[0]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[1]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[2]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[3]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[4]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[5]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[6]));
+					m.SubItems.Add(HexUtil.GetHexReverse(Settings[7]));
 
 					m.SubItems.Add(TTVisible.ToString());
 					return m;
@@ -173,9 +175,18 @@ namespace MarioKart.MKDS
 				public Vector3 Rotation { get; set; }
 				[Category("Transformation")]
 				public Vector3 Scale { get; set; }
+				[Category("Object"), DisplayName("Object ID")]
+				[TypeConverter(typeof(HexTypeConverter)), HexReversedAttribute]
 				public UInt16 ObjectID { get; set; }
+				[Category("Object"), DisplayName("Route ID")]
+				[Description("The route used by this object. If no route is used, set this to -1.")]
 				public Int16 RouteID { get; set; }
+				[Category("Object")]
+				[Description("Object specific settings.")]
+				[TypeConverter(typeof(PrettyArrayConverter))]
 				public UInt16[] Settings { get; private set; }//8
+				[Category("Object"), DisplayName("TT Visible")]
+				[Description("Specifies whether the object is visible in Time Trail mode or not.")]
 				public Boolean TTVisible { get; set; }
 			}
 		}
@@ -225,9 +236,13 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(NrPoit.ToString());
 					return m;
 				}
-
+				[Category("Path")]
 				public Byte Index { get; set; }
+				[Category("Path")]
+				[Description("Specifies whether this route loops or not.")]
 				public Boolean Loop { get; set; }
+				[Category("Path"), DisplayName("Nr Poit")]
+				[Description("The number of POIT entries that belong to this route.")]
 				public Int16 NrPoit { get; set; }
 			}
 		}
@@ -281,13 +296,17 @@ namespace MarioKart.MKDS
 
 					m.SubItems.Add(Index.ToString());
 					m.SubItems.Add(Duration.ToString());
-					m.SubItems.Add(GetHexReverse(Unknown));
+					m.SubItems.Add(HexUtil.GetHexReverse(Unknown));
 					return m;
 				}
 				[Category("Transformation")]
 				public Vector3 Position { get; set; }
+				[Category("Point")]
 				public Int16 Index { get; set; }
+				[Category("Point")]
 				public Int16 Duration { get; set; }
+				[Category("Point")]
+				[TypeConverter(typeof(HexTypeConverter)), HexReversedAttribute]
 				public UInt32 Unknown { get; set; }
 			}
 		}
@@ -313,7 +332,8 @@ namespace MarioKart.MKDS
 				KclColor2 = Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(er.ReadUInt16()));
 				KclColor3 = Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(er.ReadUInt16()));
 				KclColor4 = Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(er.ReadUInt16()));
-				UnknownData2 = er.ReadBytes(0x8);
+				FrustumFar = er.ReadFx32();
+				UnknownData2 = er.ReadBytes(0x4);
 			}
 
 			public String Signature;
@@ -331,6 +351,7 @@ namespace MarioKart.MKDS
 			public Color KclColor2;
 			public Color KclColor3;
 			public Color KclColor4;
+			public Single FrustumFar;
 			public byte[] UnknownData2;
 		}
 
@@ -385,7 +406,7 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(Rotation.Y.ToString("#####0.############"));
 					m.SubItems.Add(Rotation.Z.ToString("#####0.############"));
 
-					m.SubItems.Add(GetHexReverse(Unknown));
+					m.SubItems.Add(HexUtil.GetHexReverse(Unknown));
 					m.SubItems.Add(Index.ToString());
 					return m;
 				}
@@ -393,6 +414,7 @@ namespace MarioKart.MKDS
 				public Vector3 Position { get; set; }
 				[Category("Transformation")]
 				public Vector3 Rotation { get; set; }
+				[TypeConverter(typeof(HexTypeConverter)), HexReversedAttribute]
 				public UInt16 Unknown { get; set; }
 				public Int16 Index { get; set; }
 			}
@@ -429,8 +451,8 @@ namespace MarioKart.MKDS
 				{
 					Position = new Vector3(0, 0, 0);
 					Rotation = new Vector3(0, 0, 0);
-					EnemyPositionID = 0;
-					ItemPositionID = 0;
+					EnemyPointID = 0;
+					ItemPointID = 0;
 					Index = 0;
 				}
 				public KTPJEntry(EndianBinaryReader er, UInt16 Version)
@@ -443,8 +465,8 @@ namespace MarioKart.MKDS
 						float yangle = (float)Math.Atan2(Rotation.X, Rotation.Z);
 						Rotation = new Vector3(0, MathUtil.RadToDeg(yangle), 0);
 					}
-					EnemyPositionID = er.ReadInt16();
-					ItemPositionID = er.ReadInt16();
+					EnemyPointID = er.ReadInt16();
+					ItemPointID = er.ReadInt16();
 					if (Version >= 34) Index = er.ReadInt32();
 				}
 
@@ -459,8 +481,8 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(Rotation.Y.ToString("#####0.############"));
 					m.SubItems.Add(Rotation.Z.ToString("#####0.############"));
 
-					m.SubItems.Add(EnemyPositionID.ToString());
-					m.SubItems.Add(ItemPositionID.ToString());
+					m.SubItems.Add(EnemyPointID.ToString());
+					m.SubItems.Add(ItemPointID.ToString());
 					m.SubItems.Add(Index.ToString());
 					return m;
 				}
@@ -468,8 +490,11 @@ namespace MarioKart.MKDS
 				public Vector3 Position { get; set; }
 				[Category("Transformation")]
 				public Vector3 Rotation { get; set; }
-				public Int16 EnemyPositionID { get; set; }
-				public Int16 ItemPositionID { get; set; }
+				[Category("Respawn"), DisplayName("Enemy Point ID")]
+				public Int16 EnemyPointID { get; set; }
+				[Category("Respawn"), DisplayName("Item Point ID")]
+				public Int16 ItemPointID { get; set; }
+				[Category("Respawn")]
 				public Int32 Index { get; set; }
 			}
 		}
@@ -525,7 +550,7 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(Rotation.Y.ToString("#####0.############"));
 					m.SubItems.Add(Rotation.Z.ToString("#####0.############"));
 
-					m.SubItems.Add(GetHexReverse(Unknown));
+					m.SubItems.Add(HexUtil.GetHexReverse(Unknown));
 					m.SubItems.Add(Index.ToString());
 					return m;
 				}
@@ -533,6 +558,7 @@ namespace MarioKart.MKDS
 				public Vector3 Position { get; set; }
 				[Category("Transformation")]
 				public Vector3 Rotation { get; set; }
+				[TypeConverter(typeof(HexTypeConverter)), HexReversedAttribute]
 				public UInt16 Unknown { get; set; }
 				public Int16 Index { get; set; }
 			}
@@ -597,7 +623,9 @@ namespace MarioKart.MKDS
 				public Vector3 Position { get; set; }
 				[Category("Transformation")]
 				public Vector3 Rotation { get; set; }
+				[Category("Cannon")]
 				public Int16 NextMEPO { get; set; }
+				[Category("Cannon")]
 				public Int16 Index { get; set; }
 			}
 		}
@@ -653,7 +681,7 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(Rotation.Y.ToString("#####0.############"));
 					m.SubItems.Add(Rotation.Z.ToString("#####0.############"));
 
-					m.SubItems.Add(GetHexReverse(Unknown));
+					m.SubItems.Add(HexUtil.GetHexReverse(Unknown));
 					m.SubItems.Add(Index.ToString());
 					return m;
 				}
@@ -661,7 +689,10 @@ namespace MarioKart.MKDS
 				public Vector3 Position { get; set; }
 				[Category("Transformation")]
 				public Vector3 Rotation { get; set; }
+				[Category("Mission Point")]
+				[TypeConverter(typeof(HexTypeConverter)), HexReversedAttribute]
 				public UInt16 Unknown { get; set; }
+				[Category("Mission Point")]
 				public Int16 Index { get; set; }
 			}
 		}
@@ -685,7 +716,7 @@ namespace MarioKart.MKDS
 					"X1", "Z1", "X2", "Z2",
 					"Sine", "Cosine",
 					"Distance",
-					"Next Section", "Current Section",
+					"Goto Section", "Start Section",
 					"Key Point",
 					"Respawn",
 					"?"
@@ -697,8 +728,8 @@ namespace MarioKart.MKDS
 				public CPOIEntry()
 				{
 					UpdateSinCos();
-					NextSection = -1;
-					CurrentSection = -1;
+					GotoSection = -1;
+					StartSection = -1;
 					KeyPointID = -1;
 				}
 				public CPOIEntry(EndianBinaryReader er)
@@ -708,8 +739,8 @@ namespace MarioKart.MKDS
 					Sine = er.ReadFx32();
 					Cosine = er.ReadFx32();
 					Distance = er.ReadFx32();
-					NextSection = er.ReadInt16();
-					CurrentSection = er.ReadInt16();
+					GotoSection = er.ReadInt16();
+					StartSection = er.ReadInt16();
 					KeyPointID = er.ReadInt16();
 					RespawnID = er.ReadByte();
 					Unknown = er.ReadByte();
@@ -728,23 +759,34 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(Cosine.ToString("#####0.############"));
 					m.SubItems.Add(Distance.ToString("#####0.############"));
 
-					m.SubItems.Add(NextSection.ToString());
-					m.SubItems.Add(CurrentSection.ToString());
+					m.SubItems.Add(GotoSection.ToString());
+					m.SubItems.Add(StartSection.ToString());
 					m.SubItems.Add(KeyPointID.ToString());
 					m.SubItems.Add(RespawnID.ToString());
-					m.SubItems.Add(GetHexReverse(Unknown));
+					m.SubItems.Add(HexUtil.GetHexReverse(Unknown));
 					return m;
 				}
-
+				[Category("Points"), DisplayName("Point 1")]
 				public Vector2 Point1 { get; set; }
+				[Category("Points"), DisplayName("Point 2")]
 				public Vector2 Point2 { get; set; }
+				[Browsable(false)]
 				public Single Sine { get; private set; }
+				[Browsable(false)]
 				public Single Cosine { get; private set; }
-				public Single Distance { get; set; }
-				public Int16 NextSection { get; set; }
-				public Int16 CurrentSection { get; set; }
+				[Browsable(false)]
+				public Single Distance { get; private set; }
+				[Category("Sections"), DisplayName("Goto Section")]
+				[Description("Specifies if the next checkpoint is in a new section. Use -1 otherwise.")]
+				public Int16 GotoSection { get; set; }
+				[Category("Sections"), DisplayName("Start Section")]
+				[Description("Specifies if a new section is started (including this checkpoint). Use -1 otherwise.")]
+				public Int16 StartSection { get; set; }
+				[Category("Checkpoint"), DisplayName("Key Point")]
 				public Int16 KeyPointID { get; set; }
+				[Category("Checkpoint"), DisplayName("Respawn")]
 				public Byte RespawnID { get; set; }
+				[Category("Checkpoint")]
 				public Byte Unknown { get; set; }
 
 				public void UpdateSinCos()
@@ -758,6 +800,11 @@ namespace MarioKart.MKDS
 
 				public void UpdateDistance(CPOIEntry Next)
 				{
+					if (GotoSection != -1)
+					{
+						Distance = -1;
+						return;
+					}
 					UpdateSinCos();
 					Next.UpdateSinCos();
 					Distance =
@@ -828,11 +875,17 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(SectionOrder.ToString());
 					return m;
 				}
-
+				[Category("Checkpoint Path"), DisplayName("Start Index")]
 				public Int16 StartIndex { get; set; }
+				[Category("Checkpoint Path")]
 				public Int16 Length { get; set; }
+				[Category("Checkpoint Path"), DisplayName("Goes To")]
+				[TypeConverter(typeof(PrettyArrayConverter))]
 				public SByte[] GoesTo { get; private set; }//3
+				[Category("Checkpoint Path"), DisplayName("Comes From")]
+				[TypeConverter(typeof(PrettyArrayConverter))]
 				public SByte[] ComesFrom { get; private set; }//3
+				[Category("Checkpoint Path"), DisplayName("Order")]
 				public Int16 SectionOrder { get; set; }
 			}
 		}
@@ -954,7 +1007,7 @@ namespace MarioKart.MKDS
 					m.SubItems.Add(NextCamera.ToString());
 
 					m.SubItems.Add(FirstIntroCamera.ToString());
-					m.SubItems.Add(GetHexReverse(Unknown5));
+					m.SubItems.Add(HexUtil.GetHexReverse(Unknown5));
 					return m;
 				}
 
@@ -962,31 +1015,40 @@ namespace MarioKart.MKDS
 				public Vector3 Position { get; set; }
 				[Category("Transformation")]
 				public Vector3 Angle { get; set; }
-				[Category("Viewpoints")]
+				[Category("Viewpoints"), DisplayName("Viewpoint 1")]
 				public Vector3 Viewpoint1 { get; set; }
-				[Category("Viewpoints")]
+				[Category("Viewpoints"), DisplayName("Viewpoint 2")]
 				public Vector3 Viewpoint2 { get; set; }
-				[Category("Field of View")]
+				[Category("Field of View"), DisplayName("Begin Angle")]
 				public UInt16 FieldOfViewBegin { get; set; }
-				[Category("Field of View")]
+				[Browsable(false)]
 				public Single FieldOfViewBeginSine { get; private set; }//2
-				[Category("Field of View")]
+				[Browsable(false)]
 				public Single FieldOfViewBeginCosine { get; private set; }//2
-				[Category("Field of View")]
+				[Category("Field of View"), DisplayName("End Angle")]
 				public UInt16 FieldOfViewEnd { get; set; }
-				[Category("Field of View")]
+				[Browsable(false)]
 				public Single FieldOfViewEndSine { get; private set; }
-				[Category("Field of View")]
+				[Browsable(false)]
 				public Single FieldOfViewEndCosine { get; private set; }
-				[Category("Field of View")]
+				[Category("Field of View"), DisplayName("Speed")]
 				public Int16 FovSpeed { get; set; }
+				[Category("Camera"), DisplayName("Type")]
 				public Int16 CameraType { get; set; }
+				[Category("Camera"), DisplayName("Linked Route")]
 				public Int16 LinkedRoute { get; set; }
+				[Category("Camera"), DisplayName("Route Speed")]
 				public Int16 RouteSpeed { get; set; }
+				[Category("Viewpoints"), DisplayName("Speed")]
 				public Int16 PointSpeed { get; set; }
+				[Category("Camera")]
 				public Int16 Duration { get; set; }
+				[Category("Camera"), DisplayName("Next Camera")]
 				public Int16 NextCamera { get; set; }
+				[Category("Camera"), DisplayName("First Intro Camera")]
+				[Description("Specifies if this CAME is the first camera to use for the course intro for the top or bottom screen.")]
 				public CAMEIntroCamera FirstIntroCamera { get; set; }//byte
+				[Category("Camera")]
 				public Byte Unknown5 { get; set; }
 
 				public void UpdateSinCos()
