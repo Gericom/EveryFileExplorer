@@ -14,6 +14,7 @@ using LibEveryFileExplorer;
 using LibEveryFileExplorer.UI;
 using LibEveryFileExplorer.GameData;
 using MarioKart.MKDS;
+using MarioKart.MKDS.NKM;
 
 namespace MarioKart.UI
 {
@@ -21,9 +22,9 @@ namespace MarioKart.UI
 	{
 		List<IGameDataSectionViewer> SectionViewers = new List<IGameDataSectionViewer>();
 
-		MKDS.NKMD NKMD;
-		MKDS.KCL KCL = null;
-		public NKMDViewer(MKDS.NKMD NKMD)
+		NKMD NKMD;
+		KCL KCL = null;
+		public NKMDViewer(NKMD NKMD)
 		{
 			this.NKMD = NKMD;
 			InitializeComponent();
@@ -61,7 +62,7 @@ namespace MarioKart.UI
 
 			Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
 
-			ViewableFile[] v = EveryFileExplorerUtil.GetOpenFilesOfType(typeof(MKDS.KCL));
+			ViewableFile[] v = EveryFileExplorerUtil.GetOpenFilesOfType(typeof(KCL));
 			menuItem1.MenuItems.Clear();
 			foreach (var vv in v)
 			{
@@ -73,17 +74,23 @@ namespace MarioKart.UI
 				KCL = v[0].FileFormat;
 			}
 
-			if (NKMD.ObjectInformation != null) AddTab<NKMD.OBJI.OBJIEntry>("OBJI", NKMD.ObjectInformation);
-			if (NKMD.Path != null) AddTab<NKMD.PATH.PATHEntry>("PATH", NKMD.Path);
-			if (NKMD.Point != null) AddTab<NKMD.POIT.POITEntry>("POIT", NKMD.Point);
-			if (NKMD.KartPointStart != null) AddTab<NKMD.KTPS.KTPSEntry>("KTPS", NKMD.KartPointStart);
-			if (NKMD.KartPointJugem != null) AddTab<NKMD.KTPJ.KTPJEntry>("KTPJ", NKMD.KartPointJugem);
-			if (NKMD.KartPointSecond != null) AddTab<NKMD.KTP2.KTP2Entry>("KTP2", NKMD.KartPointSecond);
-			if (NKMD.KartPointCannon != null) AddTab<NKMD.KTPC.KTPCEntry>("KTPC", NKMD.KartPointCannon);
-			if (NKMD.KartPointMission != null) AddTab<NKMD.KTPM.KTPMEntry>("KTPM", NKMD.KartPointMission);
-			if (NKMD.CheckPoint != null) AddTab<NKMD.CPOI.CPOIEntry>("CPOI", NKMD.CheckPoint);
-			if (NKMD.CheckPointPath != null) AddTab<NKMD.CPAT.CPATEntry>("CPAT", NKMD.CheckPointPath);
-			if (NKMD.Camera != null) AddTab<NKMD.CAME.CAMEEntry>("CAME", NKMD.Camera);
+			if (NKMD.ObjectInformation != null) AddTab<MKDS.NKM.OBJI.OBJIEntry>("OBJI", NKMD.ObjectInformation);
+			if (NKMD.Path != null) AddTab<PATH.PATHEntry>("PATH", NKMD.Path);
+			if (NKMD.Point != null) AddTab<POIT.POITEntry>("POIT", NKMD.Point);
+			if (NKMD.KartPointStart != null) AddTab<KTPS.KTPSEntry>("KTPS", NKMD.KartPointStart);
+			if (NKMD.KartPointJugem != null) AddTab<KTPJ.KTPJEntry>("KTPJ", NKMD.KartPointJugem);
+			if (NKMD.KartPointSecond != null) AddTab<KTP2.KTP2Entry>("KTP2", NKMD.KartPointSecond);
+			if (NKMD.KartPointCannon != null) AddTab<KTPC.KTPCEntry>("KTPC", NKMD.KartPointCannon);
+			if (NKMD.KartPointMission != null) AddTab<KTPM.KTPMEntry>("KTPM", NKMD.KartPointMission);
+			if (NKMD.CheckPoint != null) AddTab<CPOI.CPOIEntry>("CPOI", NKMD.CheckPoint);
+			if (NKMD.CheckPointPath != null) AddTab<CPAT.CPATEntry>("CPAT", NKMD.CheckPointPath);
+			if (NKMD.ItemPoint != null) AddTab<IPOI.IPOIEntry>("IPOI", NKMD.ItemPoint);
+			if (NKMD.ItemPath != null) AddTab<IPAT.IPATEntry>("IPAT", NKMD.ItemPath);
+			if (NKMD.EnemyPoint != null) AddTab<EPOI.EPOIEntry>("EPOI", NKMD.EnemyPoint);
+			if (NKMD.EnemyPath != null) AddTab<EPAT.EPATEntry>("EPAT", NKMD.EnemyPath);
+			if (NKMD.MiniGameEnemyPoint != null) AddTab<MEPO.MEPOEntry>("MEPO", NKMD.MiniGameEnemyPoint);
+			if (NKMD.MiniGameEnemyPath != null) AddTab<MEPA.MEPAEntry>("MEPA", NKMD.MiniGameEnemyPath);
+			if (NKMD.Camera != null) AddTab<CAME.CAMEEntry>("CAME", NKMD.Camera);
 
 			Bitmap b3 = OBJI.OBJ_2D01;
 			System.Resources.ResourceSet s = OBJI.ResourceManager.GetResourceSet(System.Globalization.CultureInfo.CurrentCulture, false, false);
@@ -442,11 +449,11 @@ namespace MarioKart.UI
 				Gl.glColor3f(0, 0.8f, 0);
 			}
 			objidx = 1;
-			/*if (ePOIToolStripMenuItem.Checked)
+			//if (ePOIToolStripMenuItem.Checked)
 			{
-				if (File.EPOI != null)
+				if (NKMD.EnemyPoint != null)
 				{
-					foreach (MKDS_Course_Modifier.MKDS.NKM.EPOIEntry o in File.EPOI)
+					foreach (var o in NKMD.EnemyPoint.Entries)
 					{
 						if (picking)
 						{
@@ -458,7 +465,7 @@ namespace MarioKart.UI
 				}
 				else
 				{
-					foreach (MKDS_Course_Modifier.MKDS.NKM.MEPOEntry o in File.MEPO)
+					foreach (var o in NKMD.MiniGameEnemyPoint.Entries)
 					{
 						if (picking)
 						{
@@ -468,16 +475,16 @@ namespace MarioKart.UI
 						Gl.glVertex2f(o.Position.X, o.Position.Z);
 					}
 				}
-			}*/
+			}
 
 			if (!picking)
 			{
 				Gl.glColor3f(1, 0.9f, 0);
 			}
 			objidx = 1;
-			/*if (iPOIToolStripMenuItem.Checked)
+			//if (iPOIToolStripMenuItem.Checked)
 			{
-				foreach (MKDS_Course_Modifier.MKDS.NKM.IPOIEntry o in File.IPOI)
+				foreach (var o in NKMD.ItemPoint.Entries)
 				{
 					if (picking)
 					{
@@ -486,7 +493,7 @@ namespace MarioKart.UI
 					}
 					Gl.glVertex2f(o.Position.X, o.Position.Z);
 				}
-			}*/
+			}
 			if (!picking)
 			{
 				Gl.glColor3f(Color.CornflowerBlue.R / 255f, Color.CornflowerBlue.G / 255f, Color.CornflowerBlue.B / 255f);

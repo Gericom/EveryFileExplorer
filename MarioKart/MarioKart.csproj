@@ -62,8 +62,26 @@
     <Compile Include="MK7\KCL.cs" />
     <Compile Include="MK7\MK7.cs" />
     <Compile Include="MK7\ObjFlow.cs" />
+    <Compile Include="MKDS\ARM9.cs" />
     <Compile Include="MKDS\KCL.cs" />
-    <Compile Include="MKDS\NKMD.cs" />
+    <Compile Include="MKDS\NKM\CAME.cs" />
+    <Compile Include="MKDS\NKM\CPAT.cs" />
+    <Compile Include="MKDS\NKM\CPOI.cs" />
+    <Compile Include="MKDS\NKM\EPAT.cs" />
+    <Compile Include="MKDS\NKM\EPOI.cs" />
+    <Compile Include="MKDS\NKM\IPAT.cs" />
+    <Compile Include="MKDS\NKM\IPOI.cs" />
+    <Compile Include="MKDS\NKM\KTP2.cs" />
+    <Compile Include="MKDS\NKM\KTPC.cs" />
+    <Compile Include="MKDS\NKM\KTPJ.cs" />
+    <Compile Include="MKDS\NKM\KTPS.cs" />
+    <Compile Include="MKDS\NKM\MEPA.cs" />
+    <Compile Include="MKDS\NKM\MEPO.cs" />
+    <Compile Include="MKDS\NKM\NKMD.cs" />
+    <Compile Include="MKDS\NKM\OBJI.cs" />
+    <Compile Include="MKDS\NKM\PATH.cs" />
+    <Compile Include="MKDS\NKM\POIT.cs" />
+    <Compile Include="MKDS\NKM\STAG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -98,6 +116,10 @@
     <ProjectReference Include="..\LibEveryFileExplorer\LibEveryFileExplorer.csproj">
       <Project>{39DBD12F-F7E3-4E9A-97A2-0722A4BA2A26}</Project>
       <Name>LibEveryFileExplorer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NDS\NDS.csproj">
+      <Project>{8BCF0C6C-FD8F-4446-BEA1-B8C1BE5C3389}</Project>
+      <Name>NDS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +251,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\OBJ_CF00.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MKDS\NKM\KTPM.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
