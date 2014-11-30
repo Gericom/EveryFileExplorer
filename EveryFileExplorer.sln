@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarioKart", "MarioKart\Mari
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LegoPirates", "LegoPirates\LegoPirates.csproj", "{E786AAC6-2D88-40E0-BFB6-45164A6183F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCNWii", "GCNWii\GCNWii.csproj", "{E71F0C2A-4D4D-4C6D-9CA2-C6DD2F91C649}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,16 @@ Global
 		{E786AAC6-2D88-40E0-BFB6-45164A6183F9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E786AAC6-2D88-40E0-BFB6-45164A6183F9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E786AAC6-2D88-40E0-BFB6-45164A6183F9}.Release|x86.ActiveCfg = Release|Any CPU
+		{E71F0C2A-4D4D-4C6D-9CA2-C6DD2F91C649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E71F0C2A-4D4D-4C6D-9CA2-C6DD2F91C649}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E71F0C2A-4D4D-4C6D-9CA2-C6DD2F91C649}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E71F0C2A-4D4D-4C6D-9CA2-C6DD2F91C649}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E71F0C2A-4D4D-4C6D-9CA2-C6DD2F91C649}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E71F0C2A-4D4D-4C6D-9CA2-C6DD2F91C649}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E71F0C2A-4D4D-4C6D-9CA2-C6DD2F91C649}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E71F0C2A-4D4D-4C6D-9CA2-C6DD2F91C649}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E71F0C2A-4D4D-4C6D-9CA2-C6DD2F91C649}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E71F0C2A-4D4D-4C6D-9CA2-C6DD2F91C649}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
