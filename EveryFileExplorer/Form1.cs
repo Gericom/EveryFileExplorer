@@ -15,6 +15,7 @@ using System.Reflection;
 using LibEveryFileExplorer.Compression;
 using LibEveryFileExplorer.Projects;
 using System.IO;
+using EveryFileExplorer.Properties;
 
 namespace EveryFileExplorer
 {
@@ -23,21 +24,29 @@ namespace EveryFileExplorer
 		public Form1()
 		{
 			InitializeComponent();
+			Win32Util.SetWindowTheme(treeView1.Handle, "explorer", null);
 		}
 
 		private String PendingPath = null;
-
-		private ProjectBase Project = null;
-
 		public Form1(String Path)
+			: this()
 		{
-			InitializeComponent();
 			if (Path.Length < 1 || !System.IO.File.Exists(Path)) return;
 			PendingPath = Path;
 		}
 
+		private ImageList ProjectTreeIL = null;
+		private ProjectBase Project = null;
+
 		private void Form1_Load(object sender, EventArgs e)
 		{
+			ProjectTreeIL = new ImageList();
+			ProjectTreeIL.ColorDepth = ColorDepth.Depth32Bit;
+			ProjectTreeIL.ImageSize = new Size(16, 16);
+			ProjectTreeIL.Images.Add(Resources.document);
+			ProjectTreeIL.Images.Add(Resources.folder_open);
+			treeView1.ImageList = ProjectTreeIL;
+
 			for (int i = 0; i < this.Controls.Count; i++)
 			{
 				MdiClient mdiClient = this.Controls[i] as MdiClient;
@@ -340,7 +349,13 @@ namespace EveryFileExplorer
 		{
 			//Close all files
 			Program.FileManager.CloseAllFiles();
-			menuProject.Visible = splitter1.Visible = panel2.Visible = menuCloseProject.Enabled = true;
+
+			treeView1.BeginUpdate();
+			treeView1.Nodes.Clear();
+			treeView1.Nodes.AddRange(Project.GetProjectTree());
+			treeView1.EndUpdate();
+
+			menuProject.Visible = panel2.Visible = splitter1.Visible = menuCloseProject.Enabled = true;
 			menuNew.Enabled = menuFileNew.Enabled = menuOpen.Enabled = buttonOpen.Enabled = false;
 		}
 
@@ -350,7 +365,6 @@ namespace EveryFileExplorer
 			Project = null;
 			menuProject.Visible = splitter1.Visible = panel2.Visible = menuCloseProject.Enabled = false;
 			menuNew.Enabled = menuFileNew.Enabled = menuOpen.Enabled = buttonOpen.Enabled = true;
-			panel2.Controls.Clear();
 		}
 
 		protected override void WndProc(ref Message m)
@@ -388,6 +402,13 @@ namespace EveryFileExplorer
 		private void menuItem3_Click(object sender, EventArgs e)
 		{
 			Project.Build();
+		}
+
+		private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+		{
+			String Path = Project.ProjectDir + "\\" + e.Node.FullPath;
+			if ((new FileInfo(Path).Attributes & FileAttributes.Directory) != 0) return;
+			Program.FileManager.OpenFile(new EFEDiskFile(Path));
 		}
 	}
 }

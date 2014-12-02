@@ -17,6 +17,10 @@ namespace LibEveryFileExplorer.Projects
 		void Save();
 
 		void Build();
+
+		TreeNode[] GetProjectTree();
+
+		String ProjectDir { get; }
 	}
 
 	public abstract class Project<T, U> : ProjectBase
@@ -44,6 +48,8 @@ namespace LibEveryFileExplorer.Projects
 		}
 
 		public abstract void Build();
+
+		public abstract TreeNode[] GetProjectTree();
 
 		public U ProjectFile { get; protected set; }
 		public String ProjectDir { get; protected set; }

@@ -66,9 +66,15 @@
 			this.buttonSave = new System.Windows.Forms.ToolStripButton();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.panel2 = new System.Windows.Forms.Panel();
+			this.tabControl1 = new System.Windows.Forms.TabControl();
+			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.splitter1 = new System.Windows.Forms.Splitter();
 			this.panel1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
+			this.panel2.SuspendLayout();
+			this.tabControl1.SuspendLayout();
+			this.tabPage1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainMenu1
@@ -212,6 +218,7 @@
 			this.menuItem6.Index = 1;
 			this.menuItem6.Shortcut = System.Windows.Forms.Shortcut.F5;
 			this.menuItem6.Text = "Build and Run";
+			this.menuItem6.Visible = false;
 			// 
 			// menuTools
 			// 
@@ -323,6 +330,7 @@
 			// 
 			// panel2
 			// 
+			this.panel2.Controls.Add(this.tabControl1);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
 			this.panel2.Location = new System.Drawing.Point(0, 25);
 			this.panel2.Name = "panel2";
@@ -330,12 +338,46 @@
 			this.panel2.TabIndex = 5;
 			this.panel2.Visible = false;
 			// 
+			// tabControl1
+			// 
+			this.tabControl1.Controls.Add(this.tabPage1);
+			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControl1.Location = new System.Drawing.Point(0, 0);
+			this.tabControl1.Multiline = true;
+			this.tabControl1.Name = "tabControl1";
+			this.tabControl1.SelectedIndex = 0;
+			this.tabControl1.Size = new System.Drawing.Size(200, 376);
+			this.tabControl1.TabIndex = 0;
+			// 
+			// tabPage1
+			// 
+			this.tabPage1.Controls.Add(this.treeView1);
+			this.tabPage1.Location = new System.Drawing.Point(4, 22);
+			this.tabPage1.Name = "tabPage1";
+			this.tabPage1.Size = new System.Drawing.Size(192, 350);
+			this.tabPage1.TabIndex = 0;
+			this.tabPage1.Text = "Project Explorer";
+			this.tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// treeView1
+			// 
+			this.treeView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeView1.HotTracking = true;
+			this.treeView1.Location = new System.Drawing.Point(0, 0);
+			this.treeView1.Margin = new System.Windows.Forms.Padding(0);
+			this.treeView1.Name = "treeView1";
+			this.treeView1.ShowLines = false;
+			this.treeView1.Size = new System.Drawing.Size(192, 350);
+			this.treeView1.TabIndex = 0;
+			this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
+			// 
 			// splitter1
 			// 
 			this.splitter1.Location = new System.Drawing.Point(200, 25);
 			this.splitter1.Name = "splitter1";
 			this.splitter1.Size = new System.Drawing.Size(3, 376);
-			this.splitter1.TabIndex = 7;
+			this.splitter1.TabIndex = 9;
 			this.splitter1.TabStop = false;
 			this.splitter1.Visible = false;
 			// 
@@ -362,6 +404,9 @@
 			this.panel1.PerformLayout();
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
+			this.panel2.ResumeLayout(false);
+			this.tabControl1.ResumeLayout(false);
+			this.tabPage1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -397,7 +442,6 @@
 		private System.Windows.Forms.MenuItem menuCompression;
 		private System.Windows.Forms.MenuItem menuItem2;
 		private System.Windows.Forms.Panel panel2;
-		private System.Windows.Forms.Splitter splitter1;
 		private System.Windows.Forms.MenuItem menuProject;
 		private System.Windows.Forms.MenuItem menuItem3;
 		private System.Windows.Forms.MenuItem menuItem6;
@@ -406,6 +450,10 @@
 		private System.Windows.Forms.MenuItem menuCloseProject;
 		private System.Windows.Forms.MenuItem menuProjectNew;
 		private System.Windows.Forms.MenuItem menuItem11;
+		private System.Windows.Forms.TabControl tabControl1;
+		private System.Windows.Forms.TabPage tabPage1;
+		private System.Windows.Forms.TreeView treeView1;
+		private System.Windows.Forms.Splitter splitter1;
 	}
 }
 

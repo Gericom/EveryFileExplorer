@@ -89,6 +89,34 @@ namespace NDS
 			File.WriteAllBytes(ProjectDir + "\\" + ProjectFile.ProjectName + ".nds",  data);
 		}
 
+		public override TreeNode[] GetProjectTree()
+		{
+			List<TreeNode> Nodes = new List<TreeNode>();
+			var dataNode = new TreeNode("data", 1, 1);
+			Nodes.Add(dataNode);
+			PopulateTreeNodeFromDisk(new DirectoryInfo(ProjectDir + "\\data"), dataNode);
+			var overlayNode = new TreeNode("overlay", 1, 1);
+			Nodes.Add(overlayNode);
+			PopulateTreeNodeFromDisk(new DirectoryInfo(ProjectDir + "\\overlay"), overlayNode);
+			Nodes.Add(new TreeNode("arm9.bin"));
+			Nodes.Add(new TreeNode("arm7.bin"));
+			return Nodes.ToArray();
+		}
+
+		private void PopulateTreeNodeFromDisk(DirectoryInfo Dir, TreeNode Dst)
+		{
+			foreach (var v in Dir.EnumerateDirectories())
+			{
+				var t = new TreeNode(v.Name, 1, 1);
+				Dst.Nodes.Add(t);
+				PopulateTreeNodeFromDisk(v, t);
+			}
+			foreach (var v in Dir.EnumerateFiles())
+			{
+				Dst.Nodes.Add(v.Name);
+			}
+		}
+
 		public class NDSProjectIdentifier : ProjectIdentifier
 		{
 			public override string GetProjectDescription()

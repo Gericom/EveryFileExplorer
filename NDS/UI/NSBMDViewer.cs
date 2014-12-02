@@ -99,53 +99,57 @@ namespace NDS.UI
 
 		private void LoadTex()
 		{
-			TEX0 tt;
-			if (mod.TexPlttSet != null) tt = mod.TexPlttSet;
-			else if (tex != null) tt = tex.TexPlttSet;
-			else return;
-			for (int i = 0; i < mod.ModelSet.models.Length; i++)
+			try
 			{
-				for (int j = 0; j < mod.ModelSet.models[i].materials.materials.Length; j++)
+				TEX0 tt;
+				if (mod.TexPlttSet != null) tt = mod.TexPlttSet;
+				else if (tex != null) tt = tex.TexPlttSet;
+				else return;
+				for (int i = 0; i < mod.ModelSet.models.Length; i++)
 				{
-					TEX0.DictTexData t = null;
-					for (int k = 0; k < mod.ModelSet.models[i].materials.dictTexToMatList.numEntry; k++)
+					for (int j = 0; j < mod.ModelSet.models[i].materials.materials.Length; j++)
 					{
-						if (mod.ModelSet.models[i].materials.dictTexToMatList[k].Value.Materials.Contains((byte)j))
+						TEX0.DictTexData t = null;
+						for (int k = 0; k < mod.ModelSet.models[i].materials.dictTexToMatList.numEntry; k++)
 						{
-							int texid = k;
-							for (int l = 0; l < tt.dictTex.numEntry; l++)
+							if (mod.ModelSet.models[i].materials.dictTexToMatList[k].Value.Materials.Contains((byte)j))
 							{
-								if (tt.dictTex[l].Key == mod.ModelSet.models[i].materials.dictTexToMatList[k].Key) { texid = l; break; }
-							}
-							t = tt.dictTex[texid].Value;
-							break;
-						}
-					}
-					if (t == null)
-						continue;
-					mod.ModelSet.models[i].materials.materials[j].Fmt = t.Fmt;
-					mod.ModelSet.models[i].materials.materials[j].origHeight = t.T;
-					mod.ModelSet.models[i].materials.materials[j].origWidth = t.S;
-					TEX0.DictPlttData p = null;
-					if (t.Fmt != Textures.ImageFormat.DIRECT)
-					{
-						for (int k = 0; k < mod.ModelSet.models[i].materials.dictPlttToMatList.numEntry; k++)
-						{
-							if (mod.ModelSet.models[i].materials.dictPlttToMatList[k].Value.Materials.Contains((byte)j))
-							{
-								int palid = k;
-								for (int l = 0; l < tt.dictPltt.numEntry; l++)
+								int texid = k;
+								for (int l = 0; l < tt.dictTex.numEntry; l++)
 								{
-									if (tt.dictPltt[l].Key == mod.ModelSet.models[i].materials.dictPlttToMatList[k].Key) { palid = l; break; }
+									if (tt.dictTex[l].Key == mod.ModelSet.models[i].materials.dictTexToMatList[k].Key) { texid = l; break; }
 								}
-								p = tt.dictPltt[palid].Value;
+								t = tt.dictTex[texid].Value;
 								break;
 							}
 						}
+						if (t == null)
+							continue;
+						mod.ModelSet.models[i].materials.materials[j].Fmt = t.Fmt;
+						mod.ModelSet.models[i].materials.materials[j].origHeight = t.T;
+						mod.ModelSet.models[i].materials.materials[j].origWidth = t.S;
+						TEX0.DictPlttData p = null;
+						if (t.Fmt != Textures.ImageFormat.DIRECT)
+						{
+							for (int k = 0; k < mod.ModelSet.models[i].materials.dictPlttToMatList.numEntry; k++)
+							{
+								if (mod.ModelSet.models[i].materials.dictPlttToMatList[k].Value.Materials.Contains((byte)j))
+								{
+									int palid = k;
+									for (int l = 0; l < tt.dictPltt.numEntry; l++)
+									{
+										if (tt.dictPltt[l].Key == mod.ModelSet.models[i].materials.dictPlttToMatList[k].Key) { palid = l; break; }
+									}
+									p = tt.dictPltt[palid].Value;
+									break;
+								}
+							}
+						}
+						UploadTex(t.ToBitmap(p), mod.ModelSet.models[i].materials.materials[j], j + 1);//+ offset);
 					}
-					UploadTex(t.ToBitmap(p), mod.ModelSet.models[i].materials.materials[j], j + 1);//+ offset);
 				}
 			}
+			catch { }
 		}
 
 		private void UploadTex(Bitmap b, MDL0.Model.MaterialSet.Material m, int Id)
