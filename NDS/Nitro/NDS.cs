@@ -8,11 +8,14 @@ using System.Drawing;
 using System.Windows.Forms;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using NDS.UI;
+using System.Xml.Serialization;
+using System.Xml;
 
 namespace NDS.Nitro
 {
 	public class NDS : FileFormat<NDS.NDSIdentifier>, IViewable, IWriteable
 	{
+		public NDS() { }
 		public NDS(byte[] data)
 		{
 			EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(data), Endianness.LittleEndian);
@@ -200,8 +203,10 @@ namespace NDS.Nitro
 		}
 
 		public RomHeader Header;
+		[Serializable]
 		public class RomHeader
 		{
+			public RomHeader() { }
 			public RomHeader(EndianBinaryReader er)
 			{
 				GameName = er.ReadString(Encoding.ASCII, 12).Replace("\0", "");
@@ -322,28 +327,41 @@ namespace NDS.Nitro
 			public Byte GameVersion;
 			public Byte Property;
 
+			[XmlIgnore]
 			public UInt32 MainRomOffset;
 			public UInt32 MainEntryAddress;
 			public UInt32 MainRamAddress;
+			[XmlIgnore]
 			public UInt32 MainSize;
+			[XmlIgnore]
 			public UInt32 SubRomOffset;
 			public UInt32 SubEntryAddress;
 			public UInt32 SubRamAddress;
+			[XmlIgnore]
 			public UInt32 SubSize;
 
+			[XmlIgnore]
 			public UInt32 FntOffset;
+			[XmlIgnore]
 			public UInt32 FntSize;
 
+			[XmlIgnore]
 			public UInt32 FatOffset;
+			[XmlIgnore]
 			public UInt32 FatSize;
 
+			[XmlIgnore]
 			public UInt32 MainOvtOffset;
+			[XmlIgnore]
 			public UInt32 MainOvtSize;
 
+			[XmlIgnore]
 			public UInt32 SubOvtOffset;
+			[XmlIgnore]
 			public UInt32 SubOvtSize;
 
 			public byte[] RomParamA;//8
+			[XmlIgnore]
 			public UInt32 BannerOffset;
 			public UInt16 SecureCRC;
 			public byte[] RomParamB;//2
@@ -352,18 +370,24 @@ namespace NDS.Nitro
 			public UInt32 SubAutoloadDone;
 
 			public byte[] RomParamC;//8
+			[XmlIgnore]
 			public UInt32 RomSize;
+			[XmlIgnore]
 			public UInt32 HeaderSize;
 			public byte[] ReservedB;//0x38
 
 			public byte[] LogoData;//0x9C
+			[XmlIgnore]
 			public UInt16 LogoCRC;
+			[XmlIgnore]
 			public UInt16 HeaderCRC;
 		}
 		public Byte[] MainRom;
 		public NitroFooter StaticFooter;
+		[Serializable]
 		public class NitroFooter
 		{
+			public NitroFooter() { }
 			public NitroFooter(EndianBinaryReader er)
 			{
 				NitroCode = er.ReadUInt32();
@@ -386,6 +410,11 @@ namespace NDS.Nitro
 		public RomFNT Fnt;
 		public class RomFNT
 		{
+			public RomFNT() 
+			{
+				DirectoryTable = new List<DirectoryTableEntry>();
+				EntryNameTable = new List<EntryNameTableEntry>();
+			}
 			public RomFNT(EndianBinaryReader er)
 			{
 				DirectoryTable = new List<DirectoryTableEntry>();
@@ -419,6 +448,7 @@ namespace NDS.Nitro
 		}
 		public RomOVT[] MainOvt;
 		public RomOVT[] SubOvt;
+		[Serializable]
 		public class RomOVT
 		{
 			[Flags]
@@ -427,6 +457,7 @@ namespace NDS.Nitro
 				Compressed = 1,
 				AuthenticationCode = 2
 			}
+			public RomOVT() { }
 			public RomOVT(EndianBinaryReader er)
 			{
 				Id = er.ReadUInt32();
@@ -451,21 +482,26 @@ namespace NDS.Nitro
 				er.Write(FileId);
 				er.Write((uint)((((uint)Flag) & 0xFF) << 24 | (Compressed & 0xFFFFFF)));
 			}
+			[XmlAttribute]
 			public UInt32 Id;
 			public UInt32 RamAddress;
 			public UInt32 RamSize;
 			public UInt32 BssSize;
 			public UInt32 SinitInit;
 			public UInt32 SinitInitEnd;
+			[XmlIgnore]
 			public UInt32 FileId;
 
 			public UInt32 Compressed;//:24;
+			[XmlAttribute]
 			public OVTFlag Flag;// :8;
 		}
 		public FileAllocationEntry[] Fat;
 		public RomBanner Banner;
+		[Serializable]
 		public class RomBanner
 		{
+			public RomBanner() { }
 			public RomBanner(EndianBinaryReader er)
 			{
 				Header = new BannerHeader(er);
@@ -478,8 +514,10 @@ namespace NDS.Nitro
 				Banner.Write(er);
 			}
 			public BannerHeader Header;
+			[Serializable]
 			public class BannerHeader
 			{
+				public BannerHeader() { }
 				public BannerHeader(EndianBinaryReader er)
 				{
 					Version = er.ReadByte();
@@ -496,12 +534,15 @@ namespace NDS.Nitro
 				}
 				public Byte Version;
 				public Byte ReservedA;
+				[XmlIgnore]
 				public UInt16 CRC16_v1;
 				public Byte[] ReservedB;//28
 			}
 			public BannerV1 Banner;
+			[Serializable]
 			public class BannerV1
 			{
+				public BannerV1() { }
 				public BannerV1(EndianBinaryReader er)
 				{
 					Image = er.ReadBytes(32 * 32 / 2);
@@ -522,7 +563,31 @@ namespace NDS.Nitro
 				}
 				public Byte[] Image;//32*32/2
 				public Byte[] Pltt;//16*2
+
+				[XmlIgnore]
 				public String[] GameName;//6, 128 chars (UTF16-LE)
+
+				[XmlElement("GameName")]
+				public String[] Base64GameName
+				{
+					get
+					{
+						String[] b = new String[6];
+						for (int i = 0; i < 6; i++)
+						{
+							b[i] = Convert.ToBase64String(Encoding.Unicode.GetBytes(GameName[i]));
+						}
+						return b;
+					}
+					set
+					{
+						GameName = new string[6];
+						for (int i = 0; i < 6; i++)
+						{
+							GameName[i] = Encoding.Unicode.GetString(Convert.FromBase64String(value[i]));
+						}
+					}
+				}
 
 				public ushort GetCRC()
 				{

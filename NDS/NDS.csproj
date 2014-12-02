@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NDSProject.cs" />
     <Compile Include="Nitro\ARM9.cs" />
     <Compile Include="Nitro\ASMHack.cs" />
     <Compile Include="GPU\CommandContext.cs" />
@@ -76,6 +77,12 @@
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
     <Compile Include="SND\ADPCM.cs" />
+    <Compile Include="UI\NDSProjectDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\NDSProjectDialog.Designer.cs">
+      <DependentUpon>NDSProjectDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\UtilityBinViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,6 +143,9 @@
     <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\NDSProjectDialog.resx">
+      <DependentUpon>NDSProjectDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\UtilityBinViewer.resx">
       <DependentUpon>UtilityBinViewer.cs</DependentUpon>

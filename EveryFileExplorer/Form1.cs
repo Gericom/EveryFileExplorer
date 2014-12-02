@@ -13,6 +13,8 @@ using LibEveryFileExplorer;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using LibEveryFileExplorer.Compression;
+using LibEveryFileExplorer.Projects;
+using System.IO;
 
 namespace EveryFileExplorer
 {
@@ -24,6 +26,8 @@ namespace EveryFileExplorer
 		}
 
 		private String PendingPath = null;
+
+		private ProjectBase Project = null;
 
 		public Form1(String Path)
 		{
@@ -80,6 +84,20 @@ namespace EveryFileExplorer
 					}
 				}
 			}
+			menuProjectNew.MenuItems.Clear();
+			foreach (Plugin p in Program.PluginManager.Plugins)
+			{
+				if (p.ProjectTypes.Length > 0)
+				{
+					MenuItem m = menuProjectNew.MenuItems.Add(p.Name);
+					foreach (Type t in p.ProjectTypes)
+					{
+						MenuItem ii = m.MenuItems.Add(((dynamic)new StaticDynamic(t)).Identifier.GetProjectDescription());
+						ii.Click += new EventHandler(CreateNewProject_Click);
+						ii.Tag = t;
+					}
+				}
+			}
 			menuCompression.MenuItems.Clear();
 			foreach (Plugin p in Program.PluginManager.Plugins)
 			{
@@ -100,7 +118,15 @@ namespace EveryFileExplorer
 			PendingPath = null;
 		}
 
-		
+		void CreateNewProject_Click(object sender, EventArgs e)
+		{
+			ProjectBase p = (ProjectBase)((Type)((MenuItem)sender).Tag).InvokeMember("", BindingFlags.CreateInstance, null, null, new object[0]);
+			if (p.CreateNew())
+			{
+				Project = p;
+				EnableProjectMode();
+			}
+		}
 
 		public void BringMDIWindowToFront(Form Dialog)
 		{
@@ -312,13 +338,17 @@ namespace EveryFileExplorer
 
 		private void EnableProjectMode()
 		{
-			menuProject.Visible = splitter1.Visible = panel2.Visible = true;
+			//Close all files
+			Program.FileManager.CloseAllFiles();
+			menuProject.Visible = splitter1.Visible = panel2.Visible = menuCloseProject.Enabled = true;
 			menuNew.Enabled = menuFileNew.Enabled = menuOpen.Enabled = buttonOpen.Enabled = false;
 		}
 
 		private void DisableProjectMode()
 		{
-			menuProject.Visible = splitter1.Visible = panel2.Visible = false;
+			Program.FileManager.CloseAllFiles();
+			Project = null;
+			menuProject.Visible = splitter1.Visible = panel2.Visible = menuCloseProject.Enabled = false;
 			menuNew.Enabled = menuFileNew.Enabled = menuOpen.Enabled = buttonOpen.Enabled = true;
 			panel2.Controls.Clear();
 		}
@@ -336,6 +366,28 @@ namespace EveryFileExplorer
 				return;
 			}
 			base.WndProc(ref m);
+		}
+
+		private void menuItem1_Click(object sender, EventArgs e)
+		{
+			openFileDialog1.Filter = "Every File Explorer Project (*.efeproj)|*.efeproj";
+			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
+				&& openFileDialog1.FileName.Length > 0)
+			{
+				Type t = ProjectFile.GetProjectType(File.ReadAllBytes(openFileDialog1.FileName));
+				Project = (ProjectBase)t.InvokeMember("", BindingFlags.CreateInstance, null, null, new object[] { openFileDialog1.FileName });
+				EnableProjectMode();
+			}
+		}
+
+		private void menuCloseProject_Click(object sender, EventArgs e)
+		{
+			DisableProjectMode();
+		}
+
+		private void menuItem3_Click(object sender, EventArgs e)
+		{
+			Project.Build();
 		}
 	}
 }

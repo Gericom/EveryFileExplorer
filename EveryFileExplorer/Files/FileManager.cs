@@ -142,6 +142,21 @@ namespace EveryFileExplorer.Files
 			Closing = true;
 		}
 
+		public void EnableDependenceMessage()
+		{
+			Closing = false;
+		}
+
+		public void CloseAllFiles()
+		{
+			DisableDependenceMessage();
+			while (ViewedFiles.Count > 0)
+			{
+				ViewedFiles[0].Dialog.Close();
+			}
+			EnableDependenceMessage();
+		}
+
 		public bool CloseFile(ViewableFile File)
 		{
 			if (File.File.Children.Count != 0)

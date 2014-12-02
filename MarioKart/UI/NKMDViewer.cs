@@ -15,6 +15,7 @@ using LibEveryFileExplorer.UI;
 using LibEveryFileExplorer.GameData;
 using MarioKart.MKDS;
 using MarioKart.MKDS.NKM;
+using LibEveryFileExplorer.Collections;
 
 namespace MarioKart.UI
 {
@@ -90,6 +91,7 @@ namespace MarioKart.UI
 			if (NKMD.EnemyPath != null) AddTab<EPAT.EPATEntry>("EPAT", NKMD.EnemyPath);
 			if (NKMD.MiniGameEnemyPoint != null) AddTab<MEPO.MEPOEntry>("MEPO", NKMD.MiniGameEnemyPoint);
 			if (NKMD.MiniGameEnemyPath != null) AddTab<MEPA.MEPAEntry>("MEPA", NKMD.MiniGameEnemyPath);
+			if (NKMD.Area != null) AddTab<AREA.AREAEntry>("AREA", NKMD.Area);
 			if (NKMD.Camera != null) AddTab<CAME.CAMEEntry>("CAME", NKMD.Camera);
 
 			Bitmap b3 = OBJI.OBJ_2D01;
@@ -225,12 +227,42 @@ namespace MarioKart.UI
 				Gl.glDepthFunc(Gl.GL_ALWAYS);
 			}
 			Gl.glPointSize((picking ? 6f : 5));
+
+			int objidx = 1;
+			if (!picking)
+			{
+				Gl.glColor4f(Color.CornflowerBlue.R / 255f, Color.CornflowerBlue.G / 255f, Color.CornflowerBlue.B / 255f, 0.5f);
+			}
+			Gl.glBegin(Gl.GL_QUADS);
+			//if (aREAToolStripMenuItem.Checked)
+			{
+				foreach (var o in NKMD.Area.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (17 << 18)).R / 255f, Color.FromArgb(objidx | (17 << 18)).G / 255f, Color.FromArgb(objidx | (17 << 18)).B / 255f, 1);
+						objidx++;
+					}
+					Vector3[] cube = o.GetCube();
+					//We're interested in points 0, 1, 5 and 3 (ground plane)
+					Vector3 Point1 = cube[3];
+					Vector3 Point2 = cube[5];
+					Vector3 Point3 = cube[1];
+					Vector3 Point4 = cube[0];
+					Gl.glVertex2f(Point1.X, Point1.Z);
+					Gl.glVertex2f(Point2.X, Point2.Z);
+					Gl.glVertex2f(Point3.X, Point3.Z);
+					Gl.glVertex2f(Point4.X, Point4.Z);
+				}
+			}
+			Gl.glEnd();
+
 			Gl.glBegin(Gl.GL_POINTS);
 			if (!picking)
 			{
 				Gl.glColor3f(0, 0, 0.5f);
 			}
-			int objidx = 1;
+			objidx = 1;
 			//if (pOITToolStripMenuItem.Checked)
 			{
 				foreach (var o in NKMD.Point.Entries)
@@ -499,9 +531,9 @@ namespace MarioKart.UI
 				Gl.glColor3f(Color.CornflowerBlue.R / 255f, Color.CornflowerBlue.G / 255f, Color.CornflowerBlue.B / 255f);
 			}
 			objidx = 1;
-			/*if (aREAToolStripMenuItem.Checked)
+			//if (aREAToolStripMenuItem.Checked)
 			{
-				foreach (MKDS_Course_Modifier.MKDS.NKM.AREAEntry o in File.AREA)
+				foreach (var o in NKMD.Area.Entries)
 				{
 					if (picking)
 					{
@@ -510,7 +542,7 @@ namespace MarioKart.UI
 					}
 					Gl.glVertex2f(o.Position.X, o.Position.Z);
 				}
-			}*/
+			}
 			if (!picking)
 			{
 				Gl.glColor3f(Color.BurlyWood.R / 255f, Color.BurlyWood.G / 255f, Color.BurlyWood.B / 255f);

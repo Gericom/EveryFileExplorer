@@ -34,13 +34,13 @@
 			this.menuFile = new System.Windows.Forms.MenuItem();
 			this.menuNew = new System.Windows.Forms.MenuItem();
 			this.menuFileNew = new System.Windows.Forms.MenuItem();
-			this.menuItem10 = new System.Windows.Forms.MenuItem();
+			this.menuProjectNew = new System.Windows.Forms.MenuItem();
 			this.menuItem11 = new System.Windows.Forms.MenuItem();
 			this.menuOpen = new System.Windows.Forms.MenuItem();
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
+			this.menuOpenProject = new System.Windows.Forms.MenuItem();
 			this.menuItem8 = new System.Windows.Forms.MenuItem();
 			this.menuClose = new System.Windows.Forms.MenuItem();
-			this.menuItem9 = new System.Windows.Forms.MenuItem();
+			this.menuCloseProject = new System.Windows.Forms.MenuItem();
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
 			this.menuSave = new System.Windows.Forms.MenuItem();
 			this.menuSaveAs = new System.Windows.Forms.MenuItem();
@@ -87,13 +87,13 @@
 			this.menuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuNew,
             this.menuFileNew,
-            this.menuItem10,
+            this.menuProjectNew,
             this.menuItem11,
             this.menuOpen,
-            this.menuItem1,
+            this.menuOpenProject,
             this.menuItem8,
             this.menuClose,
-            this.menuItem9,
+            this.menuCloseProject,
             this.menuItem5,
             this.menuSave,
             this.menuSaveAs,
@@ -111,10 +111,10 @@
 			this.menuFileNew.Index = 1;
 			this.menuFileNew.Text = "New from File";
 			// 
-			// menuItem10
+			// menuProjectNew
 			// 
-			this.menuItem10.Index = 2;
-			this.menuItem10.Text = "New Project";
+			this.menuProjectNew.Index = 2;
+			this.menuProjectNew.Text = "New Project";
 			// 
 			// menuItem11
 			// 
@@ -127,10 +127,11 @@
 			this.menuOpen.Text = "Open...";
 			this.menuOpen.Click += new System.EventHandler(this.OpenFile);
 			// 
-			// menuItem1
+			// menuOpenProject
 			// 
-			this.menuItem1.Index = 5;
-			this.menuItem1.Text = "Open Project...";
+			this.menuOpenProject.Index = 5;
+			this.menuOpenProject.Text = "Open Project...";
+			this.menuOpenProject.Click += new System.EventHandler(this.menuItem1_Click);
 			// 
 			// menuItem8
 			// 
@@ -144,11 +145,12 @@
 			this.menuClose.Text = "Close";
 			this.menuClose.Click += new System.EventHandler(this.menuClose_Click);
 			// 
-			// menuItem9
+			// menuCloseProject
 			// 
-			this.menuItem9.Enabled = false;
-			this.menuItem9.Index = 8;
-			this.menuItem9.Text = "Close Project";
+			this.menuCloseProject.Enabled = false;
+			this.menuCloseProject.Index = 8;
+			this.menuCloseProject.Text = "Close Project";
+			this.menuCloseProject.Click += new System.EventHandler(this.menuCloseProject_Click);
 			// 
 			// menuItem5
 			// 
@@ -203,6 +205,7 @@
 			this.menuItem3.Index = 0;
 			this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.F6;
 			this.menuItem3.Text = "Build";
+			this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
 			// 
 			// menuItem6
 			// 
@@ -398,10 +401,10 @@
 		private System.Windows.Forms.MenuItem menuProject;
 		private System.Windows.Forms.MenuItem menuItem3;
 		private System.Windows.Forms.MenuItem menuItem6;
-		private System.Windows.Forms.MenuItem menuItem1;
+		private System.Windows.Forms.MenuItem menuOpenProject;
 		private System.Windows.Forms.MenuItem menuItem8;
-		private System.Windows.Forms.MenuItem menuItem9;
-		private System.Windows.Forms.MenuItem menuItem10;
+		private System.Windows.Forms.MenuItem menuCloseProject;
+		private System.Windows.Forms.MenuItem menuProjectNew;
 		private System.Windows.Forms.MenuItem menuItem11;
 	}
 }

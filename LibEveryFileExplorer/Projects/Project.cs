@@ -3,44 +3,98 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Serialization;
+using LibEveryFileExplorer.Files;
+using System.Xml.Schema;
+using System.Xml;
+using System.IO;
 
 namespace LibEveryFileExplorer.Projects
 {
 	public interface ProjectBase
 	{
-		String ProjectDirectory { get; }
-		bool CanRun { get; }
-
-		TabPage[] GetProjectTabPages();
+		bool CreateNew();
+		void Save();
 
 		void Build();
-		void Run();
-		void SaveProjectFile();
 	}
 
-	public abstract class Project<T> : ProjectBase where T : ProjectIdentifier, new()
+	public abstract class Project<T, U> : ProjectBase
+		where T : ProjectIdentifier, new()
+		where U : ProjectFile, new()
 	{
 		private static T _identifier = new T();
 		public static T Identifier { get { return _identifier; } }
 
-		public Project(String ProjectDir)
+		public Project() { }
+
+		public Project(String ProjectFile)
 		{
-			ProjectDirectory = ProjectDir;
+			ProjectDir = Path.GetDirectoryName(ProjectFile);
+			this.ProjectFile = Projects.ProjectFile.FromByteArray<U>(File.ReadAllBytes(ProjectFile));
 		}
 
-		public String ProjectDirectory { get; private set; }
-		public abstract bool CanRun { get; }
-
-		public abstract TabPage[] GetProjectTabPages();
+		public abstract bool CreateNew();
+		public void Save()
+		{
+			ProjectFile.ProjectClass = this.GetType().AssemblyQualifiedName;
+			byte[] data = ProjectFile.Write();
+			File.Create(ProjectDir + "\\" + ProjectFile.ProjectName + ".efeproj").Close();
+			File.WriteAllBytes(ProjectDir + "\\" + ProjectFile.ProjectName + ".efeproj", data);
+		}
 
 		public abstract void Build();
-		public abstract void Run();
-		public abstract void SaveProjectFile();
+
+		public U ProjectFile { get; protected set; }
+		public String ProjectDir { get; protected set; }
 	}
 
 	public abstract class ProjectIdentifier
 	{
 		public abstract String GetProjectDescription();
-		public abstract bool IsProject(byte[] Data);
+	}
+
+	[Serializable]
+	[XmlRoot("EFEProject")]
+	public abstract class ProjectFile
+	{
+		public ProjectFile() { }
+		public ProjectFile(String ProjectName) { this.ProjectName = ProjectName; }
+
+		[XmlAttribute("Name")]
+		public String ProjectName { get; set; }
+
+		[XmlAttribute("Class")]
+		public String ProjectClass { get; set; }
+
+		public static T FromByteArray<T>(byte[] Data)
+		{
+			XmlSerializer s = new XmlSerializer(typeof(T));
+			return (T)s.Deserialize(new MemoryStream(Data));
+		}
+
+		public static Type GetProjectType(byte[] Data)
+		{
+			XmlReader r = XmlReader.Create(new MemoryStream(Data));
+			r.Read();
+			r.Read();
+			r.Read();
+			r.MoveToAttribute("Class");
+			String s = r.ReadContentAsString();
+			r.Close();
+			return Type.GetType(s);
+		}
+
+		public byte[] Write()
+		{
+			XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+			ns.Add("", "");
+			XmlSerializer s = XmlSerializer.FromTypes(new[] { this.GetType() })[0];
+			MemoryStream m = new MemoryStream();
+			s.Serialize(m, this, ns);
+			byte[] data = m.ToArray();
+			m.Close();
+			return data;
+		}
 	}
 }

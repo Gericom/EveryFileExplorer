@@ -50,6 +50,7 @@ namespace MarioKart.MKDS.NKM
 						case "EPAT": EnemyPath = new EPAT(er); break;
 						case "MEPO": MiniGameEnemyPoint = new MEPO(er); break;
 						case "MEPA": MiniGameEnemyPath = new MEPA(er); break;
+						case "AREA": Area = new AREA(er); break;
 						case "CAME": Camera = new CAME(er); break;
 						default:
 							//throw new Exception("Unknown Section: " + sig);
@@ -110,7 +111,7 @@ namespace MarioKart.MKDS.NKM
 		public EPAT EnemyPath;
 		public MEPO MiniGameEnemyPoint;
 		public MEPA MiniGameEnemyPath;
-
+		public AREA Area;
 		public CAME Camera;
 
 		public class NKMDIdentifier : FileFormatIdentifier

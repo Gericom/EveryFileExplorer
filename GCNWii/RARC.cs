@@ -49,7 +49,6 @@ namespace GCNWii
 			}
 		}
 
-
 		public Form GetDialog()
 		{
 			return new RARCViewer(this);

@@ -37,7 +37,8 @@ namespace LibEveryFileExplorer.Files
 		public abstract String GetCategory();
 		public abstract String GetFileDescription();
 		public abstract String GetFileFilter();
-		public abstract Bitmap GetIcon();
+		public virtual Bitmap GetIcon() { return null; }
+		public virtual Bitmap GetTreeIcon() { return null; }
 		public abstract FormatMatch IsFormat(EFEFile File);
 	}
 

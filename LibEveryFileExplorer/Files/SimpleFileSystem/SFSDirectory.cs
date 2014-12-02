@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace LibEveryFileExplorer.Files.SimpleFileSystem
 {
@@ -22,6 +23,28 @@ namespace LibEveryFileExplorer.Files.SimpleFileSystem
 			SubDirectories = new List<SFSDirectory>();
 			Files = new List<SFSFile>();
 		}
+
+		public static SFSDirectory FromDirectory(String Path)
+		{
+			SFSDirectory Root = new SFSDirectory("/", true);
+			FillSFSDirFromDisk(new DirectoryInfo(Path), Root);
+			return Root;
+		}
+
+		private static void FillSFSDirFromDisk(DirectoryInfo Dir, SFSDirectory Dst)
+		{
+			foreach (var v in Dir.EnumerateFiles())
+			{
+				Dst.Files.Add(new SFSFile(-1, v.Name, Dst) { Data = File.ReadAllBytes(v.FullName) });
+			}
+			foreach (var v in Dir.EnumerateDirectories())
+			{
+				SFSDirectory d = new SFSDirectory(v.Name, false) { Parent = Dst };
+				Dst.SubDirectories.Add(d);
+				FillSFSDirFromDisk(v, d);
+			}
+		}
+
 		public String DirectoryName;
 		public UInt16 DirectoryID;
 

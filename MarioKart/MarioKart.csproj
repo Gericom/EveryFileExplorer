@@ -64,6 +64,7 @@
     <Compile Include="MK7\ObjFlow.cs" />
     <Compile Include="MKDS\ARM9.cs" />
     <Compile Include="MKDS\KCL.cs" />
+    <Compile Include="MKDS\NKM\AREA.cs" />
     <Compile Include="MKDS\NKM\CAME.cs" />
     <Compile Include="MKDS\NKM\CPAT.cs" />
     <Compile Include="MKDS\NKM\CPOI.cs" />
