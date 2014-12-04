@@ -39,6 +39,27 @@ namespace MarioKart.MKDS.NKM
 			UnknownData2 = er.ReadBytes(0x4);
 		}
 
+		public void Write(EndianBinaryWriter er)
+		{
+			er.Write(Signature, Encoding.ASCII, false);
+			er.Write(Unknown1);
+			er.Write(NrLaps);
+			er.Write(Unknown2);
+			er.Write((Byte)(FogEnabled ? 1 : 0));
+			er.Write(FogTableGenMode);
+			er.Write(FogSlope);
+			er.Write(UnknownData1, 0, 8);
+			er.WriteFx32(FogDensity);
+			er.Write((UInt16)(GFXUtil.ArgbToXBGR1555((uint)FogColor.ToArgb()) | 0x8000));
+			er.Write(FogAlpha);
+			er.Write(GFXUtil.ArgbToXBGR1555((uint)KclColor1.ToArgb()));
+			er.Write(GFXUtil.ArgbToXBGR1555((uint)KclColor2.ToArgb()));
+			er.Write(GFXUtil.ArgbToXBGR1555((uint)KclColor3.ToArgb()));
+			er.Write(GFXUtil.ArgbToXBGR1555((uint)KclColor4.ToArgb()));
+			er.WriteFx32(FrustumFar);
+			er.Write(UnknownData2, 0, 4);
+		}
+
 		public String Signature;
 		public UInt16 Unknown1;
 		public Int16 NrLaps;

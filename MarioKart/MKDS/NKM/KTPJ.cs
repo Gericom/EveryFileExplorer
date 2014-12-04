@@ -25,6 +25,14 @@ namespace MarioKart.MKDS.NKM
 			for (int i = 0; i < NrEntries; i++) Entries.Add(new KTPJEntry(er, Version));
 		}
 
+		public void Write(EndianBinaryWriter er)
+		{
+			er.Write(Signature, Encoding.ASCII, false);
+			NrEntries = (uint)Entries.Count;
+			er.Write(NrEntries);
+			for (int i = 0; i < NrEntries; i++) Entries[i].Write(er);
+		}
+
 		public override String[] GetColumnNames()
 		{
 			return new String[] {
@@ -55,12 +63,28 @@ namespace MarioKart.MKDS.NKM
 				Rotation = er.ReadVecFx32();
 				if (Version <= 34)
 				{
+					//It is a vector in this version
 					float yangle = (float)Math.Atan2(Rotation.X, Rotation.Z);
 					Rotation = new Vector3(0, MathUtil.RadToDeg(yangle), 0);
 				}
 				EnemyPointID = er.ReadInt16();
 				ItemPointID = er.ReadInt16();
 				if (Version >= 34) Index = er.ReadInt32();
+			}
+
+			public override void Write(EndianBinaryWriter er)
+			{
+				er.WriteVecFx32(Position);
+				if (Version <= 34)
+				{
+					er.WriteFx32((float)Math.Cos(MathUtil.DegToRad(Rotation.Y)));
+					er.WriteFx32(0);
+					er.WriteFx32((float)Math.Sin(MathUtil.DegToRad(Rotation.Y)));
+				}
+				else er.WriteVecFx32(Rotation);
+				er.Write(EnemyPointID);
+				er.Write(ItemPointID);
+				if (Version >= 34) er.Write(Index);
 			}
 
 			public override ListViewItem GetListViewItem()

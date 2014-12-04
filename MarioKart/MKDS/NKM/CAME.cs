@@ -25,6 +25,14 @@ namespace MarioKart.MKDS.NKM
 			for (int i = 0; i < NrEntries; i++) Entries.Add(new CAMEEntry(er));
 		}
 
+		public void Write(EndianBinaryWriter er)
+		{
+			er.Write(Signature, Encoding.ASCII, false);
+			NrEntries = (uint)Entries.Count;
+			er.Write(NrEntries);
+			for (int i = 0; i < NrEntries; i++) Entries[i].Write(er);
+		}
+
 		public override String[] GetColumnNames()
 		{
 			return new String[] {
@@ -88,6 +96,30 @@ namespace MarioKart.MKDS.NKM
 				NextCamera = er.ReadInt16();
 				FirstIntroCamera = (CAMEIntroCamera)er.ReadByte();
 				Unknown5 = er.ReadByte();
+			}
+
+			public override void Write(EndianBinaryWriter er)
+			{
+				er.WriteVecFx32(Position);
+				er.WriteVecFx32(Angle);
+				er.WriteVecFx32(Viewpoint1);
+				er.WriteVecFx32(Viewpoint2);
+				UpdateSinCos();
+				er.Write(FieldOfViewBegin);
+				er.WriteFx16(FieldOfViewBeginSine);
+				er.WriteFx16(FieldOfViewBeginCosine);
+				er.Write(FieldOfViewEnd);
+				er.WriteFx16(FieldOfViewEndSine);
+				er.WriteFx16(FieldOfViewEndCosine);
+				er.Write(FovSpeed);
+				er.Write(CameraType);
+				er.Write(LinkedRoute);
+				er.Write(RouteSpeed);
+				er.Write(PointSpeed);
+				er.Write(Duration);
+				er.Write(NextCamera);
+				er.Write((byte)FirstIntroCamera);
+				er.Write(Unknown5);
 			}
 
 			public override ListViewItem GetListViewItem()

@@ -83,6 +83,12 @@
     <Compile Include="UI\NDSProjectDialog.Designer.cs">
       <DependentUpon>NDSProjectDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Projects\BannerTabPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Projects\BannerTabPage.Designer.cs">
+      <DependentUpon>BannerTabPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\UtilityBinViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,6 +152,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\NDSProjectDialog.resx">
       <DependentUpon>NDSProjectDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Projects\BannerTabPage.resx">
+      <DependentUpon>BannerTabPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\UtilityBinViewer.resx">
       <DependentUpon>UtilityBinViewer.cs</DependentUpon>

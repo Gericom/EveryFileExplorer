@@ -1,0 +1,73 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using LibEveryFileExplorer.Collections;
+using System.Windows.Forms;
+using System.IO;
+using LibEveryFileExplorer.GameData;
+using LibEveryFileExplorer.Files;
+using LibEveryFileExplorer;
+using LibEveryFileExplorer.Math;
+
+namespace MarioKart.MK7.KMP
+{
+	public class JGPT : GameDataSection<JGPT.JGPTEntry>
+	{
+		public JGPT() { Signature = "TPGJ"; }
+		public JGPT(EndianBinaryReader er)
+		{
+			Signature = er.ReadString(Encoding.ASCII, 4);
+			if (Signature != "TPGJ") throw new SignatureNotCorrectException(Signature, "TPGJ", er.BaseStream.Position - 4);
+			NrEntries = er.ReadUInt32();
+			for (int i = 0; i < NrEntries; i++) Entries.Add(new JGPTEntry(er));
+		}
+
+		public override String[] GetColumnNames()
+		{
+			return new String[] {
+					"ID",
+					"X", "Y", "Z",
+					"X Angle", "Y Angle", "Z Angle",
+					"Index",
+					"?"
+				};
+		}
+		public class JGPTEntry : GameDataSectionEntry
+		{
+			public JGPTEntry()
+			{
+				Index = 0;
+				Unknown = 0xFFFF;
+			}
+			public JGPTEntry(EndianBinaryReader er)
+			{
+				Position = er.ReadVector3();
+				Rotation = er.ReadVector3();
+				Rotation = new Vector3(MathUtil.RadToDeg(Rotation.X), MathUtil.RadToDeg(Rotation.Y), MathUtil.RadToDeg(Rotation.Z));
+				Index = er.ReadUInt16();
+				Unknown = er.ReadUInt16();
+			}
+
+			public override ListViewItem GetListViewItem()
+			{
+				ListViewItem m = new ListViewItem("");
+				m.SubItems.Add(Position.X.ToString());
+				m.SubItems.Add(Position.Y.ToString());
+				m.SubItems.Add(Position.Z.ToString());
+
+				m.SubItems.Add(Rotation.X.ToString());
+				m.SubItems.Add(Rotation.Y.ToString());
+				m.SubItems.Add(Rotation.Z.ToString());
+
+				m.SubItems.Add(Index.ToString());
+				m.SubItems.Add(HexUtil.GetHexReverse(Unknown));
+				return m;
+			}
+			public Vector3 Position { get; set; }
+			public Vector3 Rotation { get; set; }
+			public UInt16 Index { get; set; }
+			public UInt16 Unknown { get; set; }
+		}
+	}
+}

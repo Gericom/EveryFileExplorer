@@ -342,6 +342,15 @@ namespace _3DS.NintendoWare.GFX
 				{
 					Polygon p = vv.GetVertexData(m);
 					var mat = m.Materials[m.Meshes[ff].MaterialIndex];
+
+					int TexCoord = -1;
+					if (mat.NrActiveTextureCoordiators > 0 && mat.TextureCoordiators[0].MappingMethod == 0)// && mat.TextureCoordiators[0].SourceCoordinate == 0)
+					{
+						if (mat.TextureCoordiators[0].SourceCoordinate == 0) TexCoord = 0;
+						else if (mat.TextureCoordiators[0].SourceCoordinate == 1) TexCoord = 1;
+						else TexCoord = 2;
+					}
+
 					foreach (var q in vv.PrimitiveSets[0].Primitives[0].IndexStreams)
 					{
 						Vector3[] defs = q.GetFaceData();
@@ -366,39 +375,24 @@ namespace _3DS.NintendoWare.GFX
 								f.NormalIndieces.Add(vn + 2);
 								vn += 3;
 							}
-							if (mat.NrActiveTextureCoordiators > 0 && mat.TextureCoordiators[0].MappingMethod == 0)// && mat.TextureCoordiators[0].SourceCoordinate == 0)
+							if (TexCoord == 0)
 							{
-								if (mat.TextureCoordiators[0].SourceCoordinate == 0)
-								{
-									o.TexCoords.Add(p.TexCoords[(int)d.X] * new Matrix34(mat.TextureCoordiators[0].Matrix));
-									o.TexCoords.Add(p.TexCoords[(int)d.Y] * new Matrix34(mat.TextureCoordiators[0].Matrix));
-									o.TexCoords.Add(p.TexCoords[(int)d.Z] * new Matrix34(mat.TextureCoordiators[0].Matrix));
-								}
-								else if (mat.TextureCoordiators[0].SourceCoordinate == 1)
-								{
-									o.TexCoords.Add(p.TexCoords2[(int)d.X] * new Matrix34(mat.TextureCoordiators[0].Matrix));
-									o.TexCoords.Add(p.TexCoords2[(int)d.Y] * new Matrix34(mat.TextureCoordiators[0].Matrix));
-									o.TexCoords.Add(p.TexCoords2[(int)d.Z] * new Matrix34(mat.TextureCoordiators[0].Matrix));
-								}
-								else
-								{
-									o.TexCoords.Add(p.TexCoords3[(int)d.X] * new Matrix34(mat.TextureCoordiators[0].Matrix));
-									o.TexCoords.Add(p.TexCoords3[(int)d.Y] * new Matrix34(mat.TextureCoordiators[0].Matrix));
-									o.TexCoords.Add(p.TexCoords3[(int)d.Z] * new Matrix34(mat.TextureCoordiators[0].Matrix));
-								}
+								o.TexCoords.Add(p.TexCoords[(int)d.X] * new Matrix34(mat.TextureCoordiators[0].Matrix));
+								o.TexCoords.Add(p.TexCoords[(int)d.Y] * new Matrix34(mat.TextureCoordiators[0].Matrix));
+								o.TexCoords.Add(p.TexCoords[(int)d.Z] * new Matrix34(mat.TextureCoordiators[0].Matrix));
 							}
-							/*else if (mat.NrActiveTextureCoordiators > 1 && mat.TextureCoordiators[1].MappingMethod == 0 && mat.TextureCoordiators[1].SourceCoordinate == 0)
+							else if (TexCoord == 1)
 							{
-								o.TexCoords.Add(Vector2.Multiply(p.TexCoords[(int)d.X], mat.TextureCoordiators[1].Scale));
-								o.TexCoords.Add(Vector2.Multiply(p.TexCoords[(int)d.Y], mat.TextureCoordiators[1].Scale));
-								o.TexCoords.Add(Vector2.Multiply(p.TexCoords[(int)d.Z], mat.TextureCoordiators[1].Scale));
+								o.TexCoords.Add(p.TexCoords2[(int)d.X] * new Matrix34(mat.TextureCoordiators[0].Matrix));
+								o.TexCoords.Add(p.TexCoords2[(int)d.Y] * new Matrix34(mat.TextureCoordiators[0].Matrix));
+								o.TexCoords.Add(p.TexCoords2[(int)d.Z] * new Matrix34(mat.TextureCoordiators[0].Matrix));
 							}
-							else if (mat.NrActiveTextureCoordiators > 2 && mat.TextureCoordiators[2].MappingMethod == 0 && mat.TextureCoordiators[2].SourceCoordinate == 0)
+							else if (TexCoord == 2)
 							{
-								o.TexCoords.Add(Vector2.Multiply(p.TexCoords[(int)d.X], mat.TextureCoordiators[2].Scale));
-								o.TexCoords.Add(Vector2.Multiply(p.TexCoords[(int)d.Y], mat.TextureCoordiators[2].Scale));
-								o.TexCoords.Add(Vector2.Multiply(p.TexCoords[(int)d.Z], mat.TextureCoordiators[2].Scale));
-							}*/
+								o.TexCoords.Add(p.TexCoords3[(int)d.X] * new Matrix34(mat.TextureCoordiators[0].Matrix));
+								o.TexCoords.Add(p.TexCoords3[(int)d.Y] * new Matrix34(mat.TextureCoordiators[0].Matrix));
+								o.TexCoords.Add(p.TexCoords3[(int)d.Z] * new Matrix34(mat.TextureCoordiators[0].Matrix));
+							}
 							else goto cont;
 							f.TexCoordIndieces.Add(vt);
 							f.TexCoordIndieces.Add(vt + 1);

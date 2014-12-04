@@ -33,7 +33,7 @@ namespace LibEveryFileExplorer.GameData
 
 	public abstract class GameDataSectionEntry
 	{
-		public virtual void Write(EndianBinaryReader er)
+		public virtual void Write(EndianBinaryWriter er)
 		{
 			throw new NotImplementedException();
 		}

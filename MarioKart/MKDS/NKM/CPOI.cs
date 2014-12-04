@@ -24,6 +24,14 @@ namespace MarioKart.MKDS.NKM
 			for (int i = 0; i < NrEntries; i++) Entries.Add(new CPOIEntry(er));
 		}
 
+		public void Write(EndianBinaryWriter er)
+		{
+			er.Write(Signature, Encoding.ASCII, false);
+			NrEntries = (uint)Entries.Count;
+			er.Write(NrEntries);
+			for (int i = 0; i < NrEntries; i++) Entries[i].Write(er);
+		}
+
 		public override String[] GetColumnNames()
 		{
 			return new String[] {
@@ -59,6 +67,23 @@ namespace MarioKart.MKDS.NKM
 				KeyPointID = er.ReadInt16();
 				RespawnID = er.ReadByte();
 				Unknown = er.ReadByte();
+			}
+
+			public override void Write(EndianBinaryWriter er)
+			{
+				er.WriteFx32(Point1.X);
+				er.WriteFx32(Point1.Y);
+				er.WriteFx32(Point2.X);
+				er.WriteFx32(Point2.Y);
+				UpdateSinCos();
+				er.WriteFx32(Sine);
+				er.WriteFx32(Cosine);
+				er.WriteFx32(Distance);
+				er.Write(GotoSection);
+				er.Write(StartSection);
+				er.Write(KeyPointID);
+				er.Write(RespawnID);
+				er.Write(Unknown);
 			}
 
 			public override ListViewItem GetListViewItem()
@@ -110,7 +135,7 @@ namespace MarioKart.MKDS.NKM
 				Sine = (float)Math.Sin(Math.Abs(a));
 				Cosine = (float)Math.Cos(Math.Abs(a));
 				if ((Point1.Y - Point2.Y) > 0) Sine = 0 - Sine;
-				if ((Point1.Y - Point2.X) < 0) Cosine = 0 - Cosine;
+				if ((Point1.X - Point2.X) < 0) Cosine = 0 - Cosine;
 			}
 
 			public void UpdateDistance(CPOIEntry Next)

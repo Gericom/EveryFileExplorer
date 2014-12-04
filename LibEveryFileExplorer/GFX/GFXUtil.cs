@@ -23,6 +23,14 @@ namespace LibEveryFileExplorer.GFX
 				);
 		}
 
+		public static ushort ArgbToXBGR1555(uint Color)
+		{
+			return (ushort)(
+				((((Color >> 0) & 0xFF) >> 3) << 10) |
+				((((Color >> 8) & 0xFF) >> 3) << 5) |
+				((((Color >> 16) & 0xFF) >> 3) << 0));
+		}
+
 		/// <summary>
 		/// Converts the given color to the default 32bpp color format used in C#. (System.Drawing.Imaging.PixelFormat.Format32bppArgb)
 		/// </summary>

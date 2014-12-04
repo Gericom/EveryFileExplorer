@@ -322,6 +322,23 @@ namespace System.IO
 			Write(Vector.W);
 		}
 
+		public void WriteFx16(Single Value)
+		{
+			Write((Int16)(Value * 4096f));
+		}
+
+		public void WriteFx32(Single Value)
+		{
+			Write((Int32)(Value * 4096f));
+		}
+
+		public void WriteVecFx32(Vector3 Value)
+		{
+			WriteFx32(Value.X);
+			WriteFx32(Value.Y);
+			WriteFx32(Value.Z);
+		}
+
         public void WritePadding(int multiple, byte padding)
         {
             int length = (int)(BaseStream.Position % multiple);

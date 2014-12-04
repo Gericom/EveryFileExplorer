@@ -123,7 +123,6 @@
 			this.hScrollBar1.Name = "hScrollBar1";
 			this.hScrollBar1.Size = new System.Drawing.Size(392, 17);
 			this.hScrollBar1.TabIndex = 1;
-			this.hScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
 			// 
 			// panel1
 			// 
@@ -140,6 +139,7 @@
 			this.propertyGrid1.Name = "propertyGrid1";
 			this.propertyGrid1.Size = new System.Drawing.Size(177, 350);
 			this.propertyGrid1.TabIndex = 1;
+			this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid1_PropertyValueChanged);
 			// 
 			// splitContainer1
 			// 
@@ -170,14 +170,14 @@
 			this.menuItem1.MergeOrder = 2;
 			this.menuItem1.Text = "Collision";
 			// 
-			// CDMDViewer
+			// NKMDViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(604, 350);
 			this.Controls.Add(this.splitContainer1);
 			this.Menu = this.mainMenu1;
-			this.Name = "CDMDViewer";
+			this.Name = "NKMDViewer";
 			this.Text = "NKMDViewer";
 			this.Activated += new System.EventHandler(this.simpleOpenGlControl1_Resize);
 			this.Deactivate += new System.EventHandler(this.simpleOpenGlControl1_Resize);

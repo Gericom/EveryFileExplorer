@@ -19,6 +19,7 @@ namespace LibEveryFileExplorer.Projects
 		void Build();
 
 		TreeNode[] GetProjectTree();
+		TabPage[] GetProjectTabPages();
 
 		String ProjectDir { get; }
 	}
@@ -50,6 +51,10 @@ namespace LibEveryFileExplorer.Projects
 		public abstract void Build();
 
 		public abstract TreeNode[] GetProjectTree();
+		public virtual TabPage[] GetProjectTabPages()
+		{
+			return new TabPage[0];
+		}
 
 		public U ProjectFile { get; protected set; }
 		public String ProjectDir { get; protected set; }

@@ -24,6 +24,14 @@ namespace MarioKart.MKDS.NKM
 			for (int i = 0; i < NrEntries; i++) Entries.Add(new IPOIEntry(er));
 		}
 
+		public void Write(EndianBinaryWriter er)
+		{
+			er.Write(Signature, Encoding.ASCII, false);
+			NrEntries = (uint)Entries.Count;
+			er.Write(NrEntries);
+			for (int i = 0; i < NrEntries; i++) Entries[i].Write(er);
+		}
+
 		public override String[] GetColumnNames()
 		{
 			return new String[] {
@@ -45,6 +53,13 @@ namespace MarioKart.MKDS.NKM
 				Position = er.ReadVecFx32();
 				Unknown1 = er.ReadUInt32();
 				Unknown2 = er.ReadUInt32();
+			}
+
+			public override void Write(EndianBinaryWriter er)
+			{
+				er.WriteVecFx32(Position);
+				er.Write(Unknown1);
+				er.Write(Unknown2);
 			}
 
 			public override ListViewItem GetListViewItem()

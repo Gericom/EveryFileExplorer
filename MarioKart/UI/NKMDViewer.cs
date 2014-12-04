@@ -231,7 +231,7 @@ namespace MarioKart.UI
 			int objidx = 1;
 			if (!picking)
 			{
-				Gl.glColor4f(Color.CornflowerBlue.R / 255f, Color.CornflowerBlue.G / 255f, Color.CornflowerBlue.B / 255f, 0.5f);
+				Gl.glColor4f(Color.CornflowerBlue.R / 255f, Color.CornflowerBlue.G / 255f, Color.CornflowerBlue.B / 255f, 0.25f);
 			}
 			Gl.glBegin(Gl.GL_QUADS);
 			//if (aREAToolStripMenuItem.Checked)
@@ -743,6 +743,8 @@ namespace MarioKart.UI
 		private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
 		{
 			foreach (var v in SectionViewers) v.UpdateListViewEntry(propertyGrid1.SelectedObject);
+			Render();
+			Render();
 		}
 	}
 }

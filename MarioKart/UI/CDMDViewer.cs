@@ -11,16 +11,23 @@ using Tao.OpenGl;
 using System.Drawing.Imaging;
 using LibEveryFileExplorer._3D;
 using LibEveryFileExplorer;
+using LibEveryFileExplorer.UI;
+using LibEveryFileExplorer.GameData;
+using MarioKart.MK7;
+using LibEveryFileExplorer.Collections;
+using MarioKart.MK7.KMP;
 
 namespace MarioKart.UI
 {
 	public partial class CDMDViewer : Form, IUseOtherFiles
 	{
-		MK7.CDMD CDMD;
-		MK7.KCL KCL = null;
-		public CDMDViewer(MK7.CDMD CDMD)
+		List<IGameDataSectionViewer> SectionViewers = new List<IGameDataSectionViewer>();
+
+		CDMD MapData;
+		KCL KCL = null;
+		public CDMDViewer(CDMD MapData)
 		{
-			this.CDMD = CDMD;
+			this.MapData = MapData;
 			InitializeComponent();
 			simpleOpenGlControl1.InitializeContexts();
 			simpleOpenGlControl1.MouseWheel += new MouseEventHandler(simpleOpenGlControl1_MouseWheel);
@@ -56,7 +63,7 @@ namespace MarioKart.UI
 
 			Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
 
-			ViewableFile[] v = EveryFileExplorerUtil.GetOpenFilesOfType(typeof(MK7.KCL));
+			ViewableFile[] v = EveryFileExplorerUtil.GetOpenFilesOfType(typeof(KCL));
 			menuItem1.MenuItems.Clear();
 			foreach (var vv in v)
 			{
@@ -68,26 +75,12 @@ namespace MarioKart.UI
 				KCL = v[0].FileFormat;
 			}
 
-			if (CDMD.CheckPoints != null)
-			{
-				TabPage p = new TabPage("CKPT");
-				p.Controls.Add(new LibEveryFileExplorer.UI.GameDataSectionViewer<MK7.CDMD.CKPT.CKPTEntry>(CDMD.CheckPoints) { Dock = DockStyle.Fill });
-				tabControl1.TabPages.Add(p);
-			}
-
-			if (CDMD.CheckPaths != null)
-			{
-				TabPage p = new TabPage("CKPH");
-				p.Controls.Add(new LibEveryFileExplorer.UI.GameDataSectionViewer<MK7.CDMD.CKPH.CKPHEntry>(CDMD.CheckPaths) { Dock = DockStyle.Fill });
-				tabControl1.TabPages.Add(p);
-			}
-
-			if (CDMD.GlobalObjects != null)
-			{
-				TabPage p = new TabPage("GOBJ");
-				p.Controls.Add(new LibEveryFileExplorer.UI.GameDataSectionViewer<MK7.CDMD.GOBJ.GOBJEntry>(CDMD.GlobalObjects) { Dock = DockStyle.Fill });
-				tabControl1.TabPages.Add(p);
-			}
+			if (MapData.CheckPoint != null) AddTab<CKPT.CKPTEntry>("CKPT", MapData.CheckPoint);
+			if (MapData.CheckPointPath != null) AddTab<CKPH.CKPHEntry>("CKPH", MapData.CheckPointPath);
+			if (MapData.GlobalObject != null) AddTab<GOBJ.GOBJEntry>("GOBJ", MapData.GlobalObject);
+			if (MapData.JugemPoint != null) AddTab<JGPT.JGPTEntry>("JGPT", MapData.JugemPoint);
+			if (MapData.GliderPoint != null) AddTab<GLPT.GLPTEntry>("GLPT", MapData.GliderPoint);
+			if (MapData.GliderPointPath != null) AddTab<GLPH.GLPHEntry>("GLPH", MapData.GliderPointPath);
 
 			/*Bitmap b3 = OBJI.OBJ_2D01;
 			System.Resources.ResourceSet s = OBJI.ResourceManager.GetResourceSet(System.Globalization.CultureInfo.CurrentCulture, false, false);
@@ -116,6 +109,26 @@ namespace MarioKart.UI
 			Render();
 		}
 
+		private void AddTab<T>(String Name, GameDataSection<T> Section) where T : GameDataSectionEntry, new()
+		{
+			TabPage p = new TabPage(Name);
+			var v = new GameDataSectionViewer<T>(Section) { Dock = DockStyle.Fill };
+			v.OnSelected += new SelectedEventHandler(GameDataSectionViewer_OnSelected);
+			SectionViewers.Add(v);
+			p.Controls.Add(v);
+			tabControl1.TabPages.Add(p);
+		}
+
+		void GameDataSectionViewer_OnSelected(IGameDataSectionViewer Viewer, object Entry)
+		{
+			propertyGrid1.SelectedObject = Entry;
+			propertyGrid1.ExpandAllGridItems();
+			foreach (var v in SectionViewers)
+			{
+				if (v != Viewer) v.RemoveSelection();
+			}
+		}
+
 		float min = -8192f;
 		float max = 8192f;
 		byte[] pic;
@@ -126,20 +139,20 @@ namespace MarioKart.UI
 			Gl.glMatrixMode(Gl.GL_PROJECTION);
 			Gl.glLoadIdentity();
 			Gl.glViewport(0, 0, simpleOpenGlControl1.Width, simpleOpenGlControl1.Height);
-			float x = (/*8192f*/16384f / (float)scale) / simpleOpenGlControl1.Width;
+			float x = (8192f / (float)scale) / simpleOpenGlControl1.Width;
 			x *= 2;
-			float y = (/*8192f*/16384f / (float)scale) / simpleOpenGlControl1.Height;
+			float y = (8192f / (float)scale) / simpleOpenGlControl1.Height;
 			y *= 2;
 			//Gl.glTranslatef(0, 0, 0);
 			//Gl.glOrtho(-8192, 8192, 8192, -8192, -1000, 1000);
 			if (x > y)
 			{
-				Gl.glOrtho((-(x * simpleOpenGlControl1.Width) / 2f) + (hScrollBar1.Value * (/*8192f*/16384f / (float)scale)), (x * simpleOpenGlControl1.Width) / 2f + (hScrollBar1.Value * (/*8192f*/16384f / (float)scale)), (x * simpleOpenGlControl1.Height) / 2f + (vScrollBar1.Value * (/*8192f*/16384f / (float)scale)), (-(x * simpleOpenGlControl1.Height) / 2f) + (vScrollBar1.Value * (/*8192f*/16384f / (float)scale)), -/*8192f*/16384f, /*8192f*/16384f);
+				Gl.glOrtho((-(x * simpleOpenGlControl1.Width) / 2f) + (hScrollBar1.Value * (8192f / (float)scale)), (x * simpleOpenGlControl1.Width) / 2f + (hScrollBar1.Value * (8192f / (float)scale)), (x * simpleOpenGlControl1.Height) / 2f + (vScrollBar1.Value * (8192f / (float)scale)), (-(x * simpleOpenGlControl1.Height) / 2f) + (vScrollBar1.Value * (8192f / (float)scale)), -8192, 8192);
 				mult = x;
 			}
 			else
 			{
-				Gl.glOrtho((-(y * simpleOpenGlControl1.Width) / 2f) + (hScrollBar1.Value * (/*8192f*/16384f / (float)scale)), (y * simpleOpenGlControl1.Width) / 2f + (hScrollBar1.Value * (/*8192f*/16384f / (float)scale)), (y * simpleOpenGlControl1.Height) / 2f + (vScrollBar1.Value * (/*8192f*/16384f / (float)scale)), (-(y * simpleOpenGlControl1.Height) / 2f) + (vScrollBar1.Value * (/*8192f*/16384f / (float)scale)), -/*8192f*/16384f, /*8192f*/16384f);
+				Gl.glOrtho((-(y * simpleOpenGlControl1.Width) / 2f) + (hScrollBar1.Value * (8192f / (float)scale)), (y * simpleOpenGlControl1.Width) / 2f + (hScrollBar1.Value * (8192f / (float)scale)), (y * simpleOpenGlControl1.Height) / 2f + (vScrollBar1.Value * (8192f / (float)scale)), (-(y * simpleOpenGlControl1.Height) / 2f) + (vScrollBar1.Value * (8192f / (float)scale)), -8192, 8192);
 				mult = y;
 			}
 
@@ -202,24 +215,352 @@ namespace MarioKart.UI
 				Gl.glDepthFunc(Gl.GL_ALWAYS);
 			}
 			Gl.glPointSize((picking ? 6f : 5));
+
+			int objidx = 1;
+			if (!picking)
+			{
+				Gl.glColor4f(Color.CornflowerBlue.R / 255f, Color.CornflowerBlue.G / 255f, Color.CornflowerBlue.B / 255f, 0.25f);
+			}
+			Gl.glBegin(Gl.GL_QUADS);
+			//if (aREAToolStripMenuItem.Checked)
+			/*{
+				foreach (var o in NKMD.Area.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (17 << 18)).R / 255f, Color.FromArgb(objidx | (17 << 18)).G / 255f, Color.FromArgb(objidx | (17 << 18)).B / 255f, 1);
+						objidx++;
+					}
+					Vector3[] cube = o.GetCube();
+					//We're interested in points 0, 1, 5 and 3 (ground plane)
+					Vector3 Point1 = cube[3];
+					Vector3 Point2 = cube[5];
+					Vector3 Point3 = cube[1];
+					Vector3 Point4 = cube[0];
+					Gl.glVertex2f(Point1.X, Point1.Z);
+					Gl.glVertex2f(Point2.X, Point2.Z);
+					Gl.glVertex2f(Point3.X, Point3.Z);
+					Gl.glVertex2f(Point4.X, Point4.Z);
+				}
+			}*/
+			Gl.glEnd();
+
+			Gl.glBegin(Gl.GL_POINTS);
+			if (!picking)
+			{
+				Gl.glColor3f(0, 0, 0.5f);
+			}
+			objidx = 1;
+			//if (pOITToolStripMenuItem.Checked)
+			/*{
+				foreach (var o in NKMD.Point.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (2 << 18)).R / 255f, Color.FromArgb(objidx | (2 << 18)).G / 255f, Color.FromArgb(objidx | (2 << 18)).B / 255f, 1);
+						objidx++;
+					}
+					Gl.glVertex2f(o.Position.X, o.Position.Z);
+				}
+			}*/
+			Gl.glEnd();
+			Gl.glLineWidth(1.5f);
+			int idx = 0;
+			//if (pOITToolStripMenuItem.Checked)
+			/*{
+				if (!picking)
+				{
+					foreach (var o in NKMD.Path.Entries)
+					{
+						if (NKMD.Point.NrEntries < o.NrPoit + idx) break;
+						Gl.glBegin(Gl.GL_LINE_STRIP);
+						for (int i = 0; i < o.NrPoit; i++)
+						{
+							Gl.glVertex2f(NKMD.Point[idx + i].Position.X, NKMD.Point[idx + i].Position.Z);
+							if (!(i + 1 < o.NrPoit) && o.Loop)
+							{
+								Gl.glVertex2f(NKMD.Point[idx].Position.X, NKMD.Point[idx].Position.Z);
+							}
+						}
+						Gl.glEnd();
+						idx += o.NrPoit;
+					}
+				}
+			}*/
 			Gl.glBegin(Gl.GL_POINTS);
 			if (!picking)
 			{
 				Gl.glColor3f(1, 0, 0);
 			}
-			int objidx = 1;
+			objidx = 1;
 			//if (oBJIToolStripMenuItem.Checked)
 			{
-				foreach (var o in CDMD.GlobalObjects.Entries)
+				foreach (var o in MapData.GlobalObject.Entries)
 				{
 					if (picking)
 					{
 						Gl.glColor4f(Color.FromArgb(objidx | (0 << 18)).R / 255f, Color.FromArgb(objidx | (0 << 18)).G / 255f, Color.FromArgb(objidx | (0 << 18)).B / 255f, 1);
 						objidx++;
 					}
+					//Bitmap b;
+					//if ((b = (Bitmap)OBJI.ResourceManager.GetObject("OBJ_" + BitConverter.ToString(BitConverter.GetBytes(o.ObjectID), 0).Replace("-", ""))) == null)
+					//{
+						Gl.glVertex2f(o.Position.X, o.Position.Z);
+					/*}
+					else
+					{
+						Gl.glEnd();
+						if (!picking)
+						{
+							Gl.glColor3f(1, 1, 1);
+							Gl.glBindTexture(Gl.GL_TEXTURE_2D, o.ObjectID);
+						}
+						Gl.glPushMatrix();
+						Gl.glTranslatef(o.Position.X, o.Position.Z, 0);
+
+						Gl.glRotatef(o.Rotation.Y, 0, 0, 1);
+
+						Gl.glScalef(mult, mult, 1);
+
+						Gl.glBegin(Gl.GL_QUADS);
+						Gl.glTexCoord2f(0, 0);
+						Gl.glVertex2f(-b.Width / 2f, -b.Height / 2f);
+						Gl.glTexCoord2f(1, 0);
+						Gl.glVertex2f(b.Width / 2f, -b.Height / 2f);
+						Gl.glTexCoord2f(1, 1);
+						Gl.glVertex2f(b.Width / 2f, b.Height / 2f);
+						Gl.glTexCoord2f(0, 1);
+						Gl.glVertex2f(-b.Width / 2f, b.Height / 2f);
+						Gl.glEnd();
+						Gl.glPopMatrix();
+						if (!picking)
+						{
+							Gl.glColor3f(1, 0, 0);
+							Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+						}
+						Gl.glBegin(Gl.GL_POINTS);
+					}*/
+				}
+			}
+			if (!picking)
+			{
+				Gl.glColor3f(0, 0, 0);
+			}
+			objidx = 1;
+			//if (kTPSToolStripMenuItem.Checked)
+			/*{
+				foreach (var o in NKMD.KartPointStart.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (4 << 18)).R / 255f, Color.FromArgb(objidx | (4 << 18)).G / 255f, Color.FromArgb(objidx | (4 << 18)).B / 255f, 1);
+						objidx++;
+					}
+					Bitmap b;
+					if ((b = (Bitmap)OBJI.ResourceManager.GetObject("start")) == null)
+					{
+						Gl.glVertex2f(o.Position.X, o.Position.Z);
+					}
+					else
+					{
+						Gl.glEnd();
+						if (!picking)
+						{
+							Gl.glColor3f(1, 1, 1);
+							Gl.glBindTexture(Gl.GL_TEXTURE_2D, -1);
+						}
+						Gl.glPushMatrix();
+						Gl.glTranslatef(o.Position.X, o.Position.Z, 0);
+
+						Gl.glRotatef(o.Rotation.Y, 0, 0, 1);
+
+						Gl.glScalef(mult, mult, 1);
+
+						Gl.glBegin(Gl.GL_QUADS);
+						Gl.glTexCoord2f(0, 0);
+						Gl.glVertex2f(-b.Width / 2f, -b.Height / 2f);
+						Gl.glTexCoord2f(1, 0);
+						Gl.glVertex2f(b.Width / 2f, -b.Height / 2f);
+						Gl.glTexCoord2f(1, 1);
+						Gl.glVertex2f(b.Width / 2f, b.Height / 2f);
+						Gl.glTexCoord2f(0, 1);
+						Gl.glVertex2f(-b.Width / 2f, b.Height / 2f);
+						Gl.glEnd();
+						Gl.glPopMatrix();
+						if (!picking)
+						{
+							Gl.glColor3f(1, 0, 0);
+							Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
+						}
+						Gl.glBegin(Gl.GL_POINTS);
+					}
+				}
+			}*/
+			if (!picking)
+			{
+				Gl.glColor3f(1, 0, 0.5f);
+			}
+			objidx = 1;
+			//if (kTPCToolStripMenuItem.Checked)
+			/*{
+				foreach (var o in NKMD.KartPointCannon.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (7 << 18)).R / 255f, Color.FromArgb(objidx | (7 << 18)).G / 255f, Color.FromArgb(objidx | (7 << 18)).B / 255f, 1);
+						objidx++;
+					}
+					Gl.glVertex2f(o.Position.X, o.Position.Z);
+				}
+			}*/
+			if (!picking)
+			{
+				Gl.glColor3f(0, 0.9f, 1);
+			}
+			objidx = 1;
+			//if (kTP2ToolStripMenuItem.Checked)
+			/*{
+				foreach (var o in NKMD.KartPointSecond.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (6 << 18)).R / 255f, Color.FromArgb(objidx | (6 << 18)).G / 255f, Color.FromArgb(objidx | (6 << 18)).B / 255f, 1);
+						objidx++;
+					}
+					Gl.glVertex2f(o.Position.X, o.Position.Z);
+				}
+			}*/
+			if (!picking)
+			{
+				Gl.glColor3f(Color.MediumPurple.R / 255f, Color.MediumPurple.G / 255f, Color.MediumPurple.B / 255f);
+			}
+			objidx = 1;
+			//if (kTPMToolStripMenuItem.Checked)
+			/*{
+				foreach (var o in NKMD.KartPointMission.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (8 << 18)).R / 255f, Color.FromArgb(objidx | (8 << 18)).G / 255f, Color.FromArgb(objidx | (8 << 18)).B / 255f, 1);
+						objidx++;
+					}
+					Gl.glVertex2f(o.Position.X, o.Position.Z);
+				}
+			}*/
+			if (!picking)
+			{
+				Gl.glColor3f(1, 0.6f, 0);
+			}
+			objidx = 1;
+			//if (kTPJToolStripMenuItem.Checked)
+			{
+				foreach (var o in MapData.JugemPoint.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (5 << 18)).R / 255f, Color.FromArgb(objidx | (5 << 18)).G / 255f, Color.FromArgb(objidx | (5 << 18)).B / 255f, 1);
+						objidx++;
+					}
 					Gl.glVertex2f(o.Position.X, o.Position.Z);
 				}
 			}
+			if (!picking)
+			{
+				Gl.glColor3f(0, 0.8f, 0);
+			}
+			objidx = 1;
+			//if (ePOIToolStripMenuItem.Checked)
+			/*{
+				if (NKMD.EnemyPoint != null)
+				{
+					foreach (var o in NKMD.EnemyPoint.Entries)
+					{
+						if (picking)
+						{
+							Gl.glColor4f(Color.FromArgb(objidx | (13 << 18)).R / 255f, Color.FromArgb(objidx | (13 << 18)).G / 255f, Color.FromArgb(objidx | (13 << 18)).B / 255f, 1);
+							objidx++;
+						}
+						Gl.glVertex2f(o.Position.X, o.Position.Z);
+					}
+				}
+				else
+				{
+					foreach (var o in NKMD.MiniGameEnemyPoint.Entries)
+					{
+						if (picking)
+						{
+							Gl.glColor4f(Color.FromArgb(objidx | (15 << 18)).R / 255f, Color.FromArgb(objidx | (15 << 18)).G / 255f, Color.FromArgb(objidx | (15 << 18)).B / 255f, 1);
+							objidx++;
+						}
+						Gl.glVertex2f(o.Position.X, o.Position.Z);
+					}
+				}
+			}*/
+
+			if (!picking)
+			{
+				Gl.glColor3f(1, 0.9f, 0);
+			}
+			objidx = 1;
+			//if (iPOIToolStripMenuItem.Checked)
+			/*{
+				foreach (var o in NKMD.ItemPoint.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (11 << 18)).R / 255f, Color.FromArgb(objidx | (11 << 18)).G / 255f, Color.FromArgb(objidx | (11 << 18)).B / 255f, 1);
+						objidx++;
+					}
+					Gl.glVertex2f(o.Position.X, o.Position.Z);
+				}
+			}*/
+			if (!picking)
+			{
+				Gl.glColor3f(Color.CornflowerBlue.R / 255f, Color.CornflowerBlue.G / 255f, Color.CornflowerBlue.B / 255f);
+			}
+			objidx = 1;
+			//if (aREAToolStripMenuItem.Checked)
+			/*{
+				foreach (var o in NKMD.Area.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (17 << 18)).R / 255f, Color.FromArgb(objidx | (17 << 18)).G / 255f, Color.FromArgb(objidx | (17 << 18)).B / 255f, 1);
+						objidx++;
+					}
+					Gl.glVertex2f(o.Position.X, o.Position.Z);
+				}
+			}*/
+			if (!picking)
+			{
+				Gl.glColor3f(Color.BurlyWood.R / 255f, Color.BurlyWood.G / 255f, Color.BurlyWood.B / 255f);
+			}
+			objidx = 1;
+			//if (cAMEToolStripMenuItem.Checked)
+			/*{
+				foreach (var o in NKMD.Camera.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (18 << 18)).R / 255f, Color.FromArgb(objidx | (18 << 18)).G / 255f, Color.FromArgb(objidx | (18 << 18)).B / 255f, 1);
+					}
+					Gl.glVertex2f(o.Position.X, o.Position.Z);
+					if (o.CameraType == 3 || o.CameraType == 4)
+					{
+						if (picking)
+						{
+							Gl.glColor4f(Color.FromArgb(objidx | (19 << 18)).R / 255f, Color.FromArgb(objidx | (19 << 18)).G / 255f, Color.FromArgb(objidx | (19 << 18)).B / 255f, 1);
+						}
+						Gl.glVertex2f(o.Viewpoint1.X, o.Viewpoint1.Z);
+						if (picking)
+						{
+							Gl.glColor4f(Color.FromArgb(objidx | (20 << 18)).R / 255f, Color.FromArgb(objidx | (20 << 18)).G / 255f, Color.FromArgb(objidx | (20 << 18)).B / 255f, 1);
+							objidx++;
+						}
+						Gl.glVertex2f(o.Viewpoint2.X, o.Viewpoint2.Z);
+					}
+				}
+			}*/
 
 
 
@@ -230,7 +571,7 @@ namespace MarioKart.UI
 				if (!picking)
 				{
 					Gl.glBegin(Gl.GL_LINES);
-					foreach (var o in CDMD.CheckPoints.Entries)
+					foreach (var o in MapData.CheckPoint.Entries)
 					{
 						Gl.glColor3f(0, 170f / 255f, 0);
 						//Gl.glColor3f(0.5f, 0.5f, 0.5f);
@@ -239,31 +580,29 @@ namespace MarioKart.UI
 						//Gl.glColor3f(1, 1, 1);
 						Gl.glVertex2f(o.Point2.X, o.Point2.Y);
 					}
-					for (int j = 0; j < CDMD.CheckPaths.NrEntries; j++)
+					for (int j = 0; j < MapData.CheckPointPath.Entries.Count; j++)
 					{
-						if (CDMD.CheckPoints.NrEntries < CDMD.CheckPaths[j].Start + CDMD.CheckPaths[j].Length) break;
-						for (int i = CDMD.CheckPaths[j].Start; i < CDMD.CheckPaths[j].Start + CDMD.CheckPaths[j].Length - 1; i++)
+						if (MapData.CheckPoint.Entries.Count < MapData.CheckPointPath[j].Start + MapData.CheckPointPath[j].Length) break;
+						for (int i = MapData.CheckPointPath[j].Start; i < MapData.CheckPointPath.Entries[j].Start + MapData.CheckPointPath[j].Length - 1; i++)
 						{
 							Gl.glColor3f(0, 170f / 255f, 0);
-							Gl.glVertex2f(CDMD.CheckPoints[i].Point1.X, CDMD.CheckPoints[i].Point1.Y);
-							Gl.glVertex2f(CDMD.CheckPoints[i + 1].Point1.X, CDMD.CheckPoints[i + 1].Point1.Y);
+							Gl.glVertex2f(MapData.CheckPoint[i].Point1.X, MapData.CheckPoint[i].Point1.Y);
+							Gl.glVertex2f(MapData.CheckPoint[i + 1].Point1.X, MapData.CheckPoint[i + 1].Point1.Y);
 							Gl.glColor3f(170f / 255f, 0, 0);
-							Gl.glVertex2f(CDMD.CheckPoints[i].Point2.X, CDMD.CheckPoints[i].Point2.Y);
-							Gl.glVertex2f(CDMD.CheckPoints[i + 1].Point2.X, CDMD.CheckPoints[i + 1].Point2.Y);
+							Gl.glVertex2f(MapData.CheckPoint[i].Point2.X, MapData.CheckPoint[i].Point2.Y);
+							Gl.glVertex2f(MapData.CheckPoint[i + 1].Point2.X, MapData.CheckPoint[i + 1].Point2.Y);
 						}
 
-						for (int i = 0; i < 6; i++)
+						/*for (int i = 0; i < 3; i++)
 						{
-							if (CDMD.CheckPaths[j].Next[i] != 255)//-1)
-							{
-								Gl.glColor3f(0, 170f / 255f, 0);
-								Gl.glVertex2f(CDMD.CheckPoints[CDMD.CheckPaths[j].Start + CDMD.CheckPaths[j].Length - 1].Point1.X, CDMD.CheckPoints[CDMD.CheckPaths[j].Start + CDMD.CheckPaths[j].Length - 1].Point1.Y);
-								Gl.glVertex2f(CDMD.CheckPoints[CDMD.CheckPaths[CDMD.CheckPaths[j].Next[i]].Start].Point1.X, CDMD.CheckPoints[CDMD.CheckPaths[CDMD.CheckPaths[j].Next[i]].Start].Point1.Y);
-								Gl.glColor3f(170f / 255f, 0, 0);
-								Gl.glVertex2f(CDMD.CheckPoints[CDMD.CheckPaths[j].Start + CDMD.CheckPaths[j].Length - 1].Point2.X, CDMD.CheckPoints[CDMD.CheckPaths[j].Start + CDMD.CheckPaths[j].Length - 1].Point2.Y);
-								Gl.glVertex2f(CDMD.CheckPoints[CDMD.CheckPaths[CDMD.CheckPaths[j].Next[i]].Start].Point2.X, CDMD.CheckPoints[CDMD.CheckPaths[CDMD.CheckPaths[j].Next[i]].Start].Point2.Y);
-							}
-						}
+							if (MapData.CheckPointPath[j].Next[i] == -1 || MapData.CheckPointPath[j].Next[i] >= MapData.CheckPointPath.Entries.Count) continue;
+							Gl.glColor3f(0, 170f / 255f, 0);
+							Gl.glVertex2f(MapData.CheckPoint[MapData.CheckPointPath[j].Start + MapData.CheckPointPath[j].Length - 1].Point1.X, MapData.CheckPoint[MapData.CheckPointPath[j].Start + MapData.CheckPointPath[j].Length - 1].Point1.Y);
+							Gl.glVertex2f(MapData.CheckPoint[MapData.CheckPointPath[MapData.CheckPointPath[j].Next[i]].Start].Point1.X, MapData.CheckPoint[MapData.CheckPointPath[MapData.CheckPointPath[j].Next[i]].Start].Point1.Y);
+							Gl.glColor3f(170f / 255f, 0, 0);
+							Gl.glVertex2f(MapData.CheckPoint[MapData.CheckPointPath[j].Start + MapData.CheckPointPath[j].Length - 1].Point2.X, MapData.CheckPoint[MapData.CheckPointPath[j].Start + MapData.CheckPointPath[j].Length - 1].Point2.Y);
+							Gl.glVertex2f(MapData.CheckPoint[MapData.CheckPointPath[MapData.CheckPointPath[j].Next[i]].Start].Point2.X, MapData.CheckPoint[MapData.CheckPointPath[MapData.CheckPointPath[j].Next[i]].Start].Point2.Y);
+						}*/
 					}
 					Gl.glEnd();
 				}
@@ -273,7 +612,7 @@ namespace MarioKart.UI
 			objidx = 1;
 			//if (cPOIToolStripMenuItem.Checked)
 			{
-				foreach (var o in CDMD.CheckPoints.Entries)
+				foreach (var o in MapData.CheckPoint.Entries)
 				{
 					if (!picking)
 					{
@@ -297,6 +636,7 @@ namespace MarioKart.UI
 				}
 			}
 			Gl.glEnd();
+			//Gl.glEnable(Gl.GL_LINE_SMOOTH);
 		}
 
 		public void RenderKCL(bool picking = false)
@@ -307,7 +647,7 @@ namespace MarioKart.UI
 				//Vector3 PositionA, PositionB, PositionC, Normal;
 				Triangle t = KCL.GetTriangle(p);
 
-				Color c = Color.Gray;//MK7.KCL.GetColor(p.CollisionType);
+				Color c = Color.Gray;//MKDS.KCL.GetColor(p.CollisionType);
 				if (picking && c.A != 0) c = Color.FromArgb(i + 1 | 0xFF << 24);
 				Gl.glColor4f(c.R / 255f, c.G / 255f, c.B / 255f, c.A / 255f);
 				Gl.glBegin(Gl.GL_TRIANGLES);
@@ -343,7 +683,7 @@ namespace MarioKart.UI
 
 		public void FileOpened(ViewableFile File)
 		{
-			ViewableFile[] v = EveryFileExplorerUtil.GetOpenFilesOfType(typeof(MK7.KCL));
+			ViewableFile[] v = EveryFileExplorerUtil.GetOpenFilesOfType(typeof(KCL));
 			menuItem1.MenuItems.Clear();
 			bool curavab = false;
 			foreach (var vv in v)
@@ -366,8 +706,8 @@ namespace MarioKart.UI
 
 		public void FileClosed(ViewableFile File)
 		{
-			if (File.FileFormat is MK7.KCL && File.FileFormat == KCL) KCL = null;
-			ViewableFile[] v = EveryFileExplorerUtil.GetOpenFilesOfType(typeof(MK7.KCL));
+			if (File.FileFormat is KCL && File.FileFormat == KCL) KCL = null;
+			ViewableFile[] v = EveryFileExplorerUtil.GetOpenFilesOfType(typeof(KCL));
 			menuItem1.MenuItems.Clear();
 			foreach (var vv in v)
 			{
@@ -384,6 +724,13 @@ namespace MarioKart.UI
 
 		private void NKMDViewer_Shown(object sender, EventArgs e)
 		{
+			Render();
+			Render();
+		}
+
+		private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+		{
+			foreach (var v in SectionViewers) v.UpdateListViewEntry(propertyGrid1.SelectedObject);
 			Render();
 			Render();
 		}
