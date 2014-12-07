@@ -12,15 +12,15 @@ using LibEveryFileExplorer.Math;
 
 namespace MarioKart.MK7.KMP
 {
-	public class GLPT : GameDataSection<GLPT.GLPTEntry>
+	public class ENPT : GameDataSection<ENPT.ENPTEntry>
 	{
-		public GLPT() { Signature = "TPLG"; }
-		public GLPT(EndianBinaryReader er)
+		public ENPT() { Signature = "TPNE"; }
+		public ENPT(EndianBinaryReader er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
-			if (Signature != "TPLG") throw new SignatureNotCorrectException(Signature, "TPLG", er.BaseStream.Position - 4);
+			if (Signature != "TPNE") throw new SignatureNotCorrectException(Signature, "TPNE", er.BaseStream.Position - 4);
 			NrEntries = er.ReadUInt32();
-			for (int i = 0; i < NrEntries; i++) Entries.Add(new GLPTEntry(er));
+			for (int i = 0; i < NrEntries; i++) Entries.Add(new ENPTEntry(er));
 		}
 
 		public override String[] GetColumnNames()
@@ -33,10 +33,10 @@ namespace MarioKart.MK7.KMP
 					"?"
 				};
 		}
-		public class GLPTEntry : GameDataSectionEntry
+		public class ENPTEntry : GameDataSectionEntry
 		{
-			public GLPTEntry() { }
-			public GLPTEntry(EndianBinaryReader er)
+			public ENPTEntry() { }
+			public ENPTEntry(EndianBinaryReader er)
 			{
 				Position = er.ReadVector3();
 				Unknown1 = er.ReadSingle();

@@ -11,15 +11,15 @@ using LibEveryFileExplorer;
 
 namespace MarioKart.MK7.KMP
 {
-	public class GLPH : GameDataSection<GLPH.GLPHEntry>
+	public class ITPH : GameDataSection<ITPH.ITPHEntry>
 	{
-		public GLPH() { Signature = "HPLG"; }
-		public GLPH(EndianBinaryReader er)
+		public ITPH() { Signature = "HPTI"; }
+		public ITPH(EndianBinaryReader er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
-			if (Signature != "HPLG") throw new SignatureNotCorrectException(Signature, "HPLG", er.BaseStream.Position - 4);
+			if (Signature != "HPTI") throw new SignatureNotCorrectException(Signature, "HPTI", er.BaseStream.Position - 4);
 			NrEntries = er.ReadUInt32();
-			for (int i = 0; i < NrEntries; i++) Entries.Add(new GLPHEntry(er));
+			for (int i = 0; i < NrEntries; i++) Entries.Add(new ITPHEntry(er));
 		}
 
 		public override String[] GetColumnNames()
@@ -29,26 +29,22 @@ namespace MarioKart.MK7.KMP
 					"Start",
 					"Length",
 					"Previous 1","Previous 2","Previous 3","Previous 4","Previous 5","Previous 6",
-					"Next 1","Next 2","Next 3","Next 4","Next 5","Next 6",
-					"?",
-					"?"
+					"Next 1","Next 2","Next 3","Next 4","Next 5","Next 6"
 				};
 		}
-		public class GLPHEntry : GameDataSectionEntry
+		public class ITPHEntry : GameDataSectionEntry
 		{
-			public GLPHEntry()
+			public ITPHEntry()
 			{
-				Previous = new sbyte[] { -1, -1, -1, -1, -1, -1, -1, -1 };
-				Next = new sbyte[] { -1, -1, -1, -1, -1, -1, -1, -1 };
+				Previous = new short[] { -1, -1, -1, -1, -1, -1};
+				Next = new short[] { -1, -1, -1, -1, -1, -1 };
 			}
-			public GLPHEntry(EndianBinaryReader er)
+			public ITPHEntry(EndianBinaryReader er)
 			{
-				Start = er.ReadByte();
-				Length = er.ReadByte();
-				Previous = er.ReadSBytes(6);
-				Next = er.ReadSBytes(6);
-				Unknown1 = er.ReadUInt32();
-				Unknown2 = er.ReadUInt32();
+				Start = er.ReadUInt16();
+				Length = er.ReadUInt16();
+				Previous = er.ReadInt16s(6);
+				Next = er.ReadInt16s(6);
 			}
 
 			public override ListViewItem GetListViewItem()
@@ -68,17 +64,12 @@ namespace MarioKart.MK7.KMP
 				m.SubItems.Add(Next[3].ToString());
 				m.SubItems.Add(Next[4].ToString());
 				m.SubItems.Add(Next[5].ToString());
-
-				m.SubItems.Add(HexUtil.GetHexReverse(Unknown1));
-				m.SubItems.Add(HexUtil.GetHexReverse(Unknown2));
 				return m;
 			}
-			public Byte Start { get; set; }
-			public Byte Length { get; set; }
-			public SByte[] Previous { get; set; }//6
-			public SByte[] Next { get; set; }//6
-			public UInt32 Unknown1 { get; set; }
-			public UInt32 Unknown2 { get; set; }
+			public UInt16 Start { get; set; }
+			public UInt16 Length { get; set; }
+			public Int16[] Previous { get; set; }//6
+			public Int16[] Next { get; set; }//6
 		}
 	}
 }

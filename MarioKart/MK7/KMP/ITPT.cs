@@ -12,15 +12,15 @@ using LibEveryFileExplorer.Math;
 
 namespace MarioKart.MK7.KMP
 {
-	public class GLPT : GameDataSection<GLPT.GLPTEntry>
+	public class ITPT : GameDataSection<ITPT.ITPTEntry>
 	{
-		public GLPT() { Signature = "TPLG"; }
-		public GLPT(EndianBinaryReader er)
+		public ITPT() { Signature = "TPTI"; }
+		public ITPT(EndianBinaryReader er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
-			if (Signature != "TPLG") throw new SignatureNotCorrectException(Signature, "TPLG", er.BaseStream.Position - 4);
+			if (Signature != "TPTI") throw new SignatureNotCorrectException(Signature, "TPTI", er.BaseStream.Position - 4);
 			NrEntries = er.ReadUInt32();
-			for (int i = 0; i < NrEntries; i++) Entries.Add(new GLPTEntry(er));
+			for (int i = 0; i < NrEntries; i++) Entries.Add(new ITPTEntry(er));
 		}
 
 		public override String[] GetColumnNames()
@@ -29,19 +29,17 @@ namespace MarioKart.MK7.KMP
 					"ID",
 					"X", "Y", "Z",
 					"?",
-					"?",
 					"?"
 				};
 		}
-		public class GLPTEntry : GameDataSectionEntry
+		public class ITPTEntry : GameDataSectionEntry
 		{
-			public GLPTEntry() { }
-			public GLPTEntry(EndianBinaryReader er)
+			public ITPTEntry() { }
+			public ITPTEntry(EndianBinaryReader er)
 			{
 				Position = er.ReadVector3();
 				Unknown1 = er.ReadSingle();
 				Unknown2 = er.ReadUInt32();
-				Unknown3 = er.ReadUInt32();
 			}
 
 			public override ListViewItem GetListViewItem()
@@ -53,13 +51,11 @@ namespace MarioKart.MK7.KMP
 
 				m.SubItems.Add(Unknown1.ToString());
 				m.SubItems.Add(HexUtil.GetHexReverse(Unknown2));
-				m.SubItems.Add(HexUtil.GetHexReverse(Unknown3));
 				return m;
 			}
 			public Vector3 Position { get; set; }
 			public Single Unknown1 { get; set; }
 			public UInt32 Unknown2 { get; set; }
-			public UInt32 Unknown3 { get; set; }
 		}
 	}
 }

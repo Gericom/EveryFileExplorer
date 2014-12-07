@@ -17,6 +17,26 @@ namespace MarioKart.MKDS.NKM
 {
 	public class STAG
 	{
+		public STAG()
+		{
+			Signature = "STAG";
+			Unknown1 = 0;
+			NrLaps = 3;
+			Unknown2 = 0;
+			FogEnabled = false;
+			FogTableGenMode = 0;
+			FogSlope = 0;
+			UnknownData1 = new byte[8];
+			FogDensity = 0;
+			FogColor = Color.White;
+			FogAlpha = 0;
+			KclColor1 = Color.White;
+			KclColor2 = Color.White;
+			KclColor3 = Color.White;
+			KclColor4 = Color.White;
+			FrustumFar = 0;
+			UnknownData2 = new byte[4];
+		}
 		public STAG(EndianBinaryReader er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);

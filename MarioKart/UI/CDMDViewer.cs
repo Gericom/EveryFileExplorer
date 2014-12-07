@@ -75,9 +75,14 @@ namespace MarioKart.UI
 				KCL = v[0].FileFormat;
 			}
 
+			if (MapData.EnemyPoint != null) AddTab<ENPT.ENPTEntry>("ENPT", MapData.EnemyPoint);
+			if (MapData.EnemyPointPath != null) AddTab<ENPH.ENPHEntry>("ENPH", MapData.EnemyPointPath);
+			if (MapData.ItemPoint != null) AddTab<ITPT.ITPTEntry>("ITPT", MapData.ItemPoint);
+			if (MapData.ItemPointPath != null) AddTab<ITPH.ITPHEntry>("ITPH", MapData.ItemPointPath);
 			if (MapData.CheckPoint != null) AddTab<CKPT.CKPTEntry>("CKPT", MapData.CheckPoint);
 			if (MapData.CheckPointPath != null) AddTab<CKPH.CKPHEntry>("CKPH", MapData.CheckPointPath);
 			if (MapData.GlobalObject != null) AddTab<GOBJ.GOBJEntry>("GOBJ", MapData.GlobalObject);
+			if (MapData.Camera != null) AddTab<CAME.CAMEEntry>("CAME", MapData.Camera);
 			if (MapData.JugemPoint != null) AddTab<JGPT.JGPTEntry>("JGPT", MapData.JugemPoint);
 			if (MapData.GliderPoint != null) AddTab<GLPT.GLPTEntry>("GLPT", MapData.GliderPoint);
 			if (MapData.GliderPointPath != null) AddTab<GLPH.GLPHEntry>("GLPH", MapData.GliderPointPath);
@@ -470,10 +475,10 @@ namespace MarioKart.UI
 			}
 			objidx = 1;
 			//if (ePOIToolStripMenuItem.Checked)
-			/*{
-				if (NKMD.EnemyPoint != null)
+			{
+				if (MapData.EnemyPoint != null)
 				{
-					foreach (var o in NKMD.EnemyPoint.Entries)
+					foreach (var o in MapData.EnemyPoint.Entries)
 					{
 						if (picking)
 						{
@@ -483,9 +488,9 @@ namespace MarioKart.UI
 						Gl.glVertex2f(o.Position.X, o.Position.Z);
 					}
 				}
-				else
+				/*else
 				{
-					foreach (var o in NKMD.MiniGameEnemyPoint.Entries)
+					foreach (var o in MapData.MiniGameEnemyPoint.Entries)
 					{
 						if (picking)
 						{
@@ -494,8 +499,8 @@ namespace MarioKart.UI
 						}
 						Gl.glVertex2f(o.Position.X, o.Position.Z);
 					}
-				}
-			}*/
+				}*/
+			}
 
 			if (!picking)
 			{
@@ -503,8 +508,8 @@ namespace MarioKart.UI
 			}
 			objidx = 1;
 			//if (iPOIToolStripMenuItem.Checked)
-			/*{
-				foreach (var o in NKMD.ItemPoint.Entries)
+			{
+				foreach (var o in MapData.ItemPoint.Entries)
 				{
 					if (picking)
 					{
@@ -513,7 +518,26 @@ namespace MarioKart.UI
 					}
 					Gl.glVertex2f(o.Position.X, o.Position.Z);
 				}
-			}*/
+			}
+
+			if (!picking)
+			{
+				Gl.glColor3f(0.5f, 0, 1);
+			}
+			objidx = 1;
+			//if (iPOIToolStripMenuItem.Checked)
+			{
+				foreach (var o in MapData.GliderPoint.Entries)
+				{
+					if (picking)
+					{
+						Gl.glColor4f(Color.FromArgb(objidx | (4 << 18)).R / 255f, Color.FromArgb(objidx | (4 << 18)).G / 255f, Color.FromArgb(objidx | (4 << 18)).B / 255f, 1);
+						objidx++;
+					}
+					Gl.glVertex2f(o.Position.X, o.Position.Z);
+				}
+			}
+
 			if (!picking)
 			{
 				Gl.glColor3f(Color.CornflowerBlue.R / 255f, Color.CornflowerBlue.G / 255f, Color.CornflowerBlue.B / 255f);

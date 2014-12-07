@@ -10,6 +10,7 @@ using LibEveryFileExplorer.Collections;
 using System.Windows.Forms;
 using MarioKart.UI;
 using LibEveryFileExplorer;
+using LibEveryFileExplorer.Math;
 
 namespace MarioKart.MK7.KMP
 {
@@ -28,9 +29,15 @@ namespace MarioKart.MK7.KMP
 					er.BaseStream.Position -= 4;
 					switch (sig)
 					{
+						case "TPNE": EnemyPoint = new ENPT(er); break;
+						case "HPNE": EnemyPointPath = new ENPH(er); break;
+						case "TPTI": ItemPoint = new ITPT(er); break;
+						case "HPTI": ItemPointPath = new ITPH(er); break;
 						case "TPKC": CheckPoint = new CKPT(er); break;
 						case "HPKC": CheckPointPath = new CKPH(er); break;
 						case "JBOG": GlobalObject = new GOBJ(er); break;
+						case "ITOP": PointInfo = new POTI(er); break;
+						case "EMAC": Camera = new CAME(er); break;
 						case "TPGJ": JugemPoint = new JGPT(er); break;
 						case "TPLG": GliderPoint = new GLPT(er); break;
 						case "HPLG": GliderPointPath = new GLPH(er); break;
@@ -99,11 +106,18 @@ namespace MarioKart.MK7.KMP
 			public UInt32[] SectionOffsets;
 		}
 
+		public ENPT EnemyPoint;
+		public ENPH EnemyPointPath;
+		public ITPT ItemPoint;
+		public ITPH ItemPointPath;
+
 		public CKPT CheckPoint;
 		public CKPH CheckPointPath;
 
 		public GOBJ GlobalObject;
+		public POTI PointInfo;
 
+		public CAME Camera;
 		public JGPT JugemPoint;
 
 		public GLPT GliderPoint;
@@ -115,6 +129,7 @@ namespace MarioKart.MK7.KMP
 			n.ObjectInformation = new MKDS.NKM.OBJI();
 			n.Path = new MKDS.NKM.PATH();
 			n.Point = new MKDS.NKM.POIT();
+			n.Stage = new MKDS.NKM.STAG();
 			n.KartPointStart = new MKDS.NKM.KTPS();
 			n.KartPointJugem = new MKDS.NKM.KTPJ();
 			n.KartPointSecond = new MKDS.NKM.KTP2();
@@ -133,7 +148,19 @@ namespace MarioKart.MK7.KMP
 
 			foreach (var v in GlobalObject.Entries)
 			{
-				if (v.ObjectID == 0x012D)
+				if (v.ObjectID == 4)
+				{
+					n.ObjectInformation.Entries.Add(new MKDS.NKM.OBJI.OBJIEntry()
+					{
+						Position = v.Position,
+						Rotation = v.Rotation,
+						Scale = v.Scale,
+						ObjectID = 0x65,
+						RouteID = -1,
+						TTVisible = true
+					});
+				}
+				else if (v.ObjectID == 0x012D)
 				{
 					n.KartPointStart.Entries.Add(new MKDS.NKM.KTPS.KTPSEntry()
 					{
@@ -149,10 +176,28 @@ namespace MarioKart.MK7.KMP
 						Unknown = 0xFFFF,
 						Index = -1
 					});
-					break;
 				}
 			}
 			int i = 0;
+			foreach (var v in PointInfo.Routes)
+			{
+				n.Path.Entries.Add(new MKDS.NKM.PATH.PATHEntry()
+				{
+					NrPoit = (short)v.NrPoints,
+					Loop = false,
+					Index = (byte)i++
+				});
+				for (int ii = 0; ii < v.NrPoints; ii++)
+				{
+					n.Point.Entries.Add(new MKDS.NKM.POIT.POITEntry()
+					{
+						Position = v.Points[ii].Position,
+						Unknown = v.Points[ii].Setting1,
+						Index = (short)ii
+					});
+				}
+			}
+			i = 0;
 			foreach (var v in JugemPoint.Entries)
 			{
 				n.KartPointJugem.Entries.Add(new MKDS.NKM.KTPJ.KTPJEntry()
@@ -162,6 +207,19 @@ namespace MarioKart.MK7.KMP
 					ItemPointID = 0,
 					EnemyPointID = 0,
 					Index = i++
+				});
+			}
+			i = 0;
+			foreach (var v in GliderPointPath.Entries)
+			{
+				var start = GliderPoint[v.Start];
+				var end = GliderPoint[v.Start + v.Length - 1];
+				n.KartPointCannon.Entries.Add(new MKDS.NKM.KTPC.KTPCEntry()
+				{
+					Position = end.Position,
+					Rotation = new Vector3(0, (float)MathUtil.RadToDeg(Math.Atan2(end.Position.X - start.Position.X, end.Position.Z - start.Position.Z)), 0),
+					NextMEPO = -1,
+					Index = (short)i++
 				});
 			}
 			i = 0;
@@ -204,6 +262,86 @@ namespace MarioKart.MK7.KMP
 				q.GoesTo[1] = v.Next[1];
 				q.GoesTo[2] = v.Next[2];
 				n.CheckPointPath.Entries.Add(q);
+			}
+			foreach (var v in ItemPoint.Entries)
+			{
+				n.ItemPoint.Entries.Add(new MKDS.NKM.IPOI.IPOIEntry()
+				{
+					Position = v.Position
+				});
+			}
+			foreach (var v in ItemPointPath.Entries)
+			{
+				var q = new MKDS.NKM.IPAT.IPATEntry()
+				{
+					StartIndex = (short)v.Start,
+					Length = (short)v.Length
+				};
+				q.ComesFrom[0] = (sbyte)v.Previous[0];
+				q.ComesFrom[1] = (sbyte)v.Previous[1];
+				q.ComesFrom[2] = (sbyte)v.Previous[2];
+				q.GoesTo[0] = (sbyte)v.Next[0];
+				q.GoesTo[1] = (sbyte)v.Next[1];
+				q.GoesTo[2] = (sbyte)v.Next[2];
+				n.ItemPath.Entries.Add(q);
+			}
+			foreach (var v in EnemyPoint.Entries)
+			{
+				n.EnemyPoint.Entries.Add(new MKDS.NKM.EPOI.EPOIEntry()
+				{
+					Position = v.Position,
+					PointSize = v.Unknown1 * 100f //?
+				});
+			}
+			foreach (var v in EnemyPointPath.Entries)
+			{
+				var q = new MKDS.NKM.EPAT.EPATEntry()
+				{
+					StartIndex = (short)v.Start,
+					Length = (short)v.Length
+				};
+				q.ComesFrom[0] = (sbyte)v.Previous[0];
+				q.ComesFrom[1] = (sbyte)v.Previous[1];
+				q.ComesFrom[2] = (sbyte)v.Previous[2];
+				q.GoesTo[0] = (sbyte)v.Next[0];
+				q.GoesTo[1] = (sbyte)v.Next[1];
+				q.GoesTo[2] = (sbyte)v.Next[2];
+				n.EnemyPath.Entries.Add(q);
+			}
+			bool first = true;
+			foreach (var v in Camera.Entries)
+			{
+				if (v.Type != 5)
+				{
+					n.Camera.Entries.Add(new MKDS.NKM.CAME.CAMEEntry());
+				}
+				else
+				{
+					float begindist = (float)(400f / (2f * Math.Tan(MathUtil.DegToRad(v.FOVBegin) / 2f)));
+					float beginFov = (float)Math.Atan(256f / (2f * begindist)) * 2f;
+
+					float enddist = (float)(400f / (2f * Math.Tan(MathUtil.DegToRad(v.FOVEnd) / 2f)));
+					float endFov = (float)Math.Atan(256f / (2f * enddist)) * 2f;
+					var q = new MKDS.NKM.CAME.CAMEEntry()
+					{
+						Position = v.Position,
+						Angle = v.Rotation,
+						Viewpoint1 = v.Viewpoint1,
+						Viewpoint2 = v.Viewpoint2,
+						FieldOfViewBegin = (UInt16)MathUtil.RadToDeg(beginFov / 1.5f),//(v.FOVBegin / 1.25f),
+						FieldOfViewEnd = (UInt16)MathUtil.RadToDeg(endFov / 1.5f),//(v.FOVEnd / 1.25f),
+						FovSpeed = 10,//(Int16)(v.FOVSpeed * 10),
+						CameraType = 3,
+						LinkedRoute = v.RouteID,
+						RouteSpeed = 10,//(short)(v.RouteID != 255 ? PointInfo.Routes[v.RouteID].Points[0].Setting1 / 16.67f : 0), //(Int16)v.RouteSpeed,
+						PointSpeed = 10,//(Int16)(v.ViewpointSpeed / 16.67f),
+						Duration = (Int16)v.Duration,
+						NextCamera = v.Next,
+						FirstIntroCamera = first ? MKDS.NKM.CAME.CAMEEntry.CAMEIntroCamera.Top : MKDS.NKM.CAME.CAMEEntry.CAMEIntroCamera.No
+					};
+					n.Camera.Entries.Add(q);
+					first = false;
+				}
 			}
 			return n;
 		}
