@@ -192,7 +192,7 @@ namespace MarioKart.MK7.KMP
 					n.Point.Entries.Add(new MKDS.NKM.POIT.POITEntry()
 					{
 						Position = v.Points[ii].Position,
-						Unknown = v.Points[ii].Setting1,
+						Duration = (short)v.Points[ii].Setting1,
 						Index = (short)ii
 					});
 				}
@@ -322,6 +322,17 @@ namespace MarioKart.MK7.KMP
 
 					float enddist = (float)(400f / (2f * Math.Tan(MathUtil.DegToRad(v.FOVEnd) / 2f)));
 					float endFov = (float)Math.Atan(256f / (2f * enddist)) * 2f;
+
+					int routespeed = 0;
+					if (v.RouteID != 255)
+					{
+						for (int p = 0; p< PointInfo.Routes[v.RouteID].NrPoints; p++)
+						{
+							routespeed += PointInfo.Routes[v.RouteID].Points[p].Setting1;
+						}
+						routespeed /= PointInfo.Routes[v.RouteID].NrPoints;
+					}
+
 					var q = new MKDS.NKM.CAME.CAMEEntry()
 					{
 						Position = v.Position,
@@ -330,11 +341,11 @@ namespace MarioKart.MK7.KMP
 						Viewpoint2 = v.Viewpoint2,
 						FieldOfViewBegin = (UInt16)MathUtil.RadToDeg(beginFov / 1.5f),//(v.FOVBegin / 1.25f),
 						FieldOfViewEnd = (UInt16)MathUtil.RadToDeg(endFov / 1.5f),//(v.FOVEnd / 1.25f),
-						FovSpeed = 10,//(Int16)(v.FOVSpeed * 10),
+						FovSpeed = /*10*/(Int16)(v.FOVSpeed * 10),//v.Duration / 20),//(Int16)(v.FOVSpeed * 10),
 						CameraType = 3,
 						LinkedRoute = v.RouteID,
-						RouteSpeed = 10,//(short)(v.RouteID != 255 ? PointInfo.Routes[v.RouteID].Points[0].Setting1 / 16.67f : 0), //(Int16)v.RouteSpeed,
-						PointSpeed = 10,//(Int16)(v.ViewpointSpeed / 16.67f),
+						RouteSpeed = (Int16)(routespeed * 2),//v.Duration / 2 / (v.RouteID != 255 ? PointInfo.Routes[v.RouteID].NrPoints : 1)),//10,//(short)(v.RouteID != 255 ? PointInfo.Routes[v.RouteID].Points[0].Setting1 / 16.67f : 0), //(Int16)v.RouteSpeed,
+						PointSpeed = (Int16)(v.Duration / 10),//v.ViewpointSpeed / 45),//(Int16)(v.ViewpointSpeed / 16.67f),
 						Duration = (Int16)v.Duration,
 						NextCamera = v.Next,
 						FirstIntroCamera = first ? MKDS.NKM.CAME.CAMEEntry.CAMEIntroCamera.Top : MKDS.NKM.CAME.CAMEEntry.CAMEIntroCamera.No

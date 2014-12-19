@@ -193,7 +193,7 @@ namespace MarioKart
 				{
 					if (tricube_overlap(v.Value, newpos, newsize)) t.Add(v.Key, v.Value);
 				}
-				if (BoxSize != MinSize && t.Count > MaxTris)
+				if (BoxSize > MinSize && t.Count > MaxTris)
 				{
 					n.IsLeaf = false;
 					float childsize = BoxSize / 2f;
@@ -400,12 +400,15 @@ namespace MarioKart
 			float mincomp = Math.Min(Math.Min(size.X, size.Y), size.Z);
 			int CoordShift = Get2Power(mincomp);
 			if (CoordShift > Get2Power(MaxRootSize)) CoordShift = Get2Power(MaxRootSize);
-			else if (CoordShift < Get2Power(MinRootSize)) CoordShift = Get2Power(MinRootSize);
+			//else if (CoordShift < Get2Power(MinRootSize)) CoordShift = Get2Power(MinRootSize);
 			Header.CoordShift = (uint)CoordShift;
 			int cubesize = 1 << CoordShift;
 			int NrX = (1 << Get2Power(size.X)) / cubesize;
 			int NrY = (1 << Get2Power(size.Y)) / cubesize;
 			int NrZ = (1 << Get2Power(size.Z)) / cubesize;
+			if (NrX <= 0) NrX = 1;
+			if (NrY <= 0) NrY = 1;
+			if (NrZ <= 0) NrZ = 1;
 			Header.YShift = (uint)(Get2Power(size.X) - CoordShift);
 			Header.ZShift = (uint)(Get2Power(size.X) - CoordShift + Get2Power(size.Y) - CoordShift);
 			Header.XMask = 0xFFFFFFFF << Get2Power(size.X);

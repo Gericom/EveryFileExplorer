@@ -213,7 +213,8 @@ namespace NDS.NitroSystem.FND
 				kind = er.ReadString(Encoding.ASCII, 4);
 				if (kind != "GMIF") throw new SignatureNotCorrectException(kind, "GMIF", er.BaseStream.Position);
 				size = er.ReadUInt32();
-				fileImage = er.ReadBytes((int)size - 8);
+				//Some programs seem to write the size wrong, which causes index out of range exceptions
+				fileImage = er.ReadBytes((int)(er.BaseStream.Length - er.BaseStream.Position));//er.ReadBytes((int)size - 8);
 			}
 			public void Write(EndianBinaryWriter er)
 			{

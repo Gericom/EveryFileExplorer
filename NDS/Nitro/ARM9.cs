@@ -135,7 +135,9 @@ namespace NDS.Nitro
 
 		public static byte[] Decompress(byte[] Data)
 		{
-			return Decompress(Data, FindModuleParams(Data));
+			uint offset = FindModuleParams(Data);
+			if (offset == 0xffffffe3) return Data;//no moduleparams, so it must be uncompressed
+			return Decompress(Data, offset);
 		}
 
 		public static byte[] Decompress(byte[] Data, UInt32 _start_ModuleParamsOffset)
