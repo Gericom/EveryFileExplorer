@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NDSProject.cs" />
+    <Compile Include="NitroSystem\SND\SDAT.cs" />
     <Compile Include="Nitro\ARM9.cs" />
     <Compile Include="Nitro\ASMHack.cs" />
     <Compile Include="GPU\CommandContext.cs" />
@@ -183,7 +184,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NitroSystem\G2D\" />
-    <Folder Include="NitroSystem\SND\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\leaf.png" />

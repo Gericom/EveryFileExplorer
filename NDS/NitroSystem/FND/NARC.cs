@@ -82,7 +82,7 @@ namespace NDS.NitroSystem.FND
 			public ArchiveHeader(EndianBinaryReader er)
 			{
 				signature = er.ReadString(Encoding.ASCII, 4);
-				if (signature != "NARC") throw new SignatureNotCorrectException(signature, "NARC", er.BaseStream.Position);
+				if (signature != "NARC") throw new SignatureNotCorrectException(signature, "NARC", er.BaseStream.Position - 4);
 				byteOrder = er.ReadUInt16();
 				version = er.ReadUInt16();
 				fileSize = er.ReadUInt32();
