@@ -116,15 +116,78 @@ namespace EveryFileExplorer
 					foreach (Type t in p.CompressionTypes)
 					{
 						MenuItem ii = m.MenuItems.Add(((dynamic)new StaticDynamic(t)).Identifier.GetCompressionDescription());
-						ii.MenuItems.Add("Decompress...");
-						if (t.GetInterfaces().Contains(typeof(ICompressable))) ii.MenuItems.Add("Compress...");
-						//ii.Click += new EventHandler(CreateFileNew_Click);
-						//ii.Tag = t;
+						var dec = ii.MenuItems.Add("Decompress...");
+						dec.Click += new EventHandler(Decompress_Click);
+						dec.Tag = t;
+						if (t.GetInterfaces().Contains(typeof(ICompressable)))
+						{
+							var comp = ii.MenuItems.Add("Compress...");
+							comp.Click += new EventHandler(Compress_Click);
+							comp.Tag = t;
+						}
 					}
 				}
 			}
 			if (PendingPath != null) Program.FileManager.OpenFile(new EFEDiskFile(PendingPath));
 			PendingPath = null;
+		}
+
+		void Compress_Click(object sender, EventArgs e)
+		{
+			openFileDialog1.Filter = "All Files (*.*)|*.*";
+			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
+				&& openFileDialog1.FileName.Length > 0)
+			{
+				saveFileDialog1.Filter = "All Files (*.*)|*.*";
+				saveFileDialog1.FileName = Path.GetFileNameWithoutExtension(openFileDialog1.FileName) + "_comp" + Path.GetExtension(openFileDialog1.FileName);
+				if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
+					&& saveFileDialog1.FileName.Length > 0)
+				{
+					Type comp = (Type)((MenuItem)sender).Tag;
+					ICompressable c = (ICompressable)comp.InvokeMember("", BindingFlags.CreateInstance, null, null, new object[0]);
+					byte[] result = null;
+					try
+					{
+						result = c.Compress(File.ReadAllBytes(openFileDialog1.FileName));
+					}
+					catch (Exception ee)
+					{
+						MessageBox.Show("An error occured while trying to compress:\n" + ee);
+						return;
+					}
+					File.Create(saveFileDialog1.FileName).Close();
+					File.WriteAllBytes(saveFileDialog1.FileName, result);
+				}
+			}
+		}
+
+		void Decompress_Click(object sender, EventArgs e)
+		{
+			openFileDialog1.Filter = "All Files (*.*)|*.*";
+			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
+				&& openFileDialog1.FileName.Length > 0)
+			{
+				Type comp = (Type)((MenuItem)sender).Tag;
+				CompressionFormatBase c = (CompressionFormatBase)comp.InvokeMember("", BindingFlags.CreateInstance, null, null, new object[0]);
+				byte[] result = null;
+				try
+				{
+					result = c.Decompress(File.ReadAllBytes(openFileDialog1.FileName));
+				}
+				catch (Exception ee)
+				{
+					MessageBox.Show("An error occured while trying to decompress! The file might not be in this compression type or not compressed at all!");
+					return;
+				}
+				saveFileDialog1.Filter = "All Files (*.*)|*.*";
+				saveFileDialog1.FileName = Path.GetFileNameWithoutExtension(openFileDialog1.FileName) + "_dec" + Path.GetExtension(openFileDialog1.FileName);
+				if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
+					&& saveFileDialog1.FileName.Length > 0)
+				{
+					File.Create(saveFileDialog1.FileName).Close();
+					File.WriteAllBytes(saveFileDialog1.FileName, result);
+				}
+			}
 		}
 
 		void CreateNewProject_Click(object sender, EventArgs e)
@@ -274,9 +337,9 @@ namespace EveryFileExplorer
 				file.File.Data = data;
 				file.File.Save();
 			}
-			catch
+			catch (Exception ee)
 			{
-				MessageBox.Show("An error occurred while trying to save!");
+				MessageBox.Show("An error occurred while trying to save:\n" + ee);
 			}
 		}
 

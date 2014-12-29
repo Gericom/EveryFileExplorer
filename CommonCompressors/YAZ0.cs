@@ -3,23 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Compression;
+using System.Runtime.InteropServices;
 
 namespace CommonCompressors
 {
-	public unsafe class YAZ0 : CompressionFormat<YAZ0.YAZ0Identifier>
+	public unsafe class YAZ0 : CompressionFormat<YAZ0.YAZ0Identifier>, ICompressable
 	{
-		/*public unsafe byte[] Compress(byte[] Data)
+		//Compression could be optimized by using look-ahead.
+		public unsafe byte[] Compress(byte[] Data)
 		{
 			byte* dataptr = (byte*)Marshal.UnsafeAddrOfPinnedArrayElement(Data, 0);
 
-			byte[] result = new byte[Data.Length + Data.Length / 8 + 4];
+			byte[] result = new byte[Data.Length + Data.Length / 8 + 0x10];
 			byte* resultptr = (byte*)Marshal.UnsafeAddrOfPinnedArrayElement(result, 0);
-			*resultptr++ = 0x10;
-			*resultptr++ = (byte)(Data.Length & 0xFF);
-			*resultptr++ = (byte)((Data.Length >> 8) & 0xFF);
+			*resultptr++ = (byte)'Y';
+			*resultptr++ = (byte)'a';
+			*resultptr++ = (byte)'z';
+			*resultptr++ = (byte)'0';
+			*resultptr++ = (byte)((Data.Length >> 24) & 0xFF);
 			*resultptr++ = (byte)((Data.Length >> 16) & 0xFF);
+			*resultptr++ = (byte)((Data.Length >> 8) & 0xFF);
+			*resultptr++ = (byte)((Data.Length >> 0) & 0xFF);
+			for (int i = 0; i < 8; i++) *resultptr++ = 0;
 			int length = Data.Length;
-			int dstoffs = 4;
+			int dstoffs = 16;
 			int Offs = 0;
 			while (true)
 			{
@@ -33,9 +40,10 @@ namespace CommonCompressors
 					int nr = 2;
 					{
 						byte* ptr = dataptr - 1;
-						int maxnum = 18;
+						int maxnum = 0x111;
 						if (length - Offs < maxnum) maxnum = length - Offs;
-						int maxback = 0x1000;
+						//Use a smaller amount of bytes back to decrease time
+						int maxback = 0x400;//0x1000;
 						if (Offs < maxback) maxback = Offs;
 						maxback = (int)dataptr - maxback;
 						int tmpnr;
@@ -47,6 +55,12 @@ namespace CommonCompressors
 								while (tmpnr < maxnum && ptr[tmpnr] == dataptr[tmpnr]) tmpnr++;
 								if (tmpnr > nr)
 								{
+									if (Offs + tmpnr > length)
+									{
+										nr = length - Offs;
+										back = (int)(dataptr - ptr);
+										break;
+									}
 									nr = tmpnr;
 									back = (int)(dataptr - ptr);
 									if (nr == maxnum) break;
@@ -59,9 +73,19 @@ namespace CommonCompressors
 					{
 						Offs += nr;
 						dataptr += nr;
-						*resultptr++ = (byte)((((back - 1) >> 8) & 0xF) | (((nr - 3) & 0xF) << 4));
-						*resultptr++ = (byte)((back - 1) & 0xFF);
-						dstoffs += 2;
+						if (nr >= 0x12)
+						{
+							*resultptr++ = (byte)(((back - 1) >> 8) & 0xF);
+							*resultptr++ = (byte)((back - 1) & 0xFF);
+							*resultptr++ = (byte)((nr - 0x12) & 0xFF);
+							dstoffs += 3;
+						}
+						else
+						{
+							*resultptr++ = (byte)((((back - 1) >> 8) & 0xF) | (((nr - 2) & 0xF) << 4));
+							*resultptr++ = (byte)((back - 1) & 0xFF);
+							dstoffs += 2;
+						}
 						comp = 1;
 					}
 					else
@@ -70,21 +94,21 @@ namespace CommonCompressors
 						dstoffs++;
 						Offs++;
 					}
-					header = (byte)((header << 1) | (comp & 1));
-					if (Offs == length)
+					header = (byte)((header << 1) | ((comp == 1) ? 0 : 1));
+					if (Offs >= length)
 					{
 						header = (byte)(header << (7 - i));
 						break;
 					}
 				}
 				result[headeroffs] = header;
-				if (Offs == length) break;
+				if (Offs >= length) break;
 			}
 			while ((dstoffs % 4) != 0) dstoffs++;
 			byte[] realresult = new byte[dstoffs];
 			Array.Copy(result, realresult, dstoffs);
 			return realresult;
-		}*/
+		}
 
 		public override byte[] Decompress(byte[] Data)
 		{
