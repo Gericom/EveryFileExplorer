@@ -5,7 +5,6 @@ using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
 using System.IO;
-using _3DS.DSP;
 using LibEveryFileExplorer.SND;
 using CommonFiles;
 using LibEveryFileExplorer.IO;
@@ -685,7 +684,7 @@ namespace _3DS.NintendoWare.SND
 			if (Channel >= Info.StreamInfo.NrChannels) return null;
 			if (Info.StreamInfo.Format == 2)
 			{
-				ADPCM worker = new ADPCM(Info.CodecInfos[Channel].Table);
+				DSPADPCM worker = new DSPADPCM(Info.CodecInfos[Channel].Table);
 				List<short> Data = new List<short>();
 				for (int i = 0; i < this.Data.Data.Length; i += (int)Info.StreamInfo.BlockSize * Info.StreamInfo.NrChannels)
 				{

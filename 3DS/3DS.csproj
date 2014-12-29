@@ -84,7 +84,6 @@
     <Compile Include="NintendoWare\SND\CSAR.cs" />
     <Compile Include="NintendoWare\SND\CSTM.cs" />
     <Compile Include="NintendoWare\LYT1\DARC.cs" />
-    <Compile Include="DSP\ADPCM.cs" />
     <Compile Include="DVLB.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GPU\Textures.cs" />

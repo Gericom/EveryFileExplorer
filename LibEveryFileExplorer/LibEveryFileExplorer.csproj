@@ -89,6 +89,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="SND\DSPADPCM.cs" />
     <Compile Include="SND\SNDUtil.cs" />
     <Compile Include="StaticDynamic.cs" />
     <Compile Include="UI\FileBrowser.cs">

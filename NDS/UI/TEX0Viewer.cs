@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using NDS.NitroSystem.G3D;
+using System.Drawing.Imaging;
 
 namespace NDS.UI
 {
@@ -50,9 +51,23 @@ namespace NDS.UI
 			try
 			{
 				b = tex.ToBitmap(Textures.dictPltt[listBox2.SelectedIndex].Value);
+				toolStripButton1.Enabled = true;//export
 			}
-			catch { }
+			catch 
+			{
+				toolStripButton1.Enabled = false;//export
+			}
 			finally { pictureBox1.Image = b; }
+		}
+
+		private void toolStripButton1_Click(object sender, EventArgs e)
+		{
+			saveFileDialog1.FileName = Textures.dictTex[listBox1.SelectedIndex].Key + ".png";
+			if (saveFileDialog1.ShowDialog() == DialogResult.OK
+				&& saveFileDialog1.FileName.Length > 0)
+			{
+				pictureBox1.Image.Save(saveFileDialog1.FileName, ImageFormat.Png);
+			}
 		}
 	}
 }

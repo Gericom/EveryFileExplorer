@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Math;
 
-namespace _3DS.DSP
+namespace LibEveryFileExplorer.SND
 {
-	public class ADPCM
+	public class DSPADPCM
 	{
 		Int16[] Table;
 		double Last1 = 0;
 		double Last2 = 0;
-		public ADPCM(Int16[] CoefTable)
+		public DSPADPCM(Int16[] CoefTable)
 		{
 			Table = CoefTable;
 		}
