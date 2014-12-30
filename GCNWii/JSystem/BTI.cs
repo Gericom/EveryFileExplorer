@@ -135,7 +135,7 @@ namespace GCNWii.JSystem
 
 			public override Bitmap GetIcon()
 			{
-				return null;
+				return Resource.image;
 			}
 
 			public override FormatMatch IsFormat(EFEFile File)

@@ -39,6 +39,16 @@ namespace GCNWii.GPU
 
 		public static int GetBpp(ImageFormat Format) { return Bpp[(uint)Format]; }
 
+		private static readonly int[] TileSizeW = { 8, 8, 8, 4, 4, 4, 4, 0, 8, 8, 4, 0, 0, 0, 8 };
+		private static readonly int[] TileSizeH = { 8, 4, 4, 4, 4, 4, 4, 0, 8, 4, 4, 0, 0, 0, 8 };
+
+		public static int GetDataSize(ImageFormat Format, int Width, int Height)
+		{
+			while ((Width % TileSizeW[(uint)Format]) != 0) Width++;
+			while ((Height % TileSizeH[(uint)Format]) != 0) Height++;
+			return Width * Height * GetBpp(Format) / 8;
+		}
+
 		public static unsafe Bitmap ToBitmap(byte[] TexData, int TexOffset, byte[] PalData, int PalOffset, int Width, int Height, ImageFormat Format, PaletteFormat PalFormat, bool ExactSize = false)
 		{
 			Bitmap bitm = new Bitmap(Width, Height);
