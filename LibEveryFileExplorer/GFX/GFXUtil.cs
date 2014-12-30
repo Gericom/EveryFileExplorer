@@ -8,119 +8,6 @@ namespace LibEveryFileExplorer.GFX
 {
 	public class GFXUtil
 	{
-		/// <summary>
-		/// Converts the given color to the default 32bpp color format used in C#. (System.Drawing.Imaging.PixelFormat.Format32bppArgb)
-		/// </summary>
-		/// <param name="Color">The XBGR1555 color to convert.</param>
-		/// <returns></returns>
-		public static uint XBGR1555ToArgb(ushort Color)
-		{
-			return ToArgb(
-				255,
-				(byte)((Color & 0x1F) * 8),
-				(byte)(((Color >> 5) & 0x1F) * 8),
-				(byte)(((Color >> 10) & 0x1F) * 8)
-				);
-		}
-
-		public static ushort ArgbToXBGR1555(uint Color)
-		{
-			return (ushort)(
-				((((Color >> 0) & 0xFF) >> 3) << 10) |
-				((((Color >> 8) & 0xFF) >> 3) << 5) |
-				((((Color >> 16) & 0xFF) >> 3) << 0));
-		}
-
-		/// <summary>
-		/// Converts the given color to the default 32bpp color format used in C#. (System.Drawing.Imaging.PixelFormat.Format32bppArgb)
-		/// </summary>
-		/// <param name="Color">The ABGR1555 color to convert.</param>
-		/// <returns></returns>
-		public static uint ABGR1555ToArgb(ushort Color)
-		{
-			return ToArgb(
-				(byte)((Color >> 15) * 255),
-				(byte)((Color & 0x1F) * 8),
-				(byte)(((Color >> 5) & 0x1F) * 8),
-				(byte)(((Color >> 10) & 0x1F) * 8)
-				);
-		}
-
-		/// <summary>
-		/// Converts the given color to the default 32bpp color format used in C#. (System.Drawing.Imaging.PixelFormat.Format32bppArgb)
-		/// </summary>
-		/// <param name="Color">The RGBA5551 color to convert.</param>
-		/// <returns></returns>
-		public static uint ARGB1555ToArgb(ushort Color)
-		{
-			return ToArgb(
-				(byte)((Color >> 15) * 255),
-				(byte)(((Color >> 10) & 0x1F) * 8),
-				(byte)(((Color >> 5) & 0x1F) * 8),
-				(byte)((Color & 0x1F) * 8)
-				);
-		}
-
-		/// <summary>
-		/// Converts the given color to the default 32bpp color format used in C#. (System.Drawing.Imaging.PixelFormat.Format32bppArgb)
-		/// </summary>
-		/// <param name="Color">The RGB565 color to convert.</param>
-		/// <returns></returns>
-		public static uint RGB565ToArgb(ushort Color)
-		{
-			return ToArgb(
-				255,
-				(byte)(((Color >> 11) & 0x1F) * 8),
-				(byte)(((Color >> 5) & 0x3F) * 4),
-				(byte)((Color & 0x1F) * 8)
-				);
-		}
-
-		/// <summary>
-		/// Converts the given color to RGB565.
-		/// </summary>
-		/// <param name="Color">The color to convert in the default 32bpp color format used in C#. (System.Drawing.Imaging.PixelFormat.Format32bppArgb)</param>
-		/// <returns></returns>
-		public static ushort ArgbToRGB565(uint Color)
-		{
-			uint A = (Color >> 24) & 0xFF;
-			uint R = (Color >> 16) & 0xFF;
-			uint G = (Color >> 8) & 0xFF;
-			uint B = (Color >> 0) & 0xFF;
-			if (A < 128) { R = 0; G = 0; B = 0; }
-			return (ushort)((((R >> 3) << 11) | ((G >> 2) << 5) | ((B >> 3) << 0)) & 0xFFFF);
-		}
-
-		/// <summary>
-		/// Converts the given color to the default 32bpp color format used in C# with an alpha value of 255. (System.Drawing.Imaging.PixelFormat.Format32bppArgb)
-		/// </summary>
-		/// <param name="R">Red</param>
-		/// <param name="G">Green</param>
-		/// <param name="B">Blue</param>
-		/// <returns></returns>
-		public static uint ToArgb(byte R, byte G, byte B)
-		{
-			return ToArgb(255, R, G, B);
-		}
-
-		/// <summary>
-		/// Converts the given color to the default 32bpp color format used in C#. (System.Drawing.Imaging.PixelFormat.Format32bppArgb)
-		/// </summary>
-		/// <param name="A">Alpha</param>
-		/// <param name="R">Red</param>
-		/// <param name="G">Green</param>
-		/// <param name="B">Blue</param>
-		/// <returns></returns>
-		public static uint ToArgb(byte A, byte R, byte G, byte B)
-		{
-			return (uint)(A << 24 | R << 16 | G << 8 | B);
-		}
-
-		public static uint SetArgbAlpha(uint Argb, byte A)
-		{
-			return (uint)((uint)A << 24 | (Argb & 0xFFFFFF));
-		}
-
 		public static Bitmap Resize(Bitmap Original, int Width, int Height)
 		{
 			if (Original.Width == Width && Original.Height == Height) return Original;
@@ -134,6 +21,60 @@ namespace LibEveryFileExplorer.GFX
 				g.Flush();
 			}
 			return res;
+		}
+
+		public static uint ConvertColorFormat(uint InColor, ColorFormat InputFormat, ColorFormat OutputFormat)
+		{
+			if (InputFormat == OutputFormat) return InColor;
+			//From color format to components:
+			uint A, R, G, B;
+			uint mask;
+			if (InputFormat.ASize == 0) A = 255;
+			else
+			{
+				mask = ~(0xFFFFFFFFu << InputFormat.ASize);
+				A = ((((InColor >> InputFormat.AShift) & mask) * 255u) + mask / 2) / mask;
+			}
+			mask = ~(0xFFFFFFFFu << InputFormat.RSize);
+			R = ((((InColor >> InputFormat.RShift) & mask) * 255u) + mask / 2) / mask;
+			mask = ~(0xFFFFFFFFu << InputFormat.GSize);
+			G = ((((InColor >> InputFormat.GShift) & mask) * 255u) + mask / 2) / mask;
+			mask = ~(0xFFFFFFFFu << InputFormat.BSize);
+			B = ((((InColor >> InputFormat.BShift) & mask) * 255u) + mask / 2) / mask;
+			return ToColorFormat(A, R, G, B, OutputFormat);
+		}
+
+		public static uint ToColorFormat(int R, int G, int B, ColorFormat OutputFormat)
+		{
+			return ToColorFormat(255u, (uint)R, (uint)G, (uint)B, OutputFormat);
+		}
+
+		public static uint ToColorFormat(int A, int R, int G, int B, ColorFormat OutputFormat)
+		{
+			return ToColorFormat((uint)A, (uint)R, (uint)G, (uint)B, OutputFormat);
+		}
+
+		public static uint ToColorFormat(uint R, uint G, uint B, ColorFormat OutputFormat)
+		{
+			return ToColorFormat(255u, R, G, B, OutputFormat);
+		}
+
+		public static uint ToColorFormat(uint A, uint R, uint G, uint B, ColorFormat OutputFormat)
+		{
+			uint result = 0;
+			uint mask;
+			if (OutputFormat.ASize != 0)
+			{
+				mask = ~(0xFFFFFFFFu << OutputFormat.ASize);
+				result |= ((A * mask + 127u) / 255u) << OutputFormat.AShift;
+			}
+			mask = ~(0xFFFFFFFFu << OutputFormat.RSize);
+			result |= ((R * mask + 127u) / 255u) << OutputFormat.RShift;
+			mask = ~(0xFFFFFFFFu << OutputFormat.GSize);
+			result |= ((G * mask + 127u) / 255u) << OutputFormat.GShift;
+			mask = ~(0xFFFFFFFFu << OutputFormat.BSize);
+			result |= ((B * mask + 127u) / 255u) << OutputFormat.BShift;
+			return result;
 		}
 	}
 }

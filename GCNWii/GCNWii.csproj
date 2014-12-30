@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -43,8 +44,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GPU\Textures.cs" />
+    <Compile Include="JSystem\BTI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RARC.cs" />
+    <Compile Include="UI\BTIViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\BTIViewer.Designer.cs">
+      <DependentUpon>BTIViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\RARCViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,10 +68,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="UI\BTIViewer.resx">
+      <DependentUpon>BTIViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\RARCViewer.resx">
       <DependentUpon>RARCViewer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)\EveryFileExplorer\bin\Debug\Plugins\$(TargetFileName)"</PostBuildEvent>

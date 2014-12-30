@@ -294,7 +294,7 @@ namespace NDS.GPU
 		}
 		public void Color(uint color)
 		{
-			Color(System.Drawing.Color.FromArgb((int)GFXUtil.XBGR1555ToArgb((ushort)color)));
+			Color(System.Drawing.Color.FromArgb((int)GFXUtil.ConvertColorFormat(color, ColorFormat.XBGR1555, ColorFormat.ARGB8888)));
 		}
 		public void Color(Color color)
 		{
@@ -474,8 +474,8 @@ namespace NDS.GPU
 			ushort diff = (ushort)(cmd & 0x7FFF);
 			bool vtx = (cmd & 0x8000) != 0;
 			ushort amb = (ushort)((cmd >> 16) & 0x7FFF);
-			DiffuseColor = System.Drawing.Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(diff));
-			AmbientColor = System.Drawing.Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(amb));
+			DiffuseColor = System.Drawing.Color.FromArgb((int)GFXUtil.ConvertColorFormat(diff, ColorFormat.XBGR1555, ColorFormat.ARGB8888));
+			AmbientColor = System.Drawing.Color.FromArgb((int)GFXUtil.ConvertColorFormat(amb, ColorFormat.XBGR1555, ColorFormat.ARGB8888));
 			if (vtx) Color(DiffuseColor);
 		}
 		public void MaterialColor1(uint cmd)
@@ -484,8 +484,8 @@ namespace NDS.GPU
 			bool shine = (cmd & 0x8000) != 0;
 			ushort emiss = (ushort)((cmd >> 16) & 0x7FFF);
 			UsesSpecularReflectionTable = shine;
-			SpecularColor = System.Drawing.Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(spec));
-			EmissionColor = System.Drawing.Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(emiss));
+			SpecularColor = System.Drawing.Color.FromArgb((int)GFXUtil.ConvertColorFormat(spec, ColorFormat.XBGR1555, ColorFormat.ARGB8888));
+			EmissionColor = System.Drawing.Color.FromArgb((int)GFXUtil.ConvertColorFormat(emiss, ColorFormat.XBGR1555, ColorFormat.ARGB8888));
 		}
 		public void Shininess(uint[] SpecReflectTable)
 		{

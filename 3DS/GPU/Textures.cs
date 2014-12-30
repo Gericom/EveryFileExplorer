@@ -72,7 +72,7 @@ namespace _3DS.GPU
 				Height = 1 << (int)Math.Ceiling(Math.Log(Height, 2));
 			}
 			Bitmap bitm = new Bitmap(physicalwidth, physicalheight);
-			BitmapData d = bitm.LockBits(new Rectangle(0, 0, bitm.Width, bitm.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+			BitmapData d = bitm.LockBits(new Rectangle(0, 0, bitm.Width, bitm.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
 			uint* res = (uint*)d.Scan0;
 			int offs = Offset;//0;
 			int stride = d.Stride / 4;
@@ -90,12 +90,17 @@ namespace _3DS.GPU
 								int y2 = i / 8;
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-								res[(y + y2) * stride + x + x2] = GFXUtil.ToArgb(
-									Data[offs + pos * 4],
-									Data[offs + pos * 4 + 3],
-									Data[offs + pos * 4 + 2],
-									Data[offs + pos * 4 + 1]
-									);
+								res[(y + y2) * stride + x + x2] =
+									GFXUtil.ConvertColorFormat(
+										IOUtil.ReadU32LE(Data, offs + pos * 4),
+										ColorFormat.RGBA8888,
+										ColorFormat.ARGB8888);
+								/*GFXUtil.ToArgb(
+								Data[offs + pos * 4],
+								Data[offs + pos * 4 + 3],
+								Data[offs + pos * 4 + 2],
+								Data[offs + pos * 4 + 1]
+								);*/
 							}
 							offs += 64 * 4;
 						}
@@ -113,11 +118,16 @@ namespace _3DS.GPU
 								int y2 = i / 8;
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-								res[(y + y2) * stride + x + x2] = GFXUtil.ToArgb(
-									Data[offs + pos * 3 + 2],
-									Data[offs + pos * 3 + 1],
-									Data[offs + pos * 3 + 0]
-									);
+								res[(y + y2) * stride + x + x2] =
+									GFXUtil.ConvertColorFormat(
+										IOUtil.ReadU24LE(Data, offs + pos * 3),
+										ColorFormat.RGB888,
+										ColorFormat.ARGB8888);
+								/*GFXUtil.ToArgb(
+								Data[offs + pos * 3 + 2],
+								Data[offs + pos * 3 + 1],
+								Data[offs + pos * 3 + 0]
+								);*/
 							}
 							offs += 64 * 3;
 						}
@@ -136,7 +146,11 @@ namespace _3DS.GPU
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
 								res[(y + y2) * stride + x + x2] =
-									GFXUtil.ARGB1555ToArgb(IOUtil.ReadU16LE(Data, offs + pos * 2));
+									GFXUtil.ConvertColorFormat(
+										IOUtil.ReadU16LE(Data, offs + pos * 2),
+										ColorFormat.ARGB1555,
+										ColorFormat.ARGB8888);
+								//GFXUtil.ARGB1555ToArgb(IOUtil.ReadU16LE(Data, offs + pos * 2));
 							}
 							offs += 64 * 2;
 						}
@@ -155,7 +169,11 @@ namespace _3DS.GPU
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
 								res[(y + y2) * stride + x + x2] =
-									GFXUtil.RGB565ToArgb(IOUtil.ReadU16LE(Data, offs + pos * 2));
+									GFXUtil.ConvertColorFormat(
+										IOUtil.ReadU16LE(Data, offs + pos * 2),
+										ColorFormat.RGB565,
+										ColorFormat.ARGB8888);
+								//GFXUtil.RGB565ToArgb(IOUtil.ReadU16LE(Data, offs + pos * 2));
 							}
 							offs += 64 * 2;
 						}
@@ -173,12 +191,17 @@ namespace _3DS.GPU
 								int y2 = i / 8;
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-								res[(y + y2) * stride + x + x2] = GFXUtil.ToArgb(
-									(byte)((Data[offs + pos * 2] & 0xF) * 0x11),
-									(byte)((Data[offs + pos * 2 + 1] >> 4) * 0x11),
-									(byte)((Data[offs + pos * 2 + 1] & 0xF) * 0x11),
-									(byte)((Data[offs + pos * 2] >> 4) * 0x11)
-									);
+								res[(y + y2) * stride + x + x2] =
+									GFXUtil.ConvertColorFormat(
+										IOUtil.ReadU16LE(Data, offs + pos * 2),
+										ColorFormat.RGBA4444,
+										ColorFormat.ARGB8888);
+								/*GFXUtil.ToArgb(
+								(byte)((Data[offs + pos * 2] & 0xF) * 0x11),
+								(byte)((Data[offs + pos * 2 + 1] >> 4) * 0x11),
+								(byte)((Data[offs + pos * 2 + 1] & 0xF) * 0x11),
+								(byte)((Data[offs + pos * 2] >> 4) * 0x11)
+								);*/
 							}
 							offs += 64 * 2;
 						}
@@ -196,11 +219,12 @@ namespace _3DS.GPU
 								int y2 = i / 8;
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-								res[(y + y2) * stride + x + x2] = GFXUtil.ToArgb(
+								res[(y + y2) * stride + x + x2] = GFXUtil.ToColorFormat(
 									Data[offs + pos * 2],
 									Data[offs + pos * 2 + 1],
 									Data[offs + pos * 2 + 1],
-									Data[offs + pos * 2 + 1]
+									Data[offs + pos * 2 + 1],
+									ColorFormat.ARGB8888
 									);
 							}
 							offs += 64 * 2;
@@ -219,11 +243,12 @@ namespace _3DS.GPU
 								int y2 = i / 8;
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-								res[(y + y2) * stride + x + x2] = GFXUtil.ToArgb(
+								res[(y + y2) * stride + x + x2] = GFXUtil.ToColorFormat(
 									Data[offs + pos * 2],
 									Data[offs + pos * 2 + 1],
 									Data[offs + pos * 2 + 1],
-									Data[offs + pos * 2 + 1]
+									Data[offs + pos * 2 + 1],
+									ColorFormat.ARGB8888
 									);
 							}
 							offs += 64 * 2;
@@ -242,10 +267,11 @@ namespace _3DS.GPU
 								int y2 = i / 8;
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-								res[(y + y2) * stride + x + x2] = GFXUtil.ToArgb(
+								res[(y + y2) * stride + x + x2] = GFXUtil.ToColorFormat(
 									Data[offs + pos],
 									Data[offs + pos],
-									Data[offs + pos]
+									Data[offs + pos],
+									ColorFormat.ARGB8888
 									);
 							}
 							offs += 64;
@@ -264,11 +290,12 @@ namespace _3DS.GPU
 								int y2 = i / 8;
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-								res[(y + y2) * stride + x + x2] = GFXUtil.ToArgb(
+								res[(y + y2) * stride + x + x2] = GFXUtil.ToColorFormat(
 									Data[offs + pos],
 									255,
 									255,
-									255
+									255,
+									ColorFormat.ARGB8888
 									);
 							}
 							offs += 64;
@@ -287,11 +314,12 @@ namespace _3DS.GPU
 								int y2 = i / 8;
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-								res[(y + y2) * stride + x + x2] = GFXUtil.ToArgb(
+								res[(y + y2) * stride + x + x2] = GFXUtil.ToColorFormat(
 									(byte)((Data[offs + pos] & 0xF) * 0x11),
 									(byte)((Data[offs + pos] >> 4) * 0x11),
 									(byte)((Data[offs + pos] >> 4) * 0x11),
-									(byte)((Data[offs + pos] >> 4) * 0x11)
+									(byte)((Data[offs + pos] >> 4) * 0x11),
+									ColorFormat.ARGB8888
 									);
 							}
 							offs += 64;
@@ -311,10 +339,11 @@ namespace _3DS.GPU
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
 								int shift = (pos & 1) * 4;
-								res[(y + y2) * stride + x + x2] = GFXUtil.ToArgb(
+								res[(y + y2) * stride + x + x2] = GFXUtil.ToColorFormat(
 									(byte)(((Data[offs + pos / 2] >> shift) & 0xF) * 0x11),
 									(byte)(((Data[offs + pos / 2] >> shift) & 0xF) * 0x11),
-									(byte)(((Data[offs + pos / 2] >> shift) & 0xF) * 0x11)
+									(byte)(((Data[offs + pos / 2] >> shift) & 0xF) * 0x11),
+									ColorFormat.ARGB8888
 									);
 							}
 							offs += 64 / 2;
@@ -334,11 +363,12 @@ namespace _3DS.GPU
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
 								int shift = (pos & 1) * 4;
-								res[(y + y2) * stride + x + x2] = GFXUtil.ToArgb(
+								res[(y + y2) * stride + x + x2] = GFXUtil.ToColorFormat(
 									(byte)(((Data[offs + pos / 2] >> shift) & 0xF) * 0x11),
 									255,
 									255,
-									255
+									255,
+									ColorFormat.ARGB8888
 									);
 							}
 							offs += 64 / 2;
@@ -405,12 +435,12 @@ namespace _3DS.GPU
 												if ((flipbit && y3 < 2) || (!flipbit && x3 < 2))
 												{
 													int add = ETC1Modifiers[Table1, val] * (neg ? -1 : 1);
-													c = GFXUtil.ToArgb((byte)(((alpha >> ((x3 * 4 + y3) * 4)) & 0xF) * 0x11), (byte)ColorClamp(r1 + add), (byte)ColorClamp(g1 + add), (byte)ColorClamp(b1 + add));
+													c = GFXUtil.ToColorFormat((byte)(((alpha >> ((x3 * 4 + y3) * 4)) & 0xF) * 0x11), (byte)ColorClamp(r1 + add), (byte)ColorClamp(g1 + add), (byte)ColorClamp(b1 + add), ColorFormat.ARGB8888);
 												}
 												else
 												{
 													int add = ETC1Modifiers[Table2, val] * (neg ? -1 : 1);
-													c = GFXUtil.ToArgb((byte)(((alpha >> ((x3 * 4 + y3) * 4)) & 0xF) * 0x11), (byte)ColorClamp(r2 + add), (byte)ColorClamp(g2 + add), (byte)ColorClamp(b2 + add));
+													c = GFXUtil.ToColorFormat((byte)(((alpha >> ((x3 * 4 + y3) * 4)) & 0xF) * 0x11), (byte)ColorClamp(r2 + add), (byte)ColorClamp(g2 + add), (byte)ColorClamp(b2 + add), ColorFormat.ARGB8888);
 												}
 												res[(i + y3) * stride + x + j + x3] = c;
 											}
@@ -479,7 +509,7 @@ namespace _3DS.GPU
 								int y2 = i / 8;
 								if (y + y2 >= physicalheight) continue;
 								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-								IOUtil.WriteU16LE(result, offs + pos * 2, GFXUtil.ArgbToRGB565(res[(y + y2) * d.Stride / 4 + x + x2]));
+								IOUtil.WriteU16LE(result, offs + pos * 2, (ushort)GFXUtil.ConvertColorFormat(res[(y + y2) * d.Stride / 4 + x + x2], ColorFormat.ARGB8888, ColorFormat.RGB565)); //GFXUtil.ArgbToRGB565(res[(y + y2) * d.Stride / 4 + x + x2]));
 							}
 							offs += 64 * 2;
 						}

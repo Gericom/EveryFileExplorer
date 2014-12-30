@@ -38,15 +38,30 @@ namespace LibEveryFileExplorer.IO
 			return (ushort)(Data[Offset] | (Data[Offset + 1] << 8));
 		}
 
+		public static ushort ReadU16BE(byte[] Data, int Offset)
+		{
+			return (ushort)((Data[Offset] << 8) | Data[Offset + 1]);
+		}
+
 		public static void WriteU16LE(byte[] Data, int Offset, ushort Value)
 		{
 			Data[Offset] = (byte)(Value & 0xFF);
 			Data[Offset + 1] = (byte)((Value >> 8) & 0xFF);
 		}
 
+		public static uint ReadU24LE(byte[] Data, int Offset)
+		{
+			return (uint)(Data[Offset] | (Data[Offset + 1] << 8) | (Data[Offset + 2] << 16));
+		}
+
 		public static uint ReadU32LE(byte[] Data, int Offset)
 		{
 			return (uint)(Data[Offset] | (Data[Offset + 1] << 8) | (Data[Offset + 2] << 16) | (Data[Offset + 3] << 24));
+		}
+
+		public static uint ReadU32BE(byte[] Data, int Offset)
+		{
+			return (uint)((Data[Offset] << 24) | (Data[Offset + 1] << 16) | (Data[Offset + 2] << 8) | Data[Offset + 3]);
 		}
 
 		public static void WriteU32LE(byte[] Data, int Offset, uint Value)

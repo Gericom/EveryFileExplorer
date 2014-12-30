@@ -37,12 +37,12 @@ namespace NDS.UI
 			trackBar2.Value = (int)((Material.polyAttr >> 24) & 63);
 
 			checkBox1.Checked = (Material.diffAmb & 0x8000) != 0;
-			button1.BackColor = System.Drawing.Color.FromArgb((int)GFXUtil.XBGR1555ToArgb((ushort)(Material.diffAmb & 0x7FFF)));
-			button2.BackColor = System.Drawing.Color.FromArgb((int)GFXUtil.XBGR1555ToArgb((ushort)((Material.diffAmb >> 16) & 0x7FFF)));
+			button1.BackColor = Color.FromArgb((int)GFXUtil.ConvertColorFormat(Material.diffAmb & 0x7FFF, ColorFormat.XBGR1555, ColorFormat.ARGB8888));//(int)GFXUtil.XBGR1555ToArgb((ushort)(Material.diffAmb & 0x7FFF)));
+			button2.BackColor = Color.FromArgb((int)GFXUtil.ConvertColorFormat((Material.diffAmb >> 16) & 0x7FFF, ColorFormat.XBGR1555, ColorFormat.ARGB8888));
 
 			checkBox2.Checked = (Material.specEmi & 0x8000) != 0;
-			button3.BackColor = System.Drawing.Color.FromArgb((int)GFXUtil.XBGR1555ToArgb((ushort)(Material.specEmi & 0x7FFF)));
-			button4.BackColor = System.Drawing.Color.FromArgb((int)GFXUtil.XBGR1555ToArgb((ushort)((Material.specEmi >> 16) & 0x7FFF)));
+			button3.BackColor = Color.FromArgb((int)GFXUtil.ConvertColorFormat(Material.specEmi & 0x7FFF, ColorFormat.XBGR1555, ColorFormat.ARGB8888));
+			button4.BackColor = Color.FromArgb((int)GFXUtil.ConvertColorFormat((Material.specEmi >> 16) & 0x7FFF, ColorFormat.XBGR1555, ColorFormat.ARGB8888));
 
 			uint wrapS = (Material.texImageParam >> 16) & 1;
 			if (wrapS != 0) wrapS += (Material.texImageParam >> 18) & 1;

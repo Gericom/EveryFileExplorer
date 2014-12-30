@@ -364,7 +364,7 @@ namespace NDS.GPU
 			Color[] data = new Color[Data.Length / 2];
 			for (int i = 0; i < Data.Length; i += 2)
 			{
-				data[i / 2] = Color.FromArgb((int)GFXUtil.ABGR1555ToArgb(IOUtil.ReadU16LE(Data, i)));
+				data[i / 2] = Color.FromArgb((int)GFXUtil.ConvertColorFormat(IOUtil.ReadU16LE(Data, i), ColorFormat.ABGR1555, ColorFormat.ARGB8888));
 			}
 			return data;
 		}
@@ -374,7 +374,7 @@ namespace NDS.GPU
 			Color[] data = new Color[Data.Length / 2];
 			for (int i = 0; i < Data.Length; i += 2)
 			{
-				data[i / 2] = Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(IOUtil.ReadU16LE(Data, i)));
+				data[i / 2] = Color.FromArgb((int)GFXUtil.ConvertColorFormat(IOUtil.ReadU16LE(Data, i), ColorFormat.XBGR1555, ColorFormat.ARGB8888));
 			}
 			return data;
 		}

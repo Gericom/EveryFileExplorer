@@ -386,12 +386,12 @@ namespace LibEveryFileExplorer.GFX
 					if ((flipbit && y3 < 2) || (!flipbit && x3 < 2))
 					{
 						int add = ETC1Modifiers[Table1, val] * (neg ? -1 : 1);
-						c = GFXUtil.ToArgb((byte)(((Alpha >> ((x3 * 4 + y3) * 4)) & 0xF) * 0x11), (byte)ColorClamp(r1 + add), (byte)ColorClamp(g1 + add), (byte)ColorClamp(b1 + add));
+						c = GFXUtil.ToColorFormat((byte)(((Alpha >> ((x3 * 4 + y3) * 4)) & 0xF) * 0x11), (byte)ColorClamp(r1 + add), (byte)ColorClamp(g1 + add), (byte)ColorClamp(b1 + add), ColorFormat.ARGB8888);
 					}
 					else
 					{
 						int add = ETC1Modifiers[Table2, val] * (neg ? -1 : 1);
-						c = GFXUtil.ToArgb((byte)(((Alpha >> ((x3 * 4 + y3) * 4)) & 0xF) * 0x11), (byte)ColorClamp(r2 + add), (byte)ColorClamp(g2 + add), (byte)ColorClamp(b2 + add));
+						c = GFXUtil.ToColorFormat((byte)(((Alpha >> ((x3 * 4 + y3) * 4)) & 0xF) * 0x11), (byte)ColorClamp(r2 + add), (byte)ColorClamp(g2 + add), (byte)ColorClamp(b2 + add), ColorFormat.ARGB8888);
 					}
 					Result[y3 * 4 + x3] = Color.FromArgb((int)c);
 					//res[(i + y3) * stride + x + j + x3] = c;

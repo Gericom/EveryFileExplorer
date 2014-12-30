@@ -49,12 +49,12 @@ namespace MarioKart.MKDS.NKM
 			FogSlope = er.ReadByte();
 			UnknownData1 = er.ReadBytes(0x8);
 			FogDensity = er.ReadFx32();
-			FogColor = Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(er.ReadUInt16()));
+			FogColor = Color.FromArgb((int)GFXUtil.ConvertColorFormat(er.ReadUInt16(), ColorFormat.XBGR1555, ColorFormat.ARGB8888));
 			FogAlpha = er.ReadUInt16();
-			KclColor1 = Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(er.ReadUInt16()));
-			KclColor2 = Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(er.ReadUInt16()));
-			KclColor3 = Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(er.ReadUInt16()));
-			KclColor4 = Color.FromArgb((int)GFXUtil.XBGR1555ToArgb(er.ReadUInt16()));
+			KclColor1 = Color.FromArgb((int)GFXUtil.ConvertColorFormat(er.ReadUInt16(), ColorFormat.XBGR1555, ColorFormat.ARGB8888));
+			KclColor2 = Color.FromArgb((int)GFXUtil.ConvertColorFormat(er.ReadUInt16(), ColorFormat.XBGR1555, ColorFormat.ARGB8888));
+			KclColor3 = Color.FromArgb((int)GFXUtil.ConvertColorFormat(er.ReadUInt16(), ColorFormat.XBGR1555, ColorFormat.ARGB8888));
+			KclColor4 = Color.FromArgb((int)GFXUtil.ConvertColorFormat(er.ReadUInt16(), ColorFormat.XBGR1555, ColorFormat.ARGB8888));
 			FrustumFar = er.ReadFx32();
 			UnknownData2 = er.ReadBytes(0x4);
 		}
@@ -70,12 +70,12 @@ namespace MarioKart.MKDS.NKM
 			er.Write(FogSlope);
 			er.Write(UnknownData1, 0, 8);
 			er.WriteFx32(FogDensity);
-			er.Write((UInt16)(GFXUtil.ArgbToXBGR1555((uint)FogColor.ToArgb()) | 0x8000));
+			er.Write((UInt16)(GFXUtil.ConvertColorFormat((uint)FogColor.ToArgb(), ColorFormat.ARGB8888, ColorFormat.XBGR1555) | 0x8000));
 			er.Write(FogAlpha);
-			er.Write(GFXUtil.ArgbToXBGR1555((uint)KclColor1.ToArgb()));
-			er.Write(GFXUtil.ArgbToXBGR1555((uint)KclColor2.ToArgb()));
-			er.Write(GFXUtil.ArgbToXBGR1555((uint)KclColor3.ToArgb()));
-			er.Write(GFXUtil.ArgbToXBGR1555((uint)KclColor4.ToArgb()));
+			er.Write((UInt16)GFXUtil.ConvertColorFormat((uint)KclColor1.ToArgb(), ColorFormat.ARGB8888, ColorFormat.XBGR1555));
+			er.Write((UInt16)GFXUtil.ConvertColorFormat((uint)KclColor2.ToArgb(), ColorFormat.ARGB8888, ColorFormat.XBGR1555));
+			er.Write((UInt16)GFXUtil.ConvertColorFormat((uint)KclColor3.ToArgb(), ColorFormat.ARGB8888, ColorFormat.XBGR1555));
+			er.Write((UInt16)GFXUtil.ConvertColorFormat((uint)KclColor4.ToArgb(), ColorFormat.ARGB8888, ColorFormat.XBGR1555));
 			er.WriteFx32(FrustumFar);
 			er.Write(UnknownData2, 0, 4);
 		}
