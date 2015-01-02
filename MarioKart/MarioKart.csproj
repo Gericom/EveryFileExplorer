@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,6 +58,10 @@
   <ItemGroup>
     <Compile Include="KCLHeader.cs" />
     <Compile Include="KCLOctree.cs" />
+    <Compile Include="MK64\F3DEX.cs" />
+    <Compile Include="MK64\LevelScript.cs" />
+    <Compile Include="MK64\MIO0.cs" />
+    <Compile Include="MK64\MK64.cs" />
     <Compile Include="MK7\CDAB.cs" />
     <Compile Include="MK7\KMP\CAME.cs" />
     <Compile Include="MK7\KMP\CDMD.cs" />

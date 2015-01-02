@@ -38,5 +38,7 @@ namespace LibEveryFileExplorer.GFX
 
 		public static readonly ColorFormat ABGR1555 = new ColorFormat(15, 1, 0, 5, 5, 5, 10, 5);
 		public static readonly ColorFormat XBGR1555 = new ColorFormat(0, 0, 0, 5, 5, 5, 10, 5);
+
+		public static readonly ColorFormat RGBA5551 = new ColorFormat(0, 1, 11, 5, 6, 5, 1, 5);
 	}
 }

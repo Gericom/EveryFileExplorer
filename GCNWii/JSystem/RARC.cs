@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using GCNWii.UI;
 
-namespace GCNWii
+namespace GCNWii.JSystem
 {
 	public class RARC : FileFormat<RARC.RARCIdentifier>, IViewable
 	{
@@ -198,12 +198,12 @@ namespace GCNWii
 
 			public override string GetFileDescription()
 			{
-				return "R Archive (SARC)";
+				return "JSystem Resource Archive (RARC)";
 			}
 
 			public override string GetFileFilter()
 			{
-				return "R Archive (*.arc, *.rarc)|*.arc;*.rarc";
+				return "JSystem Resource Archive (*.arc, *.rarc)|*.arc;*.rarc";
 			}
 
 			public override Bitmap GetIcon()
