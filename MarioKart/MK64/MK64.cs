@@ -31,20 +31,20 @@ namespace MarioKart.MK64
 				}
 				/*int tracknr = 0;
 				string objpath = @"d:\Temp\mk64\TrackDump\" + tracknr + @"\track.obj";
-				OBJ o = Tracks[tracknr].ToOBJ();
+				var mm = Tracks[tracknr].GetModel();
+				OBJ o = mm.ToOBJ();
 				o.MTLPath = Path.GetFileNameWithoutExtension(objpath) + ".mtl";
-				MTL m = Tracks[tracknr].ToMTL();
+				MTL m = mm.ToMTL();
 				File.Create(objpath).Close();
 				File.WriteAllBytes(objpath, o.Write());
 				File.Create(Path.ChangeExtension(objpath, "mtl")).Close();
 				File.WriteAllBytes(Path.ChangeExtension(objpath, "mtl"), m.Write());
 				Directory.CreateDirectory(Path.GetDirectoryName(objpath) + @"\Tex\");
-				int q = 0;
-				foreach (var v in Tracks[tracknr].TexTable)
+				foreach (var mmm in mm.Materials)
 				{
-					v.ToBitmap().Save(Path.GetDirectoryName(objpath) + @"\Tex\" + q + ".png");
-					v.ToBitmap(true).Save(Path.GetDirectoryName(objpath) + @"\Tex\" + q + "_swp.png");
-					q += (int)v.DecompressedSize / 2048;
+					if (mmm.Value.Texture != null) 
+						mmm.Value.Texture.Save(Path.GetDirectoryName(objpath) + @"\Tex\" + mmm.Key + ".png");
+
 				}*/
 			}
 			finally
@@ -69,8 +69,8 @@ namespace MarioKart.MK64
 				DL = MIO0.Decompress(er.ReadBytes((int)(Header.DLEnd - Header.DLOffset)));
 				er.BaseStream.Position = Header.TrackDataOffset;
 				byte[] VtxData = MIO0.Decompress(er.ReadBytes((int)(Header.VertexDataMIO0Length & 0xFFFFFF)));
-				VertexData = new VertexDataEntry[VtxData.Length / 0xE];
-				for (int i = 0; i < VtxData.Length / 0xE; i++)
+				VertexData = new VertexDataEntry[Header.VertexDataNrEntries];
+				for (int i = 0; i < Header.VertexDataNrEntries; i++)
 				{
 					VertexData[i] = new VertexDataEntry(VtxData, i * 0xE);
 				}
@@ -101,7 +101,7 @@ namespace MarioKart.MK64
 					TexTableOffset = er.ReadUInt32();
 					TexTableEnd = er.ReadUInt32();
 					Unknown1 = er.ReadUInt32();
-					Unknown2 = er.ReadUInt32();
+					VertexDataNrEntries = er.ReadUInt32();
 					VertexDataMIO0Length = er.ReadUInt32();
 					Unknown3 = er.ReadUInt32();
 					Unknown4 = er.ReadUInt32();
@@ -114,7 +114,7 @@ namespace MarioKart.MK64
 				public UInt32 TexTableOffset;
 				public UInt32 TexTableEnd;
 				public UInt32 Unknown1;
-				public UInt32 Unknown2;
+				public UInt32 VertexDataNrEntries;
 				public UInt32 VertexDataMIO0Length;//Seems segmented! and with 0xFFFFFF
 				public UInt32 Unknown3;
 				public UInt32 Unknown4;
@@ -162,7 +162,7 @@ namespace MarioKart.MK64
 
 				public byte[] TexData;
 
-				public unsafe Bitmap ToBitmap(bool swap = false)
+				public unsafe Bitmap ToBitmap(bool swap = false, bool alpha = false)
 				{
 					int width = (int)DecompressedSize / 32 / 2;
 					int height = 32;
@@ -180,10 +180,19 @@ namespace MarioKart.MK64
 					{
 						for (int x = 0; x < width; x++)
 						{
-							result[y * stride + x] = GFXUtil.ConvertColorFormat(
-								IOUtil.ReadU16BE(TexData, offs),
-								ColorFormat.RGBA5551,
-								ColorFormat.ARGB8888);
+							if (!alpha)
+							{
+								result[y * stride + x] = GFXUtil.ConvertColorFormat(
+									IOUtil.ReadU16BE(TexData, offs),
+									ColorFormat.RGBA5551,
+									ColorFormat.ARGB8888);
+							}
+							else
+							{
+								byte c = TexData[offs];
+								byte a = TexData[offs + 1];
+								result[y * stride + x] = GFXUtil.ToColorFormat(a, c, c, c, ColorFormat.ARGB8888);
+							}
 							offs += 2;
 						}
 					}
@@ -192,16 +201,21 @@ namespace MarioKart.MK64
 				}
 			}
 
-			public OBJ ToOBJ()
+			public LevelScript.MK64Model GetModel()
 			{
-				OBJ o = new OBJ();
+				return MarioKart.MK64.LevelScript.GetModel(this);
+			}
+
+			/*public OBJ ToOBJ()
+			{
+				/*OBJ o = new OBJ();
 				foreach (var v in VertexData)
 				{
 					o.Vertices.Add(v.Position);
 					o.TexCoords.Add(new Vector2(v.TexCoord.X / 32f * 0.75f, -v.TexCoord.Y / 32f * 0.75f));
-				}
-				MarioKart.MK64.LevelScript.Parse(LevelScript, o);
-				return o;
+				}/
+				return MarioKart.MK64.LevelScript.Parse(this);
+				//return o;
 			}
 
 			public MTL ToMTL()
@@ -218,10 +232,14 @@ namespace MarioKart.MK64
 					mm.DiffuseColor = Color.White;
 					mm.DiffuseMapPath = "Tex/" + i + "_swp.png";
 					m.Materials.Add(mm);
+					mm = new MTL.MTLMaterial("M" + i + "M_alp");
+					mm.DiffuseColor = Color.White;
+					mm.DiffuseMapPath = "Tex/" + i + "_alp.png";
+					m.Materials.Add(mm);
 					i += (int)t.DecompressedSize / 2048;
 				}
 				return m;
-			}
+			}*/
 		}
 
 		public class MK64Identifier : FileFormatIdentifier
