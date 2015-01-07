@@ -5,6 +5,7 @@ using System.Text;
 using Tao.OpenGl;
 using System.Drawing;
 using LibEveryFileExplorer.Collections;
+using _3DS.GPU.PICA;
 
 namespace _3DS.NintendoWare.GFX
 {
@@ -49,52 +50,37 @@ namespace _3DS.NintendoWare.GFX
 			//Gl.glUniform4fv(Gl.glGetUniformLocation(program, "registers"), 3, g_color_registers[0]);
 		}
 
+		//Use default lighting?
+		private FragmentLightSource DefaultLight0 = new FragmentLightSource() { Diffuse = new Vector4(0.5f, 0.5f, 0.5f, 1.0f) };
+		private Vector4 DefaultFragmentLightingAmbient = new Vector4(0.2f, 0.2f, 0.2f, 1);
+
 		//Fragment Lighting Primary Color:
 		//Color = SUM((dmp_FragmentLightSource[i].diffuse * dmp_FragmentMaterial.diffuse * DOT(dmp_FragmentLightSource[i].position, NormalVector) * SdwAttPr[i] + dmp_FragmentMaterial.ambient * dmp_FragmentLightSource[i].ambient) * Spot[i] * DistAtt[i]) + dmp_FragmentMaterial.emission + dmp_FragmentMaterial.ambient * dmp_FragmentLighting.ambient
-		//Color = SUM((vec3(1.0) * mDiff * DOT(
 
 		public void Compile()
 		{
-			// w.e good for now
 			uint sampler_count = (uint)Textures.Length;
-			//if (sampler_count == 0)
-			//{
-			//	sampler_count = 1;
-			//}
-			// generate vertex/fragment shader code
-			//{
+
 			StringBuilder vert_ss = new StringBuilder();
-			//String vert_ss = "";
 
 			vert_ss.AppendFormat("vec4 diffuse = {0};\n", GetVec4(Material.MaterialColor.DiffuseU32));
 			vert_ss.AppendFormat("vec4 ambient = {0};\n", GetVec4(Material.MaterialColor.Ambient));
 			vert_ss.AppendFormat("vec4 spec1 = {0};\n", GetVec4(Material.MaterialColor.Specular0U32));
 			vert_ss.AppendFormat("vec4 spec2 = {0};\n", GetVec4(Material.MaterialColor.Specular1U32));
 
+			vert_ss.AppendLine("varying vec3 N;");
+
 			vert_ss.AppendLine("void main()");
 			vert_ss.AppendLine("{");
 			{
-				//if (Material.NrActiveTextureCoordiators != 0)
-				//{
-					vert_ss.AppendLine("gl_FrontColor = gl_Color * ambient;");
-					//vert_ss.AppendLine("gl_BackColor = gl_Color * ambient;");
-					//vert_ss.AppendLine("gl_FrontSecondaryColor = gl_Color * ambient;");
-					//vert_ss.AppendLine("gl_BackSecondaryColor = gl_Color * ambient;");
-				//}
-				//else
-				//{
-				//	vert_ss.AppendLine("gl_FrontColor = diffuse * gl_Color * ambient;");
-					//vert_ss.AppendLine("gl_BackColor = diffuse * gl_Color * ambient;");
-					//vert_ss.AppendLine("gl_FrontSecondaryColor = diffuse * gl_Color * ambient;");
-					//vert_ss.AppendLine("gl_BackSecondaryColor = diffuse * gl_Color * ambient;");
-				//}
-
-				//vert_ss.AppendLine("gl_FrontColor = vec4(gl_Color.rgb, 1.0);");
+				//vert_ss.AppendLine("gl_FrontColor = gl_Color * ambient;");
+				vert_ss.AppendLine("gl_FrontColor = gl_Color;");
 
 				if (Material.Tex0 != null) vert_ss.AppendFormat("gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord{0};\n", Material.TextureCoordiators[0].SourceCoordinate);
 				if (Material.Tex1 != null) vert_ss.AppendFormat("gl_TexCoord[1] = gl_TextureMatrix[1] * gl_MultiTexCoord{0};\n", Material.TextureCoordiators[1].SourceCoordinate);
 				if (Material.Tex2 != null) vert_ss.AppendFormat("gl_TexCoord[2] = gl_TextureMatrix[2] * gl_MultiTexCoord{0};\n", Material.TextureCoordiators[2].SourceCoordinate);
 
+				vert_ss.AppendLine("N = normalize(gl_NormalMatrix * gl_Normal);");
 				vert_ss.AppendLine("gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;");
 			}
 			vert_ss.AppendLine("}");
@@ -104,11 +90,8 @@ namespace _3DS.NintendoWare.GFX
 
 			{
 				var vert_src_str = vert_ss.ToString();
-				//const GLchar* vert_src = vert_src_str.c_str();
 				Gl.glShaderSource(vertex_shader, 1, new string[] { vert_src_str }, new int[] { vert_src_str.Length });
 			}
-
-			//}	// done generating vertex shader
 
 			Gl.glCompileShader(vertex_shader);
 
@@ -139,10 +122,8 @@ namespace _3DS.NintendoWare.GFX
 			string[] p0 =
 			{
 				"gl_Color",
-				"vec4(0.5, 0.5, 0.5, 1.0)",
-				"vec4(0.5, 0.5, 0.5, 1.0)",
-				//"gl_Color",
-				//"gl_Color",
+				"primaryc",
+				"secondc",
 				"texture2D(textures0, gl_TexCoord[0].st)",
 				"texture2D(textures1, gl_TexCoord[1].st)",
 				"texture2D(textures2, gl_TexCoord[2].st)",
@@ -236,6 +217,29 @@ namespace _3DS.NintendoWare.GFX
 				"4.0"
 			};
 
+			//SUM((dmp_FragmentLightSource[i].diffuse * dmp_FragmentMaterial.diffuse * DOT(dmp_FragmentLightSource[i].position, NormalVector) * SdwAttPr[i] + dmp_FragmentMaterial.ambient * dmp_FragmentLightSource[i].ambient) * Spot[i] * DistAtt[i]) + dmp_FragmentMaterial.emission + dmp_FragmentMaterial.ambient * dmp_FragmentLighting.ambient
+
+			//Vector3 N = new Vector3();//tmp normal
+			/*Vector4 a =
+				(DefaultLight0.Diffuse
+				* Material.MaterialColor.Diffuse
+				* (new Vector3(DefaultLight0.Position.X, DefaultLight0.Position.Y, DefaultLight0.Position.Z).Dot(N))
+				//no SdwAttPr[i], because no shadow map is used
+				+ Material.MaterialColor.Ambient
+				* DefaultLight0.Ambient)
+				* DefaultLight0.SpotDirection
+				//* DefaultFragmentLightingAmbient;
+			 */
+			/*Vector4 PColor = Material.MaterialColor.Emission + DefaultFragmentLightingAmbient * Material.MaterialColor.Ambient;
+			FragmentLightSource[] Lights = new FragmentLightSource[]{DefaultLight0};
+			for (int i = 0; i < Lights.Length; i++)
+			{
+				PColor += //skip spotlight and distance attenuation
+						(Lights[i].Ambient * Material.MaterialColor.Ambient)//skip something vague  (Lights[i].TwoSideDiffuse? Math.Abs(
+						* Lights[i].Diffuse * Material.MaterialColor.Diffuse; //skip shadow attenuation
+			}*/
+
+
 			// generate fragment shader code
 			//{
 			StringBuilder frag_ss = new StringBuilder();
@@ -243,6 +247,8 @@ namespace _3DS.NintendoWare.GFX
 			// uniforms
 			for (uint i = 0; i != sampler_count; ++i)
 				frag_ss.AppendFormat("uniform sampler2D textures{0};\n", i);
+
+			frag_ss.AppendLine("varying vec3 N;");
 
 			frag_ss.AppendFormat("vec4 const0 = {0};\n", GetVec4(Material.MaterialColor.Constant0U32));
 			frag_ss.AppendFormat("vec4 const1 = {0};\n", GetVec4(Material.MaterialColor.Constant1U32));
@@ -259,7 +265,7 @@ namespace _3DS.NintendoWare.GFX
 			frag_ss.AppendFormat("vec4 unk2 = vec4(0.0);\n");
 			frag_ss.AppendFormat("vec4 unk3 = {0};\n", GetVec4(Material.FragShader.BufferColor));
 
-			if (Material.MaterialColor.Constant0U32 ==Color.FromArgb(0, 0, 0, 0) && Material.MaterialColor.Constant1U32 ==Color.FromArgb(0, 0, 0, 0) && Material.MaterialColor.Constant2U32 ==Color.FromArgb(0, 0, 0, 0) && Material.MaterialColor.Constant3U32 ==Color.FromArgb(0, 0, 0, 0) && Material.MaterialColor.Constant4U32 ==Color.FromArgb(0, 0, 0, 0) && Material.MaterialColor.Constant5U32 == Color.FromArgb(0, 0, 0, 0))
+			if (Material.MaterialColor.Constant0U32 == Color.FromArgb(0, 0, 0, 0) && Material.MaterialColor.Constant1U32 == Color.FromArgb(0, 0, 0, 0) && Material.MaterialColor.Constant2U32 == Color.FromArgb(0, 0, 0, 0) && Material.MaterialColor.Constant3U32 == Color.FromArgb(0, 0, 0, 0) && Material.MaterialColor.Constant4U32 == Color.FromArgb(0, 0, 0, 0) && Material.MaterialColor.Constant5U32 == Color.FromArgb(0, 0, 0, 0))
 			{
 				frag_ss.AppendLine("const0 = const1 = const2 = const3 = const4 = const5 = vec4(0, 0, 0, 1);");
 			}
@@ -272,9 +278,22 @@ namespace _3DS.NintendoWare.GFX
 			//frag_ss.AppendFormat("vec4 unk3 = gl_Color;\n");
 			//frag_ss.AppendFormat("vec4 unk3 = vec4(1.0);\n");
 
+			frag_ss.AppendFormat("vec4 DefFLtAmb = {0};\n", GetVec4(DefaultFragmentLightingAmbient));
+			frag_ss.AppendFormat("vec4 DefLt0Amb = {0};\n", GetVec4(DefaultLight0.Ambient));
+			frag_ss.AppendFormat("vec4 DefLt0Dif = {0};\n", GetVec4(DefaultLight0.Diffuse));
+			frag_ss.AppendFormat("vec4 DefLt0Spec0 = {0};\n", GetVec4(DefaultLight0.Specular0));
+			frag_ss.AppendFormat("vec4 DefLt0Spec1 = {0};\n", GetVec4(DefaultLight0.Specular1));
+			frag_ss.AppendFormat("vec4 DefLt0Pos = {0};\n", GetVec4(DefaultLight0.Position));
+
 			frag_ss.AppendLine("void main()");
 			frag_ss.AppendLine("{");
 			{
+				frag_ss.AppendLine("vec4 primaryc = emission + DefFLtAmb * ambient;");
+				//Use one default light
+				frag_ss.AppendLine("primaryc += (DefLt0Amb * ambient + max(dot(DefLt0Pos, vec4(N, 0.0)), 0)) * DefLt0Dif * diffuse;");
+
+				frag_ss.AppendLine("vec4 secondc = DefLt0Spec0 * spec1 + DefLt0Spec1 * spec2;");
+
 				frag_ss.AppendLine("vec4 previous = vec4(1.0);");
 				frag_ss.AppendLine("vec4 i1c;");
 				frag_ss.AppendLine("vec4 i2c;");

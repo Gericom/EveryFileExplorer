@@ -69,7 +69,7 @@ namespace LibEveryFileExplorer.GFX
 			return Result.ToArray();
 		}
 
-		private static float ColorDifference(Color a, Color b)
+		private static int ColorDifference(Color a, Color b)
 		{
 			int rr = a.R - b.R;
 			int gg = a.G - b.G;

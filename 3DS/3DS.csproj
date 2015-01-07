@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BYML.cs" />
+    <Compile Include="GPU\PICA\FragmentLightSource.cs" />
     <Compile Include="NintendoWare\FONT\CFNT.cs" />
     <Compile Include="NintendoWare\GFX\BoundingVolume.cs" />
     <Compile Include="NintendoWare\GFX\CANM.cs" />
@@ -216,6 +217,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="NintendoWare\GFX\Shaders\CGFXFrag.glsl" />
     <None Include="Resources\leaf.png" />
   </ItemGroup>
   <ItemGroup>
