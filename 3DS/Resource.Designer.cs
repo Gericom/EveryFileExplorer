@@ -61,6 +61,42 @@ namespace _3DS {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to //Should contain one shader that can be used for all CGFX files, using dmp uniforms
+        ///struct FragmentMaterial
+        ///{
+        ///	vec4 ambient;
+        ///	vec4 emission;
+        ///	vec4 diffuse;
+        ///	vec4 specular0;
+        ///	vec4 specular1;
+        ///};
+        ///
+        ///struct TevCombiner
+        ///{
+        ///	int combineRgb;
+        ///	int combineAlpha;
+        ///	int srcRgb;
+        ///	int srcAlpha;
+        ///	int operandRgb;
+        ///	int operandAlpha;
+        ///	int bufferInput;
+        ///	float scaleRgb;
+        ///	float scaleAlpha;
+        ///	vec4 constRgba;
+        ///	vec4 bufferColor;
+        ///};
+        ///
+        ///uniform sampler2D dmp_Texture[4];
+        ///
+        ///uniform FragmentMaterial dmp_FragmentMate [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CGFXFrag {
+            get {
+                return ResourceManager.GetString("CGFXFrag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap edit {
@@ -73,9 +109,29 @@ namespace _3DS {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap edit_language {
+            get {
+                object obj = ResourceManager.GetObject("edit_language", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap image {
             get {
                 object obj = ResourceManager.GetObject("image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap image_sunset {
+            get {
+                object obj = ResourceManager.GetObject("image_sunset", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -116,6 +172,16 @@ namespace _3DS {
         internal static System.Drawing.Bitmap slide {
             get {
                 object obj = ResourceManager.GetObject("slide", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap t_shirt {
+            get {
+                object obj = ResourceManager.GetObject("t_shirt", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

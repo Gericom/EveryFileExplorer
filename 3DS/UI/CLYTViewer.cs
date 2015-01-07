@@ -29,6 +29,9 @@ namespace _3DS.UI
 			InitializeComponent();
 			Win32Util.SetWindowTheme(treeView1.Handle, "explorer", null);
 			Win32Util.SetWindowTheme(treeView2.Handle, "explorer", null);
+			Win32Util.SetWindowTheme(treeView3.Handle, "explorer", null);
+			Win32Util.SetWindowTheme(treeView4.Handle, "explorer", null);
+			Win32Util.SetWindowTheme(treeView5.Handle, "explorer", null);
 		}
 
 		private void CLYTViewer_Load(object sender, EventArgs e)
@@ -86,8 +89,14 @@ namespace _3DS.UI
 			ImageL.Images.Add("wnd1", Resource.slide);
 			ImageL.Images.Add("txt1", Resource.edit);
 			ImageL.Images.Add("grp1", Resource.zones_stack);
+			ImageL.Images.Add(Resource.t_shirt);
+			ImageL.Images.Add(Resource.image_sunset);
+			ImageL.Images.Add(Resource.edit_language);
 			treeView1.ImageList = ImageL;
 			treeView2.ImageList = ImageL;
+			treeView3.ImageList = ImageL;
+			treeView4.ImageList = ImageL;
+			treeView5.ImageList = ImageL;
 
 			treeView1.BeginUpdate();
 			treeView1.Nodes.Clear();
@@ -98,6 +107,36 @@ namespace _3DS.UI
 			treeView2.Nodes.Clear();
 			treeView2.Nodes.Add(NWLayout.RootGroup.GetTreeNodes());
 			treeView2.EndUpdate();
+
+			if (NWLayout.Materials != null)
+			{
+				treeView3.BeginUpdate();
+				treeView3.Nodes.Clear();
+				foreach (var v in NWLayout.Materials.Materials)
+					treeView3.Nodes.Add(new TreeNode(v.Name, 5, 5));
+				treeView3.EndUpdate();
+			}
+
+			int q = 0;
+			if (NWLayout.TextureList != null)
+			{
+				treeView4.BeginUpdate();
+				treeView4.Nodes.Clear();
+				foreach (var v in NWLayout.TextureList.TextureNames)
+					treeView4.Nodes.Add(new TreeNode(v, 6, 6) { ForeColor = (Textures[q] == null) ? Color.Red : Color.Black });
+				treeView4.EndUpdate();
+				q++;
+			}
+
+			if (NWLayout.FontList != null)
+			{
+				treeView5.BeginUpdate();
+				treeView5.Nodes.Clear();
+				foreach (var v in NWLayout.FontList.FontNames)
+					treeView5.Nodes.Add(new TreeNode(v, 7, 7));
+				treeView5.EndUpdate();
+			}
+
 
 			init = true;
 			Render();

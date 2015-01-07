@@ -37,12 +37,15 @@
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.treeView2 = new System.Windows.Forms.TreeView();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.treeView3 = new System.Windows.Forms.TreeView();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.tabPage5 = new System.Windows.Forms.TabPage();
 			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
 			this.simpleOpenGlControl1 = new Tao.Platform.Windows.SimpleOpenGlControl();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.mainMenu1 = new LibEveryFileExplorer.UI.MainMenu(this.components);
+			this.treeView4 = new System.Windows.Forms.TreeView();
+			this.treeView5 = new System.Windows.Forms.TreeView();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -54,6 +57,9 @@
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
+			this.tabPage3.SuspendLayout();
+			this.tabPage4.SuspendLayout();
+			this.tabPage5.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// splitContainer1
@@ -150,19 +156,29 @@
 			// 
 			// tabPage3
 			// 
+			this.tabPage3.Controls.Add(this.treeView3);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage3.Size = new System.Drawing.Size(186, 156);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Materials";
 			this.tabPage3.UseVisualStyleBackColor = true;
 			// 
+			// treeView3
+			// 
+			this.treeView3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeView3.HideSelection = false;
+			this.treeView3.HotTracking = true;
+			this.treeView3.Location = new System.Drawing.Point(0, 0);
+			this.treeView3.Name = "treeView3";
+			this.treeView3.Size = new System.Drawing.Size(186, 156);
+			this.treeView3.TabIndex = 1;
+			// 
 			// tabPage4
 			// 
+			this.tabPage4.Controls.Add(this.treeView4);
 			this.tabPage4.Location = new System.Drawing.Point(4, 22);
 			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage4.Size = new System.Drawing.Size(186, 156);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "Textures";
@@ -170,9 +186,9 @@
 			// 
 			// tabPage5
 			// 
+			this.tabPage5.Controls.Add(this.treeView5);
 			this.tabPage5.Location = new System.Drawing.Point(4, 22);
 			this.tabPage5.Name = "tabPage5";
-			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage5.Size = new System.Drawing.Size(186, 156);
 			this.tabPage5.TabIndex = 4;
 			this.tabPage5.Text = "Fonts";
@@ -210,6 +226,26 @@
 			this.toolStrip1.TabIndex = 0;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
+			// treeView4
+			// 
+			this.treeView4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeView4.HideSelection = false;
+			this.treeView4.HotTracking = true;
+			this.treeView4.Location = new System.Drawing.Point(0, 0);
+			this.treeView4.Name = "treeView4";
+			this.treeView4.Size = new System.Drawing.Size(186, 156);
+			this.treeView4.TabIndex = 2;
+			// 
+			// treeView5
+			// 
+			this.treeView5.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeView5.HideSelection = false;
+			this.treeView5.HotTracking = true;
+			this.treeView5.Location = new System.Drawing.Point(0, 0);
+			this.treeView5.Name = "treeView5";
+			this.treeView5.Size = new System.Drawing.Size(186, 156);
+			this.treeView5.TabIndex = 2;
+			// 
 			// CLYTViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -235,6 +271,9 @@
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.tabPage2.ResumeLayout(false);
+			this.tabPage3.ResumeLayout(false);
+			this.tabPage4.ResumeLayout(false);
+			this.tabPage5.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -255,5 +294,8 @@
 		private System.Windows.Forms.TabPage tabPage5;
 		private System.Windows.Forms.TreeView treeView1;
 		private System.Windows.Forms.TreeView treeView2;
+		private System.Windows.Forms.TreeView treeView3;
+		private System.Windows.Forms.TreeView treeView4;
+		private System.Windows.Forms.TreeView treeView5;
 	}
 }

@@ -187,8 +187,8 @@ namespace _3DS.NintendoWare.GFX
 				"j1.rgb + j2.rgb - vec3(0.5)",
 				"j1.rgb * j3.rgb + j2.rgb * (vec3(1.0) - j3.rgb)",
 				"j1.rgb - j2.rgb",
-				"vec3(4 * ((j1.r - 0.5) * (j1.r - 0.5) + (j1.g - 0.5) * (j2.g - 0.5) + (j1.b - 0.5) * (j2.b - 0.5)))",
-				"vec4(4 * ((j1.r - 0.5) * (j1.r - 0.5) + (j1.g - 0.5) * (j2.g - 0.5) + (j1.b - 0.5) * (j2.b - 0.5)))",
+				"vec3(4 * ((j1.r - 0.5) * (j2.r - 0.5) + (j1.g - 0.5) * (j2.g - 0.5) + (j1.b - 0.5) * (j2.b - 0.5)))",
+				"vec4(4 * ((j1.r - 0.5) * (j2.r - 0.5) + (j1.g - 0.5) * (j2.g - 0.5) + (j1.b - 0.5) * (j2.b - 0.5)))",
 				"(j1.rgb * j2.rgb) + j3.rgb",//"j1.rgb * j2.aaa + j3.rgb" //"(vec3(1.0) - ((vec3(1.0) - j1.rgb) + (vec3(1.0) - j2.rgb))) + j3.rgb",//"j2.rgb * j1.rgb + j3.rgb * (vec3(1.0) - j1.rgb)",//"j1.rgb * j2.rgb + j3.rgb * (vec3(1.0) - j2.rgb)",//"j1.rgb * j2.rgb + j3.rgb * (vec3(1.0) - j2.rgb)"//"j2.rgb + j1.rgb - (vec3(1.0) - j3.rgb)",//Unknown 8
 				"clamp(j1.rgb + j2.rgb, 0.0, 1.0) * j3.rgb"//"j2.rgb + (j1.rgb * j3.rgb)"//"j3.rgb * j1.rgb + j2.rgb - vec3(0.1)"//"j2.rgb * j3.rgb + j1.rgb - vec3(0.5)"//"j1.rgb * j2.rgb + j3.rgb * (vec3(1.0) - j2.rgb)"//"j1.rgb + j3.rgb * j2.rgb"//"j3.rgb"//Unknown 9
 			};
@@ -284,7 +284,7 @@ namespace _3DS.NintendoWare.GFX
 			frag_ss.AppendFormat("vec4 DefLt0Spec0 = {0};\n", GetVec4(DefaultLight0.Specular0));
 			frag_ss.AppendFormat("vec4 DefLt0Spec1 = {0};\n", GetVec4(DefaultLight0.Specular1));
 			frag_ss.AppendFormat("vec4 DefLt0Pos = {0};\n", GetVec4(DefaultLight0.Position));
-
+			
 			frag_ss.AppendLine("void main()");
 			frag_ss.AppendLine("{");
 			{

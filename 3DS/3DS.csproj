@@ -217,7 +217,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="NintendoWare\GFX\Shaders\CGFXFrag.glsl" />
+    <Content Include="NintendoWare\GFX\Shaders\CGFXFrag.c" />
+    <None Include="Resources\image-sunset.png" />
+    <None Include="Resources\edit-language.png" />
+    <None Include="Resources\t-shirt.png" />
+    <None Include="Resources\t-shirt-gray.png" />
     <None Include="Resources\leaf.png" />
   </ItemGroup>
   <ItemGroup>
