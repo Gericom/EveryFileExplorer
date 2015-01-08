@@ -276,7 +276,10 @@ namespace NDS.UI
 			mainMenu1.MenuItems.Clear();
 			mainMenu1.MenuItems.Add(menuItem1);
 			//render it multiple times to avoid glitches!
-			for (int i = 0; i < 8; i++) ModViewer.Render();
+			if (ModViewer != null)
+			{
+				for (int i = 0; i < 8; i++) ModViewer.Render();
+			}
 		}
 
 		private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
@@ -320,6 +323,14 @@ namespace NDS.UI
 					panel1.Invalidate();
 					panel1.ResumeLayout();
 					break;
+			}
+		}
+
+		private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+		{
+			if (ModViewer != null)
+			{
+				ModViewer.Render();
 			}
 		}
 	}

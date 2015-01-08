@@ -106,12 +106,6 @@
     <Compile Include="UI\CFNTViewer.Designer.cs">
       <DependentUpon>CFNTViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\CGFXViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\CGFXViewer.designer.cs">
-      <DependentUpon>CGFXViewer.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\CLIMViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +129,18 @@
     </Compile>
     <Compile Include="UI\DARCViewer.Designer.cs">
       <DependentUpon>DARCViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\CGFXViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CGFXViewer.designer.cs">
+      <DependentUpon>CGFXViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\CMDLViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\CMDLViewer.Designer.cs">
+      <DependentUpon>CMDLViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\SAHTViewer.cs">
       <SubType>Form</SubType>
@@ -166,6 +172,12 @@
     <Compile Include="UI\ThemeViewer.Designer.cs">
       <DependentUpon>ThemeViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\TXOBViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\TXOBViewer.Designer.cs">
+      <DependentUpon>TXOBViewer.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonFiles\CommonFiles.csproj">
@@ -185,9 +197,6 @@
     <EmbeddedResource Include="UI\CFNTViewer.resx">
       <DependentUpon>CFNTViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\CGFXViewer.resx">
-      <DependentUpon>CGFXViewer.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\CLIMViewer.resx">
       <DependentUpon>CLIMViewer.cs</DependentUpon>
     </EmbeddedResource>
@@ -199,6 +208,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\DARCViewer.resx">
       <DependentUpon>DARCViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CGFXViewer.resx">
+      <DependentUpon>CGFXViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CMDLViewer.resx">
+      <DependentUpon>CMDLViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\SAHTViewer.resx">
       <DependentUpon>SAHTViewer.cs</DependentUpon>
@@ -215,9 +230,23 @@
     <EmbeddedResource Include="UI\ThemeViewer.resx">
       <DependentUpon>ThemeViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\TXOBViewer.resx">
+      <DependentUpon>TXOBViewer.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="NintendoWare\GFX\Shaders\CGFXFrag.c" />
+    <None Include="Resources\lighthouse-shine.png" />
+    <None Include="Resources\light-bulb.png" />
+    <None Include="Resources\weather-cloud.png" />
+    <None Include="Resources\weather-clouds.png" />
+    <None Include="Resources\table.png" />
+    <None Include="Resources\tables-stacks.png" />
+    <None Include="Resources\film.png" />
+    <None Include="Resources\films.png" />
+    <None Include="Resources\images-stack.png" />
+    <None Include="Resources\point.png" />
+    <None Include="Resources\jar.png" />
     <None Include="Resources\image-sunset.png" />
     <None Include="Resources\edit-language.png" />
     <None Include="Resources\t-shirt.png" />

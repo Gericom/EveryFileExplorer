@@ -68,6 +68,7 @@
 			this.splitContainer1.Size = new System.Drawing.Size(589, 385);
 			this.splitContainer1.SplitterDistance = 176;
 			this.splitContainer1.TabIndex = 1;
+			this.splitContainer1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
 			// 
 			// treeView1
 			// 
