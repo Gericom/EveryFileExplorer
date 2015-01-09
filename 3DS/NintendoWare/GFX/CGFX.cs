@@ -14,8 +14,14 @@ using LibEveryFileExplorer.Collections;
 
 namespace _3DS.NintendoWare.GFX
 {
-	public class CGFX : FileFormat<CGFX.CGFXIdentifier>, IViewable, IWriteable
+	public class CGFX : FileFormat<CGFX.CGFXIdentifier>, IFileCreatable, IViewable, IWriteable
 	{
+		public CGFX()
+		{
+			Header = new CGFXHeader();
+			Data = new DATA();
+		}
+
 		public CGFX(byte[] Data)
 		{
 			EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
@@ -66,9 +72,31 @@ namespace _3DS.NintendoWare.GFX
 			return result;
 		}
 
+		public bool CreateFromFile()
+		{
+			System.Windows.Forms.OpenFileDialog f = new System.Windows.Forms.OpenFileDialog();
+			f.Filter = OBJ.Identifier.GetFileFilter();
+			if (f.ShowDialog() == System.Windows.Forms.DialogResult.OK
+				&& f.FileName.Length > 0)
+			{
+				UI.CGFXGenDialog d = new UI.CGFXGenDialog();
+				d.ShowDialog();
+				CGFXGenerator.FromOBJ(this, f.FileName, d.ModelName);
+				return true;
+			}
+			return false;
+		}
+
 		public CGFXHeader Header;
 		public class CGFXHeader
 		{
+			public CGFXHeader()
+			{
+				Signature = "CGFX";
+				Endianness = 0xFEFF;
+				HeaderSize = 0x14;
+				Version = 0x5000000;
+			}
 			public CGFXHeader(EndianBinaryReader er)
 			{
 				Signature = er.ReadString(Encoding.ASCII, 4);
@@ -98,6 +126,12 @@ namespace _3DS.NintendoWare.GFX
 		public DATA Data;
 		public class DATA
 		{
+			public DATA()
+			{
+				Signature = "DATA";
+				DictionaryEntries = new DictionaryInfo[16];
+				Dictionaries = new DICT[16];
+			}
 			public DATA(EndianBinaryReader er)
 			{
 				Signature = er.ReadString(Encoding.ASCII, 4);

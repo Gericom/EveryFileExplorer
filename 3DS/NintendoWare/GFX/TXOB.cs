@@ -11,6 +11,12 @@ namespace _3DS.NintendoWare.GFX
 {
 	public class TXOB
 	{
+		public TXOB()
+		{
+			Signature = "TXOB";
+			Revision = 0x5000000;
+			Name = "";
+		}
 		public TXOB(EndianBinaryReader er)
 		{
 			Type = er.ReadUInt32();
@@ -70,6 +76,12 @@ namespace _3DS.NintendoWare.GFX
 
 	public class ReferenceTexture : TXOB
 	{
+		public ReferenceTexture(String RefTex)
+			: base()
+		{
+			Type = 0x20000004;
+			LinkedTextureName = RefTex;
+		}
 		public ReferenceTexture(EndianBinaryReader er)
 			: base(er)
 		{
@@ -97,13 +109,28 @@ namespace _3DS.NintendoWare.GFX
 
 	public class PixelBasedTexture : TXOB
 	{
+		protected static readonly uint[] GLFormats =
+		{
+			0x6752, 0x6754, 0x6752, 0x6754, 0x6752, 0x6758, 0x6759, 0x6757, 0x6756, 0x6758, 0x6757, 0x6756, 0x675A, 0x675B
+		};
+
+		protected static readonly uint[] GLTypes =
+		{
+			0x1401, 0x1401, 0x8034, 0x8363, 0x8033, 0x1401, 0x1401, 0x1401, 0x1401, 0x6760, 0x6761 , 0x6761 , 0, 0
+		};
+
+		public PixelBasedTexture()
+			: base()
+		{
+
+		}
 		public PixelBasedTexture(EndianBinaryReader er)
 			: base(er)
 		{
 			Height = er.ReadUInt32();
 			Width = er.ReadUInt32();
 			GLFormat = er.ReadUInt32();
-			Type = er.ReadUInt32();
+			GLType = er.ReadUInt32();
 			NrLevels = er.ReadUInt32();
 			TextureObject = er.ReadUInt32();
 			LocationFlag = er.ReadUInt32();
@@ -115,7 +142,7 @@ namespace _3DS.NintendoWare.GFX
 			er.Write(Height);
 			er.Write(Width);
 			er.Write(GLFormat);
-			er.Write(Type);
+			er.Write(GLType);
 			er.Write(NrLevels);
 			er.Write(TextureObject);
 			er.Write(LocationFlag);
@@ -124,7 +151,7 @@ namespace _3DS.NintendoWare.GFX
 		public UInt32 Height;
 		public UInt32 Width;
 		public UInt32 GLFormat;
-		public UInt32 Type;
+		public UInt32 GLType;
 		public UInt32 NrLevels;//mipmaps
 		public UInt32 TextureObject;
 		public UInt32 LocationFlag;
@@ -133,6 +160,19 @@ namespace _3DS.NintendoWare.GFX
 
 	public class ImageTextureCtr : PixelBasedTexture
 	{
+		public ImageTextureCtr(String Name, Bitmap Tex, Textures.ImageFormat Format)
+			: base()
+		{
+			Type = 0x20000011;
+			this.Name = Name;
+			Width = (uint)Tex.Width;
+			Height = (uint)Tex.Height;
+			HWFormat = Format;
+			GLFormat = GLFormats[(int)Format];
+			GLType = GLTypes[(int)Format];
+			NrLevels = 1;
+			TextureImage = new PixelBasedImageCtr(Tex, Format);
+		}
 		public ImageTextureCtr(EndianBinaryReader er)
 			: base(er)
 		{
@@ -154,6 +194,14 @@ namespace _3DS.NintendoWare.GFX
 		public PixelBasedImageCtr TextureImage;
 		public class PixelBasedImageCtr
 		{
+			public PixelBasedImageCtr(Bitmap Tex, Textures.ImageFormat Format)
+			{
+				Width = (uint)Tex.Width;
+				Height = (uint)Tex.Height;
+				BitsPerPixel = (uint)Textures.GetBpp(Format);
+				Data = Textures.FromBitmap(Tex, Format);
+				DataSize = (uint)Data.Length;
+			}
 			public PixelBasedImageCtr(EndianBinaryReader er)
 			{
 				Height = er.ReadUInt32();

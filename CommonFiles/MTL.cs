@@ -5,6 +5,7 @@ using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
 using System.IO;
+using System.Globalization;
 
 namespace CommonFiles
 {
@@ -17,6 +18,8 @@ namespace CommonFiles
 
 		public MTL(byte[] Data)
 		{
+			var enusculture = new CultureInfo("en-US");
+			Materials = new List<MTLMaterial>();
 			MTLMaterial CurrentMaterial = null;
 			TextReader tr = new StreamReader(new MemoryStream(Data));
 			String line;
@@ -37,39 +40,41 @@ namespace CommonFiles
 					case "Ka":
 						{
 							if (parts.Length < 4) continue;
-							float r = float.Parse(parts[1]);
-							float g = float.Parse(parts[2]);
-							float b = float.Parse(parts[3]);
+							float r = float.Parse(parts[1], enusculture);
+							float g = float.Parse(parts[2], enusculture);
+							float b = float.Parse(parts[3], enusculture);
 							CurrentMaterial.AmbientColor = Color.FromArgb((int)(r * 255f), (int)(g * 255f), (int)(b * 255f));
 							break;
 						}
 					case "Kd":
 						{
 							if (parts.Length < 4) continue;
-							float r = float.Parse(parts[1]);
-							float g = float.Parse(parts[2]);
-							float b = float.Parse(parts[3]);
+							float r = float.Parse(parts[1], enusculture);
+							float g = float.Parse(parts[2], enusculture);
+							float b = float.Parse(parts[3], enusculture);
 							CurrentMaterial.DiffuseColor = Color.FromArgb((int)(r * 255f), (int)(g * 255f), (int)(b * 255f));
 							break;
 						}
 					case "Ks":
 						{
 							if (parts.Length < 4) continue;
-							float r = float.Parse(parts[1]);
-							float g = float.Parse(parts[2]);
-							float b = float.Parse(parts[3]);
+							float r = float.Parse(parts[1], enusculture);
+							float g = float.Parse(parts[2], enusculture);
+							float b = float.Parse(parts[3], enusculture);
 							CurrentMaterial.SpecularColor = Color.FromArgb((int)(r * 255f), (int)(g * 255f), (int)(b * 255f));
 							break;
 						}
 					case "d":
 						if (parts.Length < 2) continue;
-						CurrentMaterial.Alpha = float.Parse(parts[1]);
+						CurrentMaterial.Alpha = float.Parse(parts[1], enusculture);
 						break;
 					case "map_Kd":
 						CurrentMaterial.DiffuseMapPath = line.Substring(parts[0].Length + 1).Trim();
 						break;
 				}
 			}
+			if(CurrentMaterial != null && !Materials.Contains(CurrentMaterial))
+				Materials.Add(CurrentMaterial);
 			tr.Close();
 		}
 

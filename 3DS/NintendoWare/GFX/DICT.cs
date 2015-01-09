@@ -9,6 +9,12 @@ namespace _3DS.NintendoWare.GFX
 {
 	public class DICT
 	{
+		public DICT()
+		{
+			Signature = "DICT";
+			RootNode = new Node();
+			Entries = new List<Node>();
+		}
 		public DICT(EndianBinaryReader er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);

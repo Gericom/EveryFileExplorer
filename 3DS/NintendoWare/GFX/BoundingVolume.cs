@@ -9,6 +9,7 @@ namespace _3DS.NintendoWare.GFX
 {
 	public class BoundingVolume
 	{
+		public BoundingVolume() { }
 		public BoundingVolume(EndianBinaryReader er)
 		{
 			Type = er.ReadUInt32();
@@ -51,6 +52,15 @@ namespace _3DS.NintendoWare.GFX
 
 	public class OrientedBoundingBox : BoundingVolume
 	{
+		public OrientedBoundingBox()
+			: base()
+		{
+			Type = 0x80000000;
+			//All to be set by the user
+			CenterPosition = new Vector3(0, 0, 0);
+			OrientationMatrix = new float[] { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
+			Size = new Vector3(1, 1, 1);
+		}
 		public OrientedBoundingBox(EndianBinaryReader er)
 			: base(er)
 		{

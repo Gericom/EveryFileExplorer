@@ -15,6 +15,21 @@ namespace _3DS.NintendoWare.GFX
 {
 	public class CMDL
 	{
+		public CMDL(String Name)
+		{
+			Type = 0x40000012;
+			Signature = "CMDL";
+			Revision = 0x9000000;
+			this.Name = Name;
+			Flags = 1;
+			IsBranchVisible = true;
+			Scale = new Vector3(1, 1, 1);
+			Rotation = new Vector3(0, 0, 0);
+			Translation = new Vector3(0, 0, 0);
+			LocalMatrix = new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0 };
+			WorldMatrix = new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0 };
+			Unknown23 = 1;//unknown what this does...
+		}
 		public CMDL(EndianBinaryReader er)
 		{
 			Type = er.ReadUInt32();
@@ -29,7 +44,8 @@ namespace _3DS.NintendoWare.GFX
 			NrChildren = er.ReadUInt32();
 			Unknown7 = er.ReadUInt32();
 			NrAnimationGroupDescriptions = er.ReadUInt32();
-			AnimationGroupDescriptionsDictOffset = (UInt32)er.BaseStream.Position + er.ReadUInt32();
+			AnimationGroupDescriptionsDictOffset =er.ReadUInt32();
+			if (AnimationGroupDescriptionsDictOffset != 0) AnimationGroupDescriptionsDictOffset += (UInt32)er.BaseStream.Position - 4; 
 			Scale = er.ReadVector3();
 			Rotation = er.ReadVector3();
 			Translation = er.ReadVector3();
@@ -52,8 +68,11 @@ namespace _3DS.NintendoWare.GFX
 			long curpos = er.BaseStream.Position;
 			er.BaseStream.Position = NameOffset;
 			Name = er.ReadStringNT(Encoding.ASCII);
-			er.BaseStream.Position = AnimationGroupDescriptionsDictOffset;
-			AnimationInfoDict = new DICT(er);
+			if (AnimationGroupDescriptionsDictOffset != 0)
+			{
+				er.BaseStream.Position = AnimationGroupDescriptionsDictOffset;
+				AnimationInfoDict = new DICT(er);
+			}
 			er.BaseStream.Position = MeshOffsetsOffset;
 			MeshOffsets = new UInt32[NrMeshes];
 			for (int i = 0; i < NrMeshes; i++)
@@ -180,16 +199,22 @@ namespace _3DS.NintendoWare.GFX
 			er.Write(new uint[NrShapes], 0, (int)NrShapes);
 
 			long anmgrpdict = er.BaseStream.Position;
-			er.BaseStream.Position = anmgrpdescdictoffs;
-			er.Write((uint)(anmgrpdict - anmgrpdescdictoffs));
-			er.BaseStream.Position = anmgrpdict;
-			AnimationInfoDict.Write(er, c);
+			if (NrAnimationGroupDescriptions != 0 && AnimationInfoDict != null)
+			{
+				er.BaseStream.Position = anmgrpdescdictoffs;
+				er.Write((uint)(anmgrpdict - anmgrpdescdictoffs));
+				er.BaseStream.Position = anmgrpdict;
+				AnimationInfoDict.Write(er, c);
+			}
 
 			long matdict = er.BaseStream.Position;
-			er.BaseStream.Position = matdictoffs;
-			er.Write((uint)(matdict - matdictoffs));
-			er.BaseStream.Position = matdict;
-			MaterialsDict.Write(er, c);
+			if (NrMaterials != 0 && MaterialsDict != null)
+			{
+				er.BaseStream.Position = matdictoffs;
+				er.Write((uint)(matdict - matdictoffs));
+				er.BaseStream.Position = matdict;
+				MaterialsDict.Write(er, c);
+			}
 
 			long mshnoddict = er.BaseStream.Position;
 			if (NrMeshNodes != 0 && MeshNodeVisibilitiesDict != null)
@@ -703,6 +728,11 @@ namespace _3DS.NintendoWare.GFX
 		public MeshNodeVisibilityCtr[] MeshNodeVisibilities;
 		public class MeshNodeVisibilityCtr
 		{
+			public MeshNodeVisibilityCtr(String Name)
+			{
+				this.Name = Name;
+				Visible = true;
+			}
 			public MeshNodeVisibilityCtr(EndianBinaryReader er)
 			{
 				NameOffset = (uint)er.BaseStream.Position + er.ReadUInt32();
@@ -743,6 +773,24 @@ namespace _3DS.NintendoWare.GFX
 				ParticleMaterialEnabled = 32
 			}
 
+			public MTOB(String Name)
+			{
+				Type = 0x8000000;
+				Signature = "MTOB";
+				Revision = 0x6000003;
+				this.Name = Name;
+				MaterialColor = new MaterialColorCtr();
+				Rasterization = new RasterizationCtr();
+				FragmentOperation = new FragmentOperationCtr();
+				NrActiveTextureCoordiators = 0;
+				TextureCoordiators = new TextureCoordinatorCtr[3];
+				TextureCoordiators[0] = new TextureCoordinatorCtr();
+				TextureCoordiators[1] = new TextureCoordinatorCtr();
+				TextureCoordiators[2] = new TextureCoordinatorCtr();
+
+				Shader = new SHDR();
+				FragShader = new FragmentShader();
+			}
 			public MTOB(EndianBinaryReader er)
 			{
 				Type = er.ReadUInt32();
@@ -1064,6 +1112,32 @@ namespace _3DS.NintendoWare.GFX
 
 			public class MaterialColorCtr
 			{
+				public MaterialColorCtr()
+				{
+					Emission = new Vector4(0, 0, 0, 0);
+					EmissionU32 = Color.FromArgb(0);
+					Ambient = new Vector4(1, 1, 1, 1);
+					AmbientU32 = Color.White;
+					Diffuse = new Vector4(1, 1, 1, 1);
+					DiffuseU32 = Color.White;
+					Specular0 = new Vector4(0.33f, 0.33f, 0.33f, 0);
+					Specular0U32 = Color.FromArgb(0, 84, 84, 84);
+					Specular1 = new Vector4(0, 0, 0, 0);
+					Specular1U32 = Color.FromArgb(0);
+					Constant0 = new Vector4(0, 0, 0, 0);
+					Constant0U32 = Color.FromArgb(0);
+					Constant1 = new Vector4(0, 0, 0, 0);
+					Constant1U32 = Color.FromArgb(0);
+					Constant2 = new Vector4(0, 0, 0, 0);
+					Constant2U32 = Color.FromArgb(0);
+					Constant3 = new Vector4(0, 0, 0, 0);
+					Constant3U32 = Color.FromArgb(0);
+					Constant4 = new Vector4(0, 0, 0, 0);
+					Constant4U32 = Color.FromArgb(0);
+					Constant5 = new Vector4(0, 0, 0, 0);
+					Constant5U32 = Color.FromArgb(0);
+					CommandCache = 0;
+				}
 				public MaterialColorCtr(EndianBinaryReader er)
 				{
 					Emission = er.ReadVector4();
@@ -1182,6 +1256,14 @@ namespace _3DS.NintendoWare.GFX
 				{
 					PolygonOffsetEnabled = 1
 				}
+				public RasterizationCtr()
+				{
+					Flags = 0;
+					CullingMode = 3;
+					PolygonOffsetUnit = 0;
+					Command1 = 0;
+					Command2 = 0x00010040;
+				}
 				public RasterizationCtr(EndianBinaryReader er)
 				{
 					Flags = (RasterizationFlags)er.ReadUInt32();
@@ -1216,6 +1298,12 @@ namespace _3DS.NintendoWare.GFX
 
 			public class FragmentOperationCtr
 			{
+				public FragmentOperationCtr()
+				{
+					DepthOperation = new DepthOperationCtr();
+					BlendOperation = new BlendOperationCtr();
+					StencilOperation = new StencilOperationCtr();
+				}
 				public FragmentOperationCtr(EndianBinaryReader er)
 				{
 					DepthOperation = new DepthOperationCtr(er);
@@ -1301,6 +1389,14 @@ namespace _3DS.NintendoWare.GFX
 						TestEnabled = 1,
 						MaskEnabled = 2
 					}
+					public DepthOperationCtr()
+					{
+						Flags = DepthFlags.TestEnabled | DepthFlags.MaskEnabled;
+						Command1 = 0x41;
+						Command2 = 0x10107;
+						Command3 = 0x3000000;
+						Command4 = 0x80126;
+					}
 					public DepthOperationCtr(EndianBinaryReader er)
 					{
 						Flags = (DepthFlags)er.ReadUInt32();
@@ -1326,6 +1422,17 @@ namespace _3DS.NintendoWare.GFX
 				public BlendOperationCtr BlendOperation;
 				public class BlendOperationCtr
 				{
+					public BlendOperationCtr()
+					{
+						Mode = 0;
+						BlendColor = new Vector4(0, 0, 0, 1);
+						Command1 = 0xe40100;
+						Command2 = 0x803f0100;
+						Command3 = 0x01010000;
+						Command4 = 0;
+						Command5 = 0xff000000;
+						Command6 = 0;
+					}
 					public BlendOperationCtr(EndianBinaryReader er)
 					{
 						Mode = er.ReadUInt32();
@@ -1419,6 +1526,13 @@ namespace _3DS.NintendoWare.GFX
 				public StencilOperationCtr StencilOperation;
 				public class StencilOperationCtr
 				{
+					public StencilOperationCtr()
+					{
+						Command1 = 0xff000000;
+						Command2 = 0xd0105;
+						Command3 = 0;
+						Command4 = 0xf0106;
+					}
 					public StencilOperationCtr(EndianBinaryReader er)
 					{
 						Command1 = er.ReadUInt32();
@@ -1442,6 +1556,18 @@ namespace _3DS.NintendoWare.GFX
 
 			public class TextureCoordinatorCtr
 			{
+				public TextureCoordinatorCtr()
+				{
+					SourceCoordinate = 0;
+					MappingMethod = 0;
+					ReferenceCamera = 0;
+					MatrixMode = 0;
+					Scale = new Vector2(0, 0);
+					Rotate = 0;
+					Translate = new Vector2(0, 0);
+					Unknown3 = 0;
+					Matrix = new float[] { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0 };
+				}
 				public TextureCoordinatorCtr(EndianBinaryReader er)
 				{
 					SourceCoordinate = er.ReadUInt32();
@@ -1479,6 +1605,21 @@ namespace _3DS.NintendoWare.GFX
 
 			public class TexInfo
 			{
+				public TexInfo(String RefTex)
+				{
+					Type = 0x80000000;
+					DynamicAllocator = 0;
+					Unknown4 = 0;
+					Unknown5 = 0x8E;
+					Unknown6 = 1;
+					Unknown7 = 0xFF000000;
+					Unknown8 = 0x81;
+					Unknown9 = 0x809f;
+					Unknown12 = 0x1002206;
+					CommandSizeToSend = 0x38;
+					TextureObject = new ReferenceTexture(RefTex);
+					Sampler = new StandardTextureSamplerCtr();
+				}
 				public TexInfo(EndianBinaryReader er)
 				{
 					Type = er.ReadUInt32();
@@ -1578,67 +1719,14 @@ namespace _3DS.NintendoWare.GFX
 				//Procedural Texture Mapper = 0x40000000
 
 				public TXOB TextureObject;
-				/*public TXOB TextureObject;
-				public class TXOB
-				{
-					public TXOB(EndianBinaryReader er)
-					{
-						Type = er.ReadUInt32();
-						Signature = er.ReadString(Encoding.ASCII, 4);
-						if (Signature != "TXOB") throw new SignatureNotCorrectException(Signature, "TXOB", er.BaseStream.Position);
-						Revision = er.ReadUInt32();
-						NameOffset = (UInt32)er.BaseStream.Position + er.ReadUInt32();
-						Unknown2 = er.ReadUInt32();
-						Unknown3 = er.ReadUInt32();
-						LinkedTextureNameOffset = (UInt32)er.BaseStream.Position + er.ReadUInt32();
-						LinkedTextureOffset = (UInt32)er.BaseStream.Position + er.ReadUInt32();
-
-						long curpos = er.BaseStream.Position;
-						er.BaseStream.Position = NameOffset;
-						Name = er.ReadStringNT(Encoding.ASCII);
-						er.BaseStream.Position = LinkedTextureNameOffset;
-						LinkedTextureName = er.ReadStringNT(Encoding.ASCII);
-						er.BaseStream.Position = curpos;
-					}
-					public void Write(EndianBinaryWriter er, CGFXWriterContext c)
-					{
-						er.Write(Type);
-						er.Write(Signature, Encoding.ASCII, false);
-						er.Write(Revision);
-						c.WriteStringReference(Name, er);
-						er.Write(Unknown2);
-						er.Write(Unknown3);
-						c.WriteStringReference(LinkedTextureName, er);
-						er.Write((uint)0);//TODO: Texture Offset
-					}
-					public UInt32 Type;
-					public String Signature;
-					public UInt32 Revision;
-					public UInt32 NameOffset;
-					public UInt32 Unknown2;
-					public UInt32 Unknown3;
-					public UInt32 LinkedTextureNameOffset;
-					public UInt32 LinkedTextureOffset;
-
-					public String Name;
-					public String LinkedTextureName;
-
-					public override string ToString()
-					{
-						return Name;
-					}
-
-					//The types are like this:
-					//Image Texture = 0x20000011
-					//Cube Texture = 0x20000009
-					//Reference Texture = 0x20000004 (this structure)
-					//Procedural Texture = 0x20000002
-					//Shadow Texture = 0x20000021
-				}*/
 
 				public TextureSamplerCtr Sampler;
 				public class TextureSamplerCtr
 				{
+					public TextureSamplerCtr()
+					{
+						MinFilter = 5;
+					}
 					public TextureSamplerCtr(EndianBinaryReader er)
 					{
 						Type = er.ReadUInt32();
@@ -1669,6 +1757,13 @@ namespace _3DS.NintendoWare.GFX
 
 				public class StandardTextureSamplerCtr : TextureSamplerCtr
 				{
+					public StandardTextureSamplerCtr()
+						: base()
+					{
+						Type = 0x80000000;
+						BorderColor = new Vector4(0, 0, 0, 1);
+						LodBias = 0;
+					}
 					public StandardTextureSamplerCtr(EndianBinaryReader er)
 						: base(er)
 					{
@@ -1688,6 +1783,14 @@ namespace _3DS.NintendoWare.GFX
 			public SHDR Shader;
 			public class SHDR
 			{
+				public SHDR()
+				{
+					Type = 0x80000001;
+					Signature = "SHDR";
+					Revision = 0x6000000;
+					Name = "";
+					LinkedShaderName = "DefaultShader";
+				}
 				public SHDR(EndianBinaryReader er)
 				{
 					Type = er.ReadUInt32();
@@ -1740,6 +1843,26 @@ namespace _3DS.NintendoWare.GFX
 			public FragmentShader FragShader;
 			public class FragmentShader
 			{
+				public FragmentShader()
+				{
+					BufferColor = new Vector4(0, 0, 0, 1);
+					FragmentLighting = new FragmentLightingCtr();
+					TextureCombiners = new TextureCombinerCtr[6];
+					TextureCombiners[0] = new TextureCombinerCtr(0);
+					TextureCombiners[1] = new TextureCombinerCtr(1);
+					TextureCombiners[2] = new TextureCombinerCtr(2);
+					TextureCombiners[3] = new TextureCombinerCtr(3);
+					TextureCombiners[4] = new TextureCombinerCtr(4);
+					TextureCombiners[5] = new TextureCombinerCtr(5);
+					AlphaTest = new AlphaTestCtr();
+					BufferCommand1 = 0xFF000000;
+					BufferCommand2 = 0xF00FD;
+					BufferCommand3 = 0;
+					BufferCommand4 = 0x200E0;
+					BufferCommand5 = 0x400;
+					BufferCommand6 = 0x201C3;
+					FragmentLightingTable = new FragmentLightingTableCtr();
+				}
 				public FragmentShader(EndianBinaryReader er)
 				{
 					BufferColor = er.ReadVector4();
@@ -1807,7 +1930,10 @@ namespace _3DS.NintendoWare.GFX
 						UseGeometricFactor1 = 16,
 						UseReflection = 32
 					}
-
+					public FragmentLightingCtr()
+					{
+						IsBumpRenormalize = false;
+					}
 					public FragmentLightingCtr(EndianBinaryReader er)
 					{
 						Flags = (FragmentLightingFlags)er.ReadUInt32();
@@ -1839,6 +1965,7 @@ namespace _3DS.NintendoWare.GFX
 				public FragmentLightingTableCtr FragmentLightingTable;
 				public class FragmentLightingTableCtr
 				{
+					public FragmentLightingTableCtr() { }
 					public FragmentLightingTableCtr(EndianBinaryReader er)
 					{
 						ReflectanceRSamplerOffset = er.ReadUInt32();
@@ -2053,6 +2180,14 @@ namespace _3DS.NintendoWare.GFX
 
 				public class TextureCombinerCtr
 				{
+					private static readonly uint[] Addresses = { 0xC0, 0xC8, 0xD0, 0xD8, 0xF0, 0xF8 };
+					public TextureCombinerCtr(int Index)
+					{
+						SrcRgb = 0xEE0;
+						SrcAlpha = 0xEE0;
+						Address = 0x804F0000 | Addresses[Index];
+						ConstRgba = Color.Black;
+					}
 					public TextureCombinerCtr(EndianBinaryReader er)
 					{
 						Constant = er.ReadUInt32();
@@ -2093,6 +2228,11 @@ namespace _3DS.NintendoWare.GFX
 
 				public class AlphaTestCtr
 				{
+					public AlphaTestCtr()
+					{
+						Command1 = 0x10;
+						Command2 = 0xF0104;
+					}
 					public AlphaTestCtr(EndianBinaryReader er)
 					{
 						Command1 = er.ReadUInt32();
@@ -2152,6 +2292,14 @@ namespace _3DS.NintendoWare.GFX
 
 		public class Mesh
 		{
+			public Mesh()
+			{
+				Type = 0x1000000;
+				Signature = "SOBJ";
+				Revision = 0;
+				Name = "";
+				IsVisible = true;
+			}
 			public Mesh(EndianBinaryReader er)
 			{
 				Type = er.ReadUInt32();
@@ -2196,8 +2344,11 @@ namespace _3DS.NintendoWare.GFX
 				long curpos = er.BaseStream.Position;
 				er.BaseStream.Position = NameOffset;
 				Name = er.ReadStringNT(Encoding.ASCII);
-				er.BaseStream.Position = MeshNodeNameOffset;
-				MeshNodeName = er.ReadStringNT(Encoding.ASCII);
+				if (MeshNodeNameOffset != 0)
+				{
+					er.BaseStream.Position = MeshNodeNameOffset;
+					MeshNodeName = er.ReadStringNT(Encoding.ASCII);
+				}
 				er.BaseStream.Position = curpos;
 			}
 			public void Write(EndianBinaryWriter er, CGFXWriterContext c, long OwnerOffset)
@@ -2232,7 +2383,8 @@ namespace _3DS.NintendoWare.GFX
 				er.Write(Unknown23);
 				er.Write(Unknown24);
 				er.Write(Unknown25);
-				c.WriteStringReference(MeshNodeName, er);
+				if (MeshNodeName != null) c.WriteStringReference(MeshNodeName, er);
+				else er.Write((uint)0);
 				er.Write(Unknown27);
 				er.Write(Unknown28);
 				er.Write(Unknown29);
@@ -2297,6 +2449,15 @@ namespace _3DS.NintendoWare.GFX
 				GL_UNSIGNED_BYTE = 0x1401,
 				GL_SHORT = 0x1402,//might also be unsigned short
 				GL_FLOAT = 0x1406
+			}
+			public SeparateDataShape()
+			{
+				Type = 0x10000001;
+				Signature = "SOBJ";
+				Revision = 0;
+				Name = "";
+				BoundingBox = new OrientedBoundingBox();
+				PositionOffset = new Vector3(0, 0, 0);
 			}
 			public SeparateDataShape(EndianBinaryReader er)
 			{
@@ -2456,6 +2617,11 @@ namespace _3DS.NintendoWare.GFX
 			public PrimitiveSet[] PrimitiveSets;
 			public class PrimitiveSet
 			{
+				public PrimitiveSet()
+				{
+					NrRelatedBones = 0;
+					SkinningMode = 0;
+				}
 				public PrimitiveSet(EndianBinaryReader er)
 				{
 					NrRelatedBones = er.ReadUInt32();
@@ -2522,6 +2688,7 @@ namespace _3DS.NintendoWare.GFX
 				public Primitive[] Primitives;
 				public class Primitive
 				{
+					public Primitive() { }
 					public Primitive(EndianBinaryReader er)
 					{
 						NrIndexStreams = er.ReadUInt32();
@@ -2588,6 +2755,13 @@ namespace _3DS.NintendoWare.GFX
 					public IndexStreamCtr[] IndexStreams;
 					public class IndexStreamCtr
 					{
+						public IndexStreamCtr()
+						{
+							FormatType = 0x1401;
+							PrimitiveMode = 0;
+							IsVisible = true;
+
+						}
 						public IndexStreamCtr(EndianBinaryReader er)
 						{
 							FormatType = er.ReadUInt32();
@@ -2722,6 +2896,7 @@ namespace _3DS.NintendoWare.GFX
 					VertexParam = 1,
 					Interleave = 2
 				}
+				public VertexAttributeCtr() { }
 				public VertexAttributeCtr(EndianBinaryReader er)
 				{
 					Type = er.ReadUInt32();
@@ -2757,6 +2932,13 @@ namespace _3DS.NintendoWare.GFX
 			}
 			public class InterleavedVertexStreamCtr : VertexAttributeCtr
 			{
+				public InterleavedVertexStreamCtr()
+					: base()
+				{
+					Type = 0x40000002;
+					Usage = VertexAttributeUsage.Interleave;
+					Flags = VertexAttributeFlags.Interleave;
+				}
 				public InterleavedVertexStreamCtr(EndianBinaryReader er)
 					: base(er)
 				{
@@ -2829,6 +3011,17 @@ namespace _3DS.NintendoWare.GFX
 				public VertexStreamCtr[] VertexStreams;
 				public class VertexStreamCtr : VertexAttributeCtr
 				{
+					public VertexStreamCtr(VertexAttributeUsage Usage, DataType FormatType, int NrComponents, int Offset, Single Scale = 1)
+						: base()
+					{
+						Type = 0x40000001;
+						Flags = 0;
+						this.Usage = Usage;
+						this.FormatType = FormatType;
+						this.NrComponents = (uint)NrComponents;
+						this.Scale = Scale;
+						this.Offset = (uint)Offset;
+					}
 					public VertexStreamCtr(EndianBinaryReader er)
 						: base(er)
 					{
@@ -3007,6 +3200,17 @@ namespace _3DS.NintendoWare.GFX
 			}
 			public class VertexParamAttributeCtr : VertexAttributeCtr
 			{
+				public VertexParamAttributeCtr(VertexAttributeUsage Usage, params Single[] Attributes)
+					: base()
+				{
+					Type = 0x80000000;
+					Flags = VertexAttributeFlags.VertexParam;
+					this.Usage = Usage;
+					FormatType = DataType.GL_FLOAT;
+					Scale = 1;
+					NrAttributes = (uint)Attributes.Length;
+					this.Attributes = Attributes;
+				}
 				public VertexParamAttributeCtr(EndianBinaryReader er)
 					: base(er)
 				{

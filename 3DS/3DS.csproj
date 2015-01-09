@@ -65,6 +65,7 @@
     <Compile Include="NintendoWare\GFX\BoundingVolume.cs" />
     <Compile Include="NintendoWare\GFX\CANM.cs" />
     <Compile Include="NintendoWare\GFX\CGFX.cs" />
+    <Compile Include="NintendoWare\GFX\CGFXGenerator.cs" />
     <Compile Include="NintendoWare\GFX\CGFXShader.cs" />
     <Compile Include="NintendoWare\GFX\CGFXWriterContext.cs" />
     <Compile Include="NintendoWare\GFX\CMDL.cs" />
@@ -105,6 +106,12 @@
     </Compile>
     <Compile Include="UI\CFNTViewer.Designer.cs">
       <DependentUpon>CFNTViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\CGFXGenDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\CGFXGenDialog.Designer.cs">
+      <DependentUpon>CGFXGenDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\CLIMViewer.cs">
       <SubType>Form</SubType>
@@ -196,6 +203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CFNTViewer.resx">
       <DependentUpon>CFNTViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CGFXGenDialog.resx">
+      <DependentUpon>CGFXGenDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CLIMViewer.resx">
       <DependentUpon>CLIMViewer.cs</DependentUpon>
