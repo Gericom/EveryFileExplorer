@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using LibEveryFileExplorer.Files;
+using LibEveryFileExplorer.Collections;
 
 namespace _3DS.NintendoWare.GFX
 {
@@ -82,30 +83,64 @@ namespace _3DS.NintendoWare.GFX
 				switch (PrimitiveType)
 				{
 					case AnimationType.Vector2Animation:
-						var v = new Single[2][];
-						if ((Flags & 1) != 0) v[0] = new float[] { er.ReadSingle() };//constant
+						ConstValues = new object[2];
+						Curves = new AnimationCurve[2];
+						if ((Flags & 1) != 0) ConstValues[0] = er.ReadSingle();//constant
 						else if ((Flags & 4) != 0) er.ReadUInt32();//nothing = empty reference
 						else
 						{
 							long offs = er.BaseStream.Position + er.ReadUInt32();
 							long curpos_ = er.BaseStream.Position;
 							er.BaseStream.Position = offs;
-							FloatAnimationCurve a = new FloatAnimationCurve(er);
+							Curves[0] = new FloatAnimationCurve(er);
 							er.BaseStream.Position = curpos_;
 						}
 
-						if ((Flags & 2) != 0) v[1] = new float[] { er.ReadSingle() };//constant
+						if ((Flags & 2) != 0) ConstValues[1] = er.ReadSingle();//constant
 						else if ((Flags & 8) != 0) er.ReadUInt32();//nothing = empty reference
 						else
 						{
 							long offs = er.BaseStream.Position + er.ReadUInt32();
 							long curpos_ = er.BaseStream.Position;
 							er.BaseStream.Position = offs;
-							FloatAnimationCurve a = new FloatAnimationCurve(er);
+							Curves[1] = new FloatAnimationCurve(er);
 							er.BaseStream.Position = curpos_;
 						}
-
-						//Data = v;
+						break;
+					case AnimationType.BakedTransformAnimation:
+						Curves = new AnimationCurve[3];
+						if ((Flags & 0x10) != 0) er.ReadUInt32();//nothing = empty reference
+						else
+						{
+							//Matrix33curve reference
+							long offs = er.BaseStream.Position + er.ReadUInt32();
+							long curpos_ = er.BaseStream.Position;
+							er.BaseStream.Position = offs;
+							Curves[0] = new Matrix33Curve(er);
+							er.BaseStream.Position = curpos_;
+						}
+						if ((Flags & 8) != 0) er.ReadUInt32();//nothing = empty reference
+						else
+						{
+							//Vector3curve reference (translation)
+							long offs = er.BaseStream.Position + er.ReadUInt32();
+							long curpos_ = er.BaseStream.Position;
+							er.BaseStream.Position = offs;
+							Curves[1] = new Vector3Curve(er);
+							er.BaseStream.Position = curpos_;
+						}
+						if ((Flags & 0x20) != 0) er.ReadUInt32();//nothing = empty reference
+						else
+						{
+							//Vector3curve reference (scale)
+							long offs = er.BaseStream.Position + er.ReadUInt32();
+							long curpos_ = er.BaseStream.Position;
+							er.BaseStream.Position = offs;
+							Curves[2] = new Vector3Curve(er);
+							er.BaseStream.Position = curpos_;
+						}
+						break;
+					default:
 						break;
 				}
 
@@ -118,9 +153,15 @@ namespace _3DS.NintendoWare.GFX
 			public UInt32 PathOffset;
 			public AnimationType PrimitiveType;
 
-			//public Array[] Data;
+			public Object[] ConstValues;
+			public AnimationCurve[] Curves;
 
 			public String Path;
+
+			public override string ToString()
+			{
+				return Path;
+			}
 
 			public class AnimationCurve
 			{
@@ -288,6 +329,64 @@ namespace _3DS.NintendoWare.GFX
 						public Single OutSlope;
 					}
 				}
+			}
+
+			public class Vector3Curve : AnimationCurve
+			{
+				public Vector3Curve(EndianBinaryReader er)
+					: base(er)
+				{
+					if ((Flags & 1) != 0)
+					{
+						ConstantValue = er.ReadVector3();
+						ConstantFlag = er.ReadUInt32();
+					}
+					else
+					{
+						Values = new Vector3[(int)(EndFrame - StartFrame)];
+						ValueFlags = new uint[(int)(EndFrame - StartFrame)];
+						for (int i = 0; i < (EndFrame - StartFrame); i++)
+						{
+							Values[i] = er.ReadVector3();
+							ValueFlags[i] = er.ReadUInt32();
+						}
+					}
+				}
+
+				public Vector3 ConstantValue;
+				public UInt32 ConstantFlag;
+
+				public Vector3[] Values;
+				public UInt32[] ValueFlags;
+			}
+
+			public class Matrix33Curve : AnimationCurve
+			{
+				public Matrix33Curve(EndianBinaryReader er)
+					: base(er)
+				{
+					if ((Flags & 1) != 0)
+					{
+						ConstantValue = er.ReadVector4();
+						ConstantFlag = er.ReadUInt32();
+					}
+					else
+					{
+						Values = new Vector4[(int)(EndFrame - StartFrame)];
+						ValueFlags = new uint[(int)(EndFrame - StartFrame)];
+						for (int i = 0; i < (EndFrame - StartFrame); i++)
+						{
+							Values[i] = er.ReadVector4();
+							ValueFlags[i] = er.ReadUInt32();
+						}
+					}
+				}
+
+				public Vector4 ConstantValue;
+				public UInt32 ConstantFlag;
+
+				public Vector4[] Values;
+				public UInt32[] ValueFlags;
 			}
 		}
 
