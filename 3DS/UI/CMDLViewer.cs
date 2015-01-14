@@ -420,7 +420,7 @@ namespace _3DS.UI
 			if (saveFileDialog1.ShowDialog() == DialogResult.OK
 				&& saveFileDialog1.FileName.Length > 0)
 			{
-				switch (saveFileDialog1.FilterIndex)
+				switch (saveFileDialog1.FilterIndex - 1)
 				{
 					case 0:
 						{
