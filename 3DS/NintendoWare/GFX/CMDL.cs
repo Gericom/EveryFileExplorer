@@ -1428,7 +1428,7 @@ namespace _3DS.NintendoWare.GFX
 						BlendColor = new Vector4(0, 0, 0, 1);
 						Command1 = 0xe40100;
 						Command2 = 0x803f0100;
-						Command3 = 0x01010000;
+						Command3 = 0x76760000;//0x01010000;
 						Command4 = 0;
 						Command5 = 0xff000000;
 						Command6 = 0;
