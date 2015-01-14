@@ -6,6 +6,7 @@ using LibEveryFileExplorer.Files;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using LibEveryFileExplorer.IO;
 
 namespace _3DS
 {

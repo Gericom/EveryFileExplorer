@@ -10,13 +10,15 @@ using System.Windows.Forms;
 using LibEveryFileExplorer;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
 	public class KTP2 : GameDataSection<KTP2.KTP2Entry>
 	{
 		public KTP2() { Signature = "KTP2"; }
-		public KTP2(EndianBinaryReader er)
+		public KTP2(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "KTP2") throw new SignatureNotCorrectException(Signature, "KTP2", er.BaseStream.Position - 4);
@@ -52,12 +54,9 @@ namespace MarioKart.MKDS.NKM
 				Unknown = 0xFFFF;
 				Index = -1;
 			}
-			public KTP2Entry(EndianBinaryReader er)
+			public KTP2Entry(EndianBinaryReaderEx er)
 			{
-				Position = er.ReadVecFx32();
-				Rotation = er.ReadVecFx32();
-				Unknown = er.ReadUInt16();
-				Index = er.ReadInt16();
+				er.ReadObject(this);
 			}
 
 			public override void Write(EndianBinaryWriter er)
@@ -84,8 +83,10 @@ namespace MarioKart.MKDS.NKM
 				return m;
 			}
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Position { get; set; }
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Rotation { get; set; }
 			[TypeConverter(typeof(HexTypeConverter)), HexReversedAttribute]
 			public UInt16 Unknown { get; set; }

@@ -10,13 +10,15 @@ using System.Windows.Forms;
 using LibEveryFileExplorer;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
 	public class KTPC : GameDataSection<KTPC.KTPCEntry>
 	{
 		public KTPC() { Signature = "KTPC"; }
-		public KTPC(EndianBinaryReader er)
+		public KTPC(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "KTPC") throw new SignatureNotCorrectException(Signature, "KTPC", er.BaseStream.Position - 4);
@@ -52,12 +54,9 @@ namespace MarioKart.MKDS.NKM
 				NextMEPO = -1;
 				Index = -1;
 			}
-			public KTPCEntry(EndianBinaryReader er)
+			public KTPCEntry(EndianBinaryReaderEx er)
 			{
-				Position = er.ReadVecFx32();
-				Rotation = er.ReadVecFx32();
-				NextMEPO = er.ReadInt16();
-				Index = er.ReadInt16();
+				er.ReadObject(this);
 			}
 
 			public override void Write(EndianBinaryWriter er)
@@ -84,8 +83,10 @@ namespace MarioKart.MKDS.NKM
 				return m;
 			}
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Position { get; set; }
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Rotation { get; set; }
 			[Category("Cannon")]
 			public Int16 NextMEPO { get; set; }

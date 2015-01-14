@@ -5,6 +5,9 @@ using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
 using System.IO;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
+using System.Windows.Forms;
 
 namespace MarioKart.MK7
 {
@@ -12,7 +15,7 @@ namespace MarioKart.MK7
 	{
 		public CDAB(byte[] Data)
 		{
-			EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
+			EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
 			try
 			{
 				Header = new CDABHeader(er);
@@ -28,21 +31,19 @@ namespace MarioKart.MK7
 				er.Close();
 			}
 		}
-		public System.Windows.Forms.Form GetDialog()
+		public Form GetDialog()
 		{
-			throw new NotImplementedException();
+			return new Form();
 		}
 		public CDABHeader Header;
 		public class CDABHeader
 		{
-			public CDABHeader(EndianBinaryReader er)
+			public CDABHeader(EndianBinaryReaderEx er)
 			{
-				Signature = er.ReadString(Encoding.ASCII, 4);
-				if (Signature != "BADC") throw new SignatureNotCorrectException(Signature, "BADC", er.BaseStream.Position - 4);
-				FileSize = er.ReadUInt32();
-				HeaderSize = er.ReadUInt32();
-				Unknown = er.ReadUInt32();
+				er.ReadObject(this);
 			}
+			[BinaryStringSignature("BADC")]
+			[BinaryFixedSize(4)]
 			public String Signature;
 			public UInt32 FileSize;
 			public UInt32 HeaderSize;
@@ -51,42 +52,43 @@ namespace MarioKart.MK7
 		public SHAP Shape;
 		public class SHAP
 		{
-			public SHAP(EndianBinaryReader er)
+			public SHAP(EndianBinaryReaderEx er)
 			{
-				Signature = er.ReadString(Encoding.ASCII, 4);
-				if (Signature != "PAHS") throw new SignatureNotCorrectException(Signature, "PAHS", er.BaseStream.Position - 4);
-				NrStreams = er.ReadUInt32();
+				er.ReadObject(this);
 			}
+			[BinaryStringSignature("PAHS")]
+			[BinaryFixedSize(4)]
 			public String Signature;
 			public UInt32 NrStreams;
 		}
 		public STRM[] Streams;
 		public class STRM
 		{
-			public STRM(EndianBinaryReader er)
+			public STRM(EndianBinaryReaderEx er)
 			{
-				Signature = er.ReadString(Encoding.ASCII, 4);
-				if (Signature != "MRTS") throw new SignatureNotCorrectException(Signature, "MRTS", er.BaseStream.Position - 4);
-				NrEntries = er.ReadUInt16();
-				Unknown = er.ReadUInt16();
+				er.ReadObject(this);
 				Entries = new STRMEntry[NrEntries];
 				for (int i = 0; i < NrEntries; i++)
 				{
 					Entries[i] = new STRMEntry(er);
 				}
 			}
+			[BinaryStringSignature("MRTS")]
+			[BinaryFixedSize(4)]
 			public String Signature;
 			public UInt16 NrEntries;
 			public UInt16 Unknown;
+			[BinaryIgnore]
 			public STRMEntry[] Entries;
 			public class STRMEntry
 			{
-				public STRMEntry(EndianBinaryReader er)
+				public STRMEntry(EndianBinaryReaderEx er)
 				{
-					Unknown1 = er.ReadSingle();
-					Unknown2 = er.ReadSingle();
-					Unknown3 = er.ReadSingle();
-					Unknown4 = er.ReadSingle();
+					er.ReadObject(this);
+					//Unknown1 = er.ReadSingle();
+					//Unknown2 = er.ReadSingle();
+					//Unknown3 = er.ReadSingle();
+					//Unknown4 = er.ReadSingle();
 				}
 				public Single Unknown1;
 				public Single Unknown2;

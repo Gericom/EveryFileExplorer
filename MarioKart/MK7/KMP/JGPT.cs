@@ -9,13 +9,14 @@ using LibEveryFileExplorer.GameData;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer;
 using LibEveryFileExplorer.Math;
+using LibEveryFileExplorer.IO;
 
 namespace MarioKart.MK7.KMP
 {
 	public class JGPT : GameDataSection<JGPT.JGPTEntry>
 	{
 		public JGPT() { Signature = "TPGJ"; }
-		public JGPT(EndianBinaryReader er)
+		public JGPT(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "TPGJ") throw new SignatureNotCorrectException(Signature, "TPGJ", er.BaseStream.Position - 4);
@@ -40,13 +41,10 @@ namespace MarioKart.MK7.KMP
 				Index = 0;
 				Unknown = 0xFFFF;
 			}
-			public JGPTEntry(EndianBinaryReader er)
+			public JGPTEntry(EndianBinaryReaderEx er)
 			{
-				Position = er.ReadVector3();
-				Rotation = er.ReadVector3();
+				er.ReadObject(this);
 				Rotation = new Vector3(MathUtil.RadToDeg(Rotation.X), MathUtil.RadToDeg(Rotation.Y), MathUtil.RadToDeg(Rotation.Z));
-				Index = er.ReadUInt16();
-				Unknown = er.ReadUInt16();
 			}
 
 			public override ListViewItem GetListViewItem()

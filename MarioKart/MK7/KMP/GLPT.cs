@@ -9,13 +9,14 @@ using LibEveryFileExplorer.GameData;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer;
 using LibEveryFileExplorer.Math;
+using LibEveryFileExplorer.IO;
 
 namespace MarioKart.MK7.KMP
 {
 	public class GLPT : GameDataSection<GLPT.GLPTEntry>
 	{
 		public GLPT() { Signature = "TPLG"; }
-		public GLPT(EndianBinaryReader er)
+		public GLPT(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "TPLG") throw new SignatureNotCorrectException(Signature, "TPLG", er.BaseStream.Position - 4);
@@ -36,12 +37,9 @@ namespace MarioKart.MK7.KMP
 		public class GLPTEntry : GameDataSectionEntry
 		{
 			public GLPTEntry() { }
-			public GLPTEntry(EndianBinaryReader er)
+			public GLPTEntry(EndianBinaryReaderEx er)
 			{
-				Position = er.ReadVector3();
-				Unknown1 = er.ReadSingle();
-				Unknown2 = er.ReadUInt32();
-				Unknown3 = er.ReadUInt32();
+				er.ReadObject(this);
 			}
 
 			public override ListViewItem GetListViewItem()

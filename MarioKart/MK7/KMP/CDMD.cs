@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using MarioKart.UI;
 using LibEveryFileExplorer;
 using LibEveryFileExplorer.Math;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MK7.KMP
 {
@@ -18,7 +20,7 @@ namespace MarioKart.MK7.KMP
 	{
 		public CDMD(byte[] Data)
 		{
-			EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
+			EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
 			try
 			{
 				Header = new CDMDHeader(er);
@@ -88,21 +90,19 @@ namespace MarioKart.MK7.KMP
 		public CDMDHeader Header;
 		public class CDMDHeader
 		{
-			public CDMDHeader(EndianBinaryReader er)
+			public CDMDHeader(EndianBinaryReaderEx er)
 			{
-				Signature = er.ReadString(Encoding.ASCII, 4);
-				if (Signature != "DMDC") throw new SignatureNotCorrectException(Signature, "DMDC", er.BaseStream.Position - 4);
-				FileSize = er.ReadUInt32();
-				NrSections = er.ReadUInt16();
-				HeaderSize = er.ReadUInt16();
-				Version = er.ReadUInt32();
+				er.ReadObject(this);
 				SectionOffsets = er.ReadUInt32s(NrSections);
 			}
+			[BinaryStringSignature("DMDC")]
+			[BinaryFixedSize(4)]
 			public String Signature;
 			public UInt32 FileSize;
 			public UInt16 NrSections;
 			public UInt16 HeaderSize;
 			public UInt32 Version;
+			[BinaryIgnore]
 			public UInt32[] SectionOffsets;
 		}
 

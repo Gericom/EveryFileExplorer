@@ -9,6 +9,7 @@ using LibEveryFileExplorer.Files;
 using System.Drawing;
 using System.Windows.Forms;
 using NDS.UI;
+using LibEveryFileExplorer.IO;
 
 namespace NDS
 {

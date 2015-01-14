@@ -6,6 +6,7 @@ using System.Drawing;
 using LibEveryFileExplorer.Collections;
 using System.IO;
 using Tao.OpenGl;
+using LibEveryFileExplorer.IO;
 
 namespace _3DS.NintendoWare.LYT1
 {

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer.Collections;
+using LibEveryFileExplorer.IO;
 
 namespace _3DS.NintendoWare.GFX
 {

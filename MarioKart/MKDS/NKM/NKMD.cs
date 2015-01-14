@@ -15,6 +15,8 @@ using LibEveryFileExplorer.Math;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
 using LibEveryFileExplorer;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
@@ -27,7 +29,7 @@ namespace MarioKart.MKDS.NKM
 
 		public NKMD(byte[] Data)
 		{
-			EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
+			EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
 			try
 			{
 				Header = new NKMDHeader(er);
@@ -58,12 +60,9 @@ namespace MarioKart.MKDS.NKM
 						case "AREA": Area = new AREA(er); break;
 						case "CAME": Camera = new CAME(er); break;
 						default:
-							//throw new Exception("Unknown Section: " + sig);
-							continue;
-						//goto cont;
+							throw new Exception("Unknown Section: " + sig);
 					}
 				}
-			cont:
 				if (KartPointCannon == null) KartPointCannon = new KTPC();
 				if (KartPointMission == null) KartPointMission = new KTPM();
 			}
@@ -254,12 +253,9 @@ namespace MarioKart.MKDS.NKM
 				SectionOffsets = new uint[0];
 			}
 
-			public NKMDHeader(EndianBinaryReader er)
+			public NKMDHeader(EndianBinaryReaderEx er)
 			{
-				Signature = er.ReadString(Encoding.ASCII, 4);
-				if (Signature != "NKMD") throw new SignatureNotCorrectException(Signature, "NKMD", er.BaseStream.Position - 4);
-				Version = er.ReadUInt16();
-				HeaderSize = er.ReadUInt16();
+				er.ReadObject(this);
 				SectionOffsets = er.ReadUInt32s((HeaderSize - 8) / 4);
 			}
 			public void Write(EndianBinaryWriter er)
@@ -270,9 +266,12 @@ namespace MarioKart.MKDS.NKM
 				er.Write(HeaderSize);
 				er.Write(SectionOffsets, 0, SectionOffsets.Length);
 			}
+			[BinaryStringSignature("NKMD")]
+			[BinaryFixedSize(4)]
 			public String Signature;
 			public UInt16 Version;
 			public UInt16 HeaderSize;
+			[BinaryIgnore]
 			public UInt32[] SectionOffsets;
 		}
 

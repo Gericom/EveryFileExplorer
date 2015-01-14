@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
+using LibEveryFileExplorer.IO;
 
 namespace NDS.Nitro
 {

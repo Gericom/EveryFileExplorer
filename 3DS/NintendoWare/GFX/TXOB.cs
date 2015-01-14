@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using LibEveryFileExplorer.Files;
 using _3DS.GPU;
+using LibEveryFileExplorer.IO;
 
 namespace _3DS.NintendoWare.GFX
 {

@@ -8,6 +8,7 @@ using LibEveryFileExplorer.Collections;
 using System.IO;
 using System.Windows.Forms;
 using _3DS.UI;
+using LibEveryFileExplorer.IO;
 
 namespace _3DS.NintendoWare.LYT1
 {

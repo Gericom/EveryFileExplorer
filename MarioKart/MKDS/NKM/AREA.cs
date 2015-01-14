@@ -11,13 +11,15 @@ using LibEveryFileExplorer;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
 using LibEveryFileExplorer.Math;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
 	public class AREA : GameDataSection<AREA.AREAEntry>
 	{
 		public AREA() { Signature = "AREA"; }
-		public AREA(EndianBinaryReader er)
+		public AREA(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "AREA") throw new SignatureNotCorrectException(Signature, "AREA", er.BaseStream.Position - 4);
@@ -47,7 +49,7 @@ namespace MarioKart.MKDS.NKM
 					"?",
 					"?",
 					"Linked CAME",
-					"?",
+					"AREA Type",
 					"?",
 					"?"
 				};
@@ -59,25 +61,9 @@ namespace MarioKart.MKDS.NKM
 			{
 
 			}
-			public AREAEntry(EndianBinaryReader er)
+			public AREAEntry(EndianBinaryReaderEx er)
 			{
-				Position = er.ReadVecFx32();
-				LengthVector = er.ReadVecFx32();
-				XVector = er.ReadVecFx32();
-				YVector = er.ReadVecFx32();
-				ZVector = er.ReadVecFx32();
-
-				Unknown5 = er.ReadInt16();
-				Unknown6 = er.ReadInt16();
-				Unknown7 = er.ReadInt16();
-
-				Unknown8 = er.ReadByte();
-				LinkedCame = er.ReadSByte();
-				Unknown9 = er.ReadByte();
-
-				Unknown10 = er.ReadUInt16();
-
-				Unknown11 = er.ReadByte();
+				er.ReadObject(this);
 			}
 
 			public override void Write(EndianBinaryWriter er)
@@ -92,7 +78,7 @@ namespace MarioKart.MKDS.NKM
 				er.Write(Unknown7);
 				er.Write(Unknown8);
 				er.Write(LinkedCame);
-				er.Write(Unknown9);
+				er.Write(AreaType);
 				er.Write(Unknown10);
 				er.Write(Unknown11);
 			}
@@ -126,7 +112,7 @@ namespace MarioKart.MKDS.NKM
 
 				m.SubItems.Add(HexUtil.GetHexReverse(Unknown8));
 				m.SubItems.Add(LinkedCame.ToString());
-				m.SubItems.Add(HexUtil.GetHexReverse(Unknown9));
+				m.SubItems.Add(HexUtil.GetHexReverse(AreaType));
 
 				m.SubItems.Add(HexUtil.GetHexReverse(Unknown10));
 
@@ -135,15 +121,20 @@ namespace MarioKart.MKDS.NKM
 			}
 
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Position { get; set; }
 
 			[Category("Vectors"), DisplayName("Length Vector")]
+			[BinaryFixedPoint(true , 19, 12)]
 			public Vector3 LengthVector { get; set; }
 			[Category("Vectors"), DisplayName("X Vector")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 XVector { get; set; }
 			[Category("Vectors"), DisplayName("Y Vector")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 YVector { get; set; }
 			[Category("Vectors"), DisplayName("Z Vector")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 ZVector { get; set; }
 
 			public Int16 Unknown5 { get; set; }
@@ -152,7 +143,7 @@ namespace MarioKart.MKDS.NKM
 
 			public Byte Unknown8 { get; set; }
 			public SByte LinkedCame { get; set; }
-			public Byte Unknown9 { get; set; }
+			public Byte AreaType { get; set; }//1 = Camera Stuff, 4 = Water Fall Sound Area
 
 			public UInt16 Unknown10 { get; set; }//unverified
 

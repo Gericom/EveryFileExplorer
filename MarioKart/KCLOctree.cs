@@ -6,6 +6,7 @@ using System.IO;
 using LibEveryFileExplorer._3D;
 using LibEveryFileExplorer.Collections;
 using CommonFiles;
+using LibEveryFileExplorer.IO;
 
 namespace MarioKart
 {

@@ -5,6 +5,7 @@ using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
 using System.IO;
+using LibEveryFileExplorer.IO;
 
 namespace CommonFiles
 {

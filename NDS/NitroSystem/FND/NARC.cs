@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using NDS.Nitro;
+using LibEveryFileExplorer.IO;
 
 namespace NDS.NitroSystem.FND
 {

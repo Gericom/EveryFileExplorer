@@ -1,9 +1,11 @@
 ﻿using System.Text;
 using LibEveryFileExplorer.Collections;
+using System.IO;
+using System;
 
-namespace System.IO
+namespace LibEveryFileExplorer.IO
 {
-    public sealed class EndianBinaryWriter : IDisposable
+    public class EndianBinaryWriter : IDisposable
     {
         private bool disposed;
         private byte[] buffer;
@@ -338,31 +340,6 @@ namespace System.IO
 			WriteFx32(Value.Y);
 			WriteFx32(Value.Z);
 		}
-
-        public void WritePadding(int multiple, byte padding)
-        {
-            int length = (int)(BaseStream.Position % multiple);
-
-            if (length != 0)
-                while (length != multiple)
-                {
-                    BaseStream.WriteByte(padding);
-                    length++;
-                }
-        }
-
-        public void WritePadding(int multiple, byte padding, long from, int offset)
-        {
-            int length = (int)((BaseStream.Position - from) % multiple);
-            length = (length + offset) % multiple;
-
-            if (length != 0)
-                while (length != multiple)
-                {
-                    BaseStream.WriteByte(padding);
-                    length++;
-                }
-        }
 
         public void Close()
         {

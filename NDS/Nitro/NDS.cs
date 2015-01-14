@@ -10,6 +10,7 @@ using LibEveryFileExplorer.Files.SimpleFileSystem;
 using NDS.UI;
 using System.Xml.Serialization;
 using System.Xml;
+using LibEveryFileExplorer.IO;
 
 namespace NDS.Nitro
 {

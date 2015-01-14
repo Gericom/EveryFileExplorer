@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using DictName = System.String;
+using LibEveryFileExplorer.IO;
 
 namespace NDS.NitroSystem.G3D
 {

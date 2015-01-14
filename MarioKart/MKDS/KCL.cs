@@ -8,6 +8,7 @@ using LibEveryFileExplorer.Collections;
 using System.IO;
 using LibEveryFileExplorer._3D;
 using CommonFiles;
+using LibEveryFileExplorer.IO;
 
 namespace MarioKart.MKDS
 {

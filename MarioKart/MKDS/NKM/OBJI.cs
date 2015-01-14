@@ -10,13 +10,15 @@ using System.Windows.Forms;
 using LibEveryFileExplorer;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
 	public class OBJI : GameDataSection<OBJI.OBJIEntry>
 	{
 		public OBJI() { Signature = "OBJI"; }
-		public OBJI(EndianBinaryReader er)
+		public OBJI(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "OBJI") throw new SignatureNotCorrectException(Signature, "OBJI", er.BaseStream.Position - 4);
@@ -58,15 +60,9 @@ namespace MarioKart.MKDS.NKM
 				Settings = new ushort[8];
 				TTVisible = true;
 			}
-			public OBJIEntry(EndianBinaryReader er)
+			public OBJIEntry(EndianBinaryReaderEx er)
 			{
-				Position = er.ReadVecFx32();
-				Rotation = er.ReadVecFx32();
-				Scale = er.ReadVecFx32();
-				ObjectID = er.ReadUInt16();
-				RouteID = er.ReadInt16();
-				Settings = er.ReadUInt16s(8);
-				TTVisible = er.ReadUInt32() == 1;
+				er.ReadObject(this);
 			}
 
 			public override void Write(EndianBinaryWriter er)
@@ -114,10 +110,13 @@ namespace MarioKart.MKDS.NKM
 				return m;
 			}
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Position { get; set; }
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Rotation { get; set; }
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Scale { get; set; }
 			[Category("Object"), DisplayName("Object ID")]
 			[TypeConverter(typeof(HexTypeConverter)), HexReversedAttribute]
@@ -128,9 +127,11 @@ namespace MarioKart.MKDS.NKM
 			[Category("Object")]
 			[Description("Object specific settings.")]
 			[TypeConverter(typeof(PrettyArrayConverter))]
+			[BinaryFixedSize(8)]
 			public UInt16[] Settings { get; private set; }//8
 			[Category("Object"), DisplayName("TT Visible")]
 			[Description("Specifies whether the object is visible in Time Trail mode or not.")]
+			[BinaryBooleanSize(BooleanSize.U32)]
 			public Boolean TTVisible { get; set; }
 		}
 	}

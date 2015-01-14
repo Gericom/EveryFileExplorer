@@ -8,13 +8,15 @@ using System.IO;
 using LibEveryFileExplorer.GameData;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MK7.KMP
 {
 	public class ENPH : GameDataSection<ENPH.ENPHEntry>
 	{
 		public ENPH() { Signature = "HPNE"; }
-		public ENPH(EndianBinaryReader er)
+		public ENPH(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "HPNE") throw new SignatureNotCorrectException(Signature, "HPNE", er.BaseStream.Position - 4);
@@ -42,13 +44,9 @@ namespace MarioKart.MK7.KMP
 				Previous = new short[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 				Next = new short[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 			}
-			public ENPHEntry(EndianBinaryReader er)
+			public ENPHEntry(EndianBinaryReaderEx er)
 			{
-				Start = er.ReadUInt16();
-				Length = er.ReadUInt16();
-				Previous = er.ReadInt16s(16);
-				Next = er.ReadInt16s(16);
-				Unknown = er.ReadUInt32();
+				er.ReadObject(this);
 			}
 
 			public override ListViewItem GetListViewItem()
@@ -94,7 +92,9 @@ namespace MarioKart.MK7.KMP
 			}
 			public UInt16 Start { get; set; }
 			public UInt16 Length { get; set; }
+			[BinaryFixedSize(16)]
 			public Int16[] Previous { get; set; }//16
+			[BinaryFixedSize(16)]
 			public Int16[] Next { get; set; }//16
 			public UInt32 Unknown { get; set; }
 		}

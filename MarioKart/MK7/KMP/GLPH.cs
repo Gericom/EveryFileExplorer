@@ -8,13 +8,15 @@ using System.IO;
 using LibEveryFileExplorer.GameData;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MK7.KMP
 {
 	public class GLPH : GameDataSection<GLPH.GLPHEntry>
 	{
 		public GLPH() { Signature = "HPLG"; }
-		public GLPH(EndianBinaryReader er)
+		public GLPH(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "HPLG") throw new SignatureNotCorrectException(Signature, "HPLG", er.BaseStream.Position - 4);
@@ -41,14 +43,9 @@ namespace MarioKart.MK7.KMP
 				Previous = new sbyte[] { -1, -1, -1, -1, -1, -1, -1, -1 };
 				Next = new sbyte[] { -1, -1, -1, -1, -1, -1, -1, -1 };
 			}
-			public GLPHEntry(EndianBinaryReader er)
+			public GLPHEntry(EndianBinaryReaderEx er)
 			{
-				Start = er.ReadByte();
-				Length = er.ReadByte();
-				Previous = er.ReadSBytes(6);
-				Next = er.ReadSBytes(6);
-				Unknown1 = er.ReadUInt32();
-				Unknown2 = er.ReadUInt32();
+				er.ReadObject(this);
 			}
 
 			public override ListViewItem GetListViewItem()
@@ -75,7 +72,9 @@ namespace MarioKart.MK7.KMP
 			}
 			public Byte Start { get; set; }
 			public Byte Length { get; set; }
+			[BinaryFixedSize(6)]
 			public SByte[] Previous { get; set; }//6
+			[BinaryFixedSize(6)]
 			public SByte[] Next { get; set; }//6
 			public UInt32 Unknown1 { get; set; }
 			public UInt32 Unknown2 { get; set; }

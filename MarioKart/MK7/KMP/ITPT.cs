@@ -9,13 +9,14 @@ using LibEveryFileExplorer.GameData;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer;
 using LibEveryFileExplorer.Math;
+using LibEveryFileExplorer.IO;
 
 namespace MarioKart.MK7.KMP
 {
 	public class ITPT : GameDataSection<ITPT.ITPTEntry>
 	{
 		public ITPT() { Signature = "TPTI"; }
-		public ITPT(EndianBinaryReader er)
+		public ITPT(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "TPTI") throw new SignatureNotCorrectException(Signature, "TPTI", er.BaseStream.Position - 4);
@@ -35,11 +36,9 @@ namespace MarioKart.MK7.KMP
 		public class ITPTEntry : GameDataSectionEntry
 		{
 			public ITPTEntry() { }
-			public ITPTEntry(EndianBinaryReader er)
+			public ITPTEntry(EndianBinaryReaderEx er)
 			{
-				Position = er.ReadVector3();
-				Unknown1 = er.ReadSingle();
-				Unknown2 = er.ReadUInt32();
+				er.ReadObject(this);
 			}
 
 			public override ListViewItem GetListViewItem()

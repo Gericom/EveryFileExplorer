@@ -10,13 +10,15 @@ using System.Windows.Forms;
 using LibEveryFileExplorer;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
 	public class CPAT : GameDataSection<CPAT.CPATEntry>
 	{
 		public CPAT() { Signature = "CPAT"; }
-		public CPAT(EndianBinaryReader er)
+		public CPAT(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "CPAT") throw new SignatureNotCorrectException(Signature, "CPAT", er.BaseStream.Position - 4);
@@ -55,13 +57,9 @@ namespace MarioKart.MKDS.NKM
 				GoesTo = new sbyte[] { -1, -1, -1 };
 				ComesFrom = new sbyte[] { -1, -1, -1 };
 			}
-			public CPATEntry(EndianBinaryReader er)
+			public CPATEntry(EndianBinaryReaderEx er)
 			{
-				StartIndex = er.ReadInt16();
-				Length = er.ReadInt16();
-				GoesTo = er.ReadSBytes(3);
-				ComesFrom = er.ReadSBytes(3);
-				SectionOrder = er.ReadInt16();
+				er.ReadObject(this);
 			}
 
 			public override void Write(EndianBinaryWriter er)
@@ -96,9 +94,11 @@ namespace MarioKart.MKDS.NKM
 			public Int16 Length { get; set; }
 			[Category("Checkpoint Path"), DisplayName("Goes To")]
 			[TypeConverter(typeof(PrettyArrayConverter))]
+			[BinaryFixedSize(3)]
 			public SByte[] GoesTo { get; private set; }//3
 			[Category("Checkpoint Path"), DisplayName("Comes From")]
 			[TypeConverter(typeof(PrettyArrayConverter))]
+			[BinaryFixedSize(3)]
 			public SByte[] ComesFrom { get; private set; }//3
 			[Category("Checkpoint Path"), DisplayName("Order")]
 			public Int16 SectionOrder { get; set; }

@@ -10,13 +10,15 @@ using System.Windows.Forms;
 using LibEveryFileExplorer;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
 	public class PATH : GameDataSection<PATH.PATHEntry>
 	{
 		public PATH() { Signature = "PATH"; }
-		public PATH(EndianBinaryReader er)
+		public PATH(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "PATH") throw new SignatureNotCorrectException(Signature, "PATH", er.BaseStream.Position - 4);
@@ -50,11 +52,9 @@ namespace MarioKart.MKDS.NKM
 				Loop = false;
 				NrPoit = 0;
 			}
-			public PATHEntry(EndianBinaryReader er)
+			public PATHEntry(EndianBinaryReaderEx er)
 			{
-				Index = er.ReadByte();
-				Loop = er.ReadByte() == 1;
-				NrPoit = er.ReadInt16();
+				er.ReadObject(this);
 			}
 
 			public override void Write(EndianBinaryWriter er)
@@ -76,6 +76,7 @@ namespace MarioKart.MKDS.NKM
 			public Byte Index { get; set; }
 			[Category("Path")]
 			[Description("Specifies whether this route loops or not.")]
+			[BinaryBooleanSize(BooleanSize.U8)]
 			public Boolean Loop { get; set; }
 			[Category("Path"), DisplayName("Nr Poit")]
 			[Description("The number of POIT entries that belong to this route.")]

@@ -9,13 +9,15 @@ using LibEveryFileExplorer.GameData;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer;
 using LibEveryFileExplorer.Math;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MK7.KMP
 {
 	public class GOBJ : GameDataSection<GOBJ.GOBJEntry>
 	{
 		public GOBJ() { Signature = "JBOG"; }
-		public GOBJ(EndianBinaryReader er)
+		public GOBJ(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "JBOG") throw new SignatureNotCorrectException(Signature, "JBOG", er.BaseStream.Position - 4);
@@ -54,28 +56,16 @@ namespace MarioKart.MK7.KMP
 				Unknown2 = 0xFFFF;
 				Unknown3 = 0;
 			}
-			public GOBJEntry(EndianBinaryReader er)
+			public GOBJEntry(EndianBinaryReaderEx er)
 			{
-				ObjectID = er.ReadUInt16();
-				Unknown1 = er.ReadUInt16();
-				Position = er.ReadVector3();
-				Rotation = er.ReadVector3();
+				er.ReadObject(this);
 				Rotation = new Vector3(MathUtil.RadToDeg(Rotation.X), MathUtil.RadToDeg(Rotation.Y), MathUtil.RadToDeg(Rotation.Z));
-				Scale = er.ReadVector3();
-				RouteID = er.ReadInt16();
-				Settings = er.ReadUInt16s(8);
-				Visibility = er.ReadUInt16();
-				Unknown2 = er.ReadUInt16();
-				Unknown3 = er.ReadUInt16();
 			}
 
 			public override ListViewItem GetListViewItem()
 			{
 				ListViewItem m = new ListViewItem("");
-				//ObjectDb.Object ob = MK7_Const.ObjectDatabase.GetObject(o.ObjectID);
-				//if (ob != null) i.SubItems.Add(ob.ToString());
-				/*else */
-				m.SubItems.Add(ToString());//String.Format("{0:X4}", ObjectID));
+				m.SubItems.Add(ToString());
 				m.SubItems.Add(HexUtil.GetHexReverse(Unknown1));
 				m.SubItems.Add(Position.X.ToString());
 				m.SubItems.Add(Position.Y.ToString());
@@ -113,6 +103,7 @@ namespace MarioKart.MK7.KMP
 			public Vector3 Rotation { get; set; }
 			public Vector3 Scale { get; set; }
 			public Int16 RouteID { get; set; }
+			[BinaryFixedSize(8)]
 			public UInt16[] Settings { get; set; }//8
 			public UInt16 Visibility { get; set; }
 			public UInt16 Unknown2 { get; set; }

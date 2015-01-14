@@ -12,6 +12,7 @@ using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
 using System.Drawing;
 using LibEveryFileExplorer.GFX;
+using LibEveryFileExplorer.IO;
 
 namespace MarioKart.MKDS.NKM
 {

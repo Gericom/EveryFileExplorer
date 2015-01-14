@@ -8,13 +8,15 @@ using System.IO;
 using LibEveryFileExplorer.GameData;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MK7.KMP
 {
 	public class ITPH : GameDataSection<ITPH.ITPHEntry>
 	{
 		public ITPH() { Signature = "HPTI"; }
-		public ITPH(EndianBinaryReader er)
+		public ITPH(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "HPTI") throw new SignatureNotCorrectException(Signature, "HPTI", er.BaseStream.Position - 4);
@@ -36,15 +38,12 @@ namespace MarioKart.MK7.KMP
 		{
 			public ITPHEntry()
 			{
-				Previous = new short[] { -1, -1, -1, -1, -1, -1};
+				Previous = new short[] { -1, -1, -1, -1, -1, -1 };
 				Next = new short[] { -1, -1, -1, -1, -1, -1 };
 			}
-			public ITPHEntry(EndianBinaryReader er)
+			public ITPHEntry(EndianBinaryReaderEx er)
 			{
-				Start = er.ReadUInt16();
-				Length = er.ReadUInt16();
-				Previous = er.ReadInt16s(6);
-				Next = er.ReadInt16s(6);
+				er.ReadObject(this);
 			}
 
 			public override ListViewItem GetListViewItem()
@@ -68,7 +67,9 @@ namespace MarioKart.MK7.KMP
 			}
 			public UInt16 Start { get; set; }
 			public UInt16 Length { get; set; }
+			[BinaryFixedSize(6)]
 			public Int16[] Previous { get; set; }//6
+			[BinaryFixedSize(6)]
 			public Int16[] Next { get; set; }//6
 		}
 	}

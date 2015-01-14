@@ -10,13 +10,15 @@ using System.Windows.Forms;
 using LibEveryFileExplorer;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
 	public class MEPO : GameDataSection<MEPO.MEPOEntry>
 	{
 		public MEPO() { Signature = "MEPO"; }
-		public MEPO(EndianBinaryReader er)
+		public MEPO(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "MEPO") throw new SignatureNotCorrectException(Signature, "MEPO", er.BaseStream.Position - 4);
@@ -49,12 +51,9 @@ namespace MarioKart.MKDS.NKM
 			{
 
 			}
-			public MEPOEntry(EndianBinaryReader er)
+			public MEPOEntry(EndianBinaryReaderEx er)
 			{
-				Position = er.ReadVecFx32();
-				PointSize = er.ReadFx32();
-				Drifting = er.ReadInt16();
-				Unknown1 = er.ReadUInt32();
+				er.ReadObject(this);
 			}
 
 			public override void Write(EndianBinaryWriter er)
@@ -80,8 +79,10 @@ namespace MarioKart.MKDS.NKM
 				return m;
 			}
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Position { get; set; }
 			[Category("Enemy Point"), DisplayName("Point Size")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Single PointSize { get; set; }
 			[Category("Enemy Point")]
 			public Int16 Drifting { get; set; }

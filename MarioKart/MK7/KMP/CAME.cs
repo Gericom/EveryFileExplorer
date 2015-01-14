@@ -9,13 +9,14 @@ using LibEveryFileExplorer.GameData;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer;
 using LibEveryFileExplorer.Math;
+using LibEveryFileExplorer.IO;
 
 namespace MarioKart.MK7.KMP
 {
 	public class CAME : GameDataSection<CAME.CAMEEntry>
 	{
 		public CAME() { Signature = "EMAC"; }
-		public CAME(EndianBinaryReader er)
+		public CAME(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "EMAC") throw new SignatureNotCorrectException(Signature, "EMAC", er.BaseStream.Position - 4);
@@ -53,24 +54,9 @@ namespace MarioKart.MK7.KMP
 			{
 				
 			}
-			public CAMEEntry(EndianBinaryReader er)
+			public CAMEEntry(EndianBinaryReaderEx er)
 			{
-				Type = er.ReadByte();
-				Next = er.ReadByte();
-				Unknown1 = er.ReadByte();
-				RouteID = er.ReadByte();
-				RouteSpeed = er.ReadUInt16();
-				FOVSpeed = er.ReadUInt16();
-				ViewpointSpeed = er.ReadUInt16();
-				Unknown2 = er.ReadByte();
-				Unknown3 = er.ReadByte();
-				Position = er.ReadVector3();
-				Rotation = er.ReadVector3();
-				FOVBegin = er.ReadSingle();
-				FOVEnd = er.ReadSingle();
-				Viewpoint1 = er.ReadVector3();
-				Viewpoint2 = er.ReadVector3();
-				Duration = er.ReadSingle();
+				er.ReadObject(this);
 			}
 
 			public override ListViewItem GetListViewItem()

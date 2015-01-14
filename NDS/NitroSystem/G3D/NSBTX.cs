@@ -7,6 +7,7 @@ using LibEveryFileExplorer.Files;
 using System.Windows.Forms;
 using System.IO;
 using NDS.UI;
+using LibEveryFileExplorer.IO;
 
 namespace NDS.NitroSystem.G3D
 {

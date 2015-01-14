@@ -11,13 +11,15 @@ using LibEveryFileExplorer;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
 using LibEveryFileExplorer.Math;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
 	public class CAME : GameDataSection<CAME.CAMEEntry>
 	{
 		public CAME() { Signature = "CAME"; }
-		public CAME(EndianBinaryReader er)
+		public CAME(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "CAME") throw new SignatureNotCorrectException(Signature, "CAME", er.BaseStream.Position - 4);
@@ -61,7 +63,7 @@ namespace MarioKart.MKDS.NKM
 
 		public class CAMEEntry : GameDataSectionEntry
 		{
-			public enum CAMEIntroCamera
+			public enum CAMEIntroCamera : byte
 			{
 				No = 0,
 				Top = 1,
@@ -75,27 +77,9 @@ namespace MarioKart.MKDS.NKM
 				LinkedRoute = -1;
 				UpdateSinCos();
 			}
-			public CAMEEntry(EndianBinaryReader er)
+			public CAMEEntry(EndianBinaryReaderEx er)
 			{
-				Position = er.ReadVecFx32();
-				Angle = er.ReadVecFx32();
-				Viewpoint1 = er.ReadVecFx32();
-				Viewpoint2 = er.ReadVecFx32();
-				FieldOfViewBegin = er.ReadUInt16();
-				FieldOfViewBeginSine = er.ReadFx16();
-				FieldOfViewBeginCosine = er.ReadFx16();
-				FieldOfViewEnd = er.ReadUInt16();
-				FieldOfViewEndSine = er.ReadFx16();
-				FieldOfViewEndCosine = er.ReadFx16();
-				FovSpeed = er.ReadInt16();
-				CameraType = er.ReadInt16();
-				LinkedRoute = er.ReadInt16();
-				RouteSpeed = er.ReadInt16();
-				PointSpeed = er.ReadInt16();
-				Duration = er.ReadInt16();
-				NextCamera = er.ReadInt16();
-				FirstIntroCamera = (CAMEIntroCamera)er.ReadByte();
-				Unknown5 = er.ReadByte();
+				er.ReadObject(this);
 			}
 
 			public override void Write(EndianBinaryWriter er)
@@ -167,24 +151,32 @@ namespace MarioKart.MKDS.NKM
 			}
 
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Position { get; set; }
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Angle { get; set; }
 			[Category("Viewpoints"), DisplayName("Viewpoint 1")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Viewpoint1 { get; set; }
 			[Category("Viewpoints"), DisplayName("Viewpoint 2")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Viewpoint2 { get; set; }
 			[Category("Field of View"), DisplayName("Begin Angle")]
 			public UInt16 FieldOfViewBegin { get; set; }
 			[Browsable(false)]
+			[BinaryFixedPoint(true, 3, 12)]
 			public Single FieldOfViewBeginSine { get; private set; }//2
 			[Browsable(false)]
+			[BinaryFixedPoint(true, 3, 12)]
 			public Single FieldOfViewBeginCosine { get; private set; }//2
 			[Category("Field of View"), DisplayName("End Angle")]
 			public UInt16 FieldOfViewEnd { get; set; }
 			[Browsable(false)]
+			[BinaryFixedPoint(true, 3, 12)]
 			public Single FieldOfViewEndSine { get; private set; }
 			[Browsable(false)]
+			[BinaryFixedPoint(true, 3, 12)]
 			public Single FieldOfViewEndCosine { get; private set; }
 			[Category("Field of View"), DisplayName("Speed")]
 			public Int16 FovSpeed { get; set; }

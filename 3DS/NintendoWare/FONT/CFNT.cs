@@ -11,6 +11,7 @@ using LibEveryFileExplorer.GFX;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using _3DS.UI;
+using LibEveryFileExplorer.IO;
 
 namespace _3DS.NintendoWare.FONT
 {

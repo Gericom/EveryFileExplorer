@@ -7,6 +7,7 @@ using System.IO;
 using LibEveryFileExplorer.Files;
 using Tao.OpenGl;
 using System.Windows.Forms;
+using LibEveryFileExplorer.IO;
 
 namespace _3DS.NintendoWare.LYT1
 {

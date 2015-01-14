@@ -10,13 +10,15 @@ using System.Windows.Forms;
 using LibEveryFileExplorer;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
 	public class MEPA : GameDataSection<MEPA.MEPAEntry>
 	{
 		public MEPA() { Signature = "MEPA"; }
-		public MEPA(EndianBinaryReader er)
+		public MEPA(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "MEPA") throw new SignatureNotCorrectException(Signature, "MEPA", er.BaseStream.Position - 4);
@@ -54,12 +56,9 @@ namespace MarioKart.MKDS.NKM
 				GoesTo = new sbyte[] { -1, -1, -1, -1, -1, -1, -1, -1 };
 				ComesFrom = new sbyte[] { -1, -1, -1, -1, -1, -1, -1, -1 };
 			}
-			public MEPAEntry(EndianBinaryReader er)
+			public MEPAEntry(EndianBinaryReaderEx er)
 			{
-				StartIndex = er.ReadInt16();
-				Length = er.ReadInt16();
-				GoesTo = er.ReadSBytes(8);
-				ComesFrom = er.ReadSBytes(8);
+				er.ReadObject(this);
 			}
 
 			public override void Write(EndianBinaryWriter er)
@@ -101,9 +100,11 @@ namespace MarioKart.MKDS.NKM
 			public Int16 Length { get; set; }
 			[Category("Enemy Path"), DisplayName("Goes To")]
 			[TypeConverter(typeof(PrettyArrayConverter))]
+			[BinaryFixedSize(8)]
 			public SByte[] GoesTo { get; private set; }//8
 			[Category("Enemy Path"), DisplayName("Comes From")]
 			[TypeConverter(typeof(PrettyArrayConverter))]
+			[BinaryFixedSize(8)]
 			public SByte[] ComesFrom { get; private set; }//8
 		}
 	}

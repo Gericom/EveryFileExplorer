@@ -10,13 +10,15 @@ using System.Windows.Forms;
 using LibEveryFileExplorer;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
 	public class CPOI : GameDataSection<CPOI.CPOIEntry>
 	{
 		public CPOI() { Signature = "CPOI"; }
-		public CPOI(EndianBinaryReader er)
+		public CPOI(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "CPOI") throw new SignatureNotCorrectException(Signature, "CPOI", er.BaseStream.Position - 4);
@@ -55,18 +57,9 @@ namespace MarioKart.MKDS.NKM
 				StartSection = -1;
 				KeyPointID = -1;
 			}
-			public CPOIEntry(EndianBinaryReader er)
+			public CPOIEntry(EndianBinaryReaderEx er)
 			{
-				Point1 = new Vector2(er.ReadFx32(), er.ReadFx32());
-				Point2 = new Vector2(er.ReadFx32(), er.ReadFx32());
-				Sine = er.ReadFx32();
-				Cosine = er.ReadFx32();
-				Distance = er.ReadFx32();
-				GotoSection = er.ReadInt16();
-				StartSection = er.ReadInt16();
-				KeyPointID = er.ReadInt16();
-				RespawnID = er.ReadByte();
-				Unknown = er.ReadByte();
+				er.ReadObject(this);
 			}
 
 			public override void Write(EndianBinaryWriter er)
@@ -107,14 +100,19 @@ namespace MarioKart.MKDS.NKM
 				return m;
 			}
 			[Category("Points"), DisplayName("Point 1")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector2 Point1 { get; set; }
 			[Category("Points"), DisplayName("Point 2")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector2 Point2 { get; set; }
 			[Browsable(false)]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Single Sine { get; private set; }
 			[Browsable(false)]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Single Cosine { get; private set; }
 			[Browsable(false)]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Single Distance { get; private set; }
 			[Category("Sections"), DisplayName("Goto Section")]
 			[Description("Specifies if the next checkpoint is in a new section. Use -1 otherwise.")]

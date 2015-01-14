@@ -8,13 +8,14 @@ using System.IO;
 using LibEveryFileExplorer.GameData;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer;
+using LibEveryFileExplorer.IO;
 
 namespace MarioKart.MK7.KMP
 {
 	public class CKPT : GameDataSection<CKPT.CKPTEntry>
 	{
 		public CKPT() { Signature = "TPKC"; }
-		public CKPT(EndianBinaryReader er)
+		public CKPT(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "TPKC") throw new SignatureNotCorrectException(Signature, "TPKC", er.BaseStream.Position - 4);
@@ -45,18 +46,9 @@ namespace MarioKart.MK7.KMP
 				Type = 0xFF;
 				Unknown2 = 0xFF;
 			}
-			public CKPTEntry(EndianBinaryReader er)
+			public CKPTEntry(EndianBinaryReaderEx er)
 			{
-				Point1 = er.ReadVector2();
-				Point2 = er.ReadVector2();
-				RespawnId = er.ReadByte();
-				Type = er.ReadByte();
-				Previous = er.ReadByte();
-				Next = er.ReadByte();
-				Unknown1 = er.ReadByte();
-				Unknown2 = er.ReadByte();
-				Unknown3 = er.ReadByte();
-				Unknown4 = er.ReadByte();
+				er.ReadObject(this);
 			}
 
 			public override ListViewItem GetListViewItem()

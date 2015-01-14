@@ -8,6 +8,7 @@ using System.IO;
 using System.Windows.Forms;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using GCNWii.UI;
+using LibEveryFileExplorer.IO;
 
 namespace GCNWii.JSystem
 {

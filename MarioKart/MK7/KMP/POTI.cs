@@ -5,6 +5,7 @@ using System.Text;
 using LibEveryFileExplorer.Collections;
 using System.IO;
 using LibEveryFileExplorer.Files;
+using LibEveryFileExplorer.IO;
 
 namespace MarioKart.MK7.KMP
 {

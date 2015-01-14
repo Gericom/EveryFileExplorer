@@ -10,13 +10,15 @@ using System.Windows.Forms;
 using LibEveryFileExplorer;
 using System.ComponentModel;
 using LibEveryFileExplorer.ComponentModel;
+using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace MarioKart.MKDS.NKM
 {
 	public class POIT : GameDataSection<POIT.POITEntry>
 	{
 		public POIT() { Signature = "POIT"; }
-		public POIT(EndianBinaryReader er)
+		public POIT(EndianBinaryReaderEx er)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "POIT") throw new SignatureNotCorrectException(Signature, "POIT", er.BaseStream.Position - 4);
@@ -52,12 +54,9 @@ namespace MarioKart.MKDS.NKM
 				Duration = 0;
 				Unknown = 0;
 			}
-			public POITEntry(EndianBinaryReader er)
+			public POITEntry(EndianBinaryReaderEx er)
 			{
-				Position = er.ReadVecFx32();
-				Index = er.ReadInt16();
-				Duration = er.ReadInt16();
-				Unknown = er.ReadUInt32();
+				er.ReadObject(this);
 			}
 
 			public override void Write(EndianBinaryWriter er)
@@ -81,6 +80,7 @@ namespace MarioKart.MKDS.NKM
 				return m;
 			}
 			[Category("Transformation")]
+			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Position { get; set; }
 			[Category("Point")]
 			public Int16 Index { get; set; }

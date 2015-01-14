@@ -6,6 +6,7 @@ using System.IO;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer.Collections;
 using NDS.GPU;
+using LibEveryFileExplorer.IO;
 
 namespace NDS.NitroSystem.G3D
 {

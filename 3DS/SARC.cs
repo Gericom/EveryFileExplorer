@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using _3DS.UI;
+using LibEveryFileExplorer.IO;
 
 namespace _3DS
 {

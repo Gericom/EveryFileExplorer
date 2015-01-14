@@ -8,6 +8,7 @@ using LibEveryFileExplorer.Files;
 using System.Drawing;
 using GCNWii.UI;
 using System.Windows.Forms;
+using LibEveryFileExplorer.IO;
 
 namespace GCNWii
 {
