@@ -31,6 +31,7 @@ namespace MarioKart.MK7.KMP
 					er.BaseStream.Position -= 4;
 					switch (sig)
 					{
+						case "TPTK": KartPoint = new KTPT(er); break;
 						case "TPNE": EnemyPoint = new ENPT(er); break;
 						case "HPNE": EnemyPointPath = new ENPH(er); break;
 						case "TPTI": ItemPoint = new ITPT(er); break;
@@ -39,6 +40,7 @@ namespace MarioKart.MK7.KMP
 						case "HPKC": CheckPointPath = new CKPH(er); break;
 						case "JBOG": GlobalObject = new GOBJ(er); break;
 						case "ITOP": PointInfo = new POTI(er); break;
+						case "AERA": Area = new AREA(er); break;
 						case "EMAC": Camera = new CAME(er); break;
 						case "TPGJ": JugemPoint = new JGPT(er); break;
 						case "TPLG": GliderPoint = new GLPT(er); break;
@@ -106,20 +108,22 @@ namespace MarioKart.MK7.KMP
 			public UInt32[] SectionOffsets;
 		}
 
+		public KTPT KartPoint;
 		public ENPT EnemyPoint;
 		public ENPH EnemyPointPath;
 		public ITPT ItemPoint;
 		public ITPH ItemPointPath;
-
 		public CKPT CheckPoint;
 		public CKPH CheckPointPath;
-
 		public GOBJ GlobalObject;
 		public POTI PointInfo;
-
+		public AREA Area;
 		public CAME Camera;
 		public JGPT JugemPoint;
-
+		//CNPT
+		//MSPT
+		//STGI
+		//CORS
 		public GLPT GliderPoint;
 		public GLPH GliderPointPath;
 

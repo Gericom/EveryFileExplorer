@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace _3DS.NintendoWare.SND
 {
@@ -14,7 +15,7 @@ namespace _3DS.NintendoWare.SND
 	{
 		public CSAR(byte[] Data)
 		{
-			EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
+			EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
 			try
 			{
 				Header = new CSARHeader(er);
@@ -42,7 +43,7 @@ namespace _3DS.NintendoWare.SND
 		public CSARHeader Header;
 		public class CSARHeader
 		{
-			public CSARHeader(EndianBinaryReader er)
+			public CSARHeader(EndianBinaryReaderEx er)
 			{
 				Signature = er.ReadString(Encoding.ASCII, 4);
 				if (Signature != "CSAR") throw new SignatureNotCorrectException(Signature, "CSAR", er.BaseStream.Position - 4);
@@ -65,7 +66,7 @@ namespace _3DS.NintendoWare.SND
 			public class SectionInfo
 			{
 				public SectionInfo(uint Id) { this.Id = Id; }
-				public SectionInfo(EndianBinaryReader er)
+				public SectionInfo(EndianBinaryReaderEx er)
 				{
 					Id = er.ReadUInt32();
 					Offset = er.ReadUInt32();
@@ -86,7 +87,7 @@ namespace _3DS.NintendoWare.SND
 		public STRG Strings;
 		public class STRG
 		{
-			public STRG(EndianBinaryReader er)
+			public STRG(EndianBinaryReaderEx er)
 			{
 				Signature = er.ReadString(Encoding.ASCII, 4);
 				if (Signature != "STRG") throw new SignatureNotCorrectException(Signature, "STRG", er.BaseStream.Position - 4);
@@ -113,7 +114,7 @@ namespace _3DS.NintendoWare.SND
 			public STRGStringTable StringTable;
 			public class STRGStringTable
 			{
-				public STRGStringTable(EndianBinaryReader er)
+				public STRGStringTable(EndianBinaryReaderEx er)
 				{
 					long basepos = er.BaseStream.Position;
 					NrEntries = er.ReadUInt32();
@@ -132,7 +133,7 @@ namespace _3DS.NintendoWare.SND
 				public STRGStringTableEntry[] Entries;
 				public class STRGStringTableEntry
 				{
-					public STRGStringTableEntry(EndianBinaryReader er)
+					public STRGStringTableEntry(EndianBinaryReaderEx er)
 					{
 						NTStringSignature = er.ReadUInt32();
 						StringOffset = er.ReadUInt32();
@@ -147,7 +148,7 @@ namespace _3DS.NintendoWare.SND
 			public STRGPatriciaTree PatriciaTree;
 			public class STRGPatriciaTree
 			{
-				public STRGPatriciaTree(EndianBinaryReader er)
+				public STRGPatriciaTree(EndianBinaryReaderEx er)
 				{
 					RootNodeIndex = er.ReadUInt32();
 					NrNodes = er.ReadUInt32();
@@ -159,15 +160,17 @@ namespace _3DS.NintendoWare.SND
 				public PatriciaTreeNode[] Nodes;
 				public class PatriciaTreeNode
 				{
-					public PatriciaTreeNode(EndianBinaryReader er)
+					public PatriciaTreeNode(EndianBinaryReaderEx er)
 					{
-						IsLeaf = er.ReadUInt16() == 1;
+						er.ReadObject(this);
+						/*IsLeaf = er.ReadUInt16() == 1;
 						Bit = er.ReadUInt16();
 						Left = er.ReadUInt32();
 						Right = er.ReadUInt32();
 						StringID = er.ReadUInt32();
-						NodeID = er.ReadUInt32();
+						NodeID = er.ReadUInt32();*/
 					}
+					[BinaryBooleanSize(BooleanSize.U16)]
 					public Boolean IsLeaf;//2
 					public UInt16 Bit;
 					public UInt32 Left;
@@ -180,7 +183,7 @@ namespace _3DS.NintendoWare.SND
 		public INFO Infos;
 		public class INFO
 		{
-			public INFO(EndianBinaryReader er)
+			public INFO(EndianBinaryReaderEx er)
 			{
 				Signature = er.ReadString(Encoding.ASCII, 4);
 				if (Signature != "INFO") throw new SignatureNotCorrectException(Signature, "INFO", er.BaseStream.Position - 4);
@@ -227,7 +230,7 @@ namespace _3DS.NintendoWare.SND
 
 			public class INFOInfoBlock<T> where T : INFOInfoBlockEntry, new()
 			{
-				public INFOInfoBlock(EndianBinaryReader er)
+				public INFOInfoBlock(EndianBinaryReaderEx er)
 				{
 					long basepos = er.BaseStream.Position;
 					NrEntries = er.ReadUInt32();
@@ -244,7 +247,7 @@ namespace _3DS.NintendoWare.SND
 				public ReferenceTableEntry[] ReferenceTableEntries;
 				public class ReferenceTableEntry
 				{
-					public ReferenceTableEntry(EndianBinaryReader er)
+					public ReferenceTableEntry(EndianBinaryReaderEx er)
 					{
 						Signature = er.ReadUInt32();
 						Offset = er.ReadUInt32();
@@ -257,13 +260,13 @@ namespace _3DS.NintendoWare.SND
 
 			public abstract class INFOInfoBlockEntry
 			{
-				public abstract void Read(EndianBinaryReader er);
+				public abstract void Read(EndianBinaryReaderEx er);
 			}
 
 			public INFOInfoBlock<INFOSoundInfoEntry> SoundInfo;
 			public class INFOSoundInfoEntry : INFOInfoBlockEntry
 			{
-				public override void Read(EndianBinaryReader er)
+				public override void Read(EndianBinaryReaderEx er)
 				{
 					FileID = er.ReadUInt32();
 					PlayerID = er.ReadUInt32();

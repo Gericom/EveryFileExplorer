@@ -68,6 +68,8 @@
     <Compile Include="MK7\KCL.cs" />
     <Compile Include="MK7\KMP\CKPH.cs" />
     <Compile Include="MK7\KMP\CKPT.cs" />
+    <Compile Include="MK7\KMP\AREA.cs" />
+    <Compile Include="MK7\KMP\KTPT.cs" />
     <Compile Include="MK7\KMP\ITPH.cs" />
     <Compile Include="MK7\KMP\ITPT.cs" />
     <Compile Include="MK7\KMP\ENPH.cs" />

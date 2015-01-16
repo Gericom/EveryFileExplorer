@@ -2230,7 +2230,7 @@ namespace _3DS.NintendoWare.GFX
 				{
 					public AlphaTestCtr()
 					{
-						Command1 = 0x10;
+						Command1 = 0x11;//0x10;
 						Command2 = 0xF0104;
 					}
 					public AlphaTestCtr(EndianBinaryReader er)

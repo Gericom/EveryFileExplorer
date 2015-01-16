@@ -75,6 +75,7 @@ namespace MarioKart.UI
 				KCL = v[0].FileFormat;
 			}
 
+			if (MapData.KartPoint != null) AddTab<KTPT.KTPTEntry>("KTPT", MapData.KartPoint);
 			if (MapData.EnemyPoint != null) AddTab<ENPT.ENPTEntry>("ENPT", MapData.EnemyPoint);
 			if (MapData.EnemyPointPath != null) AddTab<ENPH.ENPHEntry>("ENPH", MapData.EnemyPointPath);
 			if (MapData.ItemPoint != null) AddTab<ITPT.ITPTEntry>("ITPT", MapData.ItemPoint);
@@ -82,6 +83,7 @@ namespace MarioKart.UI
 			if (MapData.CheckPoint != null) AddTab<CKPT.CKPTEntry>("CKPT", MapData.CheckPoint);
 			if (MapData.CheckPointPath != null) AddTab<CKPH.CKPHEntry>("CKPH", MapData.CheckPointPath);
 			if (MapData.GlobalObject != null) AddTab<GOBJ.GOBJEntry>("GOBJ", MapData.GlobalObject);
+			if (MapData.Area != null) AddTab<AREA.AREAEntry>("AREA", MapData.Area);
 			if (MapData.Camera != null) AddTab<CAME.CAMEEntry>("CAME", MapData.Camera);
 			if (MapData.JugemPoint != null) AddTab<JGPT.JGPTEntry>("JGPT", MapData.JugemPoint);
 			if (MapData.GliderPoint != null) AddTab<GLPT.GLPTEntry>("GLPT", MapData.GliderPoint);
@@ -226,9 +228,9 @@ namespace MarioKart.UI
 			{
 				Gl.glColor4f(Color.CornflowerBlue.R / 255f, Color.CornflowerBlue.G / 255f, Color.CornflowerBlue.B / 255f, 0.25f);
 			}
-			Gl.glBegin(Gl.GL_QUADS);
+			/*Gl.glBegin(Gl.GL_QUADS);
 			//if (aREAToolStripMenuItem.Checked)
-			/*{
+			{
 				foreach (var o in NKMD.Area.Entries)
 				{
 					if (picking)
@@ -247,8 +249,8 @@ namespace MarioKart.UI
 					Gl.glVertex2f(Point3.X, Point3.Z);
 					Gl.glVertex2f(Point4.X, Point4.Z);
 				}
-			}*/
-			Gl.glEnd();
+			}
+			Gl.glEnd();*/
 
 			Gl.glBegin(Gl.GL_POINTS);
 			if (!picking)
@@ -304,7 +306,7 @@ namespace MarioKart.UI
 				{
 					if (picking)
 					{
-						Gl.glColor4f(Color.FromArgb(objidx | (0 << 18)).R / 255f, Color.FromArgb(objidx | (0 << 18)).G / 255f, Color.FromArgb(objidx | (0 << 18)).B / 255f, 1);
+						Gl.glColor4f(Color.FromArgb(objidx | (5 << 18)).R / 255f, Color.FromArgb(objidx | (5 << 18)).G / 255f, Color.FromArgb(objidx | (5 << 18)).B / 255f, 1);
 						objidx++;
 					}
 					//Bitmap b;
@@ -353,54 +355,17 @@ namespace MarioKart.UI
 			}
 			objidx = 1;
 			//if (kTPSToolStripMenuItem.Checked)
-			/*{
-				foreach (var o in NKMD.KartPointStart.Entries)
+			{
+				foreach (var o in MapData.KartPoint.Entries)
 				{
 					if (picking)
 					{
-						Gl.glColor4f(Color.FromArgb(objidx | (4 << 18)).R / 255f, Color.FromArgb(objidx | (4 << 18)).G / 255f, Color.FromArgb(objidx | (4 << 18)).B / 255f, 1);
+						Gl.glColor4f(Color.FromArgb(objidx | (0 << 18)).R / 255f, Color.FromArgb(objidx | (0 << 18)).G / 255f, Color.FromArgb(objidx | (0 << 18)).B / 255f, 1);
 						objidx++;
 					}
-					Bitmap b;
-					if ((b = (Bitmap)OBJI.ResourceManager.GetObject("start")) == null)
-					{
-						Gl.glVertex2f(o.Position.X, o.Position.Z);
-					}
-					else
-					{
-						Gl.glEnd();
-						if (!picking)
-						{
-							Gl.glColor3f(1, 1, 1);
-							Gl.glBindTexture(Gl.GL_TEXTURE_2D, -1);
-						}
-						Gl.glPushMatrix();
-						Gl.glTranslatef(o.Position.X, o.Position.Z, 0);
-
-						Gl.glRotatef(o.Rotation.Y, 0, 0, 1);
-
-						Gl.glScalef(mult, mult, 1);
-
-						Gl.glBegin(Gl.GL_QUADS);
-						Gl.glTexCoord2f(0, 0);
-						Gl.glVertex2f(-b.Width / 2f, -b.Height / 2f);
-						Gl.glTexCoord2f(1, 0);
-						Gl.glVertex2f(b.Width / 2f, -b.Height / 2f);
-						Gl.glTexCoord2f(1, 1);
-						Gl.glVertex2f(b.Width / 2f, b.Height / 2f);
-						Gl.glTexCoord2f(0, 1);
-						Gl.glVertex2f(-b.Width / 2f, b.Height / 2f);
-						Gl.glEnd();
-						Gl.glPopMatrix();
-						if (!picking)
-						{
-							Gl.glColor3f(1, 0, 0);
-							Gl.glBindTexture(Gl.GL_TEXTURE_2D, 0);
-						}
-						Gl.glBegin(Gl.GL_POINTS);
-					}
+					Gl.glVertex2f(o.Position.X, o.Position.Z);
 				}
-			}*/
+			}
 			if (!picking)
 			{
 				Gl.glColor3f(1, 0, 0.5f);
@@ -463,7 +428,7 @@ namespace MarioKart.UI
 				{
 					if (picking)
 					{
-						Gl.glColor4f(Color.FromArgb(objidx | (5 << 18)).R / 255f, Color.FromArgb(objidx | (5 << 18)).G / 255f, Color.FromArgb(objidx | (5 << 18)).B / 255f, 1);
+						Gl.glColor4f(Color.FromArgb(objidx | (10 << 18)).R / 255f, Color.FromArgb(objidx | (10 << 18)).G / 255f, Color.FromArgb(objidx | (10 << 18)).B / 255f, 1);
 						objidx++;
 					}
 					Gl.glVertex2f(o.Position.X, o.Position.Z);
@@ -482,7 +447,7 @@ namespace MarioKart.UI
 					{
 						if (picking)
 						{
-							Gl.glColor4f(Color.FromArgb(objidx | (13 << 18)).R / 255f, Color.FromArgb(objidx | (13 << 18)).G / 255f, Color.FromArgb(objidx | (13 << 18)).B / 255f, 1);
+							Gl.glColor4f(Color.FromArgb(objidx | (1 << 18)).R / 255f, Color.FromArgb(objidx | (1 << 18)).G / 255f, Color.FromArgb(objidx | (1 << 18)).B / 255f, 1);
 							objidx++;
 						}
 						Gl.glVertex2f(o.Position.X, o.Position.Z);
@@ -513,7 +478,7 @@ namespace MarioKart.UI
 				{
 					if (picking)
 					{
-						Gl.glColor4f(Color.FromArgb(objidx | (11 << 18)).R / 255f, Color.FromArgb(objidx | (11 << 18)).G / 255f, Color.FromArgb(objidx | (11 << 18)).B / 255f, 1);
+						Gl.glColor4f(Color.FromArgb(objidx | (2 << 18)).R / 255f, Color.FromArgb(objidx | (2 << 18)).G / 255f, Color.FromArgb(objidx | (2 << 18)).B / 255f, 1);
 						objidx++;
 					}
 					Gl.glVertex2f(o.Position.X, o.Position.Z);
@@ -531,7 +496,7 @@ namespace MarioKart.UI
 				{
 					if (picking)
 					{
-						Gl.glColor4f(Color.FromArgb(objidx | (4 << 18)).R / 255f, Color.FromArgb(objidx | (4 << 18)).G / 255f, Color.FromArgb(objidx | (4 << 18)).B / 255f, 1);
+						Gl.glColor4f(Color.FromArgb(objidx | (15 << 18)).R / 255f, Color.FromArgb(objidx | (15 << 18)).G / 255f, Color.FromArgb(objidx | (15 << 18)).B / 255f, 1);
 						objidx++;
 					}
 					Gl.glVertex2f(o.Position.X, o.Position.Z);
@@ -544,17 +509,17 @@ namespace MarioKart.UI
 			}
 			objidx = 1;
 			//if (aREAToolStripMenuItem.Checked)
-			/*{
-				foreach (var o in NKMD.Area.Entries)
+			{
+				foreach (var o in MapData.Area.Entries)
 				{
 					if (picking)
 					{
-						Gl.glColor4f(Color.FromArgb(objidx | (17 << 18)).R / 255f, Color.FromArgb(objidx | (17 << 18)).G / 255f, Color.FromArgb(objidx | (17 << 18)).B / 255f, 1);
+						Gl.glColor4f(Color.FromArgb(objidx | (7 << 18)).R / 255f, Color.FromArgb(objidx | (7 << 18)).G / 255f, Color.FromArgb(objidx | (7 << 18)).B / 255f, 1);
 						objidx++;
 					}
 					Gl.glVertex2f(o.Position.X, o.Position.Z);
 				}
-			}*/
+			}
 			if (!picking)
 			{
 				Gl.glColor3f(Color.BurlyWood.R / 255f, Color.BurlyWood.G / 255f, Color.BurlyWood.B / 255f);
@@ -644,7 +609,7 @@ namespace MarioKart.UI
 					}
 					if (picking)
 					{
-						Gl.glColor4f(Color.FromArgb(objidx | (21 << 18)).R / 255f, Color.FromArgb(objidx | (21 << 18)).G / 255f, Color.FromArgb(objidx | (21 << 18)).B / 255f, 1);
+						Gl.glColor4f(Color.FromArgb(objidx | (3 << 18)).R / 255f, Color.FromArgb(objidx | (3 << 18)).G / 255f, Color.FromArgb(objidx | (3 << 18)).B / 255f, 1);
 					}
 					Gl.glVertex2f(o.Point1.X, o.Point1.Y);
 					if (!picking)
@@ -653,7 +618,7 @@ namespace MarioKart.UI
 					}
 					if (picking)
 					{
-						Gl.glColor4f(Color.FromArgb(objidx | (22 << 18)).R / 255f, Color.FromArgb(objidx | (22 << 18)).G / 255f, Color.FromArgb(objidx | (22 << 18)).B / 255f, 1);
+						Gl.glColor4f(Color.FromArgb(objidx | (4 << 18)).R / 255f, Color.FromArgb(objidx | (4 << 18)).G / 255f, Color.FromArgb(objidx | (4 << 18)).B / 255f, 1);
 						objidx++;
 					}
 					Gl.glVertex2f(o.Point2.X, o.Point2.Y);
