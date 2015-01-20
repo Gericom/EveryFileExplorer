@@ -32,6 +32,15 @@ namespace LibEveryFileExplorer
 		private const uint SWP_NOOWNERZORDER = 0x0200;
 		private const uint SWP_NOSENDCHANGING = 0x0400;
 
+		[DllImport("kernel32.dll")]
+		public static extern bool AllocConsole();
+
+		[DllImport("kernel32.dll")]
+		public static extern bool AttachConsole(int pid);
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		public static extern bool FreeConsole();
+
 		[DllImport("Shlwapi.dll", CharSet = CharSet.Auto)]
 		public static extern long StrFormatByteSize(long fileSize, [MarshalAs(UnmanagedType.LPTStr)] StringBuilder buffer, int bufferSize);
 

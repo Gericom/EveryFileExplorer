@@ -5,11 +5,14 @@ using System.Text;
 using System.Reflection;
 using LibEveryFileExplorer.Files;
 using LibEveryFileExplorer.Compression;
+using LibEveryFileExplorer;
 
 namespace EveryFileExplorer.Plugins
 {
 	public class Plugin
 	{
+		public EFEPlugin Initializer;
+
 		public String Name;
 		public String Description;
 		public String Version;
@@ -36,6 +39,11 @@ namespace EveryFileExplorer.Plugins
 			foreach (var t in tt)
 			{
 				if (!t.IsClass) continue;
+				if (t.IsSubclassOf(typeof(EFEPlugin)))
+				{
+					Initializer = (EFEPlugin)t.InvokeMember(null, BindingFlags.CreateInstance, null, null, null);
+					continue;
+				}
 				var v = t.GetInterfaces();
 				if (v.Length != 0 && t.GetInterfaces()[0].Name == "FileFormatBase") fe.Add(t);
 				else if (v.Length != 0 && t.GetInterfaces()[0].Name == "CompressionFormatBase") ce.Add(t);

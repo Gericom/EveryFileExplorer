@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading;
 using System.Runtime.InteropServices;
 using LibEveryFileExplorer;
+using LibEveryFileExplorer.Script;
 
 namespace EveryFileExplorer
 {
@@ -24,6 +25,22 @@ namespace EveryFileExplorer
 		[STAThread]
 		static void Main(string[] Arguments)
 		{
+			if (Arguments.Length > 0 && Arguments[0].EndsWith(".efesc"))
+			{
+				if (!Win32Util.AttachConsole(-1)) Win32Util.AllocConsole(); 
+				AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+				PluginManager = new PluginManager();
+				String Script = File.ReadAllText(Arguments[0]);
+				string[] args = new string[Arguments.Length - 1];
+				Array.Copy(Arguments, 1, args, 0, args.Length);
+				Console.WriteLine();
+				Console.WriteLine("Executing " + Path.GetFileName(Arguments[0]) + "...");
+				EFEScript.Execute(Script, args);
+				Win32Util.FreeConsole();
+				SendKeys.SendWait("{ENTER}");
+				return;
+			}
+
 			if (mutex.WaitOne(TimeSpan.Zero, true))
 			{
 				AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
@@ -60,7 +77,7 @@ namespace EveryFileExplorer
 			{
 				assembly = Assembly.LoadFrom(assemblyPath);
 			}
-			catch(NotSupportedException e)
+			catch (NotSupportedException e)
 			{
 				MessageBox.Show("Unblock " + AssemblyName.GetAssemblyName(assemblyPath) + " from external sources!");
 			}

@@ -10,11 +10,14 @@ namespace NDS.SND
 	public class ADPCM
 	{
 		private static int[] IndexTable = 
-		{ -1, -1, -1, -1, 2, 4, 6, 8,
-          -1, -1, -1, -1, 2, 4, 6, 8 };
+		{ 
+		  -1, -1, -1, -1, 2, 4, 6, 8,
+          -1, -1, -1, -1, 2, 4, 6, 8 
+		};
 
 		private static int[] StepTable = 
-		{ 7, 8, 9, 10, 11, 12, 13, 14,
+		{ 
+		  7, 8, 9, 10, 11, 12, 13, 14,
 		  16, 17, 19, 21, 23, 25, 28,
 		  31, 34, 37, 41, 45, 50, 55,
 	      60, 66, 73, 80, 88, 97, 107,
@@ -25,7 +28,8 @@ namespace NDS.SND
 	      1707, 1878, 2066, 2272, 2499, 2749, 3024, 3327, 3660, 4026,
 	      4428, 4871, 5358, 5894, 6484, 7132, 7845, 8630,
 	      9493, 10442, 11487, 12635, 13899, 15289, 16818,
-	      18500, 20350, 22385, 24623, 27086, 29794, 32767 };
+	      18500, 20350, 22385, 24623, 27086, 29794, 32767 
+		};
 
 		private bool IsInit = false;
 		private int Last;
@@ -65,5 +69,15 @@ namespace NDS.SND
 			}
 			return DataOut.ToArray();
 		}
+
+		/*public static byte[] Encode(Int16[] WaveData)
+		{
+			Int16[] Diff = new short[WaveData.Length];
+			for (int i = 1; i < WaveData.Length; i++)
+			{
+				Diff[i] = (short)(WaveData[i] - WaveData[i - 1]);
+			}
+			return null;
+		}*/
 	}
 }

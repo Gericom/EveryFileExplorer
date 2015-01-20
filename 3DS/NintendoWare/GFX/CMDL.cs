@@ -3837,7 +3837,7 @@ namespace _3DS.NintendoWare.GFX
 			return o;
 		}
 
-		public MTL ToMTL()
+		public MTL ToMTL(String TexDir)
 		{
 			var o = new MTL();
 			var m = this;//Data.Models[Model];
@@ -3850,9 +3850,7 @@ namespace _3DS.NintendoWare.GFX
 					mm.AmbientColor = vv.MaterialColor.AmbientU32;
 					mm.Alpha = vv.MaterialColor.Diffuse.W;
 					mm.SpecularColor = vv.MaterialColor.Specular0U32;
-					if (vv.Tex0 != null && vv.Tex0.TextureObject is ReferenceTexture/* && vv.TextureCoordiators[0].SourceCoordinate == 0*/) mm.DiffuseMapPath = "Tex/" + ((ReferenceTexture)vv.Tex0.TextureObject).LinkedTextureName + ".png";
-					//else if (vv.Tex1 != null && vv.Tex1.TextureObject is ReferenceTexture && vv.TextureCoordiators[1].SourceCoordinate == 0) mm.DiffuseMapPath = "Tex/" + ((ReferenceTexture)vv.Tex1.TextureObject).LinkedTextureName + ".png";
-					//else if (vv.Tex2 != null && vv.Tex2.TextureObject is ReferenceTexture && vv.TextureCoordiators[2].SourceCoordinate == 0) mm.DiffuseMapPath = "Tex/" + ((ReferenceTexture)vv.Tex2.TextureObject).LinkedTextureName + ".png";
+					if (vv.Tex0 != null && vv.Tex0.TextureObject is ReferenceTexture) mm.DiffuseMapPath = TexDir.Replace('\\', '/').TrimEnd('/') + "/" + ((ReferenceTexture)vv.Tex0.TextureObject).LinkedTextureName + ".png";
 					o.Materials.Add(mm);
 				}
 			}

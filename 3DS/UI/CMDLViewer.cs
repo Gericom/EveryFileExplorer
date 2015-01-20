@@ -439,7 +439,7 @@ namespace _3DS.UI
 						{
 							OBJ o = Model.ToOBJ();
 							o.MTLPath = Path.GetFileNameWithoutExtension(saveFileDialog1.FileName) + ".mtl";
-							MTL m = Model.ToMTL();
+							MTL m = Model.ToMTL("Tex");
 							byte[] d = o.Write();
 							byte[] d2 = m.Write();
 							File.Create(saveFileDialog1.FileName).Close();

@@ -141,6 +141,10 @@
     <Compile Include="UtilityBin.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonFiles\CommonFiles.csproj">
+      <Project>{4D0F5EC8-4730-4D62-AFA5-80AD4AD14625}</Project>
+      <Name>CommonFiles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LibEveryFileExplorer\LibEveryFileExplorer.csproj">
       <Project>{39DBD12F-F7E3-4E9A-97A2-0722A4BA2A26}</Project>
       <Name>LibEveryFileExplorer</Name>

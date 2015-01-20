@@ -6,26 +6,6 @@ using System.Xml.Serialization;
 using System.ComponentModel;
 using System.Xml;
 using System.IO;
-/*using anyUri = System.String;
-using common_param_type = System.String;
-using dateTime = System.DateTime;
-using digits_type = System.Byte;
-using float_type = System.Double;
-using float2_type = System.Collections.Generic.List<System.Double>;
-using float3_type = System.Collections.Generic.List<System.Double>;
-using float4_type = System.Collections.Generic.List<System.Double>;
-using fx_color_type = System.Collections.Generic.List<System.Double>;
-using ID = System.String;
-using list_of_floats_type = System.Collections.Generic.List<System.Double>;
-using list_of_names_type = System.Collections.Generic.List<System.String>;
-using list_of_uints_type = System.Collections.Generic.List<System.UInt32>;
-using magnitude_type = System.Int16;
-using NCName = System.String;
-using NMTOKEN = System.String;
-using sid_type = System.String;
-using token = System.String;
-using uint_type = System.UInt32;
-using urifragment_type = System.String;*/
 
 using anyUri = System.String;
 using boolean = System.Boolean;

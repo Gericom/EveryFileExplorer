@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LibEveryFileExplorer.Files
+namespace LibEveryFileExplorer.IO
 {
 	[Serializable]
 	public class SignatureNotCorrectException : Exception

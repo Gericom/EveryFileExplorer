@@ -30,13 +30,17 @@ namespace EveryFileExplorer.Plugins
 				{
 					ass = Assembly.LoadFile(s);
 				}
-				catch(NotSupportedException e)
+				catch (NotSupportedException e)
 				{
 					MessageBox.Show("Unblock " + AssemblyName.GetAssemblyName(s) + " from external sources!");
 				}
 				if (Plugin.IsPlugin(ass)) p.Add(new Plugin(ass));
 			}
 			Plugins = p.ToArray();
+			foreach (var v in Plugins)
+			{
+				if (v.Initializer != null) v.Initializer.OnLoad();
+			}
 		}
 	}
 }

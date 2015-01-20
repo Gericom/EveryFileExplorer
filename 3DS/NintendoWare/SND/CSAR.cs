@@ -185,7 +185,7 @@ namespace _3DS.NintendoWare.SND
 		{
 			public INFO(EndianBinaryReaderEx er)
 			{
-				Signature = er.ReadString(Encoding.ASCII, 4);
+				/*Signature = er.ReadString(Encoding.ASCII, 4);
 				if (Signature != "INFO") throw new SignatureNotCorrectException(Signature, "INFO", er.BaseStream.Position - 4);
 				SectionSize = er.ReadUInt32();
 				long basepos = er.BaseStream.Position;
@@ -204,11 +204,15 @@ namespace _3DS.NintendoWare.SND
 				FileInfoSignature = er.ReadUInt32();
 				FileInfoOffset = er.ReadUInt32();
 				SoundArchivePlayerInfoSignature = er.ReadUInt32();
-				SoundArchivePlayerInfoOffset = er.ReadUInt32();
+				SoundArchivePlayerInfoOffset = er.ReadUInt32();*/
+				long basepos = er.BaseStream.Position + 8;
+				er.ReadObject(this);
 
 				er.BaseStream.Position = basepos + SoundInfoOffset;
 				SoundInfo = new INFOInfoBlock<INFOSoundInfoEntry>(er);
 			}
+			[BinaryStringSignature("INFO")]
+			[BinaryFixedSize(4)]
 			public String Signature;
 			public UInt32 SectionSize;
 			public UInt32 SoundInfoSignature;
@@ -262,7 +266,7 @@ namespace _3DS.NintendoWare.SND
 			{
 				public abstract void Read(EndianBinaryReaderEx er);
 			}
-
+			[BinaryIgnore]
 			public INFOInfoBlock<INFOSoundInfoEntry> SoundInfo;
 			public class INFOSoundInfoEntry : INFOInfoBlockEntry
 			{
