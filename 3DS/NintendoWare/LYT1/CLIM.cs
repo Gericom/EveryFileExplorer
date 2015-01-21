@@ -27,8 +27,9 @@ namespace _3DS.NintendoWare.LYT1
 			{
 				Header = new CLIMHeader(er);
 				Image = new imag(er);
+				DataLength = er.ReadUInt32();
 				er.BaseStream.Position = 0;
-				this.Data = er.ReadBytes((int)Image.DataLength);
+				this.Data = er.ReadBytes((int)DataLength);
 			}
 			finally
 			{
@@ -53,6 +54,7 @@ namespace _3DS.NintendoWare.LYT1
 			er.Write(Data, 0, Data.Length);
 			Header.Write(er);
 			Image.Write(er);
+			er.Write(DataLength);
 			long curpos = er.BaseStream.Position;
 			er.BaseStream.Position = Data.Length + 0xC;
 			er.Write((uint)curpos);
@@ -91,7 +93,7 @@ namespace _3DS.NintendoWare.LYT1
 				Image.Height = (ushort)b.Height;
 				Image.Format = 11;//10;//5;
 				Data = Textures.FromBitmap(b, Textures.ImageFormat.ETC1A4);//.RGB565);
-				Image.DataLength = (uint)Data.Length;
+				DataLength = (uint)Data.Length;
 				return true;
 			}
 			return false;
@@ -153,7 +155,6 @@ namespace _3DS.NintendoWare.LYT1
 				Width = er.ReadUInt16();
 				Height = er.ReadUInt16();
 				Format = er.ReadUInt32();
-				DataLength = er.ReadUInt32();
 			}
 			public void Write(EndianBinaryWriter er)
 			{
@@ -162,14 +163,12 @@ namespace _3DS.NintendoWare.LYT1
 				er.Write(Width);
 				er.Write(Height);
 				er.Write(Format);
-				er.Write(DataLength);
 			}
 			public String Signature;
-			public UInt32 SectionSize;//Without signature
+			public UInt32 SectionSize;
 			public UInt16 Width;
 			public UInt16 Height;
 			public UInt32 Format;
-			public UInt32 DataLength;
 
 			public Textures.ImageFormat GetGPUTextureFormat()
 			{
@@ -194,6 +193,7 @@ namespace _3DS.NintendoWare.LYT1
 				throw new Exception("Unknown Image Format!");
 			}
 		}
+		public UInt32 DataLength;
 
 		public Bitmap ToBitmap()
 		{

@@ -86,7 +86,7 @@ namespace _3DS
 			[BinaryFixedSize(4)]
 			public String Signature;
 			public UInt16 HeaderSize;
-			[BinaryBOM(0xFEFF)]
+			//[BinaryBOM(0xFEFF)]
 			public UInt16 Endianness;
 			public UInt32 FileSize;
 			public UInt32 FileDataOffset;

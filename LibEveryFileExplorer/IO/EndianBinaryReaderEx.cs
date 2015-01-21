@@ -48,6 +48,7 @@ namespace LibEveryFileExplorer.IO
 				if (f.MemberType == MemberTypes.Property) FieldType = ((PropertyInfo)f).PropertyType;
 				else FieldType = ((FieldInfo)f).FieldType;
 				if (GetAttributeValue<bool>(f, typeof(BinaryIgnoreAttribute), false)) continue;
+				if (f.GetCustomAttributes(typeof(BinaryBOMAttribute), true).Length != 0) Endianness = IO.Endianness.BigEndian;
 				object Result;
 				if (FieldType.IsArray)
 				{
@@ -57,21 +58,34 @@ namespace LibEveryFileExplorer.IO
 					{
 						switch (FieldType.GetElementType().Name)
 						{
-							/*case "Boolean":
+							case "Boolean":
 								{
-									SizeType Size = SizeType.Byte;
-									object[] att = t.GetCustomAttributes(typeof(BinarySizeAttribute), true);
-									if (att.Length > 0) Size = ((BinarySizeAttribute)att[0]).FieldSize;
-									switch (Size)
+									BooleanSize b = GetAttributeValue<BooleanSize>(f, typeof(BinaryBooleanSizeAttribute), BooleanSize.U32);
+									Result = new Boolean[ArraySize];
+									switch (b)
 									{
-										case SizeType.Byte: o = er.ReadByte() != 0; break;
-										case SizeType.Short: o = er.ReadUInt16() != 0; break;
-										case SizeType.Tri: o = er.ReadUInt24() != 0; break;
-										case SizeType.Int: o = er.ReadUInt32() != 0; break;
-										case SizeType.Long: o = er.ReadUInt64() != 0; break;
+										case BooleanSize.U8:
+											for (int i = 0; i < ArraySize; i++)
+											{
+												((Boolean[])Result)[i] = ReadByte() == 1;
+											}
+											break;
+										case BooleanSize.U16:
+											for (int i = 0; i < ArraySize; i++)
+											{
+												((Boolean[])Result)[i] = ReadUInt16() == 1;
+											}
+											break;
+										case BooleanSize.U32:
+											for (int i = 0; i < ArraySize; i++)
+											{
+												((Boolean[])Result)[i] = ReadUInt32() == 1;
+											}
+											break;
+										default: throw new Exception("Invalid BooleanSize Value!");
 									}
 									break;
-								}*/
+								}
 							case "Byte": Result = ReadBytes(ArraySize); break;
 							case "SByte": Result = ReadSBytes(ArraySize); break;
 							case "Int16": Result = ReadInt16s(ArraySize); break;
@@ -232,6 +246,12 @@ namespace LibEveryFileExplorer.IO
 					{
 						if (!ssig.Equals(Result)) throw new SignatureNotCorrectException((string)Result, ssig, BaseStream.Position - ssig.Length);
 					}
+				}
+				if (f.GetCustomAttributes(typeof(BinaryBOMAttribute), true).Length != 0)
+				{
+					uint LittleEndian = GetAttributeValue<uint>(f, typeof(BinaryBOMAttribute), 0);
+					if (Convert.ToUInt32(Result).Equals(LittleEndian)) Endianness = IO.Endianness.LittleEndian;
+					else Endianness = IO.Endianness.BigEndian;
 				}
 			}
 		}

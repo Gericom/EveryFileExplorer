@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Nintendo DS Plugin")]
+[assembly: AssemblyTitle("Wii U Plugin")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("36c51fde-f0be-452c-adcc-2cbbc16a707b")]
+[assembly: Guid("5be0e6c0-4011-448c-9c62-4e91d82a4508")]
 
 // Version information for an assembly consists of the following four values:
 //

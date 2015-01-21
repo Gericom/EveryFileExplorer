@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Every File Explorer")]
-[assembly: AssemblyCopyright("Copyright © Florian Nouwt 2014")]
+[assembly: AssemblyCopyright("Copyright © Florian Nouwt 2014-2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

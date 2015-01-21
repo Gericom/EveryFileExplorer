@@ -181,6 +181,12 @@
     <Compile Include="UI\ThemeViewer.Designer.cs">
       <DependentUpon>ThemeViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ThemeViewerNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ThemeViewerNew.Designer.cs">
+      <DependentUpon>ThemeViewerNew.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\TXOBViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -241,6 +247,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ThemeViewer.resx">
       <DependentUpon>ThemeViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ThemeViewerNew.resx">
+      <DependentUpon>ThemeViewerNew.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\TXOBViewer.resx">
       <DependentUpon>TXOBViewer.cs</DependentUpon>
