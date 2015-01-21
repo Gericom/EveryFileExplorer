@@ -70,14 +70,69 @@ namespace NDS.SND
 			return DataOut.ToArray();
 		}
 
-		/*public static byte[] Encode(Int16[] WaveData)
+		public static byte[] Encode(Int16[] WaveData)
 		{
-			Int16[] Diff = new short[WaveData.Length];
+			int Last = WaveData[0];
+			int Index = GetBestTableIndex((WaveData[1] - WaveData[0]) * 8);
+			int HeaderIndex = Index;
+			byte[] Nibbles = new byte[WaveData.Length - 1];//nibbles, lets merge it afterwards
 			for (int i = 1; i < WaveData.Length; i++)
 			{
-				Diff[i] = (short)(WaveData[i] - WaveData[i - 1]);
+				int val = GetBestConfig(Index, WaveData[i] - Last);
+				Nibbles[i - 1] = (byte)val;
+
+				int diff =
+						StepTable[Index] / 8 +
+						StepTable[Index] / 4 * ((val >> 0) & 1) +
+						StepTable[Index] / 2 * ((val >> 1) & 1) +
+						StepTable[Index] * ((val >> 2) & 1);
+
+				int samp = Last + diff * ((((val >> 3) & 1) == 1) ? -1 : 1);
+				Last = (short)MathUtil.Clamp(samp, short.MinValue, short.MaxValue);
+				Index = (short)MathUtil.Clamp(Index + IndexTable[val & 7], 0, 88);
 			}
-			return null;
-		}*/
+			byte[] Result = new byte[WaveData.Length / 2 + 4];
+			IOUtil.WriteS16LE(Result, 0, WaveData[0]);
+			IOUtil.WriteS16LE(Result, 2, (short)HeaderIndex);
+			for (int i = 0; i < Nibbles.Length; i += 2)
+			{
+				Result[i / 2 + 4] = (byte)(Nibbles[i] | (Nibbles[i + 1] << 4));
+			}
+			return Result;
+		}
+
+		private static int GetBestTableIndex(int Diff)
+		{
+			int LowestDiff = int.MaxValue;
+			int LowestIdx = -1;
+			for (int i = 0; i < StepTable.Length; i++)
+			{
+				int diff2 = Math.Abs(Math.Abs(Diff) - StepTable[i]);
+				if (diff2 < LowestDiff)
+				{
+					LowestDiff = diff2;
+					LowestIdx = i;
+				}
+			}
+			return LowestIdx;
+		}
+
+		private static int GetBestConfig(int Index, int Diff)
+		{
+			int Result = 0;
+			if (Diff < 0) Result |= 1 << 3;
+			Diff = Math.Abs(Diff);
+			int DiffNew = StepTable[Index] / 8;
+			if (Math.Abs(DiffNew - Diff) < StepTable[Index] / 4) return Result;
+			Result |= 1;
+			DiffNew += StepTable[Index] / 4;
+			if (Math.Abs(DiffNew - Diff) < StepTable[Index] / 2) return Result;
+			Result |= 1 << 1;
+			DiffNew += StepTable[Index] / 2;
+			if (Math.Abs(DiffNew - Diff) < StepTable[Index]) return Result;
+			Result |= 1 << 2;
+			DiffNew += StepTable[Index];
+			return Result;
+		}
 	}
 }

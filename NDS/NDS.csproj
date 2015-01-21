@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NDSPlugin.cs" />
     <Compile Include="NDSProject.cs" />
     <Compile Include="NitroSystem\SND\SDAT.cs" />
     <Compile Include="Nitro\ARM9.cs" />
