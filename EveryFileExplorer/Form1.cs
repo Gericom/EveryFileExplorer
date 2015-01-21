@@ -16,6 +16,7 @@ using LibEveryFileExplorer.Compression;
 using LibEveryFileExplorer.Projects;
 using System.IO;
 using EveryFileExplorer.Properties;
+using System.Diagnostics;
 
 namespace EveryFileExplorer
 {
@@ -472,6 +473,11 @@ namespace EveryFileExplorer
 			String Path = Project.ProjectDir + "\\" + e.Node.FullPath;
 			if ((new FileInfo(Path).Attributes & FileAttributes.Directory) != 0) return;
 			Program.FileManager.OpenFile(new EFEDiskFile(Path));
+		}
+
+		private void menuItem1_Click_1(object sender, EventArgs e)
+		{
+			Process.Start(new ProcessStartInfo("cmd") { WorkingDirectory = Path.GetDirectoryName(Application.ExecutablePath) });
 		}
 	}
 }

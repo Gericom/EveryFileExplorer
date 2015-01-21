@@ -70,6 +70,8 @@
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.splitter1 = new System.Windows.Forms.Splitter();
+			this.menuEFECmd = new System.Windows.Forms.MenuItem();
+			this.menuItem9 = new System.Windows.Forms.MenuItem();
 			this.panel1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -225,6 +227,8 @@
 			this.menuTools.Index = 3;
 			this.menuTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuCompression,
+            this.menuItem9,
+            this.menuEFECmd,
             this.menuItem2,
             this.menuItemOptions});
 			this.menuTools.MergeOrder = 3;
@@ -238,12 +242,12 @@
 			// 
 			// menuItem2
 			// 
-			this.menuItem2.Index = 1;
+			this.menuItem2.Index = 3;
 			this.menuItem2.Text = "-";
 			// 
 			// menuItemOptions
 			// 
-			this.menuItemOptions.Index = 2;
+			this.menuItemOptions.Index = 4;
 			this.menuItemOptions.Text = "Options...";
 			// 
 			// menuWindow
@@ -381,6 +385,17 @@
 			this.splitter1.TabStop = false;
 			this.splitter1.Visible = false;
 			// 
+			// menuEFECmd
+			// 
+			this.menuEFECmd.Index = 2;
+			this.menuEFECmd.Text = "EFE Command Prompt";
+			this.menuEFECmd.Click += new System.EventHandler(this.menuItem1_Click_1);
+			// 
+			// menuItem9
+			// 
+			this.menuItem9.Index = 1;
+			this.menuItem9.Text = "-";
+			// 
 			// Form1
 			// 
 			this.AllowDrop = true;
@@ -454,6 +469,8 @@
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.TreeView treeView1;
 		private System.Windows.Forms.Splitter splitter1;
+		private System.Windows.Forms.MenuItem menuItem9;
+		private System.Windows.Forms.MenuItem menuEFECmd;
 	}
 }
 

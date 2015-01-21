@@ -72,6 +72,7 @@
     <Compile Include="Files\IUseOtherFiles.cs" />
     <Compile Include="Files\IViewable.cs" />
     <Compile Include="Files\IWriteable.cs" />
+    <Compile Include="IO\Serialization\BinaryBOMAttribute.cs" />
     <Compile Include="IO\SignatureNotCorrectException.cs" />
     <Compile Include="Files\SimpleFileSystem\EFESFSFile.cs" />
     <Compile Include="Files\SimpleFileSystem\SFSDirectory.cs" />

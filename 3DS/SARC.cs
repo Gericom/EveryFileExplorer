@@ -8,6 +8,7 @@ using System.IO;
 using LibEveryFileExplorer.Files.SimpleFileSystem;
 using _3DS.UI;
 using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace _3DS
 {
@@ -15,7 +16,7 @@ namespace _3DS
 	{
 		public SARC(byte[] Data)
 		{
-			EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
+			EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
 			try
 			{
 				Header = new SARCHeader(er);
@@ -68,15 +69,9 @@ namespace _3DS
 				FileDataOffset = 0;
 				Unknown = 0x0100;
 			}
-			public SARCHeader(EndianBinaryReader er)
+			public SARCHeader(EndianBinaryReaderEx er)
 			{
-				Signature = er.ReadString(Encoding.ASCII, 4);
-				if (Signature != "SARC") throw new SignatureNotCorrectException(Signature, "SARC", er.BaseStream.Position - 4);
-				HeaderSize = er.ReadUInt16();
-				Endianness = er.ReadUInt16();
-				FileSize = er.ReadUInt32();
-				FileDataOffset = er.ReadUInt32();
-				Unknown = er.ReadUInt32();
+				er.ReadObject(this);
 			}
 			public void Write(EndianBinaryWriter er)
 			{
@@ -87,9 +82,11 @@ namespace _3DS
 				er.Write(FileDataOffset);
 				er.Write(Unknown);
 			}
-
+			[BinaryStringSignature("SARC")]
+			[BinaryFixedSize(4)]
 			public String Signature;
 			public UInt16 HeaderSize;
+			[BinaryBOM(0xFEFF)]
 			public UInt16 Endianness;
 			public UInt32 FileSize;
 			public UInt32 FileDataOffset;
@@ -107,7 +104,7 @@ namespace _3DS
 				HashMultiplier = 0x65;
 				Entries = new List<SFATEntry>();
 			}
-			public SFAT(EndianBinaryReader er)
+			public SFAT(EndianBinaryReaderEx er)
 			{
 				Signature = er.ReadString(Encoding.ASCII, 4);
 				if (Signature != "SFAT") throw new SignatureNotCorrectException(Signature, "SFAT", er.BaseStream.Position - 4);
@@ -138,12 +135,9 @@ namespace _3DS
 			public class SFATEntry
 			{
 				public SFATEntry() { }
-				public SFATEntry(EndianBinaryReader er)
+				public SFATEntry(EndianBinaryReaderEx er)
 				{
-					FileNameHash = er.ReadUInt32();
-					FileNameOffset = er.ReadUInt32();
-					FileDataStart = er.ReadUInt32();
-					FileDataEnd = er.ReadUInt32();
+					er.ReadObject(this);
 				}
 				public void Write(EndianBinaryWriter er)
 				{
@@ -169,7 +163,7 @@ namespace _3DS
 				HeaderSize = 8;
 				Unknown1 = 0;
 			}
-			public SFNT(EndianBinaryReader er)
+			public SFNT(EndianBinaryReaderEx er)
 			{
 				Signature = er.ReadString(Encoding.ASCII, 4);
 				if (Signature != "SFNT") throw new SignatureNotCorrectException(Signature, "SFNT", er.BaseStream.Position - 4);

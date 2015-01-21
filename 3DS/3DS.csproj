@@ -102,6 +102,7 @@
     <Compile Include="SMDH.cs" />
     <Compile Include="ThemeFile.cs" />
     <Compile Include="ThemeIconFile.cs" />
+    <Compile Include="ThemeNew.cs" />
     <Compile Include="UI\CFNTViewer.cs">
       <SubType>Form</SubType>
     </Compile>
