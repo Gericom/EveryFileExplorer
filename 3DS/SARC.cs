@@ -64,7 +64,7 @@ namespace _3DS
 			{
 				Signature = "SARC";
 				HeaderSize = 0x14;
-				Endianness = 0xFEFF;
+				Endianness = 0xFFFE;//0xFEFF;
 				FileSize = 0;
 				FileDataOffset = 0;
 				Unknown = 0x0100;
@@ -77,7 +77,9 @@ namespace _3DS
 			{
 				er.Write(Signature, Encoding.ASCII, false);
 				er.Write(HeaderSize);
+				er.Endianness = LibEveryFileExplorer.IO.Endianness.BigEndian;
 				er.Write(Endianness);
+				if (Endianness == 0xFFFE) er.Endianness = LibEveryFileExplorer.IO.Endianness.LittleEndian;
 				er.Write(FileSize);
 				er.Write(FileDataOffset);
 				er.Write(Unknown);
@@ -86,7 +88,7 @@ namespace _3DS
 			[BinaryFixedSize(4)]
 			public String Signature;
 			public UInt16 HeaderSize;
-			//[BinaryBOM(0xFEFF)]
+			[BinaryBOM(0xFFFE)]
 			public UInt16 Endianness;
 			public UInt32 FileSize;
 			public UInt32 FileDataOffset;

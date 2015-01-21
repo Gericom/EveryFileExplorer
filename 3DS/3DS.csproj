@@ -298,6 +298,9 @@
   <ItemGroup>
     <None Include="Resources\zones-stack.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NintendoWare\H3D\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)\EveryFileExplorer\bin\Debug\Plugins\$(TargetFileName)"</PostBuildEvent>
