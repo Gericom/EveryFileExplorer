@@ -73,6 +73,7 @@
     <Compile Include="NintendoWare\GFX\DICT.cs" />
     <Compile Include="NintendoWare\GFX\PatriciaTreeGenerator.cs" />
     <Compile Include="NintendoWare\GFX\TXOB.cs" />
+    <Compile Include="NintendoWare\H3D\BCH.cs" />
     <Compile Include="NintendoWare\LYT1\BasicShader.cs" />
     <Compile Include="NintendoWare\LYT1\bnd1.cs" />
     <Compile Include="NintendoWare\LYT1\CLIM.cs" />
@@ -298,9 +299,7 @@
   <ItemGroup>
     <None Include="Resources\zones-stack.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NintendoWare\H3D\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)\EveryFileExplorer\bin\Debug\Plugins\$(TargetFileName)"</PostBuildEvent>

@@ -123,10 +123,11 @@ namespace LibEveryFileExplorer.IO
 					}
 					else
 					{
-						Result = Array.CreateInstance(FieldType.GetElementType(), ArraySize);
+						Type elementt = FieldType.GetElementType();
+						Result = Array.CreateInstance(elementt, ArraySize);
 						for (int i = 0; i < ArraySize; i++)
 						{
-							((Array)Result).SetValue(FieldType.InvokeMember("", BindingFlags.CreateInstance, null, null, new object[] { this }), i);
+							((Array)Result).SetValue(elementt.InvokeMember("", BindingFlags.CreateInstance, null, null, new object[] { this }), i);
 						}
 					}
 				}
