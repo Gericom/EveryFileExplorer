@@ -44,6 +44,8 @@ namespace NDS.SND
 			{
 				Last = IOUtil.ReadS16LE(Data, Offset);
 				Index = IOUtil.ReadS16LE(Data, Offset + 2) & 0x7F;
+				Offset += 4;
+				Length -= 4;
 				DataOut.Add((short)Last);
 				IsInit = true;
 			}
@@ -96,7 +98,11 @@ namespace NDS.SND
 			IOUtil.WriteS16LE(Result, 2, (short)HeaderIndex);
 			for (int i = 0; i < Nibbles.Length; i += 2)
 			{
-				Result[i / 2 + 4] = (byte)(Nibbles[i] | (Nibbles[i + 1] << 4));
+				if (i == Nibbles.Length - 1)
+				{
+					Result[i / 2 + 4] = (byte)(Nibbles[i]);//(Nibbles[i + 1] << 4));
+				}
+				else Result[i / 2 + 4] = (byte)(Nibbles[i] | (Nibbles[i + 1] << 4));
 			}
 			return Result;
 		}
@@ -123,15 +129,24 @@ namespace NDS.SND
 			if (Diff < 0) Result |= 1 << 3;
 			Diff = Math.Abs(Diff);
 			int DiffNew = StepTable[Index] / 8;
-			if (Math.Abs(DiffNew - Diff) < StepTable[Index] / 4) return Result;
-			Result |= 1;
-			DiffNew += StepTable[Index] / 4;
-			if (Math.Abs(DiffNew - Diff) < StepTable[Index] / 2) return Result;
-			Result |= 1 << 1;
-			DiffNew += StepTable[Index] / 2;
-			if (Math.Abs(DiffNew - Diff) < StepTable[Index]) return Result;
-			Result |= 1 << 2;
-			DiffNew += StepTable[Index];
+
+			if (Math.Abs(DiffNew - Diff) >= StepTable[Index])
+			{
+				Result |= 1 << 2;
+				DiffNew += StepTable[Index];
+			}
+
+			if (Math.Abs(DiffNew - Diff) >= StepTable[Index] / 2)
+			{
+				Result |= 1 << 1;
+				DiffNew += StepTable[Index] / 2;
+			}
+
+			if (Math.Abs(DiffNew - Diff) >= StepTable[Index] / 4)
+			{
+				Result |= 1;
+				DiffNew += StepTable[Index] / 4;
+			}
 			return Result;
 		}
 	}
