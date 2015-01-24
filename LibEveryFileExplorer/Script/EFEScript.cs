@@ -8,6 +8,7 @@ using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
 using System.CodeDom;
+using System.Windows.Forms;
 
 namespace LibEveryFileExplorer.Script
 {
@@ -21,6 +22,7 @@ namespace LibEveryFileExplorer.Script
 			//prepare the script to be executed!
 			StringBuilder b = new StringBuilder();
 			b.AppendLine("using System;");
+			b.AppendLine("using System.Collections.Generic;");
 			b.AppendLine("using System.IO;");
 			b.AppendLine();
 			foreach (var v in Commands)
@@ -68,7 +70,7 @@ namespace LibEveryFileExplorer.Script
 				foreach (var vv in m.GetParameters())
 				{
 					if (!first) b.Append(", ");
-					b.Append(vv.ParameterType.FullName + " ");
+					b.Append(GetCSharpRepresentation(vv.ParameterType) + " ");
 					b.Append(vv.Name);
 					first = false;
 				}
@@ -113,7 +115,7 @@ namespace LibEveryFileExplorer.Script
 		 	AssemblyName[] refassem = Assembly.GetEntryAssembly().GetReferencedAssemblies();
 			foreach (var a in refassem)
 			{
-				opt.ReferencedAssemblies.Add(a.Name + ".dll");
+				opt.ReferencedAssemblies.Add(Assembly.ReflectionOnlyLoad(a.FullName).Location);
 			}
 			foreach (var v in Commands)
 			{
@@ -125,6 +127,57 @@ namespace LibEveryFileExplorer.Script
 				throw new Exception("An error has occured while trying to compile the script: " + result.Errors[0].ToString());
 			}
 			result.CompiledAssembly.GetType("EFEScript.Script").InvokeMember("Run", BindingFlags.InvokeMethod, null, null, Args);
+		}
+
+		private static string GetCSharpRepresentation(Type t)
+		{
+			if (t.IsGenericType)
+			{
+				var genericArgs = t.GetGenericArguments().ToList();
+
+				return GetCSharpRepresentation(t, genericArgs);
+			}
+
+			return t.Name;
+		}
+
+		private static string GetCSharpRepresentation(Type t, List<Type> availableArguments)
+		{
+			if (t.IsGenericType)
+			{
+				string value = t.Name;
+				if (value.IndexOf("`") > -1)
+				{
+					value = value.Substring(0, value.IndexOf("`"));
+				}
+
+				if (t.DeclaringType != null)
+				{
+					// This is a nested type, build the nesting type first
+					value = GetCSharpRepresentation(t.DeclaringType, availableArguments) + "+" + value;
+				}
+
+				// Build the type arguments (if any)
+				string argString = "";
+				var thisTypeArgs = t.GetGenericArguments();
+				for (int i = 0; i < thisTypeArgs.Length && availableArguments.Count > 0; i++)
+				{
+					if (i != 0) argString += ", ";
+
+					argString += GetCSharpRepresentation(availableArguments[0]);
+					availableArguments.RemoveAt(0);
+				}
+
+				// If there are type arguments, add them with < >
+				if (argString.Length > 0)
+				{
+					value += "<" + argString + ">";
+				}
+
+				return value;
+			}
+
+			return t.Name;
 		}
 
 		public static void RegisterCommand(String Command, Delegate Function)

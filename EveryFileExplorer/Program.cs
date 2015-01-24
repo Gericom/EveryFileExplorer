@@ -37,7 +37,9 @@ namespace EveryFileExplorer
 				Console.WriteLine("Executing " + Path.GetFileName(Arguments[0]) + "...");
 				EFEScript.Execute(Script, args);
 				Win32Util.FreeConsole();
-				SendKeys.SendWait("{ENTER}");
+				//Using this causes scripts to be runned over and over again if opened by double-clicking
+				//But without this, you need to press ENTER before be able to use the cmd again if you run it from there...
+				//SendKeys.SendWait("{ENTER}");
 				return;
 			}
 

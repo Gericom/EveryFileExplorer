@@ -7,14 +7,15 @@ using System.Drawing;
 using System.IO;
 using _3DS.UI;
 using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace _3DS
 {
-	public class SMDH : FileFormat<SMDH.SMDHIdentifier>, IViewable
+	public class SMDH : FileFormat<SMDH.SMDHIdentifier>, IViewable, IWriteable
 	{
 		public SMDH(byte[] Data)
 		{
-			EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
+			EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
 			try
 			{
 				Header = new SMDHHeader(er);
@@ -31,6 +32,26 @@ namespace _3DS
 			}
 		}
 
+		public string GetSaveDefaultFileFilter()
+		{
+			return "System Menu Data Header (*.icn)|*.icn";
+		}
+
+		public byte[] Write()
+		{
+			MemoryStream m = new MemoryStream();
+			EndianBinaryWriter er = new EndianBinaryWriter(m, Endianness.LittleEndian);
+			Header.Write(er);
+			for (int i = 0; i < 16; i++) AppTitles[i].Write(er);
+			AppSettings.Write(er);
+			er.Write(Reserved, 0, 8);
+			er.Write(SmallIcon, 0, 0x480);
+			er.Write(LargeIcon, 0, 0x1200);
+			byte[] result = m.ToArray();
+			er.Close();
+			return result;
+		}
+
 		public System.Windows.Forms.Form GetDialog()
 		{
 			return new SMDHViewer(this);
@@ -39,13 +60,22 @@ namespace _3DS
 		public SMDHHeader Header;
 		public class SMDHHeader
 		{
-			public SMDHHeader(EndianBinaryReader er)
+			public SMDHHeader(EndianBinaryReaderEx er)
 			{
-				Signature = er.ReadString(Encoding.ASCII, 4);
-				if (Signature != "SMDH") throw new SignatureNotCorrectException(Signature, "SMDH", er.BaseStream.Position - 4);
-				Version = er.ReadUInt16();
-				Reserved = er.ReadUInt16();
+				er.ReadObject(this);
+				//Signature = er.ReadString(Encoding.ASCII, 4);
+				//if (Signature != "SMDH") throw new SignatureNotCorrectException(Signature, "SMDH", er.BaseStream.Position - 4);
+				//Version = er.ReadUInt16();
+				//Reserved = er.ReadUInt16();
 			}
+			public void Write(EndianBinaryWriter er)
+			{
+				er.Write(Signature, Encoding.ASCII, false);
+				er.Write(Version);
+				er.Write(Reserved);
+			}
+			[BinaryStringSignature("SMDH")]
+			[BinaryFixedSize(4)]
 			public String Signature;
 			public UInt16 Version;
 			public UInt16 Reserved;
@@ -59,6 +89,12 @@ namespace _3DS
 				ShortDescription = er.ReadString(Encoding.Unicode, 64).TrimEnd('\0');
 				LongDescription = er.ReadString(Encoding.Unicode, 128).TrimEnd('\0');
 				Publisher = er.ReadString(Encoding.Unicode, 64).TrimEnd('\0');
+			}
+			public void Write(EndianBinaryWriter er)
+			{
+				er.Write(ShortDescription.PadRight(64, '\0'), Encoding.Unicode, false);
+				er.Write(LongDescription.PadRight(128, '\0'), Encoding.Unicode, false);
+				er.Write(Publisher.PadRight(64, '\0'), Encoding.Unicode, false);
 			}
 			public String ShortDescription;//0x80
 			public String LongDescription;//0x100
@@ -95,9 +131,10 @@ namespace _3DS
 				DisableSDSaveBackup = 512
 			}
 
-			public ApplicationSettings(EndianBinaryReader er)
+			public ApplicationSettings(EndianBinaryReaderEx er)
 			{
-				GameRatings = er.ReadBytes(0x10);
+				er.ReadObject(this);
+				/*GameRatings = er.ReadBytes(0x10);
 				RegionLockout = (RegionLockoutFlags)er.ReadUInt32();
 				MatchMakerID = er.ReadUInt32();
 				MatchMakerBITID = er.ReadUInt64();
@@ -105,8 +142,21 @@ namespace _3DS
 				EULAVersion = er.ReadUInt16();
 				Reserved = er.ReadUInt16();
 				AnimationDefaultFrame = er.ReadSingle();
-				StreetPassID = er.ReadUInt32();
+				StreetPassID = er.ReadUInt32();*/
 			}
+			public void Write(EndianBinaryWriter er)
+			{
+				er.Write(GameRatings, 0, 0x10);
+				er.Write((uint)RegionLockout);
+				er.Write(MatchMakerID);
+				er.Write(MatchMakerBITID);
+				er.Write((uint)Flags);
+				er.Write(EULAVersion);
+				er.Write(Reserved);
+				er.Write(AnimationDefaultFrame);
+				er.Write(StreetPassID);
+			}
+			[BinaryFixedSize(0x10)]
 			public byte[] GameRatings;//0x10
 			public RegionLockoutFlags RegionLockout;
 			public UInt32 MatchMakerID;

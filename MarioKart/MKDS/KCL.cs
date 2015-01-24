@@ -139,58 +139,59 @@ namespace MarioKart.MKDS
 				ty.DialogResult = System.Windows.Forms.DialogResult.None;
 				ty.ShowDialog();
 				while (ty.DialogResult != System.Windows.Forms.DialogResult.OK) ;
-				Dictionary<string, ushort> Mapping;
-				Dictionary<string, bool> Colli;
-				Mapping = ty.Mapping;
-				Colli = ty.Colli;
-				List<Vector3> Vertex = new List<Vector3>();
-				List<Vector3> Normals = new List<Vector3>();
-				List<KCLPlane> planes = new List<KCLPlane>();
-				List<Triangle> Triangles = new List<Triangle>();
-				foreach (var v in o.Faces)
-				{
-					if (Colli[v.Material])
-					{
-						Triangle t = new Triangle(o.Vertices[v.VertexIndieces[0]], o.Vertices[v.VertexIndieces[1]], o.Vertices[v.VertexIndieces[2]]);
-						Vector3 qq = (t.PointB - t.PointA).Cross(t.PointC - t.PointA);
-						if ((qq.X * qq.X + qq.Y * qq.Y + qq.Z * qq.Z) < 0.01) continue;
-						KCLPlane p = new KCLPlane();
-						p.CollisionType = (ushort)(((Mapping[v.Material] & 0xFF) << 8) | (Mapping[v.Material] >> 8));
-						Vector3 a = (t.PointC - t.PointA).Cross(t.Normal);
-						a.Normalize();
-						a = -a;
-						Vector3 b = (t.PointB - t.PointA).Cross(t.Normal);
-						b.Normalize();
-						Vector3 c = (t.PointC - t.PointB).Cross(t.Normal);
-						c.Normalize();
-						p.Length = (t.PointC - t.PointA).Dot(c);
-						int q = ContainsVector3(t.PointA, Vertex);
-						if (q == -1) { p.VertexIndex = (ushort)Vertex.Count; Vertex.Add(t.PointA); }
-						else p.VertexIndex = (ushort)q;
-						q = ContainsVector3(t.Normal, Normals);
-						if (q == -1) { p.NormalIndex = (ushort)Normals.Count; Normals.Add(t.Normal); }
-						else p.NormalIndex = (ushort)q;
-						q = ContainsVector3(a, Normals);
-						if (q == -1) { p.NormalAIndex = (ushort)Normals.Count; Normals.Add(a); }
-						else p.NormalAIndex = (ushort)q;
-						q = ContainsVector3(b, Normals);
-						if (q == -1) { p.NormalBIndex = (ushort)Normals.Count; Normals.Add(b); }
-						else p.NormalBIndex = (ushort)q;
-						q = ContainsVector3(c, Normals);
-						if (q == -1) { p.NormalCIndex = (ushort)Normals.Count; Normals.Add(c); }
-						else p.NormalCIndex = (ushort)q;
-						planes.Add(p);
-						Triangles.Add(t);
-					}
-				}
-				Vertices = Vertex.ToArray();
-				this.Normals = Normals.ToArray();
-				Planes = planes.ToArray();
-				Header = new MKDSKCLHeader();
-				Octree = KCLOctree.FromTriangles(Triangles.ToArray(), Header, 2048, 128, 128, 50);
+				FromOBJ(o, ty.Mapping, ty.Colli);
 				return true;
 			}
 			return false;
+		}
+
+		public void FromOBJ(OBJ Model, Dictionary<string, ushort> TypeMapping, Dictionary<string, bool> CollideMapping)
+		{
+			List<Vector3> Vertex = new List<Vector3>();
+			List<Vector3> Normals = new List<Vector3>();
+			List<KCLPlane> planes = new List<KCLPlane>();
+			List<Triangle> Triangles = new List<Triangle>();
+			foreach (var v in Model.Faces)
+			{
+				if (CollideMapping[v.Material])
+				{
+					Triangle t = new Triangle(Model.Vertices[v.VertexIndieces[0]], Model.Vertices[v.VertexIndieces[1]], Model.Vertices[v.VertexIndieces[2]]);
+					Vector3 qq = (t.PointB - t.PointA).Cross(t.PointC - t.PointA);
+					if ((qq.X * qq.X + qq.Y * qq.Y + qq.Z * qq.Z) < 0.01) continue;
+					KCLPlane p = new KCLPlane();
+					p.CollisionType = (ushort)(((TypeMapping[v.Material] & 0xFF) << 8) | (TypeMapping[v.Material] >> 8));
+					Vector3 a = (t.PointC - t.PointA).Cross(t.Normal);
+					a.Normalize();
+					a = -a;
+					Vector3 b = (t.PointB - t.PointA).Cross(t.Normal);
+					b.Normalize();
+					Vector3 c = (t.PointC - t.PointB).Cross(t.Normal);
+					c.Normalize();
+					p.Length = (t.PointC - t.PointA).Dot(c);
+					int q = ContainsVector3(t.PointA, Vertex);
+					if (q == -1) { p.VertexIndex = (ushort)Vertex.Count; Vertex.Add(t.PointA); }
+					else p.VertexIndex = (ushort)q;
+					q = ContainsVector3(t.Normal, Normals);
+					if (q == -1) { p.NormalIndex = (ushort)Normals.Count; Normals.Add(t.Normal); }
+					else p.NormalIndex = (ushort)q;
+					q = ContainsVector3(a, Normals);
+					if (q == -1) { p.NormalAIndex = (ushort)Normals.Count; Normals.Add(a); }
+					else p.NormalAIndex = (ushort)q;
+					q = ContainsVector3(b, Normals);
+					if (q == -1) { p.NormalBIndex = (ushort)Normals.Count; Normals.Add(b); }
+					else p.NormalBIndex = (ushort)q;
+					q = ContainsVector3(c, Normals);
+					if (q == -1) { p.NormalCIndex = (ushort)Normals.Count; Normals.Add(c); }
+					else p.NormalCIndex = (ushort)q;
+					planes.Add(p);
+					Triangles.Add(t);
+				}
+			}
+			Vertices = Vertex.ToArray();
+			this.Normals = Normals.ToArray();
+			Planes = planes.ToArray();
+			Header = new MKDSKCLHeader();
+			Octree = KCLOctree.FromTriangles(Triangles.ToArray(), Header, 2048, 128, 128, 50);
 		}
 
 		private int ContainsVector3(Vector3 a, List<Vector3> b)
