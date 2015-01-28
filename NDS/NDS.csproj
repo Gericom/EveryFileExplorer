@@ -78,7 +78,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
-    <Compile Include="SND\ADPCM.cs" />
+    <Compile Include="SND\IMAADPCMDecoder.cs" />
+    <Compile Include="SND\IMAADPCMConst.cs" />
+    <Compile Include="SND\IMAADPCMEncoder.cs" />
     <Compile Include="UI\NDSProjectDialog.cs">
       <SubType>Form</SubType>
     </Compile>

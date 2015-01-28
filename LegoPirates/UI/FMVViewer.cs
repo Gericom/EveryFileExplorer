@@ -41,7 +41,7 @@ namespace LegoPirates.UI
 			//TODO: Calculate timing based on fps
 			if ((Video.Header.Flags & 4) == 4)
 			{
-				AudioConverter = new ADPCM();
+				AudioConverter = new IMAADPCMDecoder();
 				AudioBuffer = new NAudio.Wave.BufferedWaveProvider(new NAudio.Wave.WaveFormat((int)Video.Header.AudioRate, 16, 1));
 				AudioBuffer.DiscardOnBufferOverflow = true;
 				AudioBuffer.BufferLength = 8192 * 16;
@@ -72,7 +72,7 @@ namespace LegoPirates.UI
 			backgroundWorker1.RunWorkerAsync();
 		}
 
-		ADPCM AudioConverter = null;
+		IMAADPCMDecoder AudioConverter = null;
 
 		int aa = 0;
 		int bb = 0;

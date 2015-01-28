@@ -54,11 +54,18 @@
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
     <Compile Include="TPL.cs" />
+    <Compile Include="U8.cs" />
     <Compile Include="UI\BTIViewer.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\BTIViewer.Designer.cs">
       <DependentUpon>BTIViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\U8Viewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\U8Viewer.Designer.cs">
+      <DependentUpon>U8Viewer.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\TPLViewer.cs">
       <SubType>Form</SubType>
@@ -86,6 +93,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\BTIViewer.resx">
       <DependentUpon>BTIViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\U8Viewer.resx">
+      <DependentUpon>U8Viewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\TPLViewer.resx">
       <DependentUpon>TPLViewer.cs</DependentUpon>

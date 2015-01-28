@@ -52,6 +52,8 @@
 			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			this.menuTools = new System.Windows.Forms.MenuItem();
 			this.menuCompression = new System.Windows.Forms.MenuItem();
+			this.menuItem9 = new System.Windows.Forms.MenuItem();
+			this.menuEFECmd = new System.Windows.Forms.MenuItem();
 			this.menuItem2 = new System.Windows.Forms.MenuItem();
 			this.menuItemOptions = new System.Windows.Forms.MenuItem();
 			this.menuWindow = new System.Windows.Forms.MenuItem();
@@ -70,8 +72,6 @@
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.splitter1 = new System.Windows.Forms.Splitter();
-			this.menuEFECmd = new System.Windows.Forms.MenuItem();
-			this.menuItem9 = new System.Windows.Forms.MenuItem();
 			this.panel1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -240,6 +240,17 @@
 			this.menuCompression.Index = 0;
 			this.menuCompression.Text = "Compression";
 			// 
+			// menuItem9
+			// 
+			this.menuItem9.Index = 1;
+			this.menuItem9.Text = "-";
+			// 
+			// menuEFECmd
+			// 
+			this.menuEFECmd.Index = 2;
+			this.menuEFECmd.Text = "EFE Command Prompt";
+			this.menuEFECmd.Click += new System.EventHandler(this.menuItem1_Click_1);
+			// 
 			// menuItem2
 			// 
 			this.menuItem2.Index = 3;
@@ -384,17 +395,6 @@
 			this.splitter1.TabIndex = 9;
 			this.splitter1.TabStop = false;
 			this.splitter1.Visible = false;
-			// 
-			// menuEFECmd
-			// 
-			this.menuEFECmd.Index = 2;
-			this.menuEFECmd.Text = "EFE Command Prompt";
-			this.menuEFECmd.Click += new System.EventHandler(this.menuItem1_Click_1);
-			// 
-			// menuItem9
-			// 
-			this.menuItem9.Index = 1;
-			this.menuItem9.Text = "-";
 			// 
 			// Form1
 			// 

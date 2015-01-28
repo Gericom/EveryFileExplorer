@@ -238,7 +238,7 @@ namespace LibEveryFileExplorer.IO
 				byte[] bsig = GetAttributeValue<byte[]>(f, typeof(BinaryByteArraySignatureAttribute), null);
 				if (bsig != null && Result is byte[])
 				{
-					if (!bsig.Equals(Result)) throw new SignatureNotCorrectException("{ " + BitConverter.ToString((byte[])Result, 0, ((byte[])Result).Length).Replace("-", ", ") + " }", "{ " + BitConverter.ToString(bsig, 0, bsig.Length).Replace("-", ", ") + " }", BaseStream.Position - ((byte[])Result).Length);
+					if (!bsig.SequenceEqual((byte[])Result)) throw new SignatureNotCorrectException("{ " + BitConverter.ToString((byte[])Result, 0, ((byte[])Result).Length).Replace("-", ", ") + " }", "{ " + BitConverter.ToString(bsig, 0, bsig.Length).Replace("-", ", ") + " }", BaseStream.Position - ((byte[])Result).Length);
 				}
 				else
 				{

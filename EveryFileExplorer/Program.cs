@@ -57,7 +57,10 @@ namespace EveryFileExplorer
 			{
 				String arg0 = "";
 				if (Arguments.Length > 0) arg0 = Arguments[0];
-				Win32Util.SendString((IntPtr)Win32Util.HWND_BROADCAST, arg0);
+				foreach (var p in System.Diagnostics.Process.GetProcessesByName(System.Diagnostics.Process.GetCurrentProcess().ProcessName))
+				{
+					if (p != System.Diagnostics.Process.GetCurrentProcess()) Win32Util.SendString(/*(IntPtr)Win32Util.HWND_BROADCAST*/p.MainWindowHandle, arg0);
+				}
 			}
 		}
 
