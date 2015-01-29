@@ -14,6 +14,7 @@ namespace LibEveryFileExplorer.UI
 
 		void RefreshListView();
 		void UpdateListViewEntry(object Entry);
+		void Select(object Entry);
 		void RemoveSelection();
 	}
 
@@ -69,6 +70,15 @@ namespace LibEveryFileExplorer.UI
 			listViewNF1.EndUpdate();
 			if (sel != -1 && sel < Section.Entries.Count) listViewNF1.SelectedIndices.Add(sel);
 			else if (sel != -1) listViewNF1.SelectedIndices.Add(Section.Entries.Count - 1);
+		}
+
+		public void Select(object Entry)
+		{
+			RemoveSelection();
+			if (!(Entry is T)) return;
+			int idx = Section.Entries.IndexOf((T)Entry);
+			listViewNF1.SelectedIndices.Add(idx);
+			UpdateListViewEntry(Entry);
 		}
 
 		public void RemoveSelection()

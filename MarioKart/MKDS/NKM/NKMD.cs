@@ -239,7 +239,7 @@ namespace MarioKart.MKDS.NKM
 
 		public Form GetDialog()
 		{
-			return new NKMDViewer(this);
+			return new NKMDViewer2(this);
 		}
 
 		public NKMDHeader Header;

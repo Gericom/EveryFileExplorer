@@ -115,12 +115,29 @@
     <Compile Include="UI\CDMDViewer.Designer.cs">
       <DependentUpon>CDMDViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\MapViewer\MKDSCheckPointLineRenderGroup.cs" />
+    <Compile Include="UI\MapViewer\MKDSCheckPointPoint2RenderGroup.cs" />
+    <Compile Include="UI\MapViewer\MKDSCheckPointPoint1RenderGroup.cs" />
+    <Compile Include="UI\NKMDViewer2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\NKMDViewer2.Designer.cs">
+      <DependentUpon>NKMDViewer2.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\KCLCollisionTypeSelector.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\KCLCollisionTypeSelector.designer.cs">
       <DependentUpon>KCLCollisionTypeSelector.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\MapViewer\MapViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\MapViewer\MapViewer.Designer.cs">
+      <DependentUpon>MapViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MapViewer\PointRenderGroup.cs" />
+    <Compile Include="UI\MapViewer\RenderGroup.cs" />
     <Compile Include="UI\NKMDViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,8 +172,14 @@
     <EmbeddedResource Include="UI\CDMDViewer.resx">
       <DependentUpon>CDMDViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\NKMDViewer2.resx">
+      <DependentUpon>NKMDViewer2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\KCLCollisionTypeSelector.resx">
       <DependentUpon>KCLCollisionTypeSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MapViewer\MapViewer.resx">
+      <DependentUpon>MapViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\NKMDViewer.resx">
       <DependentUpon>NKMDViewer.cs</DependentUpon>

@@ -7,6 +7,7 @@ using LibEveryFileExplorer._3D;
 using LibEveryFileExplorer.Collections;
 using CommonFiles;
 using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.Math;
 
 namespace MarioKart
 {
@@ -399,22 +400,22 @@ namespace MarioKart
 			Header.OctreeOrigin = min;
 			Vector3 size = max - min;
 			float mincomp = Math.Min(Math.Min(size.X, size.Y), size.Z);
-			int CoordShift = Get2Power(mincomp);
-			if (CoordShift > Get2Power(MaxRootSize)) CoordShift = Get2Power(MaxRootSize);
+			int CoordShift = MathUtil.GetNearest2Power(mincomp);
+			if (CoordShift > MathUtil.GetNearest2Power(MaxRootSize)) CoordShift = MathUtil.GetNearest2Power(MaxRootSize);
 			//else if (CoordShift < Get2Power(MinRootSize)) CoordShift = Get2Power(MinRootSize);
 			Header.CoordShift = (uint)CoordShift;
 			int cubesize = 1 << CoordShift;
-			int NrX = (1 << Get2Power(size.X)) / cubesize;
-			int NrY = (1 << Get2Power(size.Y)) / cubesize;
-			int NrZ = (1 << Get2Power(size.Z)) / cubesize;
+			int NrX = (1 << MathUtil.GetNearest2Power(size.X)) / cubesize;
+			int NrY = (1 << MathUtil.GetNearest2Power(size.Y)) / cubesize;
+			int NrZ = (1 << MathUtil.GetNearest2Power(size.Z)) / cubesize;
 			if (NrX <= 0) NrX = 1;
 			if (NrY <= 0) NrY = 1;
 			if (NrZ <= 0) NrZ = 1;
-			Header.YShift = (uint)(Get2Power(size.X) - CoordShift);
-			Header.ZShift = (uint)(Get2Power(size.X) - CoordShift + Get2Power(size.Y) - CoordShift);
-			Header.XMask = 0xFFFFFFFF << Get2Power(size.X);
-			Header.YMask = 0xFFFFFFFF << Get2Power(size.Y);
-			Header.ZMask = 0xFFFFFFFF << Get2Power(size.Z);
+			Header.YShift = (uint)(MathUtil.GetNearest2Power(size.X) - CoordShift);
+			Header.ZShift = (uint)(MathUtil.GetNearest2Power(size.X) - CoordShift + MathUtil.GetNearest2Power(size.Y) - CoordShift);
+			Header.XMask = 0xFFFFFFFF << MathUtil.GetNearest2Power(size.X);
+			Header.YMask = 0xFFFFFFFF << MathUtil.GetNearest2Power(size.Y);
+			Header.ZMask = 0xFFFFFFFF << MathUtil.GetNearest2Power(size.Z);
 
 			KCLOctree k = new KCLOctree();
 			k.RootNodes = new KCLOctreeNode[NrX * NrY * NrZ];
@@ -432,11 +433,6 @@ namespace MarioKart
 				}
 			}
 			return k;
-		}
-
-		private static int Get2Power(float Value)
-		{
-			return (int)Math.Ceiling(Math.Log(Value, 2));
 		}
 	}
 }

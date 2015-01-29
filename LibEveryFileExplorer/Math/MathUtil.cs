@@ -33,5 +33,10 @@ namespace LibEveryFileExplorer.Math
 		{
 			return Degrees * (System.Math.PI / 180.0);
 		}
+
+		public static int GetNearest2Power(float Value)
+		{
+			return (int)System.Math.Ceiling(System.Math.Log(Value, 2));
+		}
 	}
 }
