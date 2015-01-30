@@ -101,7 +101,6 @@
 			this.listViewNF1.GridLines = true;
 			this.listViewNF1.HideSelection = false;
 			this.listViewNF1.Location = new System.Drawing.Point(0, 25);
-			this.listViewNF1.MultiSelect = false;
 			this.listViewNF1.Name = "listViewNF1";
 			this.listViewNF1.Size = new System.Drawing.Size(535, 352);
 			this.listViewNF1.TabIndex = 1;

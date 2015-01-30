@@ -115,9 +115,15 @@
     <Compile Include="UI\CDMDViewer.Designer.cs">
       <DependentUpon>CDMDViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\MapViewer\MKDSObjectRenderGroup.cs" />
+    <Compile Include="UI\MapViewer\MKDSRouteLineRenderGroup.cs" />
+    <Compile Include="UI\MapViewer\MKDSAreaRenderGroup.cs" />
+    <Compile Include="UI\MapViewer\MKDSMiniGameEnemyPointLineRenderGroup.cs" />
+    <Compile Include="UI\MapViewer\MKDSEnemyPointLineRenderGroup.cs" />
     <Compile Include="UI\MapViewer\MKDSCheckPointLineRenderGroup.cs" />
     <Compile Include="UI\MapViewer\MKDSCheckPointPoint2RenderGroup.cs" />
     <Compile Include="UI\MapViewer\MKDSCheckPointPoint1RenderGroup.cs" />
+    <Compile Include="UI\MapViewer\MKDSItemPointLineRenderGroup.cs" />
     <Compile Include="UI\NKMDViewer2.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -43,9 +43,19 @@ namespace MarioKart.MKDS.NKM
 					"Next",
 					"Next",
 					"Next",
+					"Next",
+					"Next",
+					"Next",
+					"Next",
+					"Next",
 					"Previous",
 					"Previous",
-					"Previous"
+					"Previous",
+					"Previous",
+					"Previous",
+					"Previous",
+					"Previous",
+					"Previous",
 				};
 		}
 

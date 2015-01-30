@@ -85,7 +85,7 @@ namespace MarioKart.MKDS.NKM
 			[BinaryFixedPoint(true, 19, 12)]
 			public Single PointSize { get; set; }
 			[Category("Enemy Point")]
-			public Int16 Drifting { get; set; }
+			public Int32 Drifting { get; set; }
 			[TypeConverter(typeof(HexTypeConverter)), HexReversed]
 			public UInt32 Unknown1 { get; set; }
 		}

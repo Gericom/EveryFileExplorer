@@ -21,10 +21,7 @@ namespace MarioKart.UI.MapViewer
 
 		public Color PointColor { get; private set; }
 
-		public override bool Interactable
-		{
-			get { return true; }
-		}
+		public override bool Interactable { get { return true; } }
 
 		public override void Render(bool Picking, int PickingId)
 		{

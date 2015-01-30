@@ -51,7 +51,7 @@ namespace MarioKart.MKDS.NKM
 						case "KTPM": KartPointMission = new KTPM(er); break;
 						case "CPOI": CheckPoint = new CPOI(er); break;
 						case "CPAT": CheckPointPath = new CPAT(er); break;
-						case "IPOI": ItemPoint = new IPOI(er); break;
+						case "IPOI": ItemPoint = new IPOI(er, Header.Version); break;
 						case "IPAT": ItemPath = new IPAT(er); break;
 						case "EPOI": EnemyPoint = new EPOI(er); break;
 						case "EPAT": EnemyPath = new EPAT(er); break;

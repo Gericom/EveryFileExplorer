@@ -6,15 +6,15 @@ using LibEveryFileExplorer.GameData;
 
 namespace LibEveryFileExplorer.UI
 {
-	public delegate void SelectedEventHandler(IGameDataSectionViewer Viewer, object Entry);
+	public delegate void SelectedEventHandler(IGameDataSectionViewer Viewer, object[] Entries);
 
 	public interface IGameDataSectionViewer
 	{
 		event SelectedEventHandler OnSelected;
 
 		void RefreshListView();
-		void UpdateListViewEntry(object Entry);
-		void Select(object Entry);
+		void UpdateListViewEntry(params object[] Entries);
+		void Select(params object[] Entries);
 		void RemoveSelection();
 	}
 
@@ -29,11 +29,49 @@ namespace LibEveryFileExplorer.UI
 			this.Section = Section;
 			base.Load += new EventHandler(GameDataSectionViewer_Load);
 			base.listViewNF1.SelectedIndexChanged += new EventHandler(listViewNF1_SelectedIndexChanged);
+			base.buttonAdd.Click += new EventHandler(buttonAdd_Click);
+			base.buttonRemove.Click += new EventHandler(buttonRemove_Click);
+			buttonRemove.Enabled = buttonUp.Enabled = buttonDown.Enabled = false;
+		}
+
+		void buttonRemove_Click(object sender, EventArgs e)
+		{
+			if (listViewNF1.SelectedIndices.Count != 0)
+			{
+				List<T> entries = new List<T>();
+				foreach (int a in listViewNF1.SelectedIndices)	entries.Add(Section.Entries[a]);
+				listViewNF1.SelectedIndices.Clear();
+				foreach (T a in entries)
+				{
+					Section.Entries.Remove(a);
+					Section.NrEntries--;
+				}
+				RefreshListView();
+			}
+		}
+
+		void buttonAdd_Click(object sender, EventArgs e)
+		{
+			T tmp = new T();
+			Section.Entries.Add(tmp);
+			Section.NrEntries++;
+			listViewNF1.BeginUpdate();
+			listViewNF1.Items.Add(tmp.GetListViewItem());
+			listViewNF1.EndUpdate();
+			Select(tmp);
 		}
 
 		void listViewNF1_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (listViewNF1.SelectedIndices.Count != 0 && OnSelected != null) OnSelected.Invoke(this, Section[listViewNF1.SelectedIndices[0]]);
+			if (listViewNF1.SelectedIndices.Count != 0 && OnSelected != null)
+			{
+				List<T> entries = new List<T>();
+				foreach (int a in listViewNF1.SelectedIndices) entries.Add(Section.Entries[a]);
+				OnSelected(this, entries.ToArray()); //Section[listViewNF1.SelectedIndices[0]]);
+			}
+			if (listViewNF1.SelectedIndices.Count != 0) buttonRemove.Enabled = buttonUp.Enabled = buttonDown.Enabled = true;
+			else buttonRemove.Enabled = buttonUp.Enabled = buttonDown.Enabled = false;
+			if (listViewNF1.SelectedIndices.Count == 0 && OnSelected != null) OnSelected(this, null);
 		}
 
 		void GameDataSectionViewer_Load(object sender, EventArgs e)
@@ -47,38 +85,62 @@ namespace LibEveryFileExplorer.UI
 
 		public void RefreshListView()
 		{
-			int sel = -1;
-			if (listViewNF1.SelectedIndices.Count != 0) sel = listViewNF1.SelectedIndices[0];
+			int[] sel = null;
+			if (listViewNF1.SelectedIndices.Count != 0)
+			{
+				sel = new int[listViewNF1.SelectedIndices.Count];
+				listViewNF1.SelectedIndices.CopyTo(sel, 0);
+			}
 			listViewNF1.BeginUpdate();
 			listViewNF1.Items.Clear();
 			listViewNF1.Items.AddRange(Section.GetListViewItems());
 			listViewNF1.EndUpdate();
-			if (sel != -1 && sel < Section.Entries.Count) listViewNF1.SelectedIndices.Add(sel);
-			else if (sel != -1) listViewNF1.SelectedIndices.Add(Section.Entries.Count - 1);
+			if (sel != null)
+			{
+				foreach (int i in sel)
+				{
+					if(i < Section.Entries.Count) 	listViewNF1.SelectedIndices.Add(i);
+				}
+			}
 		}
 
-		public void UpdateListViewEntry(object Entry)
+		public void UpdateListViewEntry(params object[] Entries)
 		{
-			if (!(Entry is T)) return;
-			int idx = Section.Entries.IndexOf((T)Entry);
-			if (idx < 0) return;
-			int sel = -1;
-			if (listViewNF1.SelectedIndices.Count != 0) sel = listViewNF1.SelectedIndices[0];
-			listViewNF1.BeginUpdate();
-			listViewNF1.Items[idx] = ((T)Entry).GetListViewItem();
-			listViewNF1.Items[idx].Text = idx.ToString();
-			listViewNF1.EndUpdate();
-			if (sel != -1 && sel < Section.Entries.Count) listViewNF1.SelectedIndices.Add(sel);
-			else if (sel != -1) listViewNF1.SelectedIndices.Add(Section.Entries.Count - 1);
+			foreach (object Entry in Entries)
+			{
+				if (!(Entry is T)) continue;
+				int idx = Section.Entries.IndexOf((T)Entry);
+				if (idx < 0) continue;
+				int[] sel = null;
+				if (listViewNF1.SelectedIndices.Count != 0)
+				{
+					sel = new int[listViewNF1.SelectedIndices.Count];
+					listViewNF1.SelectedIndices.CopyTo(sel, 0);
+				}
+				listViewNF1.BeginUpdate();
+				listViewNF1.Items[idx] = ((T)Entry).GetListViewItem();
+				listViewNF1.Items[idx].Text = idx.ToString();
+				listViewNF1.EndUpdate();
+				if (sel != null)
+				{
+					foreach (int i in sel)
+					{
+						if (i < Section.Entries.Count) listViewNF1.SelectedIndices.Add(i);
+					}
+				}
+			}
 		}
 
-		public void Select(object Entry)
+		public void Select(params object[] Entries)
 		{
 			RemoveSelection();
-			if (!(Entry is T)) return;
-			int idx = Section.Entries.IndexOf((T)Entry);
-			listViewNF1.SelectedIndices.Add(idx);
-			UpdateListViewEntry(Entry);
+			foreach (object Entry in Entries)
+			{			
+				if (!(Entry is T)) continue;
+				int idx = Section.Entries.IndexOf((T)Entry);
+				listViewNF1.SelectedIndices.Add(idx);
+			}
+			UpdateListViewEntry(Entries);
 		}
 
 		public void RemoveSelection()

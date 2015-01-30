@@ -18,12 +18,12 @@ namespace MarioKart.MKDS.NKM
 	public class IPOI : GameDataSection<IPOI.IPOIEntry>
 	{
 		public IPOI() { Signature = "IPOI"; }
-		public IPOI(EndianBinaryReaderEx er)
+		public IPOI(EndianBinaryReaderEx er, UInt16 Version)
 		{
 			Signature = er.ReadString(Encoding.ASCII, 4);
 			if (Signature != "IPOI") throw new SignatureNotCorrectException(Signature, "IPOI", er.BaseStream.Position - 4);
 			NrEntries = er.ReadUInt32();
-			for (int i = 0; i < NrEntries; i++) Entries.Add(new IPOIEntry(er));
+			for (int i = 0; i < NrEntries; i++) Entries.Add(new IPOIEntry(er, Version));
 		}
 
 		public void Write(EndianBinaryWriter er)
@@ -46,20 +46,24 @@ namespace MarioKart.MKDS.NKM
 
 		public class IPOIEntry : GameDataSectionEntry
 		{
+			private UInt16 Version = 37;
 			public IPOIEntry()
 			{
 
 			}
-			public IPOIEntry(EndianBinaryReaderEx er)
+			public IPOIEntry(EndianBinaryReaderEx er, UInt16 Version)
 			{
-				er.ReadObject(this);
+				this.Version = Version;
+				Position = er.ReadVecFx32();
+				Unknown1 = er.ReadUInt32();
+				if (Version >= 34) Unknown2 = er.ReadUInt32();
 			}
 
 			public override void Write(EndianBinaryWriter er)
 			{
 				er.WriteVecFx32(Position);
 				er.Write(Unknown1);
-				er.Write(Unknown2);
+				if (Version >= 34) er.Write(Unknown2);
 			}
 
 			public override ListViewItem GetListViewItem()

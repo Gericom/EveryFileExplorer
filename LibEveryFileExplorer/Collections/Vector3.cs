@@ -7,7 +7,29 @@ using LibEveryFileExplorer.ComponentModel;
 
 namespace LibEveryFileExplorer.Collections
 {
-	[TypeConverter(typeof(ValueTypeTypeConverter))]
+	public class Vector3TypeConverter : ValueTypeTypeConverter
+	{
+		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+		{
+			if (sourceType == typeof(string)) return true;
+			else return base.CanConvertFrom(context, sourceType);
+		}
+
+		public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+		{
+			if (value.GetType() == typeof(string))
+			{
+				string input = (string)value;
+				input =	input.Trim('(', ')', ' ');
+				string[] parts = input.Split(';');
+				if (parts.Length != 3) throw new Exception("Wrong formatting!");
+				return new Vector3(float.Parse(parts[0]), float.Parse(parts[1]), float.Parse(parts[2]));
+			}
+			else return base.ConvertFrom(context, culture, value);
+		}
+	}
+
+	[TypeConverter(typeof(Vector3TypeConverter))]//ValueTypeTypeConverter))]
 	public struct Vector3
 	{
 		public Vector3(float Value)

@@ -40,6 +40,7 @@ namespace MarioKart.MKDS.NKM
 					"ID",
 					"X", "Y", "Z",
 					"Index",
+					"?",
 					"Duration",
 					"?"
 				};
@@ -51,8 +52,9 @@ namespace MarioKart.MKDS.NKM
 			{
 				Position = new Vector3(0, 0, 0);
 				Index = 0;
+				Unknown1 = 0;
 				Duration = 0;
-				Unknown = 0;
+				Unknown2 = 0;
 			}
 			public POITEntry(EndianBinaryReaderEx er)
 			{
@@ -63,8 +65,9 @@ namespace MarioKart.MKDS.NKM
 			{
 				er.WriteVecFx32(Position);
 				er.Write(Index);
+				er.Write(Unknown1);
 				er.Write(Duration);
-				er.Write(Unknown);
+				er.Write(Unknown2);
 			}
 
 			public override ListViewItem GetListViewItem()
@@ -75,20 +78,23 @@ namespace MarioKart.MKDS.NKM
 				m.SubItems.Add(Position.Z.ToString("#####0.############"));
 
 				m.SubItems.Add(Index.ToString());
+				m.SubItems.Add(HexUtil.GetHexReverse(Unknown1));
 				m.SubItems.Add(Duration.ToString());
-				m.SubItems.Add(HexUtil.GetHexReverse(Unknown));
+				m.SubItems.Add(HexUtil.GetHexReverse(Unknown2));
 				return m;
 			}
 			[Category("Transformation")]
 			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Position { get; set; }
 			[Category("Point")]
-			public Int16 Index { get; set; }
+			public Byte Index { get; set; }
+			[Category("Point")]
+			public Byte Unknown1 { get; set; }
 			[Category("Point")]
 			public Int16 Duration { get; set; }
 			[Category("Point")]
 			[TypeConverter(typeof(HexTypeConverter)), HexReversedAttribute]
-			public UInt32 Unknown { get; set; }
+			public UInt32 Unknown2 { get; set; }
 		}
 	}
 }

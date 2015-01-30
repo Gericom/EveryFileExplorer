@@ -11,33 +11,36 @@ namespace LibEveryFileExplorer.ComponentModel
 	{
 		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
 		{
-			if (sourceType == typeof(string))
-			{
-				return true;
-			}
-			else
-			{
-				return base.CanConvertFrom(context, sourceType);
-			}
+			if (sourceType == typeof(string)) return true;
+			else return base.CanConvertFrom(context, sourceType);
 		}
 
 		public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
 		{
-			if (destinationType == typeof(string))
-			{
-				return true;
-			}
-			else
-			{
-				return base.CanConvertTo(context, destinationType);
-			}
+			if (destinationType == typeof(string)) return true;
+			else return base.CanConvertTo(context, destinationType);
 		}
 
 		public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
 		{
 			if (destinationType != typeof(string)) return base.ConvertTo(context, culture, value, destinationType);
 			bool reverse = false;
-			foreach (var v in context.PropertyDescriptor.Attributes)
+
+			PropertyDescriptor p = context.PropertyDescriptor;
+			if (context.PropertyDescriptor.GetType().Name == "MergePropertyDescriptor")
+			{
+				System.Type propertyType = context.PropertyDescriptor.GetType();
+				System.Reflection.FieldInfo fieldInfo = propertyType.GetField(
+					"descriptors",
+					System.Reflection.BindingFlags.NonPublic
+					| System.Reflection.BindingFlags.Instance
+				);
+				PropertyDescriptor[] descriptors =
+					(PropertyDescriptor[])(fieldInfo.GetValue(context.PropertyDescriptor));
+				p = descriptors[0];
+			}
+
+			foreach (var v in p.Attributes)
 			{
 				if (v is HexReversedAttribute) reverse = ((HexReversedAttribute)v).HexReversed;
 			}
@@ -73,8 +76,22 @@ namespace LibEveryFileExplorer.ComponentModel
 				string input = (string)value;
 				if (input.StartsWith("0x", StringComparison.OrdinalIgnoreCase)) input = input.Substring(2);
 
+				PropertyDescriptor p = context.PropertyDescriptor;
+				if (context.PropertyDescriptor.GetType().Name == "MergePropertyDescriptor")
+				{
+					System.Type propertyType = context.PropertyDescriptor.GetType();
+					System.Reflection.FieldInfo fieldInfo = propertyType.GetField(
+						"descriptors",
+						System.Reflection.BindingFlags.NonPublic
+						| System.Reflection.BindingFlags.Instance
+					);
+					PropertyDescriptor[] descriptors =
+						(PropertyDescriptor[])(fieldInfo.GetValue(context.PropertyDescriptor));
+					p = descriptors[0];
+				}
+
 				bool reverse = false;
-				foreach (var v in context.PropertyDescriptor.Attributes)
+				foreach (var v in p.Attributes)
 				{
 					if (v is HexReversedAttribute) reverse = ((HexReversedAttribute)v).HexReversed;
 				}

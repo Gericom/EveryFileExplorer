@@ -197,7 +197,7 @@ namespace MarioKart.MK7.KMP
 					{
 						Position = v.Points[ii].Position,
 						Duration = (short)v.Points[ii].Setting1,
-						Index = (short)ii
+						Index = (byte)ii
 					});
 				}
 			}
