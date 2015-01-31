@@ -26,7 +26,7 @@ namespace MarioKart.UI.MapViewer
 			get { return true; }
 		}
 
-		public override void Render(bool Picking, int PickingId)
+		public override void Render(object[] Selection, bool Picking, int PickingId)
 		{
 			Gl.glPointSize((Picking ? 6f : 5));
 

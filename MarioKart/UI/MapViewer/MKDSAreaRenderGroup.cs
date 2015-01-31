@@ -23,7 +23,7 @@ namespace MarioKart.UI.MapViewer
 
 		public override bool Interactable { get { return false; } }
 
-		public override void Render(bool Picking, int PickingId)
+		public override void Render(object[] Selection, bool Picking, int PickingId)
 		{
 			if (Picking) return;
 			Gl.glColor4f(AreaColor.R / 255f, AreaColor.G / 255f, AreaColor.B / 255f, AreaColor.A / 255f);

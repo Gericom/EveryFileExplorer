@@ -24,7 +24,7 @@ namespace MarioKart.UI.MapViewer
 
 		public override bool Interactable { get { return false; } }
 
-		public override void Render(bool Picking, int PickingId)
+		public override void Render(object[] Selection, bool Picking, int PickingId)
 		{
 			if (Picking) return;
 			Gl.glLineWidth(1.5f);
@@ -41,14 +41,14 @@ namespace MarioKart.UI.MapViewer
 
 				for (int i = 0; i < 3; i++)
 				{
-					if (ItemPointPaths[j].GoesTo[i] == -1 || ItemPointPaths[j].GoesTo[i] >= ItemPointPaths.Entries.Count) continue;
+					if (ItemPointPaths[j].GoesTo[i] == 0xFF || ItemPointPaths[j].GoesTo[i] >= ItemPointPaths.Entries.Count || ItemPoints.Entries.Count <= ItemPointPaths[j].StartIndex + ItemPointPaths[j].Length - 1 || ItemPoints.Entries.Count <= ItemPointPaths[ItemPointPaths[j].GoesTo[i]].StartIndex) continue;
 					Gl.glVertex2f(ItemPoints[ItemPointPaths[j].StartIndex + ItemPointPaths[j].Length - 1].Position.X, ItemPoints[ItemPointPaths[j].StartIndex + ItemPointPaths[j].Length - 1].Position.Z);
 					Gl.glVertex2f(ItemPoints[ItemPointPaths[ItemPointPaths[j].GoesTo[i]].StartIndex].Position.X, ItemPoints[ItemPointPaths[ItemPointPaths[j].GoesTo[i]].StartIndex].Position.Z);
 				}
 
 				for (int i = 0; i < 3; i++)
 				{
-					if (ItemPointPaths[j].ComesFrom[i] == -1 || ItemPointPaths[j].ComesFrom[i] >= ItemPointPaths.Entries.Count) continue;
+					if (ItemPointPaths[j].ComesFrom[i] == 0xFF || ItemPointPaths[j].ComesFrom[i] >= ItemPointPaths.Entries.Count || ItemPoints.Entries.Count <= ItemPointPaths[j].StartIndex || ItemPoints.Entries.Count <= ItemPointPaths[ItemPointPaths[j].ComesFrom[i]].StartIndex + ItemPointPaths[ItemPointPaths[j].ComesFrom[i]].Length - 1) continue;
 					Gl.glVertex2f(ItemPoints[ItemPointPaths[j].StartIndex].Position.X, ItemPoints[ItemPointPaths[j].StartIndex].Position.Z);
 					Gl.glVertex2f(ItemPoints[ItemPointPaths[ItemPointPaths[j].ComesFrom[i]].StartIndex + ItemPointPaths[ItemPointPaths[j].ComesFrom[i]].Length - 1].Position.X, ItemPoints[ItemPointPaths[ItemPointPaths[j].ComesFrom[i]].StartIndex + ItemPointPaths[ItemPointPaths[j].ComesFrom[i]].Length - 1].Position.Z);
 				}

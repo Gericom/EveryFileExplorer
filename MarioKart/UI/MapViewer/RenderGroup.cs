@@ -11,12 +11,12 @@ namespace MarioKart.UI.MapViewer
 		//public abstract bool Createable { get; }
 		public abstract bool Interactable { get; }
 
-		public void Render()
+		public void Render(object[] Selection)
 		{
-			Render(false, -1);
+			Render(Selection, false, -1);
 		}
 
-		public abstract void Render(bool Picking, int PickingId);
+		public abstract void Render(object[] Selection, bool Picking, int PickingId);
 
 		public virtual Object GetEntry(int Index) { throw new NotImplementedException(); }
 

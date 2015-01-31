@@ -26,7 +26,7 @@ namespace MarioKart.UI.MapViewer
 
 		public override bool Interactable { get { return true; } }
 
-		public override void Render(bool Picking, int PickingId)
+		public override void Render(object[] Selection, bool Picking, int PickingId)
 		{
 			Gl.glPointSize((Picking ? 6f : 5));
 
@@ -43,6 +43,20 @@ namespace MarioKart.UI.MapViewer
 				}
 				Vector3 Position = GetPointPosition(o);
 				Gl.glVertex2f(Position.X, Position.Z);
+
+				if (!Picking && Selection != null && Selection.Contains(o))
+				{
+					Gl.glEnd();
+					Gl.glPointSize(2f);
+					Gl.glBegin(Gl.GL_POINTS);
+					Gl.glColor3f(1, 1, 1);
+					Gl.glVertex2f(Position.X, Position.Z);
+					Gl.glEnd();
+					Gl.glPointSize((Picking ? 6f : 5));
+					Gl.glBegin(Gl.GL_POINTS);
+					Gl.glColor3f(PointColor.R / 255f, PointColor.G / 255f, PointColor.B / 255f);
+				}
+
 			}
 			Gl.glEnd();
 		}

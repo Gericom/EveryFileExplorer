@@ -54,8 +54,8 @@ namespace MarioKart.MKDS.NKM
 		{
 			public IPATEntry()
 			{
-				GoesTo = new sbyte[] { -1, -1, -1 };
-				ComesFrom = new sbyte[] { -1, -1, -1 };
+				GoesTo = new byte[] { 0xFF, 0xFF, 0xFF };
+				ComesFrom = new byte[] { 0xFF, 0xFF, 0xFF };
 			}
 			public IPATEntry(EndianBinaryReaderEx er)
 			{
@@ -95,11 +95,11 @@ namespace MarioKart.MKDS.NKM
 			[Category("Item Path"), DisplayName("Goes To")]
 			[TypeConverter(typeof(PrettyArrayConverter))]
 			[BinaryFixedSize(3)]
-			public SByte[] GoesTo { get; private set; }//3
+			public Byte[] GoesTo { get; private set; }//3
 			[Category("Item Path"), DisplayName("Comes From")]
 			[TypeConverter(typeof(PrettyArrayConverter))]
 			[BinaryFixedSize(3)]
-			public SByte[] ComesFrom { get; private set; }//3
+			public Byte[] ComesFrom { get; private set; }//3
 			[Category("Item Path"), DisplayName("Order")]
 			public Int16 SectionOrder { get; set; }
 		}

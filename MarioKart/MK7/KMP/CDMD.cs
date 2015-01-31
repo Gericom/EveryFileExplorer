@@ -281,12 +281,12 @@ namespace MarioKart.MK7.KMP
 					StartIndex = (short)v.Start,
 					Length = (short)v.Length
 				};
-				q.ComesFrom[0] = (sbyte)v.Previous[0];
-				q.ComesFrom[1] = (sbyte)v.Previous[1];
-				q.ComesFrom[2] = (sbyte)v.Previous[2];
-				q.GoesTo[0] = (sbyte)v.Next[0];
-				q.GoesTo[1] = (sbyte)v.Next[1];
-				q.GoesTo[2] = (sbyte)v.Next[2];
+				q.ComesFrom[0] = (byte)v.Previous[0];
+				q.ComesFrom[1] = (byte)v.Previous[1];
+				q.ComesFrom[2] = (byte)v.Previous[2];
+				q.GoesTo[0] = (byte)v.Next[0];
+				q.GoesTo[1] = (byte)v.Next[1];
+				q.GoesTo[2] = (byte)v.Next[2];
 				n.ItemPath.Entries.Add(q);
 			}
 			foreach (var v in EnemyPoint.Entries)
@@ -304,12 +304,12 @@ namespace MarioKart.MK7.KMP
 					StartIndex = (short)v.Start,
 					Length = (short)v.Length
 				};
-				q.ComesFrom[0] = (sbyte)v.Previous[0];
-				q.ComesFrom[1] = (sbyte)v.Previous[1];
-				q.ComesFrom[2] = (sbyte)v.Previous[2];
-				q.GoesTo[0] = (sbyte)v.Next[0];
-				q.GoesTo[1] = (sbyte)v.Next[1];
-				q.GoesTo[2] = (sbyte)v.Next[2];
+				q.ComesFrom[0] = (byte)v.Previous[0];
+				q.ComesFrom[1] = (byte)v.Previous[1];
+				q.ComesFrom[2] = (byte)v.Previous[2];
+				q.GoesTo[0] = (byte)v.Next[0];
+				q.GoesTo[1] = (byte)v.Next[1];
+				q.GoesTo[2] = (byte)v.Next[2];
 				n.EnemyPath.Entries.Add(q);
 			}
 			bool first = true;

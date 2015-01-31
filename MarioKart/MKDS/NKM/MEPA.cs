@@ -63,8 +63,8 @@ namespace MarioKart.MKDS.NKM
 		{
 			public MEPAEntry()
 			{
-				GoesTo = new sbyte[] { -1, -1, -1, -1, -1, -1, -1, -1 };
-				ComesFrom = new sbyte[] { -1, -1, -1, -1, -1, -1, -1, -1 };
+				GoesTo = new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+				ComesFrom = new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 			}
 			public MEPAEntry(EndianBinaryReaderEx er)
 			{
@@ -111,11 +111,11 @@ namespace MarioKart.MKDS.NKM
 			[Category("Enemy Path"), DisplayName("Goes To")]
 			[TypeConverter(typeof(PrettyArrayConverter))]
 			[BinaryFixedSize(8)]
-			public SByte[] GoesTo { get; private set; }//8
+			public Byte[] GoesTo { get; private set; }//8
 			[Category("Enemy Path"), DisplayName("Comes From")]
 			[TypeConverter(typeof(PrettyArrayConverter))]
 			[BinaryFixedSize(8)]
-			public SByte[] ComesFrom { get; private set; }//8
+			public Byte[] ComesFrom { get; private set; }//8
 		}
 	}
 }

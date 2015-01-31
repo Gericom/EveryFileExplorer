@@ -20,7 +20,7 @@ namespace LibEveryFileExplorer.Collections
 			if (value.GetType() == typeof(string))
 			{
 				string input = (string)value;
-				input =	input.Trim('(', ')', ' ');
+				input = input.Trim('(', ')', ' ');
 				string[] parts = input.Split(';');
 				if (parts.Length != 3) throw new Exception("Wrong formatting!");
 				return new Vector3(float.Parse(parts[0]), float.Parse(parts[1]), float.Parse(parts[2]));
@@ -29,7 +29,7 @@ namespace LibEveryFileExplorer.Collections
 		}
 	}
 
-	[TypeConverter(typeof(Vector3TypeConverter))]//ValueTypeTypeConverter))]
+	[TypeConverter(typeof(Vector3TypeConverter))]
 	public struct Vector3
 	{
 		public Vector3(float Value)

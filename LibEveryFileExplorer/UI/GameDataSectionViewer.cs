@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.GameData;
+using System.Windows.Forms;
 
 namespace LibEveryFileExplorer.UI
 {
@@ -32,6 +33,30 @@ namespace LibEveryFileExplorer.UI
 			base.buttonAdd.Click += new EventHandler(buttonAdd_Click);
 			base.buttonRemove.Click += new EventHandler(buttonRemove_Click);
 			buttonRemove.Enabled = buttonUp.Enabled = buttonDown.Enabled = false;
+			t = new Timer();
+			t.Tick += new EventHandler(t_Tick);
+		}
+
+		void t_Tick(object sender, EventArgs e)
+		{
+			t.Enabled = false;
+			if (listViewNF1.SelectedIndices.Count != 0 && OnSelected != null)
+			{
+				List<T> entries = new List<T>();
+				foreach (int a in listViewNF1.SelectedIndices) entries.Add(Section.Entries[a]);
+				OnSelected(this, entries.ToArray());
+			}
+			if (listViewNF1.SelectedIndices.Count != 0) buttonRemove.Enabled = buttonUp.Enabled = buttonDown.Enabled = true;
+			else buttonRemove.Enabled = buttonUp.Enabled = buttonDown.Enabled = false;
+			if (!RemovingSelection && listViewNF1.SelectedIndices.Count == 0 && OnSelected != null) OnSelected(null, null);
+		}
+
+		Timer t;
+
+		void listViewNF1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			t.Interval = 100;
+			t.Enabled = true;
 		}
 
 		void buttonRemove_Click(object sender, EventArgs e)
@@ -39,7 +64,7 @@ namespace LibEveryFileExplorer.UI
 			if (listViewNF1.SelectedIndices.Count != 0)
 			{
 				List<T> entries = new List<T>();
-				foreach (int a in listViewNF1.SelectedIndices)	entries.Add(Section.Entries[a]);
+				foreach (int a in listViewNF1.SelectedIndices) entries.Add(Section.Entries[a]);
 				listViewNF1.SelectedIndices.Clear();
 				foreach (T a in entries)
 				{
@@ -61,18 +86,7 @@ namespace LibEveryFileExplorer.UI
 			Select(tmp);
 		}
 
-		void listViewNF1_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (listViewNF1.SelectedIndices.Count != 0 && OnSelected != null)
-			{
-				List<T> entries = new List<T>();
-				foreach (int a in listViewNF1.SelectedIndices) entries.Add(Section.Entries[a]);
-				OnSelected(this, entries.ToArray()); //Section[listViewNF1.SelectedIndices[0]]);
-			}
-			if (listViewNF1.SelectedIndices.Count != 0) buttonRemove.Enabled = buttonUp.Enabled = buttonDown.Enabled = true;
-			else buttonRemove.Enabled = buttonUp.Enabled = buttonDown.Enabled = false;
-			if (listViewNF1.SelectedIndices.Count == 0 && OnSelected != null) OnSelected(this, null);
-		}
+		
 
 		void GameDataSectionViewer_Load(object sender, EventArgs e)
 		{
@@ -99,7 +113,7 @@ namespace LibEveryFileExplorer.UI
 			{
 				foreach (int i in sel)
 				{
-					if(i < Section.Entries.Count) 	listViewNF1.SelectedIndices.Add(i);
+					if (i < Section.Entries.Count) listViewNF1.SelectedIndices.Add(i);
 				}
 			}
 		}
@@ -117,10 +131,12 @@ namespace LibEveryFileExplorer.UI
 					sel = new int[listViewNF1.SelectedIndices.Count];
 					listViewNF1.SelectedIndices.CopyTo(sel, 0);
 				}
+				RemovingSelection = true;
 				listViewNF1.BeginUpdate();
 				listViewNF1.Items[idx] = ((T)Entry).GetListViewItem();
 				listViewNF1.Items[idx].Text = idx.ToString();
 				listViewNF1.EndUpdate();
+				RemovingSelection = false;
 				if (sel != null)
 				{
 					foreach (int i in sel)
@@ -134,18 +150,23 @@ namespace LibEveryFileExplorer.UI
 		public void Select(params object[] Entries)
 		{
 			RemoveSelection();
+			int visidx = -1;
 			foreach (object Entry in Entries)
-			{			
+			{
 				if (!(Entry is T)) continue;
 				int idx = Section.Entries.IndexOf((T)Entry);
+				if (visidx < 0) visidx = idx;
 				listViewNF1.SelectedIndices.Add(idx);
 			}
 			UpdateListViewEntry(Entries);
+			if (visidx >= 0) listViewNF1.EnsureVisible(visidx);
 		}
-
+		bool RemovingSelection = false;
 		public void RemoveSelection()
 		{
+			RemovingSelection = true;
 			listViewNF1.SelectedItems.Clear();
+			RemovingSelection = false;
 		}
 	}
 }

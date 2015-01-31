@@ -39,7 +39,7 @@ namespace MarioKart.MKDS.NKM
 			return new String[] {
 					"ID",
 					"X", "Y", "Z",
-					"?",
+					"Point Size",
 					"?"
 				};
 		}
@@ -55,14 +55,14 @@ namespace MarioKart.MKDS.NKM
 			{
 				this.Version = Version;
 				Position = er.ReadVecFx32();
-				Unknown1 = er.ReadUInt32();
+				PointSize = er.ReadFx32();
 				if (Version >= 34) Unknown2 = er.ReadUInt32();
 			}
 
 			public override void Write(EndianBinaryWriter er)
 			{
 				er.WriteVecFx32(Position);
-				er.Write(Unknown1);
+				er.WriteFx32(PointSize);
 				if (Version >= 34) er.Write(Unknown2);
 			}
 
@@ -73,15 +73,16 @@ namespace MarioKart.MKDS.NKM
 				m.SubItems.Add(Position.Y.ToString("#####0.############"));
 				m.SubItems.Add(Position.Z.ToString("#####0.############"));
 
-				m.SubItems.Add(HexUtil.GetHexReverse(Unknown1));
+				m.SubItems.Add(PointSize.ToString("#####0.############"));
 				m.SubItems.Add(HexUtil.GetHexReverse(Unknown2));
 				return m;
 			}
 			[Category("Transformation")]
 			[BinaryFixedPoint(true, 19, 12)]
 			public Vector3 Position { get; set; }
-			[TypeConverter(typeof(HexTypeConverter)), HexReversed]
-			public UInt32 Unknown1 { get; set; }
+			[Category("Item Point")]
+			[BinaryFixedPoint(true, 19, 12)]
+			public Single PointSize { get; set; }
 			[TypeConverter(typeof(HexTypeConverter)), HexReversed]
 			public UInt32 Unknown2 { get; set; }
 		}

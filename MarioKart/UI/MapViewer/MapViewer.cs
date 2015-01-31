@@ -19,6 +19,8 @@ namespace MarioKart.UI.MapViewer
 	{
 		public List<RenderGroup> Groups { get; private set; }
 
+		public Object[] SelectedEntries { get; set; }
+
 		public delegate void Init3DEventHandler();
 		public event Init3DEventHandler Init3D;
 
@@ -250,7 +252,7 @@ namespace MarioKart.UI.MapViewer
 			{
 				idx++;
 				if (Picking && !s.Interactable) continue;
-				s.Render(Picking, (idx << (24 - NrPickingBits)) & 0xFFFFFF);
+				s.Render(SelectedEntries, Picking, (idx << (24 - NrPickingBits)) & 0xFFFFFF);
 			}
 		}
 
@@ -273,18 +275,22 @@ namespace MarioKart.UI.MapViewer
 		{
 			if (e.Button != System.Windows.Forms.MouseButtons.Left) return;
 			Selection = GroupPick(e.Location);
-			if (Selection == null)
+			/*if (Selection == null)
 			{
 				if (GroupMemberSelected != null) GroupMemberSelected(null);
 				return;
 			}
-			if (GroupMemberSelected != null) GroupMemberSelected(Groups[Selection.GroupId].GetEntry(Selection.Index - 1));
+			if (GroupMemberSelected != null) GroupMemberSelected(Groups[Selection.GroupId].GetEntry(Selection.Index - 1));*/
 		}
 
 		private void simpleOpenGlControl1_MouseUp(object sender, MouseEventArgs e)
 		{
 			startmove = false;
-			drawSelRect = false;
+			if (drawSelRect)
+			{
+				drawSelRect = false;
+
+			}
 			if (e.Button != System.Windows.Forms.MouseButtons.Left) return;
 			Selection = GroupPick(e.Location);
 			if (Selection == null)

@@ -104,6 +104,12 @@
     <Compile Include="ThemeFile.cs" />
     <Compile Include="ThemeIconFile.cs" />
     <Compile Include="ThemeNew.cs" />
+    <Compile Include="UI\BCLIMGenDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\BCLIMGenDialog.Designer.cs">
+      <DependentUpon>BCLIMGenDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\CFNTViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,6 +215,9 @@
     <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\BCLIMGenDialog.resx">
+      <DependentUpon>BCLIMGenDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CFNTViewer.resx">
       <DependentUpon>CFNTViewer.cs</DependentUpon>

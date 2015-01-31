@@ -24,7 +24,7 @@ namespace MarioKart.UI.MapViewer
 
 		public override bool Interactable { get { return false; } }
 
-		public override void Render(bool Picking, int PickingId)
+		public override void Render(object[] Selection, bool Picking, int PickingId)
 		{
 			if (Picking) return;
 			Gl.glLineWidth(1.5f);
@@ -41,14 +41,14 @@ namespace MarioKart.UI.MapViewer
 
 				for (int i = 0; i < 8; i++)
 				{
-					if (MiniGameEnemyPointPaths[j].GoesTo[i] == -1 || MiniGameEnemyPointPaths[j].GoesTo[i] >= MiniGameEnemyPoints.Entries.Count) continue;
+					if (MiniGameEnemyPointPaths[j].GoesTo[i] == 0xFF || MiniGameEnemyPointPaths[j].GoesTo[i] >= MiniGameEnemyPoints.Entries.Count) continue;
 					Gl.glVertex2f(MiniGameEnemyPoints[MiniGameEnemyPointPaths[j].StartIndex + MiniGameEnemyPointPaths[j].Length - 1].Position.X, MiniGameEnemyPoints[MiniGameEnemyPointPaths[j].StartIndex + MiniGameEnemyPointPaths[j].Length - 1].Position.Z);
 					Gl.glVertex2f(MiniGameEnemyPoints[MiniGameEnemyPointPaths[j].GoesTo[i]].Position.X, MiniGameEnemyPoints[MiniGameEnemyPointPaths[j].GoesTo[i]].Position.Z);
 				}
 
 				for (int i = 0; i < 8; i++)
 				{
-					if (MiniGameEnemyPointPaths[j].ComesFrom[i] == -1 || MiniGameEnemyPointPaths[j].ComesFrom[i] >= MiniGameEnemyPoints.Entries.Count) continue;
+					if (MiniGameEnemyPointPaths[j].ComesFrom[i] == 0xFF || MiniGameEnemyPointPaths[j].ComesFrom[i] >= MiniGameEnemyPoints.Entries.Count) continue;
 					Gl.glVertex2f(MiniGameEnemyPoints[MiniGameEnemyPointPaths[j].StartIndex].Position.X, MiniGameEnemyPoints[MiniGameEnemyPointPaths[j].StartIndex].Position.Z);
 					Gl.glVertex2f(MiniGameEnemyPoints[MiniGameEnemyPointPaths[j].ComesFrom[i]].Position.X, MiniGameEnemyPoints[MiniGameEnemyPointPaths[j].ComesFrom[i]].Position.Z);
 				}

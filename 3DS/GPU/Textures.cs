@@ -476,6 +476,28 @@ namespace _3DS.GPU
 			int offs = 0;
 			switch (Format)
 			{
+				case ImageFormat.RGBA8:
+					for (int y = 0; y < ConvHeight; y += 8)
+					{
+						for (int x = 0; x < ConvWidth; x += 8)
+						{
+							for (int i = 0; i < 64; i++)
+							{
+								int x2 = i % 8;
+								if (x + x2 >= physicalwidth) continue;
+								int y2 = i / 8;
+								if (y + y2 >= physicalheight) continue;
+								int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
+								Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
+								result[offs + pos * 4 + 0] = c.A;
+								result[offs + pos * 4 + 1] = c.B;
+								result[offs + pos * 4 + 2] = c.G;
+								result[offs + pos * 4 + 3] = c.R;
+							}
+							offs += 64 * 4;
+						}
+					}
+					break;
 				case ImageFormat.RGB8:
 					for (int y = 0; y < ConvHeight; y += 8)
 					{

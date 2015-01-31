@@ -66,26 +66,26 @@ namespace MarioKart.UI
 			if (NKMD.Camera != null) AddTab<CAME.CAMEEntry>("CAME", NKMD.Camera);
 
 			if (NKMD.Area != null) mapViewer1.Groups.Add(new MKDSAreaRenderGroup(NKMD.Area, Color.FromArgb(64, Color.CornflowerBlue)));
-			
-			if (NKMD.Point != null && NKMD.Path != null) mapViewer1.Groups.Add(new MKDSRouteLineRenderGroup(NKMD.Path, NKMD.Point, Color.FromArgb(0, 0, 128)));
-			if (NKMD.CheckPoint != null && NKMD.CheckPointPath != null) mapViewer1.Groups.Add(new MKDSCheckPointLineRenderGroup(NKMD.CheckPoint, NKMD.CheckPointPath, Color.FromArgb(0, 170, 0), Color.FromArgb(170, 0, 0)));
-			if (NKMD.ItemPoint != null && NKMD.ItemPath != null) mapViewer1.Groups.Add(new MKDSItemPointLineRenderGroup(NKMD.ItemPoint, NKMD.ItemPath, Color.FromArgb(/*255, 230*/204, 153, 0)));
-			if (NKMD.EnemyPoint != null && NKMD.EnemyPath != null) mapViewer1.Groups.Add(new MKDSEnemyPointLineRenderGroup(NKMD.EnemyPoint, NKMD.EnemyPath, Color.FromArgb(0, 204, 0)));
-			if (NKMD.MiniGameEnemyPoint != null && NKMD.MiniGameEnemyPath != null) mapViewer1.Groups.Add(new MKDSMiniGameEnemyPointLineRenderGroup(NKMD.MiniGameEnemyPoint, NKMD.MiniGameEnemyPath, Color.FromArgb(0, 204, 0)));
 
+			if (NKMD.Point != null && NKMD.Path != null) mapViewer1.Groups.Add(new MKDSRouteLineRenderGroup(NKMD.Path, NKMD.Point, Color.FromArgb(0, 0, 128)));
 			if (NKMD.Point != null) mapViewer1.Groups.Add(new PointRenderGroup<POIT.POITEntry>(Color.FromArgb(0, 0, 128), NKMD.Point, typeof(POIT.POITEntry).GetProperty("Position")));
+			if (NKMD.CheckPoint != null && NKMD.CheckPointPath != null) mapViewer1.Groups.Add(new MKDSCheckPointLineRenderGroup(NKMD.CheckPoint, NKMD.CheckPointPath, Color.FromArgb(0, 170, 0), Color.FromArgb(170, 0, 0)));
+			if (NKMD.CheckPoint != null) mapViewer1.Groups.Add(new MKDSCheckPointPoint1RenderGroup(NKMD.CheckPoint, Color.FromArgb(0, 170, 0)));
+			if (NKMD.CheckPoint != null) mapViewer1.Groups.Add(new MKDSCheckPointPoint2RenderGroup(NKMD.CheckPoint, Color.FromArgb(170, 0, 0)));
+			if (NKMD.ItemPoint != null && NKMD.ItemPath != null) mapViewer1.Groups.Add(new MKDSItemPointLineRenderGroup(NKMD.ItemPoint, NKMD.ItemPath, Color.FromArgb(/*255, 230*/204, 153, 0)));
+			if (NKMD.ItemPoint != null) mapViewer1.Groups.Add(new PointRenderGroup<IPOI.IPOIEntry>(Color.FromArgb(/*255, 230*/204, 153, 0), NKMD.ItemPoint, typeof(IPOI.IPOIEntry).GetProperty("Position")));
+			if (NKMD.EnemyPoint != null && NKMD.EnemyPath != null) mapViewer1.Groups.Add(new MKDSEnemyPointLineRenderGroup(NKMD.EnemyPoint, NKMD.EnemyPath, Color.FromArgb(0, 204, 0)));
+			if (NKMD.EnemyPoint != null) mapViewer1.Groups.Add(new PointRenderGroup<EPOI.EPOIEntry>(Color.FromArgb(0, 204, 0), NKMD.EnemyPoint, typeof(EPOI.EPOIEntry).GetProperty("Position")));
+			if (NKMD.MiniGameEnemyPoint != null && NKMD.MiniGameEnemyPath != null) mapViewer1.Groups.Add(new MKDSMiniGameEnemyPointLineRenderGroup(NKMD.MiniGameEnemyPoint, NKMD.MiniGameEnemyPath, Color.FromArgb(0, 204, 0)));
+			if (NKMD.MiniGameEnemyPoint != null) mapViewer1.Groups.Add(new PointRenderGroup<MEPO.MEPOEntry>(Color.FromArgb(0, 204, 0), NKMD.MiniGameEnemyPoint, typeof(MEPO.MEPOEntry).GetProperty("Position")));
+
 			if (NKMD.ObjectInformation != null) mapViewer1.Groups.Add(new MKDSObjectRenderGroup(NKMD.ObjectInformation, Color.Red));
 			if (NKMD.KartPointStart != null) mapViewer1.Groups.Add(new PointRenderGroup<KTPS.KTPSEntry>(Color.Black, NKMD.KartPointStart, typeof(KTPS.KTPSEntry).GetProperty("Position")));
 			if (NKMD.KartPointJugem != null) mapViewer1.Groups.Add(new PointRenderGroup<KTPJ.KTPJEntry>(Color.Orange, NKMD.KartPointJugem, typeof(KTPJ.KTPJEntry).GetProperty("Position")));
 			if (NKMD.KartPointSecond != null) mapViewer1.Groups.Add(new PointRenderGroup<KTP2.KTP2Entry>(Color.FromArgb(0, 230, 255), NKMD.KartPointSecond, typeof(KTP2.KTP2Entry).GetProperty("Position")));
 			if (NKMD.KartPointCannon != null) mapViewer1.Groups.Add(new PointRenderGroup<KTPC.KTPCEntry>(Color.FromArgb(255, 0, 128), NKMD.KartPointCannon, typeof(KTPC.KTPCEntry).GetProperty("Position")));
 			if (NKMD.KartPointMission != null) mapViewer1.Groups.Add(new PointRenderGroup<KTPM.KTPMEntry>(Color.MediumPurple, NKMD.KartPointMission, typeof(KTPM.KTPMEntry).GetProperty("Position")));
-			if (NKMD.CheckPoint != null) mapViewer1.Groups.Add(new MKDSCheckPointPoint1RenderGroup(NKMD.CheckPoint, Color.FromArgb(0, 170, 0)));
-			if (NKMD.CheckPoint != null) mapViewer1.Groups.Add(new MKDSCheckPointPoint2RenderGroup(NKMD.CheckPoint, Color.FromArgb(170, 0, 0)));
 			if (NKMD.Area != null) mapViewer1.Groups.Add(new PointRenderGroup<AREA.AREAEntry>(Color.CornflowerBlue, NKMD.Area, typeof(AREA.AREAEntry).GetProperty("Position")));
-			if (NKMD.ItemPoint != null) mapViewer1.Groups.Add(new PointRenderGroup<IPOI.IPOIEntry>(Color.FromArgb(/*255, 230*/204, 153, 0), NKMD.ItemPoint, typeof(IPOI.IPOIEntry).GetProperty("Position")));
-			if (NKMD.EnemyPoint != null) mapViewer1.Groups.Add(new PointRenderGroup<EPOI.EPOIEntry>(Color.FromArgb(0, 204, 0), NKMD.EnemyPoint, typeof(EPOI.EPOIEntry).GetProperty("Position")));
-			if (NKMD.MiniGameEnemyPoint != null) mapViewer1.Groups.Add(new PointRenderGroup<MEPO.MEPOEntry>(Color.FromArgb(0, 204, 0), NKMD.MiniGameEnemyPoint, typeof(MEPO.MEPOEntry).GetProperty("Position")));
 			if (NKMD.Camera != null) mapViewer1.Groups.Add(new PointRenderGroup<CAME.CAMEEntry>(Color.BurlyWood, NKMD.Camera, typeof(CAME.CAMEEntry).GetProperty("Position")));
 		}
 
@@ -107,6 +107,8 @@ namespace MarioKart.UI
 			{
 				if (v != Viewer) v.RemoveSelection();
 			}
+			mapViewer1.SelectedEntries = Entry;
+			mapViewer1.Render();
 		}
 
 		private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
@@ -236,6 +238,8 @@ namespace MarioKart.UI
 			}
 			propertyGrid1.SelectedObject = Entry;
 			propertyGrid1.ExpandAllGridItems();
+			mapViewer1.SelectedEntries = new object[] { Entry };
+			mapViewer1.Render();
 		}
 	}
 }
