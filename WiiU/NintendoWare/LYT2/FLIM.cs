@@ -116,7 +116,7 @@ namespace WiiU.NintendoWare.LYT2
 			public Byte Unknown;
 
 			//Tempoarly use 3ds stuff!
-			public _3DS.GPU.Textures.ImageFormat GetGPUTextureFormat()
+			/*public _3DS.GPU.Textures.ImageFormat GetGPUTextureFormat()
 			{
 				switch (Format)
 				{
@@ -134,17 +134,65 @@ namespace WiiU.NintendoWare.LYT2
 					case 11: return _3DS.GPU.Textures.ImageFormat.ETC1A4;
 					case 0x12: return _3DS.GPU.Textures.ImageFormat.L4;
 					case 0x13: return _3DS.GPU.Textures.ImageFormat.A4;
+					//Wii U Formats:
+					case 0x17: return WiiU.GPU.Textures.ImageFormat.ETC1A4;
 				}
 				throw new Exception("Unknown Image Format!");
-			}
+			}*/
 		}
 		public UInt32 DataLength;
 
 		//Tempoarly use 3ds stuff!
 		public Bitmap ToBitmap()
 		{
-			if (Image.Unknown == 0) return _3DS.GPU.Textures.ToBitmap(Data, Image.Width, Image.Height, Image.GetGPUTextureFormat());
-			return _3DS.GPU.Textures.ToBitmap(Data, Image.Height, Image.Width, Image.GetGPUTextureFormat());
+			if (Header.Endianness == 0xFFFE)//3ds
+			{
+				_3DS.GPU.Textures.ImageFormat f3 = 0;
+				switch (Image.Format)
+				{
+					case 0: f3 = _3DS.GPU.Textures.ImageFormat.L8; break;
+					case 1: f3 = _3DS.GPU.Textures.ImageFormat.A8; break;
+					case 2: f3 = _3DS.GPU.Textures.ImageFormat.LA4; break;
+					case 3: f3 = _3DS.GPU.Textures.ImageFormat.LA8; break;
+					case 4: f3 = _3DS.GPU.Textures.ImageFormat.HILO8; break;
+					case 5: f3 = _3DS.GPU.Textures.ImageFormat.RGB565; break;
+					case 6: f3 = _3DS.GPU.Textures.ImageFormat.RGB8; break;
+					case 7: f3 = _3DS.GPU.Textures.ImageFormat.RGBA5551; break;
+					case 8: f3 = _3DS.GPU.Textures.ImageFormat.RGBA4; break;
+					case 9: f3 = _3DS.GPU.Textures.ImageFormat.RGBA8; break;
+					case 10: f3 = _3DS.GPU.Textures.ImageFormat.ETC1; break;
+					case 11: f3 = _3DS.GPU.Textures.ImageFormat.ETC1A4; break;
+					case 0x12: f3 = _3DS.GPU.Textures.ImageFormat.L4; break;
+					case 0x13: f3 = _3DS.GPU.Textures.ImageFormat.A4; break;
+					default: throw new Exception("Unknown Image Format!");
+				}
+				if (Image.Unknown == 0) return _3DS.GPU.Textures.ToBitmap(Data, Image.Width, Image.Height, f3);
+				return _3DS.GPU.Textures.ToBitmap(Data, Image.Height, Image.Width, f3);
+			}
+			else
+			{
+				GPU.Textures.ImageFormat fu = 0;
+				switch (Image.Format)
+				{
+					//case 0: f3 = _3DS.GPU.Textures.ImageFormat.L8; break;
+					//case 1: f3 = _3DS.GPU.Textures.ImageFormat.A8; break;
+					//case 2: f3 = _3DS.GPU.Textures.ImageFormat.LA4; break;
+					//case 3: f3 = _3DS.GPU.Textures.ImageFormat.LA8; break;
+					//case 4: f3 = _3DS.GPU.Textures.ImageFormat.HILO8; break;
+					case 5: fu = GPU.Textures.ImageFormat.RGB565; break;
+					//case 6: f3 = _3DS.GPU.Textures.ImageFormat.RGB8; break;
+					//case 7: f3 = _3DS.GPU.Textures.ImageFormat.RGBA5551; break;
+					//case 8: f3 = _3DS.GPU.Textures.ImageFormat.RGBA4; break;
+					//case 9: f3 = _3DS.GPU.Textures.ImageFormat.RGBA8; break;
+					//case 10: f3 = _3DS.GPU.Textures.ImageFormat.ETC1; break;
+					//case 11: f3 = _3DS.GPU.Textures.ImageFormat.ETC1A4; break;
+					//case 0x12: f3 = _3DS.GPU.Textures.ImageFormat.L4; break;
+					//case 0x13: f3 = _3DS.GPU.Textures.ImageFormat.A4; break;
+					case 0x17: fu = GPU.Textures.ImageFormat.DXT5; break;
+					default: throw new Exception("Unknown Image Format!");
+				}
+				return GPU.Textures.ToBitmap(Data, Image.Width, Image.Height, fu, (GPU.Textures.TileMode)(Image.Unknown & 0x1F), (uint)Image.Unknown >> 5);
+			}
 		}
 
 		public class FLIMIdentifier : FileFormatIdentifier

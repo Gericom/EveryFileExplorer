@@ -82,6 +82,11 @@ namespace LibEveryFileExplorer.IO
 			return (ulong)Data[Offset] | ((ulong)Data[Offset + 1] << 8) | ((ulong)Data[Offset + 2] << 16) | ((ulong)Data[Offset + 3] << 24) | ((ulong)Data[Offset + 4] << 32) | ((ulong)Data[Offset + 5] << 40) | ((ulong)Data[Offset + 6] << 48) | ((ulong)Data[Offset + 7] << 56);
 		}
 
+		public static ulong ReadU64BE(byte[] Data, int Offset)
+		{
+			return ((ulong)Data[Offset] << 56) | ((ulong)Data[Offset + 1] << 48) | ((ulong)Data[Offset + 2] << 40) | ((ulong)Data[Offset + 3] << 32) | ((ulong)Data[Offset + 4] << 24) | ((ulong)Data[Offset + 5] << 16) | ((ulong)Data[Offset + 6] << 8) | ((ulong)Data[Offset + 7] << 0);
+		}
+
 		public static void WriteU64LE(byte[] Data, int Offset, ulong Value)
 		{
 			Data[Offset] = (byte)(Value & 0xFF);

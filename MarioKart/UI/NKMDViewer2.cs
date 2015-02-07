@@ -49,6 +49,15 @@ namespace MarioKart.UI
 			if (NKMD.ObjectInformation != null) AddTab<MKDS.NKM.OBJI.OBJIEntry>("OBJI", NKMD.ObjectInformation);
 			if (NKMD.Path != null) AddTab<PATH.PATHEntry>("PATH", NKMD.Path);
 			if (NKMD.Point != null) AddTab<POIT.POITEntry>("POIT", NKMD.Point);
+			if (NKMD.Path != null && NKMD.Point != null)
+			{
+				TabPage p = new TabPage("Routes");
+				var vv = new MKDSRouteViewer(NKMD.Path, NKMD.Point) { Dock = DockStyle.Fill };
+				vv.OnSelected += new SelectedEventHandler(GameDataSectionViewer_OnSelected);
+				SectionViewers.Add(vv);
+				p.Controls.Add(vv);
+				tabControl1.TabPages.Add(p);
+			}
 			if (NKMD.KartPointStart != null) AddTab<KTPS.KTPSEntry>("KTPS", NKMD.KartPointStart);
 			if (NKMD.KartPointJugem != null) AddTab<KTPJ.KTPJEntry>("KTPJ", NKMD.KartPointJugem);
 			if (NKMD.KartPointSecond != null) AddTab<KTP2.KTP2Entry>("KTP2", NKMD.KartPointSecond);

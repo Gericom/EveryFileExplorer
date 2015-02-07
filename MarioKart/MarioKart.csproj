@@ -124,6 +124,12 @@
     <Compile Include="UI\MapViewer\MKDSCheckPointPoint2RenderGroup.cs" />
     <Compile Include="UI\MapViewer\MKDSCheckPointPoint1RenderGroup.cs" />
     <Compile Include="UI\MapViewer\MKDSItemPointLineRenderGroup.cs" />
+    <Compile Include="UI\MKDSRouteViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\MKDSRouteViewer.Designer.cs">
+      <DependentUpon>MKDSRouteViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\NKMDViewer2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -177,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CDMDViewer.resx">
       <DependentUpon>CDMDViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MKDSRouteViewer.resx">
+      <DependentUpon>MKDSRouteViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\NKMDViewer2.resx">
       <DependentUpon>NKMDViewer2.cs</DependentUpon>

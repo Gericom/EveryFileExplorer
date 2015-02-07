@@ -48,14 +48,15 @@ namespace LibEveryFileExplorer.UI
 			}
 			if (listViewNF1.SelectedIndices.Count != 0) buttonRemove.Enabled = buttonUp.Enabled = buttonDown.Enabled = true;
 			else buttonRemove.Enabled = buttonUp.Enabled = buttonDown.Enabled = false;
-			if (!RemovingSelection && listViewNF1.SelectedIndices.Count == 0 && OnSelected != null) OnSelected(null, null);
+			//if (!RemovingSelection && listViewNF1.SelectedIndices.Count == 0 && OnSelected != null) OnSelected(null, null);
 		}
 
 		Timer t;
 
 		void listViewNF1_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			t.Interval = 100;
+			if (!RemovingSelection && listViewNF1.SelectedIndices.Count == 0 && OnSelected != null) OnSelected(null, null);
+			t.Interval = 10;//100;
 			t.Enabled = true;
 		}
 
@@ -164,6 +165,7 @@ namespace LibEveryFileExplorer.UI
 		bool RemovingSelection = false;
 		public void RemoveSelection()
 		{
+			if (listViewNF1.SelectedIndices.Count == 0) return;
 			RemovingSelection = true;
 			listViewNF1.SelectedItems.Clear();
 			RemovingSelection = false;
