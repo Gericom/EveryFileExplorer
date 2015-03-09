@@ -17,6 +17,8 @@ using MarioKart.MKDS;
 using MarioKart.MKDS.NKM;
 using LibEveryFileExplorer.Collections;
 using MarioKart.UI.MapViewer;
+using System.Resources;
+using System.Globalization;
 
 namespace MarioKart.UI
 {
@@ -186,8 +188,7 @@ namespace MarioKart.UI
 
 		private void mapViewer1_Init3D()
 		{
-			Bitmap b3 = OBJI.OBJ_2D01;//important!
-			System.Resources.ResourceSet s = OBJI.ResourceManager.GetResourceSet(System.Globalization.CultureInfo.CurrentCulture, false, false);
+			ResourceSet s = OBJI.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
 			foreach (Object b in s)
 			{
 				Bitmap b2 = ((Bitmap)((System.Collections.DictionaryEntry)b).Value);
