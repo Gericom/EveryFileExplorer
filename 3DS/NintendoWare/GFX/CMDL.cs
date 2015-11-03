@@ -44,8 +44,8 @@ namespace _3DS.NintendoWare.GFX
 			NrChildren = er.ReadUInt32();
 			Unknown7 = er.ReadUInt32();
 			NrAnimationGroupDescriptions = er.ReadUInt32();
-			AnimationGroupDescriptionsDictOffset =er.ReadUInt32();
-			if (AnimationGroupDescriptionsDictOffset != 0) AnimationGroupDescriptionsDictOffset += (UInt32)er.BaseStream.Position - 4; 
+			AnimationGroupDescriptionsDictOffset = er.ReadUInt32();
+			if (AnimationGroupDescriptionsDictOffset != 0) AnimationGroupDescriptionsDictOffset += (UInt32)er.BaseStream.Position - 4;
 			Scale = er.ReadVector3();
 			Rotation = er.ReadVector3();
 			Translation = er.ReadVector3();
@@ -3855,6 +3855,228 @@ namespace _3DS.NintendoWare.GFX
 				}
 			}
 			return o;
+		}
+
+		public String ToMayaASCII(CGFX Resource)
+		{
+			var er = new CommonFiles.Maya.MayaASCIIWriter();
+			if (Resource.Data.Textures != null)
+			{
+				foreach (var tex in Resource.Data.Textures)
+				{
+					er.CreateNode("file", tex.Name.Replace('.', '_') + "_tex");
+					er.BeginStatement("setAttr");
+					{
+						er.WriteArgument("\".ftn\"");
+						er.WriteArgument("-type", "\"string\"");
+						er.WriteArgument("\"Tex/" + tex.Name + ".png\"");
+					}
+					er.EndStatement();
+					er.CreateNode("place2dTexture", tex.Name.Replace('.', '_') + "_tex_p2d");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.c", tex.Name.Replace('.', '_') + "_tex.c");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.tf", tex.Name.Replace('.', '_') + "_tex.tf");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.rf", tex.Name.Replace('.', '_') + "_tex.rf");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.mu", tex.Name.Replace('.', '_') + "_tex.mu");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.mv", tex.Name.Replace('.', '_') + "_tex.mv");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.s", tex.Name.Replace('.', '_') + "_tex.s");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.wu", tex.Name.Replace('.', '_') + "_tex.wu");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.wv", tex.Name.Replace('.', '_') + "_tex.wv");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.re", tex.Name.Replace('.', '_') + "_tex.re");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.of", tex.Name.Replace('.', '_') + "_tex.of");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.r", tex.Name.Replace('.', '_') + "_tex.ro");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.n", tex.Name.Replace('.', '_') + "_tex.n");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.vt1", tex.Name.Replace('.', '_') + "_tex.vt1");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.vt2", tex.Name.Replace('.', '_') + "_tex.vt2");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.vt3", tex.Name.Replace('.', '_') + "_tex.vt3");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.vc1", tex.Name.Replace('.', '_') + "_tex.vc1");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.o", tex.Name.Replace('.', '_') + "_tex.uv");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex_p2d.ofs", tex.Name.Replace('.', '_') + "_tex.fs");
+					er.ConnectAttribute(tex.Name.Replace('.', '_') + "_tex.msg", ":defaultTextureList1.tx", true);
+				}
+			}
+			foreach (var mat in Materials)
+			{
+				er.CreateNode("phong", mat.Name.Replace('.', '_'));
+				er.BeginStatement("setAttr");
+				{
+					er.WriteArgument("\".dc\"", 1);
+				}
+				er.EndStatement();
+				er.CreateNode("shadingEngine", mat.Name.Replace('.', '_') + "_Sg");
+				er.BeginStatement("setAttr");
+				{
+					er.WriteArgument("\".ihi\"", 0);
+				}
+				er.EndStatement();
+				er.BeginStatement("setAttr");
+				{
+					er.WriteArgument("\".ro\"", "yes");
+				}
+				er.EndStatement();
+				er.CreateNode("materialInfo", mat.Name.Replace('.', '_') + "_In");
+				er.ConnectAttribute(mat.Name.Replace('.', '_') + ".oc", mat.Name.Replace('.', '_') + "_Sg.ss");
+				er.ConnectAttribute(mat.Name.Replace('.', '_') + "_Sg.msg", mat.Name.Replace('.', '_') + "_In.sg");
+				er.ConnectAttribute(mat.Name.Replace('.', '_') + ".msg", mat.Name.Replace('.', '_') + "_In.m");
+				er.ConnectAttribute(mat.Name.Replace('.', '_') + "_Sg.pa", ":renderPartition.st", true);
+				er.ConnectAttribute(mat.Name.Replace('.', '_') + ".msg", ":defaultShaderList1.s", true);
+				if (mat.Tex0 != null && mat.Tex0.TextureObject is ReferenceTexture)
+				{
+					er.ConnectAttribute(((ReferenceTexture)mat.Tex0.TextureObject).LinkedTextureName.Replace('.', '_') + "_tex.oc", mat.Name.Replace('.', '_') + ".c");
+					er.ConnectAttribute(((ReferenceTexture)mat.Tex0.TextureObject).LinkedTextureName.Replace('.', '_') + "_tex.msg", mat.Name.Replace('.', '_') + "_In.t", true);
+				}
+			}
+			int s = 0;
+			foreach (var vv in Shapes)
+			{
+				var mat = Materials[Meshes[s].MaterialIndex];
+				er.CreateNode("transform", "S" + s + "_trans");
+				er.CreateNode("mesh", "S" + s + "_mesh", "S" + s + "_trans");
+				Polygon p = vv.GetVertexData(this);
+				int cnt = 0;
+				foreach (var q in vv.PrimitiveSets[0].Primitives[0].IndexStreams)
+				{
+					Vector3[] defs = q.GetFaceData();
+					cnt += defs.Length;
+				}
+				if (p.TexCoords != null)
+				{
+					if (mat.NrActiveTextureCoordiators > 0 && mat.TextureCoordiators[0].MappingMethod == 0)
+					{
+						Vector2[] texc;
+						if (mat.TextureCoordiators[0].SourceCoordinate == 0)
+						{
+							texc = p.TexCoords;
+						}
+						else if (mat.TextureCoordiators[0].SourceCoordinate == 1)
+						{
+							texc = p.TexCoords2;
+						}
+						else
+						{
+							texc = p.TexCoords3;
+						}
+						er.BeginStatement("setAttr");
+						{
+							er.WriteArgument("\".uvst[0].uvsn\"");
+							er.WriteArgument("-type", "\"string\"");
+							er.WriteArgument("\"map1\"");
+						}
+						er.EndStatement();
+						er.BeginStatement("setAttr");
+						{
+							er.WriteArgument("-s", texc.Length);
+							er.WriteArgument("\".uvst[0].uvsp[0:" + (texc.Length - 1) + "]\"");
+							er.WriteArgument("-type", "\"float2\"");
+							foreach (var v in texc)
+							{
+								er.WriteArgument(v.X);
+								er.WriteArgument(v.Y);
+							}
+						}
+						er.EndStatement();
+						er.BeginStatement("setAttr");
+						{
+							er.WriteArgument("\".cuvs\"");
+							er.WriteArgument("-type", "\"string\"");
+							er.WriteArgument("\"map1\"");
+						}
+						er.EndStatement();
+					}
+				}
+				if (p.Vertex != null)
+				{
+					er.BeginStatement("setAttr");
+					{
+						er.WriteArgument("-s", p.Vertex.Length);
+						er.WriteArgument("\".vt[0:" + (p.Vertex.Length - 1) + "]\"");
+						foreach (var v in p.Vertex)
+						{
+							er.WriteArgument(v.X);
+							er.WriteArgument(v.Y);
+							er.WriteArgument(v.Z);
+						}
+					}
+					er.EndStatement();
+					er.BeginStatement("setAttr");
+					{
+						er.WriteArgument("-s", cnt * 3);
+						er.WriteArgument("\".ed[0:" + ((cnt * 3) - 1) + "]\"");
+						int idx = 0;
+						foreach (var q in vv.PrimitiveSets[0].Primitives[0].IndexStreams)
+						{
+							Vector3[] defs = q.GetFaceData();
+							foreach (Vector3 def in defs)
+							{
+								er.WriteArgument(def.X);
+								er.WriteArgument(def.Y);
+								er.WriteArgument(0);
+
+								er.WriteArgument(def.Y);
+								er.WriteArgument(def.Z);
+								er.WriteArgument(0);
+
+								er.WriteArgument(def.X);
+								er.WriteArgument(def.Z);
+								er.WriteArgument(0);
+							}
+						}
+					}
+					er.EndStatement();
+				}
+				if (p.Colors != null)
+				{
+					er.BeginStatement("setAttr");
+					{
+						er.WriteArgument("-s", p.Colors.Length);
+						er.WriteArgument("\".clr[0:" + (p.Colors.Length - 1) + "]\"");
+						foreach (var v in p.Colors)
+						{
+							er.WriteArgument(v.R / 255f);
+							er.WriteArgument(v.G / 255f);
+							er.WriteArgument(v.B / 255f);
+							er.WriteArgument(1);//v.A / 255f);
+						}
+					}
+					er.EndStatement();
+				}
+				er.BeginStatement("setAttr");
+				{
+					er.WriteArgument("-s", cnt);
+					er.WriteArgument("\".fc[0:" + (cnt - 1) + "]\"");
+					er.WriteArgument("-type", "\"polyFaces\"");
+					int idx = 0;
+					foreach (var q in vv.PrimitiveSets[0].Primitives[0].IndexStreams)
+					{
+						Vector3[] defs = q.GetFaceData();
+						foreach (Vector3 def in defs)
+						{
+							er.WriteArgument("\nf", 3);
+							er.WriteArgument(idx++);
+							er.WriteArgument(idx++);
+							er.WriteArgument(idx++);
+
+							er.WriteArgument("\nmu", 0);
+							er.WriteArgument(3);
+							er.WriteArgument(def.X);
+							er.WriteArgument(def.Y);
+							er.WriteArgument(def.Z);
+
+							if (p.Colors != null)
+							{
+								er.WriteArgument("\nfc");
+								er.WriteArgument(3);
+								er.WriteArgument(def.X);
+								er.WriteArgument(def.Y);
+								er.WriteArgument(def.Z);
+							}
+						}
+					}
+				}
+				er.EndStatement();
+				er.ConnectAttribute("S" + s + "_mesh.iog", Materials[Meshes[s].MaterialIndex].Name.Replace('.', '_') + "_Sg.dsm", true);
+				s++;
+			}
+			return er.Close();
 		}
 
 		public override string ToString()

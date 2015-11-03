@@ -100,7 +100,7 @@ namespace LibEveryFileExplorer.Collections
 			Matrix33 result = Matrix33.Identity;
 			result[0, 0] = Scale.X;
 			result[1, 1] = Scale.Y;
-			result[2, 2] = Scale.X;
+			result[2, 2] = Scale.Z;
 			return result;
 		}
 

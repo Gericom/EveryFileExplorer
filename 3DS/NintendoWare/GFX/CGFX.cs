@@ -43,11 +43,12 @@ namespace _3DS.NintendoWare.GFX
 
 		public string GetSaveDefaultFileFilter()
 		{
-			return "CTR Graphics Resource (*.bcres)|*.bcres";
+            return "CTR Graphics Resource (*.bcres;*.bcmdl)|*.bcres;*.bcmdl";
 		}
 
 		public byte[] Write()
 		{
+            //MessageBox.Show("CGFX saving is experimental! A couple of sections (like animations) are lost while saving!");
 			MemoryStream m = new MemoryStream();
 			EndianBinaryWriter er = new EndianBinaryWriter(m, Endianness.LittleEndian);
 			Header.NrBlocks = 1;
@@ -224,9 +225,9 @@ namespace _3DS.NintendoWare.GFX
 				er.Write((uint)0);
 				for (int i = 0; i < 16; i++)
 				{
-					if (Dictionaries[i] != null)
+                    if (Dictionaries[i] != null && (i == 0 || i == 1))
 					{
-						if (i != 0 && i != 1) throw new NotImplementedException();
+						//if (i != 0 && i != 1) throw new NotImplementedException();
 						er.Write((uint)Dictionaries[i].Count);
 						er.Write((uint)0);//dictoffset
 					}
@@ -239,7 +240,7 @@ namespace _3DS.NintendoWare.GFX
 				long[] dictoffsets = new long[16];
 				for (int i = 0; i < 16; i++)
 				{
-					if (Dictionaries[i] != null)
+					if (Dictionaries[i] != null && (i == 0 || i == 1))
 					{
 						dictoffsets[i] = er.BaseStream.Position;
 						er.BaseStream.Position = basepos + 8 + i * 8 + 4;

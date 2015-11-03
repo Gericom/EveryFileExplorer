@@ -76,7 +76,8 @@
 			// 
 			// saveFileDialog1
 			// 
-			this.saveFileDialog1.Filter = "COLLADA DAE File (*.dae)|*.dae|Wavefront OBJ File (*.obj)|*.obj";
+			this.saveFileDialog1.Filter = "COLLADA DAE File (*.dae)|*.dae|Wavefront OBJ File (*.obj)|*.obj|Maya ASCII (*.ma)" +
+    "|*.ma";
 			// 
 			// CMDLViewer
 			// 

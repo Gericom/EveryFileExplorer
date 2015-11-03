@@ -6,6 +6,7 @@ using LibEveryFileExplorer.Files;
 using System.Drawing;
 using System.IO;
 using LibEveryFileExplorer.IO;
+using LibEveryFileExplorer.IO.Serialization;
 
 namespace NDS.NitroSystem.SND
 {
@@ -13,7 +14,7 @@ namespace NDS.NitroSystem.SND
 	{
 		public SDAT(byte[] Data)
 		{
-			EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
+			EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
 			try
 			{
 				Header = new SDATHeader(er);
@@ -43,9 +44,10 @@ namespace NDS.NitroSystem.SND
 		public SDATHeader Header;
 		public class SDATHeader
 		{
-			public SDATHeader(EndianBinaryReader er)
+			public SDATHeader(EndianBinaryReaderEx er)
 			{
-				Signature = er.ReadString(Encoding.ASCII, 4);
+				er.ReadObject(this);
+				/*Signature = er.ReadString(Encoding.ASCII, 4);
 				if (Signature != "SDAT") throw new SignatureNotCorrectException(Signature, "SDAT", er.BaseStream.Position - 4);
 				Endianness = er.ReadUInt16();
 				Version = er.ReadUInt16();
@@ -60,9 +62,12 @@ namespace NDS.NitroSystem.SND
 				FATLength = er.ReadUInt32();
 				FILEOffset = er.ReadUInt32();
 				FILELength = er.ReadUInt32();
-				Padding = er.ReadBytes(16);
+				Padding = er.ReadBytes(16);*/
 			}
+			[BinaryStringSignature("SDAT")]
+			[BinaryFixedSize(4)]
 			public String Signature;
+			[BinaryBOM(0xFFFE)]
 			public UInt16 Endianness;
 			public UInt16 Version;
 			public UInt32 FileSize;
@@ -76,6 +81,7 @@ namespace NDS.NitroSystem.SND
 			public UInt32 FATLength;
 			public UInt32 FILEOffset;
 			public UInt32 FILELength;
+			[BinaryFixedSize(16)]
 			public byte[] Padding;//16
 		}
 
@@ -289,12 +295,12 @@ namespace NDS.NitroSystem.SND
 
 			public override string GetFileDescription()
 			{
-				return "Sound Data (SDAT)";
+				return "Nitro Sound Data (SDAT)";
 			}
 
 			public override string GetFileFilter()
 			{
-				return "Sound Data (*.sdat)|*.sdat";
+				return "Nitro Sound Data (*.sdat)|*.sdat";
 			}
 
 			public override Bitmap GetIcon()

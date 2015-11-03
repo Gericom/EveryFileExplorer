@@ -233,7 +233,7 @@ namespace MarioKart.MK7.KMP
 				{
 					Point1 = v.Point1,
 					Point2 = v.Point2,
-					KeyPointID = v.Type,
+					KeyPointID = (short)(v.Type == 255?-1:v.Type),
 					RespawnID = v.RespawnId,
 				};
 

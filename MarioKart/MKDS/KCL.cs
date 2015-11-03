@@ -191,6 +191,7 @@ namespace MarioKart.MKDS
 			this.Normals = Normals.ToArray();
 			Planes = planes.ToArray();
 			Header = new MKDSKCLHeader();
+            //Octree = KCLOctree.FromTriangles(Triangles.ToArray(), Header, 2048, 128, 32, 10);
 			Octree = KCLOctree.FromTriangles(Triangles.ToArray(), Header, 2048, 128, 128, 50);
 		}
 

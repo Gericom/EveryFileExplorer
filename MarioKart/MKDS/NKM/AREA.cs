@@ -143,7 +143,7 @@ namespace MarioKart.MKDS.NKM
 
 			public Byte Unknown8 { get; set; }
 			public SByte LinkedCame { get; set; }
-			public Byte AreaType { get; set; }//1 = Camera Stuff, 4 = Water Fall Sound Area
+			public Byte AreaType { get; set; }//1 = Camera Area, 3 = Area for Boo's etc. (unknown5 = subtype), 4 = Water Fall Sound Area
 
 			public UInt16 Unknown10 { get; set; }//unverified
 

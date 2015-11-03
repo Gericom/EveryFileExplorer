@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAE.cs" />
+    <Compile Include="Maya\MayaASCIIWriter.cs" />
     <Compile Include="MTL.cs" />
     <Compile Include="OBJ.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

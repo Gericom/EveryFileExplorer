@@ -457,6 +457,19 @@ namespace _3DS.UI
 							}
 							break;
 						}
+					case 2:
+						{
+							String result = Model.ToMayaASCII(Resource);
+							File.Create(saveFileDialog1.FileName).Close();
+							File.WriteAllBytes(saveFileDialog1.FileName, Encoding.ASCII.GetBytes(result));
+							Directory.CreateDirectory(Path.GetDirectoryName(saveFileDialog1.FileName) + "\\Tex");
+							foreach (var v in Resource.Data.Textures)
+							{
+								if (!(v is ImageTextureCtr)) continue;
+								((ImageTextureCtr)v).GetBitmap().Save(Path.GetDirectoryName(saveFileDialog1.FileName) + "\\Tex\\" + v.Name + ".png");
+							}
+							break;
+						}
 				}
 			}
 		}
