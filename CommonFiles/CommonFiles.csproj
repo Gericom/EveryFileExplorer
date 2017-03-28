@@ -49,6 +49,7 @@
     <Compile Include="Maya\MayaASCIIWriter.cs" />
     <Compile Include="MTL.cs" />
     <Compile Include="OBJ.cs" />
+    <Compile Include="PNG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -83,6 +84,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\control-pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\image.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
