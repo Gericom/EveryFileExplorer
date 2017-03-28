@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="BYML.cs" />
     <Compile Include="GPU\PICA\FragmentLightSource.cs" />
+    <Compile Include="Moflex.cs" />
     <Compile Include="N3DSPlugin.cs" />
     <Compile Include="NintendoWare\FONT\CFNT.cs" />
     <Compile Include="NintendoWare\GFX\BoundingVolume.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="DVLB.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GPU\Textures.cs" />
+    <Compile Include="NintendoWare\SND\CWAV.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
