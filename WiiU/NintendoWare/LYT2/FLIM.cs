@@ -38,10 +38,10 @@ namespace WiiU.NintendoWare.LYT2
 			return new FLIMViewer(this);
 		}
 
-		//public string GetSaveDefaultFileFilter()
-		//{
-		//	return "Cafe Layout Images (*.bflim)|*.bflim";
-		//}
+		public string GetSaveDefaultFileFilter()
+		{
+	        	return "Cafe Layout Images (*.bflim)|*.bflim";
+		}
 
 		public string GetConversionFileFilters()
 		{
