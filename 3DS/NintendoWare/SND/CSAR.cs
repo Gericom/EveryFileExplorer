@@ -300,7 +300,7 @@ namespace _3DS.NintendoWare.SND
 		{
 			public override string GetCategory()
 			{
-				return Category_Archives;
+				return Category_Sound;
 			}
 
 			public override string GetFileDescription()
