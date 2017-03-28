@@ -33,6 +33,8 @@ namespace LibEveryFileExplorer.Files
 		protected const String Category_Strings = "Strings";
 		protected const String Category_Textures = "Textures";
 		protected const String Category_Videos = "Videos";
+		protected const String Category_Movies = "Movies";
+                protected const String Category_Sound = "Sound";
 
 		public abstract String GetCategory();
 		public abstract String GetFileDescription();
