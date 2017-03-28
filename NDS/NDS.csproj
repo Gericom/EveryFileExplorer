@@ -52,8 +52,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BMG.cs" />
+    <Compile Include="MODS.cs" />
     <Compile Include="NDSPlugin.cs" />
     <Compile Include="NDSProject.cs" />
+    <Compile Include="NitroSystem\FONT\NFTR.cs" />
+    <Compile Include="NitroSystem\G2D\NCER.cs" />
+    <Compile Include="NitroSystem\G2D\NCGR.cs" />
+    <Compile Include="NitroSystem\G2D\NCLR.cs" />
+    <Compile Include="NitroSystem\G2D\NSCR.cs" />
+    <Compile Include="NitroSystem\G3D\NANR.cs" />
+    <Compile Include="NitroSystem\G3D\NSBMA.cs" />
+    <Compile Include="NitroSystem\G3D\NSBTA.cs" />
+    <Compile Include="NitroSystem\G3D\NSBTP.cs" />
+    <Compile Include="NitroSystem\G3D\NSBVA .cs" />
     <Compile Include="NitroSystem\SND\SDAT.cs" />
     <Compile Include="NitroSystem\SND\SWAR.cs" />
     <Compile Include="NitroSystem\SND\SWAV.cs" />
@@ -144,6 +156,7 @@
       <DependentUpon>TEX0Viewer.cs</DependentUpon>
     </Compile>
     <Compile Include="UtilityBin.cs" />
+    <Compile Include="VX.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonFiles\CommonFiles.csproj">
@@ -192,7 +205,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NitroSystem\G2D\" />
+    <Content Include="Resources\color_swatch1.png" />
+    <Content Include="Resources\disc_music.png" />
+    <Content Include="Resources\map.png" />
+    <Content Include="Resources\script_text.png" />
+    <Content Include="Resources\stack.png" />
+    <Content Include="Resources\sunset_vertical.png" />
+    <Content Include="Resources\traffic_light_anim.png" />
+    <Content Include="Resources\truck_anim.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\leaf.png" />
