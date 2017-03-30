@@ -274,12 +274,13 @@ namespace _3DS
 			Header.FileSize += (uint)Data.Length;
 		        }
 
+                        public class SARCIdentifier : FileFormatIdentifier
+                        {
                         public override string GetCategory()
                         {
-                         //Tempoarly
                         return "SARC Archive";
                         }
-
+			
 			public override string GetFileDescription()
 			{
 				return "Simple Archive (SARC)";
