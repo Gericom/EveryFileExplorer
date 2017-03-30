@@ -270,8 +270,10 @@ namespace NDS
 		{
 			public override string GetCategory()
 			{
-				return Category_Archives;
+				//Tempoarly
+				return "NDS Wifi Archive";
 			}
+
 
 			public override string GetFileDescription()
 			{
