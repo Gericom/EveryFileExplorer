@@ -333,11 +333,12 @@ namespace NDS.NitroSystem.FND
 			return dirs[0];
 		}
 
-                        public override string GetCategory()
-                        {
-                         //Tempoarly
-                        return "NARC Archive";
-                        }
+                       public class NARCIdentifier : FileFormatIdentifier
+                       {
+                       public override string GetCategory()
+                       {
+                       return "NARC Archive";
+                       }
 
 			public override string GetFileDescription()
 			{
