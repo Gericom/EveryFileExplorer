@@ -120,12 +120,11 @@ namespace _3DS.NintendoWare.LYT1
 			return dirs[1];
 		}
 
-		public class darcIdentifier : FileFormatIdentifier
-		{
-			public override string GetCategory()
-			{
-				return Category_Archives;
-			}
+                        public override string GetCategory()
+                        {
+                         //Tempoarly
+                        return "DARC Archive";
+                        }
 
 			public override string GetFileDescription()
 			{
