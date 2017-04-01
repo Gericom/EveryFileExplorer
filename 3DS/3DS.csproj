@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BYML.cs" />
+    <Compile Include="CTPK.cs" />
     <Compile Include="GPU\PICA\FragmentLightSource.cs" />
     <Compile Include="Moflex.cs" />
     <Compile Include="N3DSPlugin.cs" />
