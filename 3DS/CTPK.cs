@@ -11,13 +11,12 @@ namespace _3DS
     {
         public class CTPKIdentifier : FileFormatIdentifier
         {
-            public override string GetCategory()
+             public override string GetCategory()
             {
-                return Category_Archives;
-
+                return "CTPK Archives";
             }
 
-            public override string GetFileDescription()
+                public override string GetFileDescription()
             {
                 return "CTR Texture Package (CTPK)";
             }
