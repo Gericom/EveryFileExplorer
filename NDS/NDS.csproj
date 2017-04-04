@@ -42,12 +42,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tao.OpenGl">
-      <HintPath>D:\拆包工具\EveryFileExplorer\Plugins\Tao.OpenGl.dll</HintPath>
-    </Reference>
-    <Reference Include="Tao.Platform.Windows">
-      <HintPath>D:\拆包工具\EveryFileExplorer\Plugins\Tao.Platform.Windows.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BMG.cs" />
