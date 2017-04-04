@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -274,12 +274,12 @@ namespace _3DS
 			Header.FileSize += (uint)Data.Length;
 		        }
 
-                        public class SARCIdentifier : FileFormatIdentifier
-                        {
-                        public override string GetCategory()
-                        {
-                        return "SARC Archive";
-                        }
+            public class SARCIdentifier : FileFormatIdentifier
+            {
+            public override string GetCategory()
+            {
+            return "SARC Archives";
+            }
 			
 			public override string GetFileDescription()
 			{
