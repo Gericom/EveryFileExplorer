@@ -5,7 +5,7 @@ using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
 
-namespace NDS
+namespace _NDS.NitroSystem.FONT
 {
 	public class NFTR:FileFormat<NFTR.NFTRIdentifier>
 	{
