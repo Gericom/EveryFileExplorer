@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -120,12 +120,12 @@ namespace _3DS.NintendoWare.LYT1
 			return dirs[1];
 		}
 
-                       public class darcIdentifier : FileFormatIdentifier
-                       {
-                       public override string GetCategory()
-                       {
-                       return "Darc Archive";
-                       }
+            public class darcIdentifier : FileFormatIdentifier
+            {
+            public override string GetCategory()
+            {
+            return "Darc Archives";
+            }
 
 			public override string GetFileDescription()
 			{
