@@ -304,12 +304,12 @@ namespace MarioKart.MKDS.NKM
 
 			public override string GetFileDescription()
 			{
-				return "MarioKart DS Map Data (NKM)";
+				return "Mario Kart DS Map Data (NKM)";
 			}
 
 			public override string GetFileFilter()
 			{
-				return "MarioKart DS Map Data (*.nkm)|*.nkm";
+				return "Mario Kart DS Map Data (*.nkm)|*.nkm";
 			}
 
 			public override Bitmap GetIcon()
