@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -50,6 +50,8 @@
     <Compile Include="NintendoWare\LYT2\FLIM.cs" />
     <Compile Include="NintendoWare\LYT2\FLYT.cs" />
     <Compile Include="NintendoWare\SND\FSAR.cs" />
+    <Compile Include="NintendoWare\SND\FSTM.cs" />
+    <Compile Include="NintendoWare\SND\FWAV.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
