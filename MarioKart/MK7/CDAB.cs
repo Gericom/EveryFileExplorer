@@ -106,12 +106,12 @@ namespace MarioKart.MK7
 
 			public override string GetFileDescription()
 			{
-				return "CTR Dash AB (KMP)";
+				return "Mario Kart 7 Dash AB (KMP)";
 			}
 
 			public override string GetFileFilter()
 			{
-				return "CTR Dash AB (*.div)|*.div";
+				return "Mario Kart 7 Dash AB (*.div)|*.div";
 			}
 
 			public override Bitmap GetIcon()
