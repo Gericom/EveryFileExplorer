@@ -23,7 +23,7 @@ namespace WiiU.NintendoWare.SND
 
 			public override string GetFileFilter()
 			{
-				return "Cafe Wave (*.bfwav)|*.fcwav";
+				return "Cafe Wave (*.bfwav)|*.bfwav";
 			}
 
 			public override Bitmap GetIcon()
