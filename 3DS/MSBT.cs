@@ -11,12 +11,12 @@ namespace _3DS
 	{
 		public class MSBTIdentifier:FileFormatIdentifier
 		{
-			public override string GetCategory()
-			{
-                return Category_Text;
+            public override string GetCategory()
+            {
+                return "MSBT Text";
             }
 
-			public override string GetFileDescription()
+            public override string GetFileDescription()
 			{
 				return "Message Binary Text (MSBT)";
 			}
@@ -33,10 +33,10 @@ namespace _3DS
 
             public override FormatMatch IsFormat(EFEFile File)
 			{
-				if (File.Data.Length > 8 && File.Data[0] == 'M' && File.Data[1] == 's' && File.Data[2] == 'g' && File.Data[3] == 'S' && File.Data[4] == 't' && File.Data[5] == 'd' && File.Data[6] == 'B' && File.Data[7] == 'N') return FormatMatch.Content;
-				return FormatMatch.No;
-			}
+                if (File.Name.ToLower().EndsWith(".msbt")) return FormatMatch.Extension;
+                return FormatMatch.No;
+            }
 
-		}
-	}
+        }
+    }
 }
