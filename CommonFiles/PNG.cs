@@ -7,7 +7,7 @@ using System.Drawing;
 using System.IO;
 using LibEveryFileExplorer.IO;
 
-namespace CommonFiles
+/*namespace CommonFiles
 {
 	public class PNG:FileFormat<PNG.PNGIdentifier>
 	{
@@ -41,5 +41,5 @@ namespace CommonFiles
 
         }
     }
-}
+}*/
 
