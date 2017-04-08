@@ -5,7 +5,7 @@ using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
 
-namespace _3DS
+/*namespace _3DS
 {
 	public class MSBT:FileFormat<MSBT.MSBTIdentifier>
 	{
@@ -39,4 +39,4 @@ namespace _3DS
 
         }
     }
-}
+}*/
