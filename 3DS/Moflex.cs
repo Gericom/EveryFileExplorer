@@ -5,7 +5,7 @@ using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
 
-namespace _3DS
+/*namespace _3DS
 {
 	public class L2 : FileFormat<L2.L2Identifier>
 	{
@@ -40,5 +40,5 @@ namespace _3DS
 
         }
     }
-}
+}*/
 
