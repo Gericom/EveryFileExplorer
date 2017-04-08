@@ -6,7 +6,7 @@ using LibEveryFileExplorer.Files;
 using System.Drawing;
 using LibEveryFileExplorer.IO;
 
-namespace NDS
+/*namespace NDS
 {
     public class SPA:FileFormat<SPA.SPAIdentifier>
     {
@@ -40,4 +40,4 @@ namespace NDS
 
         }
     }
-}
+}*/
