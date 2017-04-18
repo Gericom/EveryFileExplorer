@@ -53,7 +53,7 @@
     <Compile Include="NitroSystem\G2D\NCGR.cs" />
     <Compile Include="NitroSystem\G2D\NCLR.cs" />
     <Compile Include="NitroSystem\G2D\NSCR.cs" />
-    <Compile Include="NitroSystem\G3D\NANR.cs" />
+    <Compile Include="NitroSystem\G2D\NANR.cs" />
     <Compile Include="NitroSystem\G3D\NSBMA.cs" />
     <Compile Include="NitroSystem\G3D\NSBTA.cs" />
     <Compile Include="NitroSystem\G3D\NSBTP.cs" />
