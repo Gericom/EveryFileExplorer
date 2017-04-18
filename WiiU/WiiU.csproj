@@ -50,7 +50,6 @@
     <Compile Include="NintendoWare\LYT2\FLIM.cs" />
     <Compile Include="NintendoWare\LYT2\FLYT.cs" />
     <Compile Include="NintendoWare\SND\FSAR.cs" />
-    <Compile Include="NintendoWare\SND\FSTM.cs" />
     <Compile Include="NintendoWare\SND\FWAV.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
