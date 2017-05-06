@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,9 +13,9 @@ using LibEveryFileExplorer.IO.Serialization;
 
 namespace WiiU.NintendoWare.LYT2
 {
-	public class FLIM : FileFormat<FLIM.FLIMIdentifier>, IConvertable, IViewable
-	{
-		public FLIM(byte[] Data)
+    public class FLIM : FileFormat<FLIM.FLIMIdentifier>, IConvertable,  IViewable, IWriteable//, IFileCreatable
+    {
+        public FLIM(byte[] Data)
 		{
 			EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
 			er.BaseStream.Position = Data.Length - 0x28;
@@ -43,7 +43,24 @@ namespace WiiU.NintendoWare.LYT2
 	        	return "Cafe Layout Images (*.bflim)|*.bflim";
 		}
 
-		public string GetConversionFileFilters()
+        public byte[] Write()
+        {
+            MemoryStream m = new MemoryStream();
+            EndianBinaryWriter er = new EndianBinaryWriter(m, Endianness.LittleEndian);
+            er.Write(Data, 0, Data.Length);
+            Header.Write(er);
+            Image.Write(er);
+            er.Write(DataLength);
+            long curpos = er.BaseStream.Position;
+            er.BaseStream.Position = Data.Length + 0xC;
+            er.Write((uint)curpos);
+            er.BaseStream.Position = curpos;
+            byte[] result = m.ToArray();
+            er.Close();
+            return result;
+        }
+
+        public string GetConversionFileFilters()
 		{
 			return "Portable Network Graphics (*.png)|*.png";
 		}
@@ -69,7 +86,7 @@ namespace WiiU.NintendoWare.LYT2
 			{
 				er.ReadObject(this);
 			}
-			/*public void Write(EndianBinaryWriter er)
+			public void Write(EndianBinaryWriter er)
 			{
 				er.Write(Signature, Encoding.ASCII, false);
 				er.Write(Endianness);
@@ -77,7 +94,7 @@ namespace WiiU.NintendoWare.LYT2
 				er.Write(Version);
 				er.Write((uint)0);
 				er.Write(NrBlocks);
-			}*/
+			}
 			[BinaryStringSignature("FLIM")]
 			[BinaryFixedSize(4)]
 			public String Signature;
@@ -96,15 +113,15 @@ namespace WiiU.NintendoWare.LYT2
 			{
 				er.ReadObject(this);
 			}
-			/*public void Write(EndianBinaryWriter er)
+			public void Write(EndianBinaryWriter er)
 			{
 				er.Write(Signature, Encoding.ASCII, false);
 				er.Write(SectionSize);
 				er.Write(Width);
 				er.Write(Height);
 				er.Write(Format);
-				er.Write(DataLength);
-			}*/
+				//er.Write(DataLength);
+			}
 			[BinaryStringSignature("imag")]
 			[BinaryFixedSize(4)]
 			public String Signature;
@@ -115,8 +132,8 @@ namespace WiiU.NintendoWare.LYT2
 			public Byte Format;
 			public Byte Unknown;
 
-			//Tempoarly use 3ds stuff!
-			/*public _3DS.GPU.Textures.ImageFormat GetGPUTextureFormat()
+            //Tempoarly use 3ds stuff!
+            public _3DS.GPU.Textures.ImageFormat GetGPUTextureFormat()
 			{
 				switch (Format)
 				{
@@ -135,10 +152,10 @@ namespace WiiU.NintendoWare.LYT2
 					case 0x12: return _3DS.GPU.Textures.ImageFormat.L4;
 					case 0x13: return _3DS.GPU.Textures.ImageFormat.A4;
 					//Wii U Formats:
-					case 0x17: return WiiU.GPU.Textures.ImageFormat.ETC1A4;
+					//case 0x17: return WiiU.GPU.Textures.ImageFormat.ETC1A4;
 				}
 				throw new Exception("Unknown Image Format!");
-			}*/
+			}
 		}
 		public UInt32 DataLength;
 
