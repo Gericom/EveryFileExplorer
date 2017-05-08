@@ -75,9 +75,23 @@ namespace WiiU.NintendoWare.LYT2
 					return true;
 			}
 			return false;
-		}
+        }
 
-		public byte[] Data;
+        /*public bool CreateFromFile()
+        {
+            System.Windows.Forms.OpenFileDialog f = new System.Windows.Forms.OpenFileDialog();
+            f.Filter = "PNG Files (*.png)|*.png";
+            if (f.ShowDialog() == System.Windows.Forms.DialogResult.OK
+                && f.FileName.Length > 0)
+            {
+				Bitmap b = new Bitmap(new MemoryStream(File.ReadAllBytes(f.FileName)));
+
+				return true;
+			}
+			return false;
+		}*/
+
+        public byte[] Data;
 
 		public FLIMHeader Header;
 		public class FLIMHeader
