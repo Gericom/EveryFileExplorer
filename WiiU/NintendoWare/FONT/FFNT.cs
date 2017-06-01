@@ -4,12 +4,18 @@ using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace WiiU.NintendoWare.LYT2
 {
-	public class FFNT : FileFormat<FFNT.FFNTIdentifier>
-	{
-		public class FFNTIdentifier : FileFormatIdentifier
+	public class FFNT : FileFormat<FFNT.FFNTIdentifier>, IViewable
+    {
+        public Form GetDialog()
+        {
+            return new Form();
+        }
+
+        public class FFNTIdentifier : FileFormatIdentifier
 		{
 			public override string GetCategory()
 			{
