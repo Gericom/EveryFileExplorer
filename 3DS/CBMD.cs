@@ -4,11 +4,17 @@ using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace _3DS
 {
-    public class CBMD:FileFormat<CBMD.CBMDIdentifier>
+    public class CBMD:FileFormat<CBMD.CBMDIdentifier>, IViewable
     {
+        public Form GetDialog()
+        {
+            return new Form();
+        }
+
         public class CBMDIdentifier:FileFormatIdentifier
         {
              public override string GetCategory()
