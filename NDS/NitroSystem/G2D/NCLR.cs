@@ -4,14 +4,20 @@ using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace NDS.NitroSystem.G2D
 {
-	public class NCLR:FileFormat<NCLR.NCLRIdentifier>
-	{
-		public class NCLRIdentifier:FileFormatIdentifier
+	public class NCLR:FileFormat<NCLR.NCLRIdentifier>, IViewable
+    {
+        public Form GetDialog()
+        {
+            return new Form();
+        }
+
+        public class NCLRIdentifier:FileFormatIdentifier
 		{
-			public override string GetCategory()
+            public override string GetCategory()
 			{
 				return Category_Palettes;
 			}
