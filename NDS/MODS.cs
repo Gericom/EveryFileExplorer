@@ -4,12 +4,18 @@ using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace NDS
 {
-	public class MODS:FileFormat<MODS.MODSIdentifier>
-	{
-		public class MODSIdentifier : FileFormatIdentifier
+	public class MODS:FileFormat<MODS.MODSIdentifier>, IViewable
+    {
+        public Form GetDialog()
+        {
+            return new Form();
+        }
+
+        public class MODSIdentifier : FileFormatIdentifier
 		{
 			public override string GetCategory()
 			{
