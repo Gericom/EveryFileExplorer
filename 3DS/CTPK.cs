@@ -4,11 +4,17 @@ using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace _3DS
 {
-    public class CTPK:FileFormat<CTPK.CTPKIdentifier>
+    public class CTPK:FileFormat<CTPK.CTPKIdentifier>, IViewable
     {
+        public Form GetDialog()
+        {
+            return new Form();
+        }
+
         public class CTPKIdentifier : FileFormatIdentifier
         {
              public override string GetCategory()
