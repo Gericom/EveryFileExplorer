@@ -4,12 +4,18 @@ using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace NDS
 {
-	public class BMG:FileFormat<BMG.BMGIdentifier>
-	{
-		public class BMGIdentifier : FileFormatIdentifier
+	public class BMG:FileFormat<BMG.BMGIdentifier>, IViewable
+    {
+        public Form GetDialog()
+        {
+            return new Form();
+        }
+
+        public class BMGIdentifier : FileFormatIdentifier
 		{
 			public override string GetCategory()
 			{
@@ -18,12 +24,12 @@ namespace NDS
 
 			public override string GetFileDescription()
 			{
-				return "Text Strings (BMG)";
+				return "Binary Message Strings (BMG)";
 			}
 
 			public override string GetFileFilter()
 			{
-				return "Text Strings (*.bmg)|*.bmg";
+				return "Binary Message Strings (*.bmg)|*.bmg";
 			}
 
 			public override Bitmap GetIcon()
