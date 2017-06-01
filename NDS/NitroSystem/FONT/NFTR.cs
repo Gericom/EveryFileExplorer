@@ -4,12 +4,18 @@ using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace NDS.NitroSystem.FONT
 {
-	public class NFTR:FileFormat<NFTR.NFTRIdentifier>
-	{
-		public class NFTRIdentifier : FileFormatIdentifier
+	public class NFTR:FileFormat<NFTR.NFTRIdentifier>, IViewable
+    {
+        public Form GetDialog()
+        {
+            return new Form();
+        }
+
+        public class NFTRIdentifier : FileFormatIdentifier
 		{
 			public override string GetCategory()
 			{
