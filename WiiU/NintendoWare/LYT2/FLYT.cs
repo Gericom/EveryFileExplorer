@@ -4,14 +4,20 @@ using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace WiiU.NintendoWare.LYT2
 {
-	public class FLYT : FileFormat<FLYT.FLYTIdentifier>
-	{
-		public class FLYTIdentifier : FileFormatIdentifier
+	public class FLYT : FileFormat<FLYT.FLYTIdentifier>, IViewable
+    {
+        public Form GetDialog()
+        {
+            return new Form();
+        }
+
+        public class FLYTIdentifier : FileFormatIdentifier
 		{
-			public override string GetCategory()
+            public override string GetCategory()
 			{
 				return Category_Layouts;
 			}
