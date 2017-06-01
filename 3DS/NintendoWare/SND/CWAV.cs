@@ -4,12 +4,23 @@ using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
+using System.IO;
+using LibEveryFileExplorer.SND;
+using CommonFiles;
+using LibEveryFileExplorer.IO;
+using _3DS.UI;
+using System.Windows.Forms;
 
 namespace _3DS.NintendoWare.SND
 {
-	public class CWAV:FileFormat<CWAV.CWAVIdentifier>
-	{
-		public class CWAVIdentifier : FileFormatIdentifier
+    public class CWAV : FileFormat<CWAV.CWAVIdentifier>, IViewable
+    {
+        public Form GetDialog()
+        {
+            return new Form();
+        }
+
+        public class CWAVIdentifier : FileFormatIdentifier
 		{
 			public override string GetCategory()
 			{
