@@ -1,15 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace _3DS
 {
-	public class DVLB : FileFormat<DVLB.DVLBIdentifier>
-	{
-		public class DVLBIdentifier : FileFormatIdentifier
+	public class DVLB : FileFormat<DVLB.DVLBIdentifier>, IViewable
+    {
+        public Form GetDialog()
+        {
+            return new Form();
+        }
+
+        public class DVLBIdentifier : FileFormatIdentifier
 		{
 			public override string GetCategory()
 			{
