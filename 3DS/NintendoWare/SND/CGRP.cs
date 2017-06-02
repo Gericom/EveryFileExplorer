@@ -24,7 +24,7 @@ namespace _3DS.NintendoWare.SND
                     er.BaseStream.Position = v.Offset;
                     switch (v.Id)
                     {
-                        //case 0x2001: Infos = new INFO(er); break;
+
                     }
                 }
             }
@@ -48,7 +48,7 @@ namespace _3DS.NintendoWare.SND
                 Endianness = er.ReadUInt16();
                 HeaderSize = er.ReadUInt16();
                 Version = er.ReadUInt32();
-                Unknown = er.ReadUInt32();//bigger than the filesize
+                Unknown = er.ReadUInt32();
                 NrSections = er.ReadUInt32();
                 Sections = new SectionInfo[NrSections];
                 for (int i = 0; i < NrSections; i++) Sections[i] = new SectionInfo(er);
@@ -76,7 +76,7 @@ namespace _3DS.NintendoWare.SND
                     er.Write(Offset);
                     er.Write(Size);
                 }
-                public UInt32 Id;//0x4000 = INFO, 0x4001 = SEEK, 0x4002 = DATA
+                public UInt32 Id;
                 public UInt32 Offset;
                 public UInt32 Size;
             }
