@@ -5,26 +5,88 @@ using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
 using System.IO;
-using LibEveryFileExplorer.SND;
-using CommonFiles;
 using LibEveryFileExplorer.IO;
-using _3DS.UI;
+using LibEveryFileExplorer.IO.Serialization;
 using System.Windows.Forms;
 
 namespace _3DS.NintendoWare.SND
 {
     public class CGRP : FileFormat<CGRP.CGRPIdentifier>, IViewable
     {
+        public CGRP(byte[] Data)
+        {
+            EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
+            try
+            {
+                Header = new CGRPHeader(er);
+                foreach (var v in Header.Sections)
+                {
+                    er.BaseStream.Position = v.Offset;
+                    switch (v.Id)
+                    {
+                        //case 0x2001: Infos = new INFO(er); break;
+                    }
+                }
+            }
+            finally
+            {
+                er.Close();
+            }
+        }
         public Form GetDialog()
         {
             return new Form();
+        }
+
+        public CGRPHeader Header;
+        public class CGRPHeader
+        {
+            public CGRPHeader(EndianBinaryReaderEx er)
+            {
+                Signature = er.ReadString(Encoding.ASCII, 4);
+                if (Signature != "CGRP") throw new SignatureNotCorrectException(Signature, "CGRP", er.BaseStream.Position - 4);
+                Endianness = er.ReadUInt16();
+                HeaderSize = er.ReadUInt16();
+                Version = er.ReadUInt32();
+                Unknown = er.ReadUInt32();//bigger than the filesize
+                NrSections = er.ReadUInt32();
+                Sections = new SectionInfo[NrSections];
+                for (int i = 0; i < NrSections; i++) Sections[i] = new SectionInfo(er);
+            }
+
+            public String Signature;
+            public UInt16 Endianness;
+            public UInt16 HeaderSize;
+            public UInt32 Version;
+            public UInt32 Unknown;
+            public UInt32 NrSections;
+            public SectionInfo[] Sections;
+            public class SectionInfo
+            {
+                public SectionInfo(uint Id) { this.Id = Id; }
+                public SectionInfo(EndianBinaryReaderEx er)
+                {
+                    Id = er.ReadUInt32();
+                    Offset = er.ReadUInt32();
+                    Size = er.ReadUInt32();
+                }
+                public void Write(EndianBinaryWriter er)
+                {
+                    er.Write(Id);
+                    er.Write(Offset);
+                    er.Write(Size);
+                }
+                public UInt32 Id;//0x4000 = INFO, 0x4001 = SEEK, 0x4002 = DATA
+                public UInt32 Offset;
+                public UInt32 Size;
+            }
         }
 
         public class CGRPIdentifier : FileFormatIdentifier
 		{
 			public override string GetCategory()
 			{
-                return Category_Audio;
+                return Category_Sound;
             }
 
 			public override string GetFileDescription()
