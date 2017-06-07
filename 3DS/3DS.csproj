@@ -77,6 +77,7 @@
     <Compile Include="NintendoWare\LYT1\wnd1.cs" />
     <Compile Include="NintendoWare\SND\CGRP.cs" />
     <Compile Include="NintendoWare\SND\CSAR.cs" />
+    <Compile Include="NintendoWare\SND\CSEQ.cs" />
     <Compile Include="NintendoWare\SND\CSTM.cs" />
     <Compile Include="NintendoWare\LYT1\DARC.cs" />
     <Compile Include="DVLB.cs" />
