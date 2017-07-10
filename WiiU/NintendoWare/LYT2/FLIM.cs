@@ -10,10 +10,11 @@ using System.Windows.Forms;
 using WiiU.UI;
 using System.Drawing.Imaging;
 using LibEveryFileExplorer.IO.Serialization;
+using _3DS.GPU;
 
 namespace WiiU.NintendoWare.LYT2
 {
-    public class FLIM : FileFormat<FLIM.FLIMIdentifier>, IConvertable,  IViewable, IWriteable//, IFileCreatable
+    public class FLIM : FileFormat<FLIM.FLIMIdentifier>, IConvertable,  IViewable, IWriteable, IFileCreatable
     {
         public FLIM(byte[] Data)
 		{
@@ -77,19 +78,23 @@ namespace WiiU.NintendoWare.LYT2
 			return false;
         }
 
-        /*public bool CreateFromFile()
+        public bool CreateFromFile()
         {
             System.Windows.Forms.OpenFileDialog f = new System.Windows.Forms.OpenFileDialog();
             f.Filter = "PNG Files (*.png)|*.png";
             if (f.ShowDialog() == System.Windows.Forms.DialogResult.OK
                 && f.FileName.Length > 0)
             {
-				Bitmap b = new Bitmap(new MemoryStream(File.ReadAllBytes(f.FileName)));
-
-				return true;
-			}
+                Bitmap b = new Bitmap(new MemoryStream(File.ReadAllBytes(f.FileName)));
+                Image.Width = (ushort)b.Width;
+                Image.Height = (ushort)b.Height;
+                Image.Format = 11;
+                Data = Textures.FromBitmap(b, Textures.ImageFormat.ETC1A4);
+                DataLength = (uint)Data.Length;
+                return true;
+            }
 			return false;
-		}*/
+		}
 
         public byte[] Data;
 
