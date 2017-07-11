@@ -49,8 +49,8 @@ namespace WiiU.NintendoWare.LYT2
             MemoryStream m = new MemoryStream();
             EndianBinaryWriter er = new EndianBinaryWriter(m, Endianness.LittleEndian);
             er.Write(Data, 0, Data.Length);
-            //Header.Write(er);
-            //Image.Write(er);
+            Header.Write(er);
+            Image.Write(er);
             er.Write(DataLength);
             long curpos = er.BaseStream.Position;
             er.BaseStream.Position = Data.Length + 0xC;
@@ -105,7 +105,7 @@ namespace WiiU.NintendoWare.LYT2
             {
                 er.ReadObject(this);
             }
-            /*public void Write(EndianBinaryWriter er)
+            public void Write(EndianBinaryWriter er)
 			{
 				er.Write(Signature, Encoding.ASCII, false);
 				er.Write(Endianness);
@@ -113,7 +113,7 @@ namespace WiiU.NintendoWare.LYT2
 				er.Write(Version);
 				er.Write((uint)0);
 				er.Write(NrBlocks);
-			}*/
+			}
             [BinaryStringSignature("FLIM")]
             [BinaryFixedSize(4)]
             public String Signature;
@@ -132,15 +132,15 @@ namespace WiiU.NintendoWare.LYT2
             {
                 er.ReadObject(this);
             }
-            /*public void Write(EndianBinaryWriter er)
+            public void Write(EndianBinaryWriter er)
 			{
 				er.Write(Signature, Encoding.ASCII, false);
 				er.Write(SectionSize);
 				er.Write(Width);
 				er.Write(Height);
 				er.Write(Format);
-				er.Write(DataLength);
-			}*/
+				//er.Write(DataLength);
+			}
             [BinaryStringSignature("imag")]
             [BinaryFixedSize(4)]
             public String Signature;
