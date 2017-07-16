@@ -14,25 +14,16 @@ namespace _3DS
     {
         public CBMD(byte[] Data)
         {
-            EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
+            EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
             try
             {
                 Header = new CBMDHeader(er);
-                foreach (var v in Header.Sections)
-                {
-                    er.BaseStream.Position = v.Offset;
-                    switch (v.Id)
-                    {
-
-                    }
-                }
             }
             finally
             {
                 er.Close();
             }
         }
-
         public Form GetDialog()
         {
             return new Form();
@@ -41,46 +32,28 @@ namespace _3DS
         public CBMDHeader Header;
         public class CBMDHeader
         {
-            public CBMDHeader(EndianBinaryReaderEx er)
+            public CBMDHeader(EndianBinaryReader er)
             {
                 Signature = er.ReadString(Encoding.ASCII, 4);
                 if (Signature != "CBMD") throw new SignatureNotCorrectException(Signature, "CBMD", er.BaseStream.Position - 4);
                 Endianness = er.ReadUInt16();
                 HeaderSize = er.ReadUInt16();
                 Version = er.ReadUInt32();
-                Unknown = er.ReadUInt32();
-                NrSections = er.ReadUInt32();
-                Sections = new SectionInfo[NrSections];
-                for (int i = 0; i < NrSections; i++) Sections[i] = new SectionInfo(er);
+                FileSize = er.ReadUInt32();
+                FileTableOffset = er.ReadUInt32();
+                FileTableLength = er.ReadUInt32();
+                FileDataOffset = er.ReadUInt32();
             }
-
             public String Signature;
             public UInt16 Endianness;
             public UInt16 HeaderSize;
             public UInt32 Version;
-            public UInt32 Unknown;
-            public UInt32 NrSections;
-            public SectionInfo[] Sections;
-            public class SectionInfo
-            {
-                public SectionInfo(uint Id) { this.Id = Id; }
-                public SectionInfo(EndianBinaryReaderEx er)
-                {
-                    Id = er.ReadUInt32();
-                    Offset = er.ReadUInt32();
-                    Size = er.ReadUInt32();
-                }
-                public void Write(EndianBinaryWriter er)
-                {
-                    er.Write(Id);
-                    er.Write(Offset);
-                    er.Write(Size);
-                }
-                public UInt32 Id;
-                public UInt32 Offset;
-                public UInt32 Size;
-            }
+            public UInt32 FileSize;
+            public UInt32 FileTableOffset;
+            public UInt32 FileTableLength;
+            public UInt32 FileDataOffset;
         }
+
 
         public class CBMDIdentifier : FileFormatIdentifier
         {
