@@ -62,7 +62,7 @@ namespace NDS.NitroSystem.SND
 
 			public override string GetFileFilter()
 			{
-				return "Nitro Sound Wave Archive (*.sdat)|*.sdat";
+				return "Nitro Sound Wave Archive (*.swar)|*.swar";
 			}
 
 			public override Bitmap GetIcon()
