@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BCK.cs" />
     <Compile Include="GPU\Textures.cs" />
     <Compile Include="JSystem\BTI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
