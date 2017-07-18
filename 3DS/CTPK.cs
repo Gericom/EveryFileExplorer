@@ -7,23 +7,35 @@ using System.Drawing;
 using System.Windows.Forms;
 using LibEveryFileExplorer.IO;
 using System.IO;
+using LibEveryFileExplorer.Files.SimpleFileSystem;
 
 namespace _3DS
 {
     public class CTPK : FileFormat<CTPK.CTPKIdentifier>, IViewable
     {
-        public CTPK(byte[] Data)
+        public CTPK()
+        {
+          //Header = new CTPKHeader();
+          //FromFileSystem(new SFSDirectory("/", true)
+        }
+            public CTPK(byte[] Data)
         {
             EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
             try
             {
                 Header = new CTPKHeader(er);
+
+            }
+            catch (SignatureNotCorrectException e)
+            {
+                MessageBox.Show(e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 er.Close();
             }
         }
+
         public Form GetDialog()
         {
             return new Form();
