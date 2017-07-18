@@ -60,6 +60,7 @@
     <Compile Include="NitroSystem\G3D\NSBVA .cs" />
     <Compile Include="NitroSystem\SND\SDAT.cs" />
     <Compile Include="NitroSystem\SND\SSEQ.cs" />
+    <Compile Include="NitroSystem\SND\SSEQEvent.cs" />
     <Compile Include="NitroSystem\SND\SWAR.cs" />
     <Compile Include="NitroSystem\SND\SWAV.cs" />
     <Compile Include="Nitro\ARM9.cs" />
