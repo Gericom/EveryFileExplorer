@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -50,17 +50,9 @@
     <Compile Include="rf3Archive.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonCompressors\CommonCompressors.csproj">
-      <Project>{ce7a5169-bb6e-4112-9e18-9836ff94fa4c}</Project>
-      <Name>CommonCompressors</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LibEveryFileExplorer\LibEveryFileExplorer.csproj">
       <Project>{39dbd12f-f7e3-4e9a-97a2-0722a4ba2a26}</Project>
       <Name>LibEveryFileExplorer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NDS\NDS.csproj">
-      <Project>{8bcf0c6c-fd8f-4446-bea1-b8c1be5c3389}</Project>
-      <Name>NDS</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
