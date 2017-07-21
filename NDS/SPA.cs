@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +6,7 @@ using LibEveryFileExplorer.Files;
 using System.Drawing;
 using LibEveryFileExplorer.IO;
 
-/*namespace NDS
+ namespace NDS
 {
     public class SPA:FileFormat<SPA.SPAIdentifier>
     {
@@ -34,10 +34,11 @@ using LibEveryFileExplorer.IO;
 
             public override FormatMatch IsFormat(EFEFile File)
             {
-                if (File.Name.ToLower().EndsWith(".spa")) return FormatMatch.Extension;
+                if (File.Data.Length > 3 && File.Data[0] == 'A' && File.Data[1] == 'P' && File.Data[2] == 'S') return FormatMatch.Content;
                 return FormatMatch.No;
-            }
+			}
 
-        }
-    }
-}*/
+		}
+	}
+}
+
