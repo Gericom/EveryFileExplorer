@@ -67,7 +67,7 @@ namespace NDS.NitroSystem.SND
 
 			public override Bitmap GetIcon()
 			{
-				return null;
+				return Resource.speaker2_box;
 			}
 
 			public override FormatMatch IsFormat(EFEFile File)

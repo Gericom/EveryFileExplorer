@@ -1,16 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
-using System.IO;
-using LibEveryFileExplorer.IO;
-using System.Windows.Forms;
 
 namespace NDS.NitroSystem.SND
 {
-    public class SSEQ : FileFormat<SSEQ.SSEQIdentifier>
+    public class SSAR : FileFormat<SSAR.SSARIdentifier>
     {
-        public class SSEQIdentifier : FileFormatIdentifier
+        public class SSARIdentifier : FileFormatIdentifier
         {
             public override string GetCategory()
             {
@@ -19,25 +18,24 @@ namespace NDS.NitroSystem.SND
 
             public override string GetFileDescription()
             {
-                return "Nitro Sound Sequence (SSEQ)";
+                return "Nitro Sound Archive (SSAR)";
             }
 
             public override string GetFileFilter()
             {
-                return "Nitro Sound Sequence (*.sseq)|*.sseq";
+                return "Nitro Sound Archive (*.ssar)|*.ssar";
             }
 
             public override Bitmap GetIcon()
             {
-                return Resource.note;
+                return Resource.note_box;
             }
 
             public override FormatMatch IsFormat(EFEFile File)
             {
-                if (File.Data.Length > 4 && File.Data[0] == 'S' && File.Data[1] == 'S' && File.Data[2] == 'E' && File.Data[3] == 'Q') return FormatMatch.Content;
+                if (File.Data.Length > 4 && File.Data[0] == 'S' && File.Data[1] == 'S' && File.Data[2] == 'A' && File.Data[3] == 'R') return FormatMatch.Content;
                 return FormatMatch.No;
             }
-
         }
     }
 }
