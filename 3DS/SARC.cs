@@ -278,7 +278,7 @@ namespace _3DS
             {
             public override string GetCategory()
             {
-            return "SARC Archives";
+            return Category_Archives;
             }
 			
 			public override string GetFileDescription()
