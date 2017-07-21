@@ -70,7 +70,7 @@ namespace _3DS
         {
              public override string GetCategory()
             {
-                return "CTPK Archives";
+                return Category_Archives;
             }
 
                 public override string GetFileDescription()
