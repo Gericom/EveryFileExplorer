@@ -337,7 +337,7 @@ namespace NDS.NitroSystem.FND
             {
             public override string GetCategory()
             {
-            return "NARC Archives";
+            return Category_Archives;
             }
 
 			public override string GetFileDescription()
