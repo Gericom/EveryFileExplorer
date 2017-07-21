@@ -8,13 +8,8 @@ using System.Windows.Forms;
 
 namespace WiiU.NintendoWare.SND
 {
-    public class FSAR : FileFormat<FSAR.FSARIdentifier>, IViewable
+    public class FSAR : FileFormat<FSAR.FSARIdentifier>//, IViewable
     {
-        public Form GetDialog()
-        {
-            return new Form();
-        }
-
         public class FSARIdentifier : FileFormatIdentifier
         {
 
