@@ -124,7 +124,7 @@ namespace _3DS.NintendoWare.LYT1
             {
             public override string GetCategory()
             {
-            return "Darc Archives";
+            return Category_Archives;
             }
 
 			public override string GetFileDescription()
