@@ -58,9 +58,16 @@
     <Compile Include="NitroSystem\G3D\NSBTA.cs" />
     <Compile Include="NitroSystem\G3D\NSBTP.cs" />
     <Compile Include="NitroSystem\G3D\NSBVA .cs" />
+    <Compile Include="NitroSystem\SND\SBNK.cs" />
     <Compile Include="NitroSystem\SND\SDAT.cs" />
+    <Compile Include="NitroSystem\SND\SSAR.cs" />
     <Compile Include="NitroSystem\SND\SSEQ.cs" />
+    <Compile Include="NitroSystem\SND\SSEQDecoder.cs" />
+    <Compile Include="NitroSystem\SND\SSEQEncoder.cs" />
     <Compile Include="NitroSystem\SND\SSEQEvent.cs" />
+    <Compile Include="NitroSystem\SND\SSEQMidiResult.cs" />
+    <Compile Include="NitroSystem\SND\SSEQTrack.cs" />
+    <Compile Include="NitroSystem\SND\STRM.cs" />
     <Compile Include="NitroSystem\SND\SWAR.cs" />
     <Compile Include="NitroSystem\SND\SWAV.cs" />
     <Compile Include="Nitro\ARM9.cs" />
@@ -202,8 +209,14 @@
   <ItemGroup>
     <Content Include="Resources\color_swatch1.png" />
     <Content Include="Resources\disc_music.png" />
+    <Content Include="Resources\guitar.png" />
     <Content Include="Resources\map.png" />
+    <Content Include="Resources\note.png" />
+    <Content Include="Resources\note_box.png" />
     <Content Include="Resources\script_text.png" />
+    <Content Include="Resources\speaker.png" />
+    <Content Include="Resources\speaker2.png" />
+    <Content Include="Resources\speaker2_box.png" />
     <Content Include="Resources\stack.png" />
     <Content Include="Resources\sunset_vertical.png" />
     <Content Include="Resources\traffic_light_anim.png" />

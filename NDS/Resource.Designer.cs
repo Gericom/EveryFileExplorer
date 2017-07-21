@@ -123,6 +123,16 @@ namespace NDS {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap guitar {
+            get {
+                object obj = ResourceManager.GetObject("guitar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap image {
             get {
                 object obj = ResourceManager.GetObject("image", resourceCulture);
@@ -223,6 +233,26 @@ namespace NDS {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap note {
+            get {
+                object obj = ResourceManager.GetObject("note", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap note_box {
+            get {
+                object obj = ResourceManager.GetObject("note_box", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap point {
             get {
                 object obj = ResourceManager.GetObject("point", resourceCulture);
@@ -236,6 +266,36 @@ namespace NDS {
         internal static System.Drawing.Bitmap script_text {
             get {
                 object obj = ResourceManager.GetObject("script_text", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap speaker {
+            get {
+                object obj = ResourceManager.GetObject("speaker", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap speaker2 {
+            get {
+                object obj = ResourceManager.GetObject("speaker2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap speaker2_box {
+            get {
+                object obj = ResourceManager.GetObject("speaker2_box", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
