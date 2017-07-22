@@ -53,14 +53,6 @@ namespace _3DS
             public UInt32 FileTableOffset;
             public UInt32 FileTableLength;
             public UInt32 FileDataOffset;
-
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x4)]
-            public char[] Magic;
-            public uint Padding0;
-            public uint CompressedCGFXOffset;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x78)]
-            public byte[] Padding1;
-            public uint CBMDLength;
         }
 
         public class CBMDIdentifier : FileFormatIdentifier
@@ -77,7 +69,7 @@ namespace _3DS
 
             public override string GetFileFilter()
             {
-                return "CTR Banner Model Data (*.cbmd, *.bnr)|*.cbmd;*.bnr";
+                return "CTR Banner Model Data (*.cbmd)|*.cbmd";
             }
 
             public override Bitmap GetIcon()
