@@ -34,7 +34,7 @@ using LibEveryFileExplorer.IO;
 
             public override FormatMatch IsFormat(EFEFile File)
             {
-                if (File.Data.Length > 3 && File.Data[0] == 'A' && File.Data[1] == 'P' && File.Data[2] == 'S') return FormatMatch.Content;
+                if (File.Data.Length > 3 && File.Data[1] == 'A' && File.Data[2] == 'P' && File.Data[3] == 'S') return FormatMatch.Content;
                 return FormatMatch.No;
 			}
 
