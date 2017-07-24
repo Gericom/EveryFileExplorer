@@ -479,5 +479,23 @@ namespace EveryFileExplorer
 		{
 			Process.Start(new ProcessStartInfo("cmd") { WorkingDirectory = Path.GetDirectoryName(Application.ExecutablePath) });
 		}
-	}
+
+        private void menuItem10_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog opn = new OpenFileDialog();
+                opn.Filter = "Supported file|*.bcstm;*.bcwav;*.brstm";
+                opn.Title = "Open file";
+                opn.Multiselect = true;
+                if (opn.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+
+                }
+
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message, "Error"); }
+        }
+
+    }
 }
