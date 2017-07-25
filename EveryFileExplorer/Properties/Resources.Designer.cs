@@ -83,6 +83,36 @@ namespace EveryFileExplorer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] libg7221_decode {
+            get {
+                object obj = ResourceManager.GetObject("libg7221_decode", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] libmpg123_0 {
+            get {
+                object obj = ResourceManager.GetObject("libmpg123_0", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] libvorbis {
+            get {
+                object obj = ResourceManager.GetObject("libvorbis", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] vgmstream {
             get {
                 object obj = ResourceManager.GetObject("vgmstream", resourceCulture);

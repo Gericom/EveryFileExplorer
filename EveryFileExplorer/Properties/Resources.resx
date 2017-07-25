@@ -124,6 +124,15 @@
   <data name="folder_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\folder-open.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="libg7221_decode" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\libg7221_decode.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="libmpg123_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\libmpg123-0.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="libvorbis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\libvorbis.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="vgmstream" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\vgmstream.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
