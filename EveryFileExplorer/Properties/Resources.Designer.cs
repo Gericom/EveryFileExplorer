@@ -61,6 +61,36 @@ namespace EveryFileExplorer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] CommandLineUtilities {
+            get {
+                object obj = ResourceManager.GetObject("CommandLineUtilities", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] ctr_crr {
+            get {
+                object obj = ResourceManager.GetObject("ctr_crr", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] ctr_WaveConverter32 {
+            get {
+                object obj = ResourceManager.GetObject("ctr_WaveConverter32", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap document {
@@ -106,6 +136,76 @@ namespace EveryFileExplorer.Properties {
         internal static byte[] libvorbis {
             get {
                 object obj = ResourceManager.GetObject("libvorbis", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] LoadRunLibrary {
+            get {
+                object obj = ResourceManager.GetObject("LoadRunLibrary", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] LoadRunRunner {
+            get {
+                object obj = ResourceManager.GetObject("LoadRunRunner", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Nyaml {
+            get {
+                object obj = ResourceManager.GetObject("Nyaml", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] SoundFoundation {
+            get {
+                object obj = ResourceManager.GetObject("SoundFoundation", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] SoundFoundation_LegacyFormats {
+            get {
+                object obj = ResourceManager.GetObject("SoundFoundation_LegacyFormats", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] SoundFoundationCtr {
+            get {
+                object obj = ResourceManager.GetObject("SoundFoundationCtr", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] ToolDevelopmentKit {
+            get {
+                object obj = ResourceManager.GetObject("ToolDevelopmentKit", resourceCulture);
                 return ((byte[])(obj));
             }
         }
