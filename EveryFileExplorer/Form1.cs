@@ -517,7 +517,7 @@ namespace EveryFileExplorer
             {
                 if (!File.Exists("vgmstream.exe")) File.WriteAllBytes("vgmstream.exe", Properties.Resources.vgmstream);
                 SaveFileDialog sv = new SaveFileDialog();
-                sv.Filter = "WAV file|*.wav;
+                sv.Filter = "Wave File (*.wav)|*.wav";
                         sv.Title = "Save file";
                 if (sv.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
