@@ -98,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Propeller_Box_Artwork_-_Super_Mario_3D_World.ico" />
+    <None Include="Resources\libvorbis.dll" />
+    <None Include="Resources\libmpg123-0.dll" />
+    <None Include="Resources\libg7221_decode.dll" />
     <None Include="Resources\vgmstream.exe" />
     <None Include="Resources\document.png" />
     <None Include="Resources\folder-open.png" />

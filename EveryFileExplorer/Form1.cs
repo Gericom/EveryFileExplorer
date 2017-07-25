@@ -483,10 +483,13 @@ namespace EveryFileExplorer
         private void menuItem10_Click(object sender, EventArgs e)
         {
             if (!File.Exists("vgmstream.exe")) File.WriteAllBytes("vgmstream.exe", Properties.Resources.vgmstream);
+            if (!File.Exists("libg7221_decode.dll")) File.WriteAllBytes("libg7221_decode.dll", Properties.Resources.libg7221_decode);
+            if (!File.Exists("libmpg123-0.dll")) File.WriteAllBytes("libmpg123-0.dll", Properties.Resources.libmpg123_0);
+            if (!File.Exists("libvorbis.dll")) File.WriteAllBytes("libvorbis.dll", Properties.Resources.libvorbis);
             try
             {
                 OpenFileDialog opn = new OpenFileDialog();
-                opn.Filter = "CTR Stream (*.bcstm)|*.bcstm";
+                opn.Filter = "BCSTM/BCWAV/BRSTM (*.bcstm;*.bcwav;*.brstm)|*.bcstm;*.bcwav;*.brstm";
                 opn.Title = "Open file";
                 opn.Multiselect = true;
                 if (opn.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -516,9 +519,12 @@ namespace EveryFileExplorer
             void AudioTOWav(string input)
             {
                 if (!File.Exists("vgmstream.exe")) File.WriteAllBytes("vgmstream.exe", Properties.Resources.vgmstream);
+                if (!File.Exists("libg7221_decode.dll")) File.WriteAllBytes("libg7221_decode.dll", Properties.Resources.libg7221_decode);
+                if (!File.Exists("libmpg123-0.dll")) File.WriteAllBytes("libmpg123-0.dll", Properties.Resources.libmpg123_0);
+                if (!File.Exists("libvorbis.dll")) File.WriteAllBytes("libvorbis.dll", Properties.Resources.libvorbis);
                 SaveFileDialog sv = new SaveFileDialog();
                 sv.Filter = "Wave File (*.wav)|*.wav";
-                        sv.Title = "Save file";
+                sv.Title = "Save file";
                 if (sv.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     Process prc = new Process();

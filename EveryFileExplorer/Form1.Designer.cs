@@ -309,7 +309,7 @@
             // menuItem10
             // 
             this.menuItem10.Index = 0;
-            this.menuItem10.Text = "BCSTM Batch Convert WAV";
+            this.menuItem10.Text = "BCSTM/BCWAV/BRSTM Convert WAV(Batch Convert Support)";
             this.menuItem10.Click += new System.EventHandler(this.menuItem10_Click);
             // 
             // openFileDialog1
