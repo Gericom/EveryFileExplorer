@@ -482,20 +482,55 @@ namespace EveryFileExplorer
 
         private void menuItem10_Click(object sender, EventArgs e)
         {
+            if (!File.Exists("vgmstream.exe")) File.WriteAllBytes("vgmstream.exe", Properties.Resources.vgmstream);
             try
             {
                 OpenFileDialog opn = new OpenFileDialog();
-                opn.Filter = "Supported file|*.bcstm;*.bcwav;*.brstm";
+                opn.Filter = "CTR Stream (*.bcstm)|*.bcstm";
                 opn.Title = "Open file";
                 opn.Multiselect = true;
                 if (opn.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-
+                    if (opn.FileNames.Length == 1)
+                    {
+                        AudioTOWav(opn.FileName);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < opn.FileNames.Length; i++)
+                        {
+                            Process prc = new Process();
+                            prc.StartInfo.FileName = "vgmstream.exe";
+                            prc.StartInfo.Arguments = "-o \"" + opn.FileNames[i] + ".wav\" " + "\"" + opn.FileNames[i] + "\"";
+                            prc.StartInfo.CreateNoWindow = true;
+                            prc.StartInfo.UseShellExecute = false;
+                            prc.Start();
+                            prc.WaitForExit();
+                        }
+                        MessageBox.Show("Batch Conversion Completed");
+                    }
                 }
-
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "Error"); }
-        }
 
+            void AudioTOWav(string input)
+            {
+                if (!File.Exists("vgmstream.exe")) File.WriteAllBytes("vgmstream.exe", Properties.Resources.vgmstream);
+                SaveFileDialog sv = new SaveFileDialog();
+                sv.Filter = "WAV file|*.wav;
+                        sv.Title = "Save file";
+                if (sv.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    Process prc = new Process();
+                    prc.StartInfo.FileName = "vgmstream.exe";
+                    prc.StartInfo.Arguments = "-o \"" + sv.FileName + "\" " + "\"" + input + "\"";
+                    prc.StartInfo.CreateNoWindow = true;
+                    prc.StartInfo.UseShellExecute = false;
+                    prc.Start();
+                    prc.WaitForExit();
+                    if (File.Exists(sv.FileName)) MessageBox.Show("Conversion Completed");
+                }
+            }
+        }
     }
 }

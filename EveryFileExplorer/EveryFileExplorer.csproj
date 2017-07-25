@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Propeller_Box_Artwork_-_Super_Mario_3D_World.ico" />
+    <None Include="Resources\vgmstream.exe" />
     <None Include="Resources\document.png" />
     <None Include="Resources\folder-open.png" />
   </ItemGroup>

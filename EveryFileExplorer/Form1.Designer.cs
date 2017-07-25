@@ -61,6 +61,8 @@
             this.menuCascade = new System.Windows.Forms.MenuItem();
             this.menuHelp = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.menuItem10 = new System.Windows.Forms.MenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -72,8 +74,6 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.menuItem10 = new System.Windows.Forms.MenuItem();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -299,6 +299,19 @@
             this.menuItem4.Index = 0;
             this.menuItem4.Text = "About...";
             // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 6;
+            this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem10});
+            this.menuItem1.Text = "Convert";
+            // 
+            // menuItem10
+            // 
+            this.menuItem10.Index = 0;
+            this.menuItem10.Text = "BCSTM Batch Convert WAV";
+            this.menuItem10.Click += new System.EventHandler(this.menuItem10_Click);
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -398,19 +411,6 @@
             this.splitter1.TabIndex = 9;
             this.splitter1.TabStop = false;
             this.splitter1.Visible = false;
-            // 
-            // menuItem1
-            // 
-            this.menuItem1.Index = 6;
-            this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem10});
-            this.menuItem1.Text = "Convert";
-            // 
-            // menuItem10
-            // 
-            this.menuItem10.Index = 0;
-            this.menuItem10.Text = "BCSTM/BRSTM/BCWAV Convert WAV";
-            this.menuItem10.Click += new System.EventHandler(this.menuItem10_Click);
             // 
             // Form1
             // 
