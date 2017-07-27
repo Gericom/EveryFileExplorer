@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -98,10 +98,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Propeller_Box_Artwork_-_Super_Mario_3D_World.ico" />
-    <None Include="Resources\libvorbis.dll" />
-    <None Include="Resources\libmpg123-0.dll" />
-    <None Include="Resources\libg7221_decode.dll" />
-    <None Include="Resources\vgmstream.exe" />
     <None Include="Resources\document.png" />
     <None Include="Resources\folder-open.png" />
   </ItemGroup>
