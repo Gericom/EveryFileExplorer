@@ -5,15 +5,55 @@ using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
+using LibEveryFileExplorer.IO;
 
 namespace NDS
 {
 	public class BMG:FileFormat<BMG.BMGIdentifier>, IViewable
     {
+        public BMG(byte[] Data)
+        {
+            EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
+            try
+            {
+                Header = new BMGHeader(er);
+                //INF1 = INF1Section(er);
+                //DAT1 = DAT1Section(er);
+            }
+            finally
+            {
+                er.Close();
+            }
+        }
+
         public Form GetDialog()
         {
             return new Form();
         }
+
+        public BMGHeader Header;
+        public class BMGHeader
+        {
+            public BMGHeader(EndianBinaryReader er)
+            {
+                Signature = er.ReadString(Encoding.ASCII, 8);
+                if (Signature != "MESGbmg1") throw new SignatureNotCorrectException(Signature, "MESGbmg1", er.BaseStream.Position - 8);
+                Version = er.ReadUInt16();
+                NodeNameTableNodeOffset = er.ReadUInt32();
+                StringValueTableNodeOffset = er.ReadUInt32();
+                RootNodeOffset = er.ReadUInt32();
+            }
+            public String Signature;
+            public UInt16 Version;
+            public UInt32 NodeNameTableNodeOffset;
+            public UInt32 StringValueTableNodeOffset;
+            public UInt32 RootNodeOffset;
+        }
+
+        //public class INF1Section INF1Section;
+            //{
+
 
         public class BMGIdentifier : FileFormatIdentifier
 		{
