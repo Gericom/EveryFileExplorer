@@ -16,6 +16,13 @@ namespace WiiU.NintendoWare.LYT2
 {
     public class FLIM : FileFormat<FLIM.FLIMIdentifier>, IConvertable,  IViewable, IWriteable, IFileCreatable
     {
+        public FLIM()
+        {
+            Data = new byte[0];
+            //Header = new FLIMHeader();
+            //Image = new imag();
+        }
+
         public FLIM(byte[] Data)
 		{
 			EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
