@@ -14,7 +14,7 @@ using _3DS.GPU;
 
 namespace WiiU.NintendoWare.LYT2
 {
-    public class FLIM : FileFormat<FLIM.FLIMIdentifier>, IConvertable,  IViewable, IWriteable, IFileCreatable
+    public class FLIM : FileFormat<FLIM.FLIMIdentifier>, IConvertable, IViewable, IWriteable, IFileCreatable
     {
         public FLIM()
         {
@@ -24,32 +24,32 @@ namespace WiiU.NintendoWare.LYT2
         }
 
         public FLIM(byte[] Data)
-		{
-			EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
-			er.BaseStream.Position = Data.Length - 0x28;
-			try
-			{
-				Header = new FLIMHeader(er);
-				Image = new imag(er);
-				DataLength = er.ReadUInt32();
-				er.BaseStream.Position = 0;
-				this.Data = er.ReadBytes((int)DataLength);
-			}
-			finally
-			{
-				er.Close();
-			}
-		}
+        {
+            EndianBinaryReaderEx er = new EndianBinaryReaderEx(new MemoryStream(Data), Endianness.LittleEndian);
+            er.BaseStream.Position = Data.Length - 0x28;
+            try
+            {
+                Header = new FLIMHeader(er);
+                Image = new imag(er);
+                DataLength = er.ReadUInt32();
+                er.BaseStream.Position = 0;
+                this.Data = er.ReadBytes((int)DataLength);
+            }
+            finally
+            {
+                er.Close();
+            }
+        }
 
-		public Form GetDialog()
-		{
-			return new FLIMViewer(this);
-		}
+        public Form GetDialog()
+        {
+            return new FLIMViewer(this);
+        }
 
-		public string GetSaveDefaultFileFilter()
-		{
-	        	return "Cafe Layout Images (*.bflim)|*.bflim";
-		}
+        public string GetSaveDefaultFileFilter()
+        {
+            return "Cafe Layout Images (*.bflim)|*.bflim";
+        }
 
         public byte[] Write()
         {
@@ -69,20 +69,20 @@ namespace WiiU.NintendoWare.LYT2
         }
 
         public string GetConversionFileFilters()
-		{
-			return "Portable Network Graphics (*.png)|*.png";
-		}
+        {
+            return "Portable Network Graphics (*.png)|*.png";
+        }
 
-		public bool Convert(int FilterIndex, string Path)
-		{
-			switch (FilterIndex)
-			{
-				case 0:
-					File.Create(Path).Close();
-					ToBitmap().Save(Path, ImageFormat.Png);
-					return true;
-			}
-			return false;
+        public bool Convert(int FilterIndex, string Path)
+        {
+            switch (FilterIndex)
+            {
+                case 0:
+                    File.Create(Path).Close();
+                    ToBitmap().Save(Path, ImageFormat.Png);
+                    return true;
+            }
+            return false;
         }
 
         public bool CreateFromFile()
@@ -100,8 +100,8 @@ namespace WiiU.NintendoWare.LYT2
                 DataLength = (uint)Data.Length;
                 return true;
             }
-			return false;
-		}
+            return false;
+        }
 
         public byte[] Data;
 
@@ -113,14 +113,14 @@ namespace WiiU.NintendoWare.LYT2
                 er.ReadObject(this);
             }
             public void Write(EndianBinaryWriter er)
-			{
-				er.Write(Signature, Encoding.ASCII, false);
-				er.Write(Endianness);
-				er.Write(HeaderSize);
-				er.Write(Version);
-				er.Write((uint)0);
-				er.Write(NrBlocks);
-			}
+            {
+                er.Write(Signature, Encoding.ASCII, false);
+                er.Write(Endianness);
+                er.Write(HeaderSize);
+                er.Write(Version);
+                er.Write((uint)0);
+                er.Write(NrBlocks);
+            }
             [BinaryStringSignature("FLIM")]
             [BinaryFixedSize(4)]
             public String Signature;
@@ -135,19 +135,24 @@ namespace WiiU.NintendoWare.LYT2
         public imag Image;
         public class imag
         {
+            public imag()
+            {
+                Signature = "imag";
+                SectionSize = 0x10;
+            }
             public imag(EndianBinaryReaderEx er)
             {
                 er.ReadObject(this);
             }
             public void Write(EndianBinaryWriter er)
-			{
-				er.Write(Signature, Encoding.ASCII, false);
-				er.Write(SectionSize);
-				er.Write(Width);
-				er.Write(Height);
-				er.Write(Format);
-				//er.Write(DataLength);
-			}
+            {
+                er.Write(Signature, Encoding.ASCII, false);
+                er.Write(SectionSize);
+                er.Write(Width);
+                er.Write(Height);
+                er.Write(Format);
+                //er.Write(DataLength);
+            }
             [BinaryStringSignature("imag")]
             [BinaryFixedSize(4)]
             public String Signature;
