@@ -19,8 +19,8 @@ namespace WiiU.NintendoWare.LYT2
         public FLIM()
         {
             Data = new byte[0];
-            //Header = new FLIMHeader();
-            //Image = new imag();
+            Header = new FLIMHeader();
+            Image = new imag();
         }
 
         public FLIM(byte[] Data)
@@ -108,6 +108,15 @@ namespace WiiU.NintendoWare.LYT2
         public FLIMHeader Header;
         public class FLIMHeader
         {
+            public FLIMHeader()
+            {
+                Signature = "FLIM";
+                Endianness = 0xFEFF;
+                HeaderSize = 0x14;
+                Version = 0x02020000;
+                NrBlocks = 1;
+            }
+
             public FLIMHeader(EndianBinaryReaderEx er)
             {
                 er.ReadObject(this);
@@ -220,22 +229,23 @@ namespace WiiU.NintendoWare.LYT2
             else
             {
                 GPU.Textures.ImageFormat fu = 0;
+                _3DS.GPU.Textures.ImageFormat f3 = 0;
                 switch (Image.Format)
                 {
-                    //case 0: f3 = _3DS.GPU.Textures.ImageFormat.L8; break;
-                    //case 1: f3 = _3DS.GPU.Textures.ImageFormat.A8; break;
-                    //case 2: f3 = _3DS.GPU.Textures.ImageFormat.LA4; break;
-                    //case 3: f3 = _3DS.GPU.Textures.ImageFormat.LA8; break;
-                    //case 4: f3 = _3DS.GPU.Textures.ImageFormat.HILO8; break;
+                    case 0: f3 = _3DS.GPU.Textures.ImageFormat.L8; break;
+                    case 1: f3 = _3DS.GPU.Textures.ImageFormat.A8; break;
+                    case 2: f3 = _3DS.GPU.Textures.ImageFormat.LA4; break;
+                    case 3: f3 = _3DS.GPU.Textures.ImageFormat.LA8; break;
+                    case 4: f3 = _3DS.GPU.Textures.ImageFormat.HILO8; break;
                     case 5: fu = GPU.Textures.ImageFormat.RGB565; break;
-                    //case 6: f3 = _3DS.GPU.Textures.ImageFormat.RGB8; break;
-                    //case 7: f3 = _3DS.GPU.Textures.ImageFormat.RGBA5551; break;
-                    //case 8: f3 = _3DS.GPU.Textures.ImageFormat.RGBA4; break;
-                    //case 9: f3 = _3DS.GPU.Textures.ImageFormat.RGBA8; break;
-                    //case 10: f3 = _3DS.GPU.Textures.ImageFormat.ETC1; break;
-                    //case 11: f3 = _3DS.GPU.Textures.ImageFormat.ETC1A4; break;
-                    //case 0x12: f3 = _3DS.GPU.Textures.ImageFormat.L4; break;
-                    //case 0x13: f3 = _3DS.GPU.Textures.ImageFormat.A4; break;
+                    case 6: f3 = _3DS.GPU.Textures.ImageFormat.RGB8; break;
+                    case 7: f3 = _3DS.GPU.Textures.ImageFormat.RGBA5551; break;
+                    case 8: f3 = _3DS.GPU.Textures.ImageFormat.RGBA4; break;
+                    case 9: f3 = _3DS.GPU.Textures.ImageFormat.RGBA8; break;
+                    case 10: f3 = _3DS.GPU.Textures.ImageFormat.ETC1; break;
+                    case 11: f3 = _3DS.GPU.Textures.ImageFormat.ETC1A4; break;
+                    case 0x12: f3 = _3DS.GPU.Textures.ImageFormat.L4; break;
+                    case 0x13: f3 = _3DS.GPU.Textures.ImageFormat.A4; break;
                     case 0x17: fu = GPU.Textures.ImageFormat.DXT5; break;
                     default: throw new Exception("Unknown Image Format!");
                 }
