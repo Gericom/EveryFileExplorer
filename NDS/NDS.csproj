@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -97,6 +97,12 @@
     <Compile Include="SND\IMAADPCMConst.cs" />
     <Compile Include="SND\IMAADPCMEncoder.cs" />
     <Compile Include="SPA.cs" />
+    <Compile Include="UI\BMGViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\BMGViewer.Designer.cs">
+      <DependentUpon>BMGViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\NDSProjectDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -174,6 +180,9 @@
     <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\BMGViewer.resx">
+      <DependentUpon>BMGViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\NDSProjectDialog.resx">
       <DependentUpon>NDSProjectDialog.cs</DependentUpon>
