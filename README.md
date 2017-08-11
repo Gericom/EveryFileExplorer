@@ -1,12 +1,9 @@
 Every File Explorer
 ===================
-<img src="http://florian.nouwt.com/EFEIcon.png" height="256px" align="right"/>
-Every File Explorer is a dynamic tool to browse, edit, view, explore and modify files. It is plugin-based, so you can make your own plugins for it aswell!
+EFE Branch version （Sorry my programming is not good,Now a lot of code isn't perfect And there may be problems）
 
-<h3>Building</h3>
-Just open the project in Visual Studio, and build it. You may need to specify the path to the 2 dlls in the Libraries directory. Afterwards, copy them in the Plugins directory aswell. Don't forget to unblock it from external sources!
-<h3>Add references</h3>
-You must add Tao.Platform.Windows.dll,Tao.OpenGl.dll references to 3DS and NDS.MarioKart add Front two dll and Microsoft.VisualBasic.PowerPacks.Vs.dll references.
+<h3>Compile</h3>
+Just open the project in Visual Studio, and build it.You must add Tao.Platform.Windows.dll,Tao.OpenGl.dll references to 3DS,NAudio.dll references to EveryFileExplorer,OpenTK.dll references to GCNWii,and NDS.MarioKart add Tao.Platform.Windows.dll,Tao.OpenGl.dll and Microsoft.VisualBasic.PowerPacks.Vs.dll references,NDS add Tao.Platform.Windows.dll,Tao.OpenGl.dll,NAudio.dll(The DLL that you need to add references is in the Libraries folder)
 <h3>Provided Plugins</h3>
 * 3DS
 * Common Compressors
@@ -14,3 +11,5 @@ You must add Tao.Platform.Windows.dll,Tao.OpenGl.dll references to 3DS and NDS.M
 * Lego Pirates of the Carribean
 * Mario Kart
 * NDS
+* RuneFactory3
+* WiiU
