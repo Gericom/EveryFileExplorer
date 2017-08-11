@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using LibEveryFileExplorer.IO;
+using NDS.UI;
 
 namespace NDS
 {
@@ -27,9 +28,9 @@ namespace NDS
             }
         }
 
-        public Form GetDialog()
+        public System.Windows.Forms.Form GetDialog()
         {
-            return new Form();
+            return new BMGViewer(this);
         }
 
         public BMGHeader Header;
