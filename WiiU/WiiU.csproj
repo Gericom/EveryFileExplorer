@@ -63,6 +63,12 @@
     <Compile Include="UI\FLIMViewer.Designer.cs">
       <DependentUpon>FLIMViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\FLYTViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FLYTViewer.Designer.cs">
+      <DependentUpon>FLYTViewer.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NintendoWare\GFX\" />
@@ -84,6 +90,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FLIMViewer.resx">
       <DependentUpon>FLIMViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FLYTViewer.resx">
+      <DependentUpon>FLYTViewer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
