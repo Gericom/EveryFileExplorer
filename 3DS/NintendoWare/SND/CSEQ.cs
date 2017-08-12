@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using LibEveryFileExplorer.IO;
 using System.Windows.Forms;
+using _3DS.UI;
 
 namespace _3DS.NintendoWare.SND
 {
@@ -22,9 +23,9 @@ namespace _3DS.NintendoWare.SND
                 er.Close();
             }
         }
-        public Form GetDialog()
+        public System.Windows.Forms.Form GetDialog()
         {
-            return new Form();
+            return new CSEQViewer(this);
         }
 
         public CSEQHeader Header;
@@ -56,7 +57,7 @@ namespace _3DS.NintendoWare.SND
         {
             public override string GetCategory()
             {
-                return Category_Audio;
+                return null;
             }
 
             public override string GetFileDescription()
