@@ -20,7 +20,18 @@ namespace WiiU.NintendoWare.LYT2
             try
             {
                 Header = new FLYTHeader(er);
+                //int blocknr = 0;
+                //while (blocknr < Header.NrBlocks)
+                //{
+                //    String sig = er.ReadString(Encoding.ASCII, 4);
+                //    switch (sig)
+                //    {
+                //        case "lyt1": Layout = new lyt1(er); break;
+                //        case "txl1": TextureList = new txl1(er); break;
+                //    }
+                //}
             }
+
             finally
             {
                 er.Close();
@@ -72,6 +83,35 @@ namespace WiiU.NintendoWare.LYT2
             public UInt32 SectionSize;
             public ScreenOriginType ScreenOrigin;//u32
             public Vector2 LayoutSize;
+        }
+
+        public txl1 TextureList;
+        public class txl1
+        {
+            public txl1(EndianBinaryReader er)
+            {
+                long startpos = er.BaseStream.Position;
+                Signature = er.ReadString(Encoding.ASCII, 4);
+                if (Signature != "txl1") throw new SignatureNotCorrectException(Signature, "txl1", er.BaseStream.Position - 4);
+                SectionSize = er.ReadUInt32();
+                NrTextures = er.ReadUInt32();
+                long baseoffset = er.BaseStream.Position;
+                TextureNameOffsets = er.ReadUInt32s((int)NrTextures);
+                TextureNames = new string[NrTextures];
+                for (int i = 0; i < NrTextures; i++)
+                {
+                    er.BaseStream.Position = baseoffset + TextureNameOffsets[i];
+                    TextureNames[i] = er.ReadStringNT(Encoding.ASCII);
+                }
+                //padding
+                er.BaseStream.Position = startpos + SectionSize;
+            }
+            public String Signature;
+            public UInt32 SectionSize;
+            public UInt32 NrTextures;
+            public UInt32[] TextureNameOffsets;
+
+            public String[] TextureNames;
         }
 
         public class FLYTIdentifier : FileFormatIdentifier
