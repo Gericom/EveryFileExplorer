@@ -6,7 +6,9 @@ EFE Branch version （Sorry my programming is not good,Now a lot of code isn't p
 Just open the project in Visual Studio, and build it,You must add references.
 ## Add references
 3DS
+
 You must add Tao.Platform.Windows.dll,Tao.OpenGl.dll references to 3DS
+
 EveryFileExplorer
 
 You must add NAudio.dll references to EveryFileExplorer
