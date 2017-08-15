@@ -483,10 +483,7 @@ namespace EveryFileExplorer
 
         private void menuItem10_Click(object sender, EventArgs e)
         {
-            if (!File.Exists("vgmstream.exe")) File.WriteAllBytes("vgmstream.exe", Properties.Resources.vgmstream);
-            if (!File.Exists("libg7221_decode.dll")) File.WriteAllBytes("libg7221_decode.dll", Properties.Resources.libg7221_decode);
-            if (!File.Exists("libmpg123-0.dll")) File.WriteAllBytes("libmpg123-0.dll", Properties.Resources.libmpg123_0);
-            if (!File.Exists("libvorbis.dll")) File.WriteAllBytes("libvorbis.dll", Properties.Resources.libvorbis);
+            st.StartInfo.FileName = @"Plugins\vgmstream\vgmstream.exe";
             try
             {
                 OpenFileDialog opn = new OpenFileDialog();
@@ -504,7 +501,7 @@ namespace EveryFileExplorer
                         for (int i = 0; i < opn.FileNames.Length; i++)
                         {
                             Process prc = new Process();
-                            prc.StartInfo.FileName = "vgmstream.exe";
+                            prc.StartInfo.FileName = @"Plugins\vgmstream\vgmstream.exe";
                             prc.StartInfo.Arguments = "-o \"" + opn.FileNames[i] + ".wav\" " + "\"" + opn.FileNames[i] + "\"";
                             prc.StartInfo.CreateNoWindow = true;
                             prc.StartInfo.UseShellExecute = false;
@@ -519,17 +516,16 @@ namespace EveryFileExplorer
 
             void AudioTOWav(string input)
             {
-                if (!File.Exists("vgmstream.exe")) File.WriteAllBytes("vgmstream.exe", Properties.Resources.vgmstream);
-                if (!File.Exists("libg7221_decode.dll")) File.WriteAllBytes("libg7221_decode.dll", Properties.Resources.libg7221_decode);
-                if (!File.Exists("libmpg123-0.dll")) File.WriteAllBytes("libmpg123-0.dll", Properties.Resources.libmpg123_0);
-                if (!File.Exists("libvorbis.dll")) File.WriteAllBytes("libvorbis.dll", Properties.Resources.libvorbis);
+                st.StartInfo.FileName = @"Plugins\vgmstream\vgmstream.exe";
+                {
+                }
                 SaveFileDialog sv = new SaveFileDialog();
                 sv.Filter = "Wave File (*.wav)|*.wav";
                 sv.Title = "Save file";
                 if (sv.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     Process prc = new Process();
-                    prc.StartInfo.FileName = "vgmstream.exe";
+                    prc.StartInfo.FileName = @"Plugins\vgmstream\vgmstream.exe";
                     prc.StartInfo.Arguments = "-o \"" + sv.FileName + "\" " + "\"" + input + "\"";
                     prc.StartInfo.CreateNoWindow = true;
                     prc.StartInfo.UseShellExecute = false;
@@ -540,18 +536,11 @@ namespace EveryFileExplorer
             }
         }
 
+        System.Diagnostics.Process st = new System.Diagnostics.Process();
+
         private void menuItem12_Click(object sender, EventArgs e)
         {
-            if (!File.Exists("ctr_WaveConverter32.exe")) File.WriteAllBytes("ctr_WaveConverter32.exe", Properties.Resources.ctr_WaveConverter32);
-            if (!File.Exists("CommandLineUtilities.dll")) File.WriteAllBytes("CommandLineUtilities.dll", Properties.Resources.CommandLineUtilities);
-            if (!File.Exists("ctr_crr-0.dll")) File.WriteAllBytes("ctr_crr-0.dll", Properties.Resources.ctr_crr);
-            if (!File.Exists("LoadRunLibrary.dll")) File.WriteAllBytes("LoadRunLibrary.dll", Properties.Resources.LoadRunLibrary);
-            if (!File.Exists("LoadRunRunner.dll")) File.WriteAllBytes("LoadRunRunner.dll", Properties.Resources.LoadRunRunner);
-            if (!File.Exists("Nyaml.dll")) File.WriteAllBytes("Nyaml.dll", Properties.Resources.Nyaml);
-            if (!File.Exists("SoundFoundation.dll")) File.WriteAllBytes("SoundFoundation.dll", Properties.Resources.SoundFoundation);
-            if (!File.Exists("SoundFoundation.LegacyFormats.dll")) File.WriteAllBytes("SoundFoundation.LegacyFormats.dll", Properties.Resources.SoundFoundation_LegacyFormats);
-            if (!File.Exists("SoundFoundationCtr.dll")) File.WriteAllBytes("SoundFoundationCtr.dll", Properties.Resources.SoundFoundationCtr);
-            if (!File.Exists("ToolDevelopmentKit.dll")) File.WriteAllBytes("ToolDevelopmentKit.dll", Properties.Resources.ToolDevelopmentKit);
+            st.StartInfo.FileName = @"Plugins\ctr_WaveConverter32\ctr_WaveConverter32.exe";
             try
             {
                 OpenFileDialog opn = new OpenFileDialog();
@@ -581,7 +570,7 @@ namespace EveryFileExplorer
                                 Original.Dispose();
                             }
                             Process prc = new Process();
-                            prc.StartInfo.FileName = "CTR_WaveConverter32.exe";
+                            prc.StartInfo.FileName = @"Plugins\ctr_WaveConverter32\ctr_WaveConverter32.exe";
                             if (!APP_not_Optimize_Cwavs) prc.StartInfo.Arguments = "-o \"" + opn.FileNames[i] + ".bcwav\" \"" + Path.GetTempPath() + Path.GetFileName(opn.FileNames[i]) + ".tmp.wav\""; else prc.StartInfo.Arguments = "-o \"" + opn.FileNames[i] + ".bcwav\" \"" + opn.FileNames[i] + "\"";
                             Debug.Print("Converting CWAV: " + Path.GetTempPath() + Path.GetFileName(opn.FileNames[i]) + ".tmp.wav");
                             prc.Start();
@@ -618,7 +607,7 @@ namespace EveryFileExplorer
                     Original.Dispose();
                 }
                 Process prc = new Process();
-                prc.StartInfo.FileName = "CTR_WaveConverter32.exe";
+                prc.StartInfo.FileName = @"Plugins\ctr_WaveConverter32\ctr_WaveConverter32.exe";
                 if (!APP_not_Optimize_Cwavs) prc.StartInfo.Arguments = "-o \"" + sv.FileName + "\" \"" + Path.GetTempPath() + Path.GetFileName(input) + ".tmp.wav\""; else prc.StartInfo.Arguments = "-o \"" + sv.FileName + "\" \"" + input + "\"";
                 prc.Start();
                 prc.WaitForExit();
