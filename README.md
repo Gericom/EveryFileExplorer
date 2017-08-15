@@ -4,6 +4,7 @@ EFE Branch version （Sorry my programming is not good,Now a lot of code isn't p
 
 # Compile
 Just open the project in Visual Studio, and build it,You must add references.
+Add references you can Correct Compile(The DLL that you need to add references is in the Libraries folder)
 ## Add references
 3DS
 
@@ -24,5 +25,3 @@ You must add Tao.Platform.Windows.dll,Tao.OpenGl.dll and Microsoft.VisualBasic.P
 NDS
 
 You must add Tao.Platform.Windows.dll,Tao.OpenGl.dll,NAudio.dll to NDS.
-
-Add references you can Correct Compile(The DLL that you need to add references is in the Libraries folder)
