@@ -160,7 +160,7 @@ namespace WiiU.NintendoWare.LYT2
                 er.Write(Width);
                 er.Write(Height);
                 er.Write(Format);
-                //er.Write(DataLength);
+                er.Write(DataLength);
             }
             [BinaryStringSignature("imag")]
             [BinaryFixedSize(4)]
@@ -171,9 +171,10 @@ namespace WiiU.NintendoWare.LYT2
             public UInt16 Alignment;
             public Byte Format;
             public Byte Unknown;
+            public UInt32 DataLength;
 
             //Tempoarly use 3ds stuff!
-            /*public _3DS.GPU.Textures.ImageFormat GetGPUTextureFormat()
+            public _3DS.GPU.Textures.ImageFormat GetGPUTextureFormat()
 			{
 				switch (Format)
 				{
@@ -192,10 +193,10 @@ namespace WiiU.NintendoWare.LYT2
 					case 0x12: return _3DS.GPU.Textures.ImageFormat.L4;
 					case 0x13: return _3DS.GPU.Textures.ImageFormat.A4;
 					//Wii U Formats:
-					case 0x17: return WiiU.GPU.Textures.ImageFormat.ETC1A4;
+					//case 0x17: return WiiU.GPU.Textures.ImageFormat.ETC1A4;
 				}
 				throw new Exception("Unknown Image Format!");
-			}*/
+			}
         }
         public UInt32 DataLength;
 
