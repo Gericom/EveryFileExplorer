@@ -20,6 +20,7 @@ namespace WiiU.NintendoWare.LYT2
             {
                 Header = new FFNTHeader(er);
                 FontInfo = new FINF(er);
+                TextureGlyph = new TGLP(er);
             }
 
             finally
