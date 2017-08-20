@@ -483,11 +483,12 @@ namespace EveryFileExplorer
 
         private void menuItem10_Click(object sender, EventArgs e)
         {
+            //I use to some of the YATA-PLUS's code:https://github.com/exelix11/YATA-PLUS/edit/master/Form1.cs
             st.StartInfo.FileName = @"Plugins\vgmstream\vgmstream.exe";
             try
             {
                 OpenFileDialog opn = new OpenFileDialog();
-                opn.Filter = "BCSTM/BCWAV/BRSTM (*.bcstm;*.bcwav;*.brstm)|*.bcstm;*.bcwav;*.brstm";
+                opn.Filter = "Supported files (*.bcstm;*.bcwav;*.brstm;*.nus3bank)|*.bcstm;*.bcwav;*.brstm;*.nus3bank";
                 opn.Title = "Open file";
                 opn.Multiselect = true;
                 if (opn.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -501,7 +502,7 @@ namespace EveryFileExplorer
                         for (int i = 0; i < opn.FileNames.Length; i++)
                         {
                             Process prc = new Process();
-                            prc.StartInfo.FileName = @"Plugins\vgmstream\vgmstream.exe";
+                            prc.StartInfo.FileName = @"Plugins\vgmstream\test.exe";
                             prc.StartInfo.Arguments = "-o \"" + opn.FileNames[i] + ".wav\" " + "\"" + opn.FileNames[i] + "\"";
                             prc.StartInfo.CreateNoWindow = true;
                             prc.StartInfo.UseShellExecute = false;
@@ -525,7 +526,7 @@ namespace EveryFileExplorer
                 if (sv.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     Process prc = new Process();
-                    prc.StartInfo.FileName = @"Plugins\vgmstream\vgmstream.exe";
+                    prc.StartInfo.FileName = @"Plugins\vgmstream\test.exe";
                     prc.StartInfo.Arguments = "-o \"" + sv.FileName + "\" " + "\"" + input + "\"";
                     prc.StartInfo.CreateNoWindow = true;
                     prc.StartInfo.UseShellExecute = false;
@@ -540,6 +541,7 @@ namespace EveryFileExplorer
 
         private void menuItem12_Click(object sender, EventArgs e)
         {
+            //I use to some of the YATA-PLUS's code:https://github.com/exelix11/YATA-PLUS/edit/master/Form1.cs
             st.StartInfo.FileName = @"Plugins\ctr_WaveConverter32\ctr_WaveConverter32.exe";
             try
             {

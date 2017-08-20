@@ -311,7 +311,7 @@
             // menuItem10
             // 
             this.menuItem10.Index = 0;
-            this.menuItem10.Text = "BCSTM/BCWAV/BRSTM Convert WAV(Use vgmstream)";
+            this.menuItem10.Text = "Video Games Audio Formats Convert WAV(Use vgmstream)";
             this.menuItem10.Click += new System.EventHandler(this.menuItem10_Click);
             // 
             // menuItem12
