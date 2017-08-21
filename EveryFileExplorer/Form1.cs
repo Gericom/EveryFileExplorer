@@ -488,7 +488,12 @@ namespace EveryFileExplorer
             try
             {
                 OpenFileDialog opn = new OpenFileDialog();
-                opn.Filter = "Supported files (*.bcstm;*.bcwav;*.brstm;*.nus3bank)|*.bcstm;*.bcwav;*.brstm;*.nus3bank";
+                opn.Filter = 
+                    "Supported files (*.bcstm;*.bcwav;*.brstm;*.nus3bank)|*.bcstm;*.bcwav;*.brstm;*.nus3bank" +
+                    "|CTR Stream (*.bcstm)|*.bcstm" +
+                    "|CTR Wave (*.bcwav)|*.bcwav" +
+                    "|brstm (*.brstm)|*.brstm" +
+                    "|nus3bank(*.nus3bank)|*.nus3bank";
                 opn.Title = "Open file";
                 opn.Multiselect = true;
                 if (opn.ShowDialog() == System.Windows.Forms.DialogResult.OK)
