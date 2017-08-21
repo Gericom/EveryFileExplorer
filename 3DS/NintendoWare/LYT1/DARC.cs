@@ -134,8 +134,9 @@ namespace _3DS.NintendoWare.LYT1
 
 			public override string GetFileFilter()
 			{
-				return "Data Archive (*.darc, *.arc, *.bcma)|*.darc;*.arc;*.bcma";
-			}
+				return "Data Archive (*.darc, *.arc)|*.darc;*.arc" +
+                       "|CTR Manual Archive (*.bcma)|*.bcma";
+            }
 
 			public override Bitmap GetIcon()
 			{
