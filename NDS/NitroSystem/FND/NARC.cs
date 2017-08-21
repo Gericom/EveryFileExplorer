@@ -347,7 +347,7 @@ namespace NDS.NitroSystem.FND
 
 			public override string GetFileFilter()
 			{
-				return "Nitro Archive (*.narc, *.carc)|*.narc;*.carc";
+				return "Nitro Archive (*.narc)|*.narc|Compress Nitro Archive (*.carc)|*.carc";
 			}
 
 			public override Bitmap GetIcon()
