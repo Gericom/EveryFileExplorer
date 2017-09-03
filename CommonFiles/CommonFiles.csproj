@@ -49,7 +49,6 @@
     <Compile Include="Maya\MayaASCIIWriter.cs" />
     <Compile Include="MTL.cs" />
     <Compile Include="OBJ.cs" />
-    <Compile Include="PNG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
