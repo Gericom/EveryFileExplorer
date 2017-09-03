@@ -96,7 +96,7 @@ namespace WiiU.NintendoWare.LYT2
                 Image.Width = (ushort)b.Width;
                 Image.Height = (ushort)b.Height;
                 Image.Format = 11;
-                Data = Textures.FromBitmap(b, Textures.ImageFormat.ETC1A4);
+                Data = _3DS.GPU.Textures.FromBitmap(b,_3DS.GPU.Textures.ImageFormat.ETC1A4);
                 DataLength = (uint)Data.Length;
                 return true;
             }
