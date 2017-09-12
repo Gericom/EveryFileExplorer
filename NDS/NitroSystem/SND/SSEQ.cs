@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using LibEveryFileExplorer.Files;
 using System.Drawing;
@@ -8,8 +8,47 @@ using System.Windows.Forms;
 
 namespace NDS.NitroSystem.SND
 {
-    public class SSEQ : FileFormat<SSEQ.SSEQIdentifier>
+    public class SSEQ : FileFormat<SSEQ.SSEQIdentifier>, IViewable
     {
+        public SSEQ(byte[] Data)
+        {
+            EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.LittleEndian);
+            try
+            {
+                Signature = new SSEQSignature(er);
+            }
+            finally
+            {
+                er.Close();
+            }
+        }
+        public System.Windows.Forms.Form GetDialog()
+        {
+            return new Form();
+            //return new SSEQViewer(this);
+        }
+        public SSEQSignature Signature;
+        public class SSEQSignature
+        {
+            public SSEQSignature()
+            {
+                Signature = "SSEQ";
+                HeaderSize = 0x8;
+                Version = 0x17325600;
+            }
+
+            public SSEQSignature(EndianBinaryReader er)
+            {
+                Signature = er.ReadString(Encoding.ASCII, 4);
+                if (Signature != "SSEQ") throw new SignatureNotCorrectException(Signature, "SSEQ", er.BaseStream.Position - 4);
+                HeaderSize = er.ReadUInt16();
+                Version = er.ReadUInt32();
+            }
+            public String Signature;
+            public UInt16 HeaderSize;
+            public UInt32 Version;
+        }
+
         public class SSEQIdentifier : FileFormatIdentifier
         {
             public override string GetCategory()
@@ -29,7 +68,7 @@ namespace NDS.NitroSystem.SND
 
             public override Bitmap GetIcon()
             {
-                return Resource.note;
+                return null;
             }
 
             public override FormatMatch IsFormat(EFEFile File)
