@@ -16,6 +16,7 @@ namespace NDS.NitroSystem.SND
             try
             {
                 Signature = new SSEQSignature(er);
+                DATA = new DATAChunkHeader(er);
             }
             finally
             {
@@ -27,6 +28,7 @@ namespace NDS.NitroSystem.SND
             return new Form();
             //return new SSEQViewer(this);
         }
+
         public SSEQSignature Signature;
         public class SSEQSignature
         {
@@ -34,7 +36,6 @@ namespace NDS.NitroSystem.SND
             {
                 Signature = "SSEQ";
                 HeaderSize = 0x8;
-                Version = 0x17325600;
             }
 
             public SSEQSignature(EndianBinaryReader er)
@@ -43,6 +44,25 @@ namespace NDS.NitroSystem.SND
                 if (Signature != "SSEQ") throw new SignatureNotCorrectException(Signature, "SSEQ", er.BaseStream.Position - 4);
                 HeaderSize = er.ReadUInt16();
                 Version = er.ReadUInt32();
+            }
+            public String Signature;
+            public UInt16 HeaderSize;
+            public UInt32 Version;
+        }
+
+        public DATAChunkHeader DATA;
+        public class DATAChunkHeader
+        {
+            public DATAChunkHeader()
+            {
+                Signature = "DATA";
+                HeaderSize = 0x4;
+            }
+
+            public DATAChunkHeader(EndianBinaryReader er)
+            {
+                Signature = er.ReadString(Encoding.ASCII, 4);
+                HeaderSize = er.ReadUInt16();
             }
             public String Signature;
             public UInt16 HeaderSize;
