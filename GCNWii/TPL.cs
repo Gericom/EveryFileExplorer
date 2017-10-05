@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +12,8 @@ using LibEveryFileExplorer.IO;
 
 namespace GCNWii
 {
-	public class TPL : FileFormat<TPL.TPLIdentifier>, IViewable
-	{
+	public class TPL : FileFormat<TPL.TPLIdentifier>, IViewable//, IConvertable
+    {
 		public TPL(byte[] Data)
 		{
 			EndianBinaryReader er = new EndianBinaryReader(new MemoryStream(Data), Endianness.BigEndian);
@@ -32,7 +32,21 @@ namespace GCNWii
 			}
 		}
 
-		public Form GetDialog()
+        //public string GetConversionFileFilters()
+        //{
+        //    return "Portable Network Graphics (*.png)|*.png";
+        //}
+
+        //public bool Convert(int FilterIndex, string Path)
+        //{
+        //    switch (FilterIndex)
+        //    {
+        //        case 0:
+        //    }
+        //    return false;
+        //}
+
+        public Form GetDialog()
 		{
 			return new TPLViewer(this);
 		}
@@ -143,12 +157,12 @@ namespace GCNWii
 
 			public override string GetFileDescription()
 			{
-				return "Texture Palette (TPL)";
+				return "Texture Palette Images (TPL)";
 			}
 
 			public override string GetFileFilter()
 			{
-				return "Texture Palette (*.tpl)|*.tpl";
+				return "Texture Palette Images (*.tpl)|*.tpl";
 			}
 
 			public override Bitmap GetIcon()
