@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using LibEveryFileExplorer.IO;
-using OpenTK;
+using LibEveryFileExplorer.Collections;
 
 namespace GCNWii
 {
