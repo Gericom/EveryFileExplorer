@@ -86,5 +86,46 @@ namespace _3DS.UI
                 pictureBox1.Image = Texture.GetBitmap(toolStripComboBox1.SelectedIndex);
             }
         }
-	}
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            var foundControls = ParentForm.Controls.Find("treeView1", true);
+            if (foundControls.Length < 1)
+            {
+                MessageBox.Show("Nothing to export");
+                return;
+            }
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            if (folderDialog.ShowDialog() != DialogResult.OK)
+                return;
+            TreeView treeView1 = (TreeView)foundControls[0];
+            var treeViewTextures = treeView1.Nodes
+                                    .Cast<TreeNode>()
+                                    .Where(r => r.Text == "Textures")
+                                    .ToArray()[0];
+            int count = 0;
+            int imgCount = 0;
+            foreach (TreeNode node in treeViewTextures.Nodes)
+            {
+                ImageTextureCtr iterTexture = (ImageTextureCtr)node.Tag;
+                Bitmap img = iterTexture.GetBitmap(0);
+                string sFilename = folderDialog.SelectedPath + "\\" + node.Text + ".png";
+                img.Save(sFilename, ImageFormat.Png);
+                imgCount++;
+                count++;
+                if (iterTexture.NrLevels > 1)
+                {
+                    System.IO.Directory.CreateDirectory(folderDialog.SelectedPath + "\\" + "mipmaps");
+                    for (int i = 1; i < iterTexture.NrLevels; i++)
+                    {
+                        img = iterTexture.GetBitmap(i);
+                        sFilename = folderDialog.SelectedPath + "\\mipmaps\\" + node.Text + "_" + i.ToString("000") + ".png";
+                        img.Save(sFilename, ImageFormat.Png);
+                        imgCount++;
+                    }
+                }
+            }
+            MessageBox.Show("Exported " + count + " textures into " + imgCount + " files.");
+        }
+    }
 }
