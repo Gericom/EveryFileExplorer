@@ -88,7 +88,7 @@ namespace GCNWii.JSystem
 
             public override FormatMatch IsFormat(EFEFile File)
             {
-                if (File.Data.Length > 4 && File.Data[0] == 'R' && File.Data[1] == 'S' && File.Data[2] == 'A' && File.Data[3] == 'R') return FormatMatch.Content;
+                if (File.Data.Length > 4 && File.Data[0] == 'R' && File.Data[1] == 'S' && File.Data[2] == 'A' && File.Data[3] == 'R' && File.Data[0x40] == 'S' && File.Data[0x41] == 'Y' && File.Data[0x42] == 'M' && File.Data[0x43] == 'B') return FormatMatch.Content;
                 return FormatMatch.No;
             }
 
