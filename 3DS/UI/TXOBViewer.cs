@@ -52,6 +52,7 @@ namespace _3DS.UI
                 Texture.HWFormat != Textures.ImageFormat.RGB8 &&
                 Texture.HWFormat != Textures.ImageFormat.RGB565 &&
                 Texture.HWFormat != Textures.ImageFormat.ETC1 &&
+                Texture.HWFormat != Textures.ImageFormat.RGBA5551 &&
                 Texture.HWFormat != Textures.ImageFormat.ETC1A4)
             {
                 MessageBox.Show("This texture format is currently not supported for importing.");
