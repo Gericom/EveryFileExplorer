@@ -93,6 +93,8 @@ namespace _3DS.NintendoWare.LYT1
 				Image.Height = (ushort)b.Height;
 				Image.Format = 11;//10;//5;
 				Data = Textures.FromBitmap(b, Textures.ImageFormat.ETC1A4);//.RGB565);
+                                //1;2;3;4;5;6;7;8;9;10;11;12;13;19;
+                                //L8,A8,LA4,LA8,HILO8,RGB565,RGB8,RGBA5551,RGBA4,RGBA8,ETC1,ETC1A4,L4,ETC1				
 				DataLength = (uint)Data.Length;
 				return true;
 			}
