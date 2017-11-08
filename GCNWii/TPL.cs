@@ -12,7 +12,7 @@ using LibEveryFileExplorer.IO;
 
 namespace GCNWii
 {
-	public class TPL : FileFormat<TPL.TPLIdentifier>, IViewable//, IConvertable
+	public class TPL : FileFormat<TPL.TPLIdentifier>, IViewable, IConvertable
     {
 		public TPL(byte[] Data)
 		{
@@ -32,19 +32,22 @@ namespace GCNWii
 			}
 		}
 
-        //public string GetConversionFileFilters()
-        //{
-        //    return "Portable Network Graphics (*.png)|*.png";
-        //}
+        public string GetConversionFileFilters()
+        {
+            return "Portable Network Graphics (*.png)|*.png";
+        }
 
-        //public bool Convert(int FilterIndex, string Path)
-        //{
-        //    switch (FilterIndex)
-        //    {
-        //        case 0:
-        //    }
-        //    return false;
-        //}
+        public bool Convert(int FilterIndex, string Path)
+        {
+            switch (FilterIndex)
+            {
+                case 0:
+                    File.Create(Path).Close();
+                    Textures[0].ToBitmap().Save(Path, System.Drawing.Imaging.ImageFormat.Png);
+                    return true;
+            }
+            return false;
+        }
 
         public Form GetDialog()
 		{
