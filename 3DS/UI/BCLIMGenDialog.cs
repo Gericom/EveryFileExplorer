@@ -14,6 +14,7 @@ namespace _3DS.UI
         public BCLIMGenDialog()
         {
             InitializeComponent();
+            comboBox1.SelectedIndex = 9;
         }
         public int index { get; private set; }
 
