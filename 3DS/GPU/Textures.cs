@@ -617,46 +617,49 @@ namespace _3DS.GPU
                 //        }
                 //    }
                 //    break;
-                //case ImageFormat.L8:
-                //    for (int y = 0; y < ConvHeight; y += 8)
-                //    {
-                //        for (int x = 0; x < ConvWidth; x += 8)
-                //        {
-                //            for (int i = 0; i < 64; i++)
-                //            {
-                //                int x2 = i % 8;
-                //                if (x + x2 >= physicalwidth) continue;
-                //                int y2 = i / 8;
-                //                if (y + y2 >= physicalheight) continue;
-                //                int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-                //                Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
-                //                result[offs + pos] = c.B;
-                //                result[offs + pos] = c.G;
-                //                result[offs + pos] = c.R;
-                //            }
-                //            offs += 64;
-                //        }
-                //    }
-                //    break;
-                //case ImageFormat.A8:
-                //    for (int y = 0; y < ConvHeight; y += 8)
-                //    {
-                //        for (int x = 0; x < ConvWidth; x += 8)
-                //        {
-                //            for (int i = 0; i < 64; i++)
-                //            {
-                //                int x2 = i % 8;
-                //                if (x + x2 >= physicalwidth) continue;
-                //                int y2 = i / 8;
-                //                if (y + y2 >= physicalheight) continue;
-                //                int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-                //                Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
-                //                result[offs + pos] = c.A;
-                //            }
-                //            offs += 64;
-                //        }
-                //    }
-                //    break;
+                case ImageFormat.L8:
+                    for (int y = 0; y < ConvHeight; y += 8)
+                    {
+                        for (int x = 0; x < ConvWidth; x += 8)
+                        {
+                            for (int i = 0; i < 64; i++)
+                            {
+                                int x2 = i % 8;
+                                if (x + x2 >= physicalwidth) continue;
+                                int y2 = i / 8;
+                                if (y + y2 >= physicalheight) continue;
+                                int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
+                                Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
+                                result[offs + pos] = c.B;
+                                result[offs + pos] = c.G;
+                                result[offs + pos] = c.R;
+                            }
+                            offs += 64;
+                        }
+                    }
+                    break;
+                case ImageFormat.A8:
+                    for (int y = 0; y < ConvHeight; y += 8)
+                    {
+                        for (int x = 0; x < ConvWidth; x += 8)
+                        {
+                            for (int i = 0; i < 64; i++)
+                            {
+                                int x2 = i % 8;
+                                if (x + x2 >= physicalwidth) continue;
+                                int y2 = i / 8;
+                                if (y + y2 >= physicalheight) continue;
+                                int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
+                                Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
+                                result[offs + pos] = c.A;
+                                result[255] = c.B;
+                                result[255] = c.G;
+                                result[255] = c.R;
+                            }
+                            offs += 64;
+                        }
+                    }
+                    break;
                 //case ImageFormat.LA4:
                 //    for (int y = 0; y < ConvHeight; y += 8)
                 //    {
