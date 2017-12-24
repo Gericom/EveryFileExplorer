@@ -95,71 +95,26 @@ namespace _3DS.NintendoWare.LYT1
                 Image.Height = (ushort)b.Height;
                 switch (BC.index)
                 {
-                    case 0:
-                        //Image.Format = 0;
-                        //Data = Textures.FromBitmap(b, Textures.ImageFormat.L8);
-                        //break;
-                        throw new NotSupportedException("L8 Format is not supported.");
-                    case 1:
-                        //Image.Format = 1;
-                        //Data = Textures.FromBitmap(b, Textures.ImageFormat.A8);
-                        //break;
-                        throw new NotSupportedException("A8 Format is not supported.");
-                    case 2:
-                        //Image.Format = 2;
-                        //Data = Textures.FromBitmap(b, Textures.ImageFormat.LA4);
-                        //break;
+                    case 0: Image.Format = 0; Data = Textures.FromBitmap(b, Textures.ImageFormat.L8); break;
+                    case 1: Image.Format = 1; Data = Textures.FromBitmap(b, Textures.ImageFormat.A8); break;
+                    case 2: //Image.Format = 2; Data = Textures.FromBitmap(b, Textures.ImageFormat.LA4); break;
                         throw new NotSupportedException("LA4 Format is not supported.");
-                    case 3:
-                        //Image.Format = 3;
-                        //Data = Textures.FromBitmap(b, Textures.ImageFormat.LA8);
-                        //break;
-                        throw new NotSupportedException("LA8 Format is not supported.");
-                    case 4:
-                        //Image.Format = 4;
-                        //Data = Textures.FromBitmap(b, Textures.ImageFormat.HILO8);
-                        //break;
+                    case 3: Image.Format = 3; Data = Textures.FromBitmap(b, Textures.ImageFormat.LA8); break;
+                    //throw new NotSupportedException("LA8 Format is not supported.");
+                    case 4: //Image.Format = 4; Data = Textures.FromBitmap(b, Textures.ImageFormat.HILO8); break;
                         throw new NotSupportedException("HILO8 Format is not supported.");
-                    case 5:
-                        Image.Format = 5;
-                        Data = Textures.FromBitmap(b, Textures.ImageFormat.RGB565);
-                        break;
-                    case 6:
-                        Image.Format = 6;
-                        Data = Textures.FromBitmap(b, Textures.ImageFormat.RGB8);
-                        break;
-                    case 7:
-                        Image.Format = 7;
-                        Data = Textures.FromBitmap(b, Textures.ImageFormat.RGBA5551);
-                        break;
-                    case 8:
-                        Image.Format = 8;
-                        Data = Textures.FromBitmap(b, Textures.ImageFormat.RGBA4);
-                        break;
-                    case 9:
-                        Image.Format = 9;
-                        Data = Textures.FromBitmap(b, Textures.ImageFormat.RGBA8);
-                        break;
-                    case 10:
-                        Image.Format = 10;
-                        Data = Textures.FromBitmap(b, Textures.ImageFormat.ETC1);
-                        break;
-                    case 11:
-                        Image.Format = 11;
-                        Data = Textures.FromBitmap(b, Textures.ImageFormat.ETC1A4);
-                        break;
-                    case 12:
-                        //Image.Format = 12;
-                        //Data = Textures.FromBitmap(b, Textures.ImageFormat.L4);
-                        //break;
+                    case 5: Image.Format = 5; Data = Textures.FromBitmap(b, Textures.ImageFormat.RGB565); break;
+                    case 6: Image.Format = 6; Data = Textures.FromBitmap(b, Textures.ImageFormat.RGB8); break;
+                    case 7: Image.Format = 7; Data = Textures.FromBitmap(b, Textures.ImageFormat.RGBA5551); break;
+                    case 8: Image.Format = 8; Data = Textures.FromBitmap(b, Textures.ImageFormat.RGBA4); break;
+                    case 9: Image.Format = 9; Data = Textures.FromBitmap(b, Textures.ImageFormat.RGBA8); break;
+                    case 10: Image.Format = 10; Data = Textures.FromBitmap(b, Textures.ImageFormat.ETC1); break;
+                    case 11: Image.Format = 11; Data = Textures.FromBitmap(b, Textures.ImageFormat.ETC1A4); break;
+                    case 12://Image.Format = 12;Data = Textures.FromBitmap(b, Textures.ImageFormat.L4);break;
                         throw new NotSupportedException("L4 Format is not supported.");
-                    case 13:
-                        //Image.Format = 13;
-                        //Data = Textures.FromBitmap(b, Textures.ImageFormat.A4);
-                        //break;
-                        throw new NotSupportedException("A4 Format is not supported.");
-                    default:
-                        throw new Exception("Please select the Image format!");
+                    case 13: //Image.Format = 13; Data = Textures.FromBitmap(b, Textures.ImageFormat.A4); break;
+                    throw new NotSupportedException("A4 Format is not supported.");
+                    default: throw new Exception("Please select the Image format!");
                 }
                 DataLength = (uint)Data.Length;
                 return true;
