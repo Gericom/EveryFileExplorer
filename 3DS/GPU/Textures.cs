@@ -245,8 +245,8 @@ namespace _3DS.GPU
                                 int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
                                 res[(y + y2) * stride + x + x2] = GFXUtil.ToColorFormat(
                                     Data[offs + pos * 2 + 1],
-                                    Data[offs + pos * 2 + 1],
-                                    Data[offs + pos * 2 + 1],
+                                    Data[offs + pos * 2 + 0],
+                                    255,
                                     ColorFormat.ARGB8888
                                     );
                             }
@@ -607,10 +607,8 @@ namespace _3DS.GPU
                                 if (y + y2 >= physicalheight) continue;
                                 int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
                                 Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
-                                result[offs + pos * 2 + 0] = c.A;
-                                result[offs + pos * 2 + 1] = c.B;
-                                result[offs + pos * 2 + 2] = c.G;
-                                result[offs + pos * 2 + 3] = c.R;
+                                result[offs + pos * 2 + 0] = c.G;
+                                result[offs + pos * 2 + 1] = c.R;
                             }
                             offs += 64 * 2;
                         }
