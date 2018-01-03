@@ -100,9 +100,7 @@ namespace _3DS.NintendoWare.LYT1
                     case 2: //Image.Format = 2; Data = Textures.FromBitmap(b, Textures.ImageFormat.LA4); break;
                         throw new NotSupportedException("LA4 Format is not supported.");
                     case 3: Image.Format = 3; Data = Textures.FromBitmap(b, Textures.ImageFormat.LA8); break;
-                    //throw new NotSupportedException("LA8 Format is not supported.");
-                    case 4: //Image.Format = 4; Data = Textures.FromBitmap(b, Textures.ImageFormat.HILO8); break;
-                        throw new NotSupportedException("HILO8 Format is not supported.");
+                    case 4: Image.Format = 4; Data = Textures.FromBitmap(b, Textures.ImageFormat.HILO8); break;
                     case 5: Image.Format = 5; Data = Textures.FromBitmap(b, Textures.ImageFormat.RGB565); break;
                     case 6: Image.Format = 6; Data = Textures.FromBitmap(b, Textures.ImageFormat.RGB8); break;
                     case 7: Image.Format = 7; Data = Textures.FromBitmap(b, Textures.ImageFormat.RGBA5551); break;
