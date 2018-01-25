@@ -40,13 +40,13 @@ namespace WiiU.GPU
             RGBA5551 = 2,
             RGB565 = 3,
             RGBA4 = 4,
-            //LA8 = 5,
-            //HILO8 = 6,
-            //L8 = 7,
-            //A8 = 8,
-            //LA4 = 9,
-            //L4 = 10,
-            //A4 = 11,
+            LA8 = 5,
+            HILO8 = 6,
+            L8 = 7,
+            A8 = 8,
+            LA4 = 9,
+            L4 = 10,
+            A4 = 11,
             ETC1 = 12,
             ETC1A4 = 13,
             DXT5 = 14,
@@ -179,6 +179,13 @@ namespace WiiU.GPU
                         }
                     }
                     break;
+                case ImageFormat.LA8: throw new NotImplementedException("LA8 format is not implemented yet.");
+                case ImageFormat.HILO8: throw new NotImplementedException("HILO8 format is not implemented yet.");
+                case ImageFormat.L8: throw new NotImplementedException("L8 format is not implemented yet.");
+                case ImageFormat.A8: throw new NotImplementedException("A8 format is not implemented yet.");
+                case ImageFormat.LA4: throw new NotImplementedException("LA4 format is not implemented yet.");
+                case ImageFormat.L4: throw new NotImplementedException("L4 format is not implemented yet.");
+                case ImageFormat.A4: throw new NotImplementedException("A4 format is not implemented yet.");
                 case ImageFormat.ETC1://Some reference: http://www.khronos.org/registry/gles/extensions/OES/OES_compressed_ETC1_RGB8_texture.txt
                 case ImageFormat.ETC1A4:
                     {
