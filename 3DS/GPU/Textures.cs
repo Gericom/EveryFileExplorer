@@ -657,73 +657,73 @@ namespace _3DS.GPU
                         }
                     }
                     break;
-                case ImageFormat.LA4:
-                    for (int y = 0; y < ConvHeight; y += 8)
-                    {
-                        for (int x = 0; x < ConvWidth; x += 8)
-                        {
-                            for (int i = 0; i < 64; i++)
-                            {
-                                int x2 = i % 8;
-                                if (x + x2 >= physicalwidth) continue;
-                                int y2 = i / 8;
-                                if (y + y2 >= physicalheight) continue;
-                                int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-                                Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
-                                result[(byte)(offs + pos & 0xF) * 0x11] = c.A;
-                                result[(byte)(offs + pos >> 4) * 0x11] = c.B;
-                                result[(byte)(offs + pos >> 4) * 0x11] = c.G;
-                                result[(byte)(offs + pos >> 4) * 0x11] = c.R;
-                            }
-                            offs += 64;
-                        }
-                    }
-                    break;
-                case ImageFormat.L4:
-                    for (int y = 0; y < ConvHeight; y += 8)
-                    {
-                        for (int x = 0; x < ConvWidth; x += 8)
-                        {
-                            for (int i = 0; i < 64; i++)
-                            {
-                                int x2 = i % 8;
-                                if (x + x2 >= physicalwidth) continue;
-                                int y2 = i / 8;
-                                if (y + y2 >= physicalheight) continue;
-                                int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-                                Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
-                                int shift = (pos & 1) * 4;
-                                result[(byte)((offs + pos / 2) >> shift & 0xF) * 0x11] = c.B;
-                                result[(byte)((offs + pos / 2) >> shift & 0xF) * 0x11] = c.G;
-                                result[(byte)((offs + pos / 2) >> shift & 0xF) * 0x11] = c.R;
-                            }
-                            offs += 64 / 2;
-                        }
-                    }
-                    break;
-                case ImageFormat.A4:
-                    for (int y = 0; y < ConvHeight; y += 8)
-                    {
-                        for (int x = 0; x < ConvWidth; x += 8)
-                        {
-                            for (int i = 0; i < 64; i++)
-                            {
-                                int x2 = i % 8;
-                                if (x + x2 >= physicalwidth) continue;
-                                int y2 = i / 8;
-                                if (y + y2 >= physicalheight) continue;
-                                int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
-                                Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
-                                int shift = (pos & 1) * 4;
-                                result[(byte)((offs + pos / 2) >> shift & 0xF) * 0x11] = c.A;
-                                result[255] = c.B;
-                                result[255] = c.G;
-                                result[255] = c.R;
-                            }
-                            offs += 64 / 2;
-                        }
-                    }
-                    break;
+                case ImageFormat.LA4: throw new NotImplementedException("LA4 format is not implemented yet.");
+                //for (int y = 0; y < ConvHeight; y += 8)
+                //{
+                //    for (int x = 0; x < ConvWidth; x += 8)
+                //    {
+                //        for (int i = 0; i < 64; i++)
+                //        {
+                //            int x2 = i % 8;
+                //            if (x + x2 >= physicalwidth) continue;
+                //            int y2 = i / 8;
+                //            if (y + y2 >= physicalheight) continue;
+                //            int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
+                //            Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
+                //            result[(byte)(offs + pos & 0xF) * 0x11] = c.A;
+                //            result[(byte)(offs + pos >> 4) * 0x11] = c.B;
+                //            result[(byte)(offs + pos >> 4) * 0x11] = c.G;
+                //            result[(byte)(offs + pos >> 4) * 0x11] = c.R;
+                //        }
+                //        offs += 64;
+                //    }
+                //}
+                //break;
+                case ImageFormat.L4: throw new NotImplementedException("L4 format is not implemented yet.");
+                //for (int y = 0; y < ConvHeight; y += 8)
+                //{
+                //    for (int x = 0; x < ConvWidth; x += 8)
+                //    {
+                //        for (int i = 0; i < 64; i++)
+                //        {
+                //            int x2 = i % 8;
+                //            if (x + x2 >= physicalwidth) continue;
+                //            int y2 = i / 8;
+                //            if (y + y2 >= physicalheight) continue;
+                //            int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
+                //            Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
+                //            int shift = (pos & 1) * 4;
+                //            result[(byte)((offs + pos / 2) >> shift & 0xF) * 0x11] = c.B;
+                //            result[(byte)((offs + pos / 2) >> shift & 0xF) * 0x11] = c.G;
+                //            result[(byte)((offs + pos / 2) >> shift & 0xF) * 0x11] = c.R;
+                //        }
+                //        offs += 64 / 2;
+                //    }
+                //}
+                //break;
+                case ImageFormat.A4: throw new NotImplementedException("A4 format is not implemented yet.");
+                //for (int y = 0; y < ConvHeight; y += 8)
+                //{
+                //    for (int x = 0; x < ConvWidth; x += 8)
+                //    {
+                //        for (int i = 0; i < 64; i++)
+                //        {
+                //            int x2 = i % 8;
+                //            if (x + x2 >= physicalwidth) continue;
+                //            int y2 = i / 8;
+                //            if (y + y2 >= physicalheight) continue;
+                //            int pos = TileOrder[x2 % 4 + y2 % 4 * 4] + 16 * (x2 / 4) + 32 * (y2 / 4);
+                //            Color c = Color.FromArgb((int)res[(y + y2) * d.Stride / 4 + x + x2]);
+                //            int shift = (pos & 1) * 4;
+                //            result[(byte)((offs + pos / 2) >> shift & 0xF) * 0x11] = c.A;
+                //            result[255] = c.B;
+                //            result[255] = c.G;
+                //            result[255] = c.R;
+                //        }
+                //        offs += 64 / 2;
+                //    }
+                //}
+                //break;
                 case ImageFormat.ETC1:
                 case ImageFormat.ETC1A4:
                     for (int y = 0; y < ConvHeight; y += 8)
