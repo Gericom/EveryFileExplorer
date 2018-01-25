@@ -167,11 +167,11 @@ namespace WiiU.NintendoWare.LYT2
                 GPU.Textures.ImageFormat fu = 0;
                 switch (Image.Format)
                 {
-                    //case 0: fu = GPU.Textures.ImageFormat.L8; break;
-                    //case 1: fu = GPU.Textures.ImageFormat.A8; break;
-                    //case 2: fu = GPU.Textures.ImageFormat.LA4; break;
-                    //case 3: fu = GPU.Textures.ImageFormat.LA8; break;
-                    //case 4: fu = GPU.Textures.ImageFormat.HILO8; break;
+                    case 0: fu = GPU.Textures.ImageFormat.L8; break;
+                    case 1: fu = GPU.Textures.ImageFormat.A8; break;
+                    case 2: fu = GPU.Textures.ImageFormat.LA4; break;
+                    case 3: fu = GPU.Textures.ImageFormat.LA8; break;
+                    case 4: fu = GPU.Textures.ImageFormat.HILO8; break;
                     case 5: fu = GPU.Textures.ImageFormat.RGB565; break;
                     case 6: fu = GPU.Textures.ImageFormat.RGB8; break;
                     case 7: fu = GPU.Textures.ImageFormat.RGBA5551; break;
@@ -179,8 +179,8 @@ namespace WiiU.NintendoWare.LYT2
                     case 9: fu = GPU.Textures.ImageFormat.RGBA8; break;
                     case 10: fu = GPU.Textures.ImageFormat.ETC1; break;
                     case 11: fu = GPU.Textures.ImageFormat.ETC1A4; break;
-                    //case 0x12: fu = GPU.Textures.ImageFormat.L4; break;
-                    //case 0x13: fu = GPU.Textures.ImageFormat.A4; break;
+                    case 0x12: fu = GPU.Textures.ImageFormat.L4; break;
+                    case 0x13: fu = GPU.Textures.ImageFormat.A4; break;
                     case 0x17: fu = GPU.Textures.ImageFormat.DXT5; break;
                     default: throw new Exception("Unknown Image Format!");
                 }
