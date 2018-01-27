@@ -155,8 +155,8 @@ namespace WiiU.NintendoWare.LYT2
                     case 9: f3 = _3DS.GPU.Textures.ImageFormat.RGBA8; break;
                     case 10: f3 = _3DS.GPU.Textures.ImageFormat.ETC1; break;
                     case 11: f3 = _3DS.GPU.Textures.ImageFormat.ETC1A4; break;
-                    case 0x12: f3 = _3DS.GPU.Textures.ImageFormat.L4; break;
-                    case 0x13: f3 = _3DS.GPU.Textures.ImageFormat.A4; break;
+                    case 12: f3 = _3DS.GPU.Textures.ImageFormat.L4; break;
+                    case 13: f3 = _3DS.GPU.Textures.ImageFormat.A4; break;
                     default: throw new Exception("Unknown Image Format!");
                 }
                 if (Image.Unknown == 0) return _3DS.GPU.Textures.ToBitmap(Data, Image.Width, Image.Height, f3);
