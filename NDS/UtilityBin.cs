@@ -266,11 +266,12 @@ namespace NDS
 			return dirs[0];
 		}
 
-		public class UtilityBinIdentifier : FileFormatIdentifier
+		        public class UtilityBinIdentifier : FileFormatIdentifier
 		{
 			public override string GetCategory()
 			{
-				return Category_Archives;
+				//Tempoarly
+				return "NDS Wifi Archive";
 			}
 
 			public override string GetFileDescription()

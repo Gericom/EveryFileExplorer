@@ -104,12 +104,12 @@ namespace MarioKart.MK7
 
 			public override string GetFileDescription()
 			{
-				return "CTR ObjFlow (FBOC)";
+				return "Mario Kart 7 ObjFlow (FBOC)";
 			}
 
 			public override string GetFileFilter()
 			{
-				return "CTR ObjFlow (ObjFlow.bin)|ObjFlow.bin";
+				return "Mario Kart 7 ObjFlow (ObjFlow.bin)|ObjFlow.bin";
 			}
 
 			public override Bitmap GetIcon()

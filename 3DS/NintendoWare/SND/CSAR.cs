@@ -300,7 +300,7 @@ namespace _3DS.NintendoWare.SND
 		{
 			public override string GetCategory()
 			{
-				return Category_Archives;
+				return Category_Sound;
 			}
 
 			public override string GetFileDescription()
@@ -320,7 +320,7 @@ namespace _3DS.NintendoWare.SND
 
 			public override FormatMatch IsFormat(EFEFile File)
 			{
-				if (File.Data.Length > 0x10 && File.Data[0] == 'C' && File.Data[1] == 'S' && File.Data[2] == 'A' && File.Data[3] == 'R') return FormatMatch.Content;
+				if (File.Data.Length > 50 && File.Data[0] == 'C' && File.Data[1] == 'S' && File.Data[2] == 'A' && File.Data[3] == 'R' && File.Data[0x40] == 'S' && File.Data[0x41] == 'T' && File.Data[0x42] == 'R' && File.Data[0x43] == 'G') return FormatMatch.Content;
 				return FormatMatch.No;
 			}
 

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -42,19 +42,32 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tao.OpenGl, Version=2.1.0.12, Culture=neutral, PublicKeyToken=1ca010269a4501ef, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\MKDS Course Modifier\MKDS Course Modifier\bin\x86\Debug_new\Tao.OpenGl.dll</HintPath>
-    </Reference>
-    <Reference Include="Tao.Platform.Windows, Version=1.0.0.5, Culture=neutral, PublicKeyToken=701104b2da67a104, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3DS\bin\Debug\Tao.Platform.Windows.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BMG.cs" />
+    <Compile Include="MODS.cs" />
     <Compile Include="NDSPlugin.cs" />
     <Compile Include="NDSProject.cs" />
+    <Compile Include="NitroSystem\FONT\NFTR.cs" />
+    <Compile Include="NitroSystem\G2D\NCER.cs" />
+    <Compile Include="NitroSystem\G2D\NCGR.cs" />
+    <Compile Include="NitroSystem\G2D\NCLR.cs" />
+    <Compile Include="NitroSystem\G2D\NSCR.cs" />
+    <Compile Include="NitroSystem\G2D\NANR.cs" />
+    <Compile Include="NitroSystem\G3D\NSBMA.cs" />
+    <Compile Include="NitroSystem\G3D\NSBTA.cs" />
+    <Compile Include="NitroSystem\G3D\NSBTP.cs" />
+    <Compile Include="NitroSystem\G3D\NSBVA .cs" />
+    <Compile Include="NitroSystem\SND\SBNK.cs" />
     <Compile Include="NitroSystem\SND\SDAT.cs" />
+    <Compile Include="NitroSystem\SND\SSAR.cs" />
+    <Compile Include="NitroSystem\SND\SSEQ.cs" />
+    <Compile Include="NitroSystem\SND\SSEQDecoder.cs" />
+    <Compile Include="NitroSystem\SND\SSEQEncoder.cs" />
+    <Compile Include="NitroSystem\SND\SSEQEvent.cs" />
+    <Compile Include="NitroSystem\SND\SSEQMidiResult.cs" />
+    <Compile Include="NitroSystem\SND\SSEQTrack.cs" />
+    <Compile Include="NitroSystem\SND\STRM.cs" />
     <Compile Include="NitroSystem\SND\SWAR.cs" />
     <Compile Include="NitroSystem\SND\SWAV.cs" />
     <Compile Include="Nitro\ARM9.cs" />
@@ -83,6 +96,13 @@
     <Compile Include="SND\IMAADPCMDecoder.cs" />
     <Compile Include="SND\IMAADPCMConst.cs" />
     <Compile Include="SND\IMAADPCMEncoder.cs" />
+    <Compile Include="SPA.cs" />
+    <Compile Include="UI\BMGViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\BMGViewer.Designer.cs">
+      <DependentUpon>BMGViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\NDSProjectDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,6 +164,7 @@
       <DependentUpon>TEX0Viewer.cs</DependentUpon>
     </Compile>
     <Compile Include="UtilityBin.cs" />
+    <Compile Include="VX.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonFiles\CommonFiles.csproj">
@@ -159,6 +180,9 @@
     <EmbeddedResource Include="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\BMGViewer.resx">
+      <DependentUpon>BMGViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\NDSProjectDialog.resx">
       <DependentUpon>NDSProjectDialog.cs</DependentUpon>
@@ -192,7 +216,20 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NitroSystem\G2D\" />
+    <Content Include="Resources\color_swatch1.png" />
+    <Content Include="Resources\disc_music.png" />
+    <Content Include="Resources\guitar.png" />
+    <Content Include="Resources\map.png" />
+    <Content Include="Resources\note.png" />
+    <Content Include="Resources\note_box.png" />
+    <Content Include="Resources\script_text.png" />
+    <Content Include="Resources\speaker.png" />
+    <Content Include="Resources\speaker2.png" />
+    <Content Include="Resources\speaker2_box.png" />
+    <Content Include="Resources\stack.png" />
+    <Content Include="Resources\sunset_vertical.png" />
+    <Content Include="Resources\traffic_light_anim.png" />
+    <Content Include="Resources\truck_anim.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\leaf.png" />

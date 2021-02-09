@@ -370,12 +370,12 @@ namespace MarioKart.MK7.KMP
 
 			public override string GetFileDescription()
 			{
-				return "CTR Dash Map Data (KMP)";
+				return "Mario Kart 7 Map Data (KMP)";
 			}
 
 			public override string GetFileFilter()
 			{
-				return "CTR Dash Map Data (*.kmp)|*.kmp";
+				return "Mario Kart 7 Map Data (*.kmp)|*.kmp";
 			}
 
 			public override Bitmap GetIcon()

@@ -290,7 +290,7 @@ namespace NDS.NitroSystem.SND
 		{
 			public override string GetCategory()
 			{
-				return Category_Archives;
+				return Category_Sound;
 			}
 
 			public override string GetFileDescription()
@@ -305,7 +305,7 @@ namespace NDS.NitroSystem.SND
 
 			public override Bitmap GetIcon()
 			{
-				return null;
+				return Resource.disc_music;
 			}
 
 			public override FormatMatch IsFormat(EFEFile File)

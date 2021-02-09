@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -120,12 +120,12 @@ namespace _3DS.NintendoWare.LYT1
 			return dirs[1];
 		}
 
-		public class darcIdentifier : FileFormatIdentifier
-		{
-			public override string GetCategory()
-			{
-				return Category_Archives;
-			}
+            public class darcIdentifier : FileFormatIdentifier
+            {
+            public override string GetCategory()
+            {
+            return Category_Archives;
+            }
 
 			public override string GetFileDescription()
 			{
@@ -134,8 +134,9 @@ namespace _3DS.NintendoWare.LYT1
 
 			public override string GetFileFilter()
 			{
-				return "Data Archive (*.darc, *.arc)|*.darc;*.arc";
-			}
+				return "Data Archive (*.darc, *.arc)|*.darc;*.arc" +
+                       "|CTR Manual Archive (*.bcma)|*.bcma";
+            }
 
 			public override Bitmap GetIcon()
 			{

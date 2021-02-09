@@ -104,7 +104,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>md "$(TargetDir)\Plugins"
-copy "$(SolutionDir)\Libraries\*" "$(TargetDir)\Plugins"</PreBuildEvent>
+md "$(TargetDir)\Plugins\ctr_WaveConverter32"
+md "$(TargetDir)\Plugins\vgmstream"
+copy "$(SolutionDir)\Libraries\*" "$(TargetDir)\Plugins"
+copy "$(SolutionDir)\Libraries\ctr_WaveConverter32\*" "$(TargetDir)\Plugins\ctr_WaveConverter32"
+copy "$(SolutionDir)\Libraries\vgmstream\*" "$(TargetDir)\Plugins\vgmstream"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

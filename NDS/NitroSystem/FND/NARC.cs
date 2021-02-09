@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -333,12 +333,12 @@ namespace NDS.NitroSystem.FND
 			return dirs[0];
 		}
 
-		public class NARCIdentifier : FileFormatIdentifier
-		{
-			public override string GetCategory()
-			{
-				return Category_Archives;
-			}
+            public class NARCIdentifier : FileFormatIdentifier
+            {
+            public override string GetCategory()
+            {
+            return Category_Archives;
+            }
 
 			public override string GetFileDescription()
 			{
@@ -347,7 +347,7 @@ namespace NDS.NitroSystem.FND
 
 			public override string GetFileFilter()
 			{
-				return "Nitro Archive (*.narc, *.carc)|*.narc;*.carc";
+				return "Nitro Archive (*.narc)|*.narc|Compress Nitro Archive (*.carc)|*.carc";
 			}
 
 			public override Bitmap GetIcon()

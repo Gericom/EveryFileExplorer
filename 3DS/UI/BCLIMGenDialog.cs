@@ -9,11 +9,18 @@ using System.Windows.Forms;
 
 namespace _3DS.UI
 {
-	public partial class BCLIMGenDialog : Form
-	{
-		public BCLIMGenDialog()
-		{
-			InitializeComponent();
-		}
-	}
+    public partial class BCLIMGenDialog : Form
+    {
+        public BCLIMGenDialog()
+        {
+            InitializeComponent();
+            comboBox1.SelectedIndex = 9;
+        }
+        public int index { get; private set; }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            index = comboBox1.SelectedIndex;
+        }
+    }
 }

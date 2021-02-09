@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -272,15 +272,15 @@ namespace _3DS
 			while ((Header.FileSize % 128) != 0) Header.FileSize++;
 			Header.FileDataOffset = Header.FileSize;
 			Header.FileSize += (uint)Data.Length;
-		}
+		        }
 
-		public class SARCIdentifier : FileFormatIdentifier
-		{
-			public override string GetCategory()
-			{
-				return Category_Archives;
-			}
-
+            public class SARCIdentifier : FileFormatIdentifier
+            {
+            public override string GetCategory()
+            {
+            return Category_Archives;
+            }
+			
 			public override string GetFileDescription()
 			{
 				return "Simple Archive (SARC)";

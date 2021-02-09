@@ -325,7 +325,7 @@ namespace _3DS.NintendoWare.GFX
 
 			public override string GetFileFilter()
 			{
-				return "CTR Graphics (*.bccam, *.bcfog, *.bclgt, *.bcmata, *.bcmcla, *.bcmdl, *.bcptl, *.bcres, *.bcsdr, *.bcskla)|*.bccam;*.bcfog;*.bclgt;*.bcmata;*.bcmcla;*.bcmdl;*.bcptl;*.bcres;*.bcsdr;*.bcskla";
+				return "CTR Graphics (*.cgfx, *.bcenv, *.bclts *.bctex, *.bccam, *.bcfog, *.bclgt, *.bcmata, *.bcmcla, *.bcmdl, *.bcptl, *.bcres, *.bcsdr, *.bcskla)|*.cgfx;*.bcenv;*.bclts;*.bctex;*.bccam;*.bcfog;*.bclgt;*.bcmata;*.bcmcla;*.bcmdl;*.bcptl;*.bcres;*.bcsdr;*.bcskla";
 			}
 
 			public override Bitmap GetIcon()
