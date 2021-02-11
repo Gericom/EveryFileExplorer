@@ -86,5 +86,82 @@ namespace _3DS.UI
                 pictureBox1.Image = Texture.GetBitmap(toolStripComboBox1.SelectedIndex);
             }
         }
-	}
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            List<CGFXViewer> subWindows = new List<CGFXViewer>();
+            DialogResult res = MessageBox.Show("From all open files?", "Export option", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            if (res == DialogResult.Cancel) return;
+            else if (res == DialogResult.No)
+                subWindows.Add((CGFXViewer)ParentForm);
+            else
+            {
+                var findSubWindows = ParentForm.Parent;
+                foreach (Control c in findSubWindows.Controls)
+                {
+                    subWindows.Add((CGFXViewer)c);
+                }
+            }
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            if (folderDialog.ShowDialog() != DialogResult.OK)
+                return;
+            int count = 0;
+            int imgCount = 0;
+            foreach (CGFXViewer subWin in subWindows)
+            {
+                var foundSplitContainers = subWin.Controls.Find("splitContainer1", false);
+                if (foundSplitContainers.Length < 1)
+                {
+                    MessageBox.Show("No split containers");
+                    continue;
+                }
+                var foundTreeViews = ((SplitContainer)foundSplitContainers[0]).Panel1.Controls.Find("treeView1", false);
+                if (foundTreeViews.Length < 1)
+                {
+                    MessageBox.Show("No tree views");
+                    continue;
+                }
+                var foundControl = foundTreeViews[0];
+                TreeView treeView1 = (TreeView)foundControl;
+                var treeViewTextures = treeView1.Nodes
+                                        .Cast<TreeNode>()
+                                        .Where(r => r.Text == "Textures")
+                                        .ToArray()[0];
+                foreach (TreeNode node in treeViewTextures.Nodes)
+                {
+                    ImageTextureCtr iterTexture = (ImageTextureCtr)node.Tag;
+                    Bitmap img = iterTexture.GetBitmap(0);
+                    string sModelname = subWin.Text.Split('.')[0];
+                    string sFilename = folderDialog.SelectedPath + "\\" + sModelname + "_" + node.Text + ".png";
+                    int iFileCount = 1;
+                    while (File.Exists(sFilename))
+                    {
+                        sFilename = folderDialog.SelectedPath + "\\" + sModelname + "_" + node.Text + "-" + iFileCount + ".png";
+                        iFileCount++;
+                    }
+                    img.Save(sFilename, ImageFormat.Png);
+                    imgCount++;
+                    count++;
+                    if (iterTexture.NrLevels > 1)
+                    {
+                        System.IO.Directory.CreateDirectory(folderDialog.SelectedPath + "\\" + "mipmaps");
+                        for (int i = 1; i < iterTexture.NrLevels; i++)
+                        {
+                            img = iterTexture.GetBitmap(i);
+                            sFilename = folderDialog.SelectedPath + "\\mipmaps\\" + sModelname + "_" + node.Text + "_" + i.ToString("000") + ".png";
+                            iFileCount = 1;
+                            while (File.Exists(sFilename))
+                            {
+                                sFilename = folderDialog.SelectedPath + "\\mipmaps\\" + sModelname + "_" + node.Text + "_" + i.ToString("000") + "-" + iFileCount + ".png";
+                                iFileCount++;
+                            }
+                            img.Save(sFilename, ImageFormat.Png);
+                            imgCount++;
+                        }
+                    }
+                }
+            }
+            MessageBox.Show("Exported " + count + " textures into " + imgCount + " files.");
+        }
+    }
 }
